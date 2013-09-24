@@ -5,13 +5,13 @@ package sg.edu.nus.cs2103.sudo.logic;
  *
  */
 
-public class Timed extends Task {
+public class TimedTask extends Task {
 	
 	private final String FROM = " from ";
 	private final String TO = " to ";
 	
 	// Timed Task constructor
-	public Timed(){
+	public TimedTask(){
 		
 	}
 	

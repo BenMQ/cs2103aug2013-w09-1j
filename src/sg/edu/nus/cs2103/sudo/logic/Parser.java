@@ -1,4 +1,4 @@
-package sg.edu.nus.cs2103.logic;
+package sg.edu.nus.cs2103.sudo.logic;
 
 import sg.edu.nus.cs2103.sudo.COMMAND_TYPE;
 

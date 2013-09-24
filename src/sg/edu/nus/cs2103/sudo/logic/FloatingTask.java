@@ -4,10 +4,10 @@ package sg.edu.nus.cs2103.sudo.logic;
  * @author Ipsita 
  *
  */
-public class Floating extends Task {
+public class FloatingTask extends Task {
 	
 	// Floating object constructor
-	public Floating() {
+	public FloatingTask() {
 		
 	}
 	

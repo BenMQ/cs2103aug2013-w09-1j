@@ -8,12 +8,16 @@ public class FloatingTask extends Task {
 	
 	// Floating object constructor
 	public FloatingTask() {
-		
+	}
+	
+	// Floating object constructor
+	public FloatingTask(String description) {
+		editDescription(description);
 	}
 	
 	@Override
 	public String toString() {
-		return description;
+		return description+"\n";
 	}
 
 }

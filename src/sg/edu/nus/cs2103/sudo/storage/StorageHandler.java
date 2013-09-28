@@ -8,6 +8,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import sg.edu.nus.cs2103.sudo.logic.DeadlineTask;
+import sg.edu.nus.cs2103.sudo.logic.FloatingTask;
+import sg.edu.nus.cs2103.sudo.logic.TimedTask;
+
 public class StorageHandler {
 	/**
 	 * This StorageHandler class is responsible for
@@ -18,6 +22,7 @@ public class StorageHandler {
 	 */
 	private String fileName;
 	private static final String TASK_LIST_BOUNDARY = "#boundary_here";
+	private static final String MESSAGE_IO_ERROR = null;
 
 	public void StorageHandler(String fileName, ArrayList floatingTask, ArrayList deadLine, ArrayList timedTask){
 		this.fileName = fileName;
@@ -30,7 +35,7 @@ public class StorageHandler {
 						fileName));
 				String temp = iptBuff.readLine();
 				while (temp != null && temp!=TASK_LIST_BOUNDARY) {
-					floatingTask.add(new FloatingTask(temp));
+					floatingTask.add(new FloatingTask());
 					temp = iptBuff.readLine();
 				}
 				while (temp != null && temp!=TASK_LIST_BOUNDARY) {
@@ -44,11 +49,16 @@ public class StorageHandler {
 				iptBuff.close();
 			}
 		}catch(IOException e){
-			feedBack(FEEDBACK_IO);
+			displayError(MESSAGE_IO_ERROR);
 			System.exit(0);
 		}
 	}
 	
+	private void displayError(String messageIoError) {
+		// TODO Auto-generated method stub
+		
+	}
+
 	private void saveOneList(File file, ArrayList taskList) throws IOException{
 		BufferedWriter output = new BufferedWriter(new FileWriter(file, false));
 		for (int i = 0; i < taskList.size(); i++) {

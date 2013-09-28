@@ -1,21 +1,28 @@
 package sg.edu.nus.cs2103.sudo.logic;
 
+import org.joda.time.DateTime;
+
 /**
  * @author Ipsita 
  *
  */
 
 public abstract class Task {
-	
+	protected int id;
 	protected String description = "";
 	protected Boolean isComplete = false;
-	protected String startTime = "";
-	protected String startDate = "";
-	protected String endTime = "";
-	protected String endDate = "";
+	protected DateTime startTime;
+	protected DateTime endTime;
 	
 	// Task object constructor
 	public Task() {
+	}
+	
+	public Task(int id, String desc, DateTime startTime, DateTime endTime) {
+	    this.id = id;
+	    this.description = desc;
+	    this.startTime = startTime;
+	    this.endTime = endTime;
 	}
 	
 	public abstract String toString();	
@@ -24,22 +31,24 @@ public abstract class Task {
 		description = newDescription;
 	}
 	
-	public void editStartTime(String startTime) {
+	public void editStartTime(DateTime startTime) {
 		this.startTime = startTime;
 	}
 	
-	public void editStartDate(String startDate) {
-		this.startDate = startDate;
-	}
-	
-	public void editEndTime(String endTime) {
+	public void editEndTime(DateTime endTime) {
 		this.endTime = endTime;
 	}
 	
-	public void editEndDate(String endDate) {
-		this.endDate = endDate;
+	public void markCompleted() {
+		this.isComplete = true;
 	}
-	public void markCompleted(boolean isComplete) {
-		this.isComplete = isComplete;
+	
+	public void markNotCompleted() {
+	    this.isComplete = true;
 	}
+	
+	public void toggleCompleted() {
+	    this.isComplete = !this.isComplete;
+	}
+	
 }

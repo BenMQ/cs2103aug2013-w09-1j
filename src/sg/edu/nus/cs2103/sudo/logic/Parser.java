@@ -14,9 +14,9 @@ public class Parser {
 	 */
 	
 	
-	public static final String DATE_TIME_SPLIT = "TO";
-	public static final String FROM = "FROM";	
-	public static final String DOUBLE_QUOTE = "\"";
+	private static final String TO = " to ";
+	private static final String FROM = " from ";	
+	private static final String DOUBLE_QUOTE = "\"";
 	
 	// Parser object constructor
 	public Parser(){
@@ -34,6 +34,12 @@ public class Parser {
 		
 	}
 	
+	
+	
+	public static String parseDateTime(String userInput){
+		return "";
+	}
+	
 	public static String parseCommand(String userInput){
 		return userInput.substring(0, userInput.indexOf(" "));
 	}	
@@ -47,10 +53,4 @@ public class Parser {
 		return COMMAND_TYPE.valueOf(userCommand.toUpperCase());
 	}
 	
-	
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
-	}
-
 }

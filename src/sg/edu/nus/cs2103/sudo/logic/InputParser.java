@@ -1,5 +1,6 @@
 package sg.edu.nus.cs2103.sudo.logic;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -24,7 +25,12 @@ public class InputParser {
 	private static final String TO = " to ";
 	private static final String FROM = " from ";	
 	private static final String DOUBLE_QUOTE = "\"";
-	
+
+	/**
+	 * Executes the user's input
+	 * @param userInput 	string of the user's input
+	 * @return executes the appropriate high level command
+	 */
 	public static void executeCommand(String userInput){
 		String userCommand = parseCommand(userInput); 
 		COMMAND_TYPE userCommandType = getCommandType(userCommand);
@@ -36,17 +42,20 @@ public class InputParser {
 		
 	}
 	
-	
-	public static List<DateGroup> parseDateTime(String userInput){
-		Parser parser = new Parser(); // Use natty to parse into joda datetime objects
-		List<DateGroup> groups = parser.parse(userInput); //Each DateGroup contains a list of Date
-		for(DateGroup group:groups) {
-			  List<Date> dates = group.getDates();
-		}
+	/**
+	 * Parses dates from the user's input string
+	 * @param userInput 			string of the user's input
+	 * @return ArrayList<DateTime>	A list of DateTime objects
+	 */	
+	public static ArrayList<DateTime> parseDateTime(String userInput){
+		Parser parser = new Parser();
+		List<DateGroup> dateGroups = parser.parse(userInput); //Each DateGroup contains a list of Date
+		ArrayList<List<Date>> dateLists = getDateLists(dateGroups);	
+		ArrayList<DateTime> dateTimes = convertToDateTimes(dateLists);
 		
-		return groups;
+		return dateTimes;
 	}
-	
+
 	public static String parseCommand(String userInput){
 		return userInput.substring(0, userInput.indexOf(" "));
 	}	
@@ -61,12 +70,29 @@ public class InputParser {
 	}
 	
 	
-	public static void main(String[] args){
-//		List<DateGroup> t = parseDateTime("the day before next thursday");
-//		System.out.println(t.get(0));
-		Parser parser = new Parser();
+	
+	
+	
+	// Helper method
+	private static ArrayList<List<Date>> getDateLists(List<DateGroup> dateGroups) {
+		ArrayList<List<Date>> dateLists = new ArrayList<List<Date>>();
+		for(DateGroup dateGroup:dateGroups) {
+			  List<Date> dateList = dateGroup.getDates();
+			  dateLists.add(dateList);
+		}
 		
+		return dateLists;
 	}
 	
-	
+	// Helper method
+	public static ArrayList<DateTime> convertToDateTimes(ArrayList<List<Date>> dateLists){
+		List<Date> dates = dateLists.get(0);
+		ArrayList<DateTime> dateTimes = new ArrayList<DateTime>();
+		for(Date date:dates){ //cast Date to joda-DateTime
+			DateTime dt = new DateTime(date);
+			dateTimes.add(dt);
+		}
+		
+		return dateTimes;
+	}	
 }

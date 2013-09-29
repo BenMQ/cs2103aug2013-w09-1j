@@ -44,7 +44,7 @@ public abstract class Task {
 	}
 	
 	public void markNotCompleted() {
-	    this.isComplete = true;
+	    this.isComplete = false;
 	}
 	
 	public void toggleCompleted() {

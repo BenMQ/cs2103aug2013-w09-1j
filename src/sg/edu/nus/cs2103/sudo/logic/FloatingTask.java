@@ -11,9 +11,8 @@ public class FloatingTask extends Task {
 	}
 	
 	// Floating object constructor
-	public FloatingTask(String description, boolean isComplete) {
+	public FloatingTask(String description) {
 		editDescription(description);
-		markCompleted(isComplete);
 	}
 	
 	@Override

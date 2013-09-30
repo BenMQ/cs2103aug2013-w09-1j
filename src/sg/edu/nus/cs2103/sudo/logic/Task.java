@@ -25,7 +25,22 @@ public abstract class Task implements Comparable<Task>{
 	    this.endTime = endTime;
 	}
 	
-	public abstract String toString();	
+	/**
+	 * Converts the task object into a string with the following format:
+	 * 1) Timed task: desc from x to y
+	 * 2) Deadline task: desc by x
+	 * 3) Floating task: desc
+	 */
+	public String toString() {
+	    String output = description;
+	    if (startTime != null) {
+	        output += " from " + startTime.toString() + " to " + endTime.toString();
+	    } else if (endTime != null) {
+	        output += " by " + endTime.toString();
+	    }
+	    
+	    return output;
+	}
 	
 	public void editDescription(String newDescription) {
 		description = newDescription;

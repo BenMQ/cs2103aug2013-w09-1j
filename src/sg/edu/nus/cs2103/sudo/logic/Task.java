@@ -7,7 +7,7 @@ import org.joda.time.DateTime;
  *
  */
 
-public abstract class Task {
+public abstract class Task implements Comparable<Task>{
 	protected int id;
 	protected String description = "";
 	protected Boolean isComplete = false;
@@ -49,6 +49,26 @@ public abstract class Task {
 	
 	public void toggleCompleted() {
 	    this.isComplete = !this.isComplete;
+	}
+	
+	/**
+	 * Implements comparable interface. Tasks are sorted by their end time.
+	 * Floating tasks are always at the end, but they are managed separately anyway.
+	 */
+	public int compareTo(Task x) {
+        if (this.endTime != null) {
+            if (x.endTime != null) {
+                return this.endTime.compareTo(x.endTime);
+            } else {
+                return -1;
+            }
+        } else {
+            if (x.endTime != null) {
+                return 1;
+            } else {
+                return 0;
+            }
+        }
 	}
 	
 }

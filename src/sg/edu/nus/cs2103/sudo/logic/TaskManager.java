@@ -49,7 +49,7 @@ public class TaskManager {
             Task task = normalTasks.get(i);
             if (showAll || !task.isComplete) {
                 serial++;
-                System.out.println(serial + task.toString());
+                System.out.println(serial + " " + task.toString());
             }
         }
     }

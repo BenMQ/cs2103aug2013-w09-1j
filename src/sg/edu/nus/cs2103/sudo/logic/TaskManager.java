@@ -129,8 +129,9 @@ public class TaskManager {
    
 	/**
      * Removes the task by first searching for the search string
-     * in the task description. If there is exactly one match,
-     * just delete it. If there are multiple matches, display 
+     * in the task description. 
+     * If there is exactly one match, just delete it. 
+     * If there are multiple matches, display 
      * all searchResults to user. Wait for user input to delete again. 
      */
     public void delete(String searchStr) {
@@ -140,7 +141,7 @@ public class TaskManager {
     		System.out.println(NOTHING_TO_DELETE);
     	} else if (numResults == 1) {
     		delete(searchResults.get(0).getId());
-    	} else {
+    	} else { // needs amendments!!
     		displaySearchResults(searchResults);
     	}
     }

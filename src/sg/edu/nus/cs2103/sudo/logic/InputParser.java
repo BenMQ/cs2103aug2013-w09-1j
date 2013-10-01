@@ -54,6 +54,14 @@ public class InputParser {
 			System.out.println("Adding floating task:" + taskDescription);
 			this.manager.addTask(new FloatingTask(taskDescription));
 			return;
+		case SEARCH:
+			System.out.println("Searching:" + taskDescription);
+			this.manager.searchAndDisplay(taskDescription);
+			return;
+		case DELETE:
+			System.out.println("Deleting:" + taskDescription);
+			this.manager.delete(taskDescription);
+			return;			
 		default:
 			//some error message
 			return;

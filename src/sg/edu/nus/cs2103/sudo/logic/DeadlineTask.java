@@ -15,11 +15,6 @@ public class DeadlineTask extends Task {
 	public DeadlineTask() {
 		
 	}
-	
-	@Override
-	public String toString() {
-		return description + BY + endTime + ", "+ endDate + "\n";
-	}
 
 	// To be used to store in .txt 
 	public String toStringForFile() {

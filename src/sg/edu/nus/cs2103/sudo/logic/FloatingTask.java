@@ -15,11 +15,6 @@ public class FloatingTask extends Task {
 		editDescription(description);
 	}
 	
-	@Override
-	public String toString() {
-		return description + "\n";
-	}
-	
 	// To be used to store in .txt 
 	public String toStringForFile() {
 		return description + " " + isComplete + "\n";

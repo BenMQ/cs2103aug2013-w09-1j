@@ -41,16 +41,18 @@ public class InputParser {
 	public void executeCommand(String userInput){
 		String userCommand = parseCommand(userInput); 		
 		String taskDescription = parseDescription(userInput);
-		ArrayList<DateTime> dateTimes = parseDateTime(userInput);
+//		ArrayList<DateTime> dateTimes = parseDateTime(userInput);
 		
 		COMMAND_TYPE userCommandType = getCommandType(userCommand);
 		
 		//executes the method associated with userCommandType, methods not yet written
 		switch(userCommandType){
 		case DISPLAY:
+			System.out.println("Displaying all tasks");
 			this.manager.displayAllTasks();
 			return;
 		case ADD:
+			System.out.println("Adding floating task:" + taskDescription);
 			this.manager.addTask(new FloatingTask(taskDescription));
 			return;
 		default:
@@ -83,6 +85,9 @@ public class InputParser {
 	}	
 	
 	public static String parseCommand(String userInput){
+		if(userInput.indexOf(" ") == -1){
+			return userInput;
+		}
 		return userInput.substring(0, userInput.indexOf(" "));
 	}	
 

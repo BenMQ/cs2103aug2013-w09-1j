@@ -7,8 +7,9 @@ import sg.edu.nus.cs2103.sudo.logic.InputParser;
 public class Executor {
 
 	/**
-	 * @param args
+	 * The main Executor class
 	 */
+	
 	public static void main(String[] args) {
 		
 		Scanner user = new Scanner( System.in );

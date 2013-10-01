@@ -14,12 +14,7 @@ public class TimedTask extends Task {
 	public TimedTask(){
 		
 	}
-	
-	@Override
-	public String toString() {
-		return description + FROM + startTime + ", " + startDate + TO + endTime + ", "+ endDate + "\n";
-	}
-	
+		
 	// To be used to store in .txt 
 	public String toStringForFile() {
 		return description + FROM + startTime + ", " + startDate + TO + endTime + ", "+ endDate + " " + isComplete + "\n";

@@ -61,5 +61,21 @@ public class TaskManager {
         displayAllTasks(false);
     }
     
+    /**
+     * Searches tasks and returns an ArrayList of the tasks that match the input search string
+     */
+    private ArrayList<Task> search(String searchStr) {
+		searchStr = searchStr.trim();
+		ArrayList<Task> searchedTasks = new ArrayList<Task>();
+		
+		for (int i=0; i<normalTasks.size(); i++) {
+			Task currTask = normalTasks.get(i);
+			String currTaskStr = currTask.toString();
+			if (currTaskStr.contains(searchStr)) {
+				searchedTasks.add(currTask);
+			}
+		}
+		return searchedTasks;
+	}
     
 }

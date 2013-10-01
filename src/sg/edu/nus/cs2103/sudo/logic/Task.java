@@ -25,6 +25,10 @@ public abstract class Task implements Comparable<Task>{
 	    this.endTime = endTime;
 	}
 	
+	public int getId() {
+		return id;
+	}
+
 	/**
 	 * Converts the task object into a string with the following format:
 	 * 1) Timed task: desc from x to y

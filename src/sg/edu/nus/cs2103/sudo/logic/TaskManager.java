@@ -9,7 +9,8 @@ import java.util.ArrayList;
  */
 public class TaskManager {
     
-    // A list of non-floating tasks
+    private static final String NOTHING_TO_DELETE = "Nothing to delete!";
+	// A list of non-floating tasks
     private ArrayList<Task> normalTasks;
     
     public TaskManager() {
@@ -62,20 +63,67 @@ public class TaskManager {
     }
     
     /**
-     * Searches tasks and returns an ArrayList of the tasks that match the input search string
+     * Searches for Task objects matching the input search string.
+     * Prints out the list of searched Task objects.
+     */
+    public void searchAndDisplay(String searchStr) {
+    	ArrayList<Task> searchResults = search(searchStr);
+    	displaySearchResults(searchResults);
+    }  
+   
+	/**
+     * Removes the task by first searching for the search string
+     * in the task description. If there is exactly one match,
+     * just delete it. If there are multiple matches, display 
+     * all searchResults to user. Wait for user input to delete again. 
+     */
+    public void delete(String searchStr) {
+    	ArrayList<Task> searchResults = search(searchStr);
+    	int numResults = searchResults.size();
+    	if (numResults == 0) {
+    		System.out.println(NOTHING_TO_DELETE);
+    	} else if (numResults == 1) {
+    		delete(searchResults.get(0).getId());
+    	} else {
+    		displaySearchResults(searchResults);
+    	}
+    }
+    
+    
+    
+    
+    
+    /**
+     * Searches for Task objects matching the input search string.
+     * Returns searchResults in the form of an ArrayList of Task objects. 
      */
     private ArrayList<Task> search(String searchStr) {
 		searchStr = searchStr.trim();
-		ArrayList<Task> searchedTasks = new ArrayList<Task>();
+		ArrayList<Task> searchResults = new ArrayList<Task>();
 		
 		for (int i=0; i<normalTasks.size(); i++) {
 			Task currTask = normalTasks.get(i);
 			String currTaskStr = currTask.toString();
 			if (currTaskStr.contains(searchStr)) {
-				searchedTasks.add(currTask);
+				searchResults.add(currTask);
 			}
 		}
-		return searchedTasks;
+		return searchResults;
 	}
     
+    /**
+     * Prints out the list of search results containing Task objects.
+     */
+    private void displaySearchResults(ArrayList<Task> searchResults) {
+		for (int i=0; i<searchResults.size(); i++) {
+			System.out.println((i+1) + ". " + searchResults.get(i).toString());
+		}
+	}
+    
+    /**
+     * Given the id of the task, the task is deleted from normalTasks 
+     */
+    private void delete(int id) {
+    	normalTasks.remove(id-1);
+    }
 }

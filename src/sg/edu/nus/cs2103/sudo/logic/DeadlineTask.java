@@ -15,9 +15,11 @@ public class DeadlineTask extends Task {
 	public DeadlineTask() {
 		
 	}
-
+	
+	/*
 	// To be used to store in .txt 
 	public String toStringForFile() {
 		return description + BY + endTime + ", "+ endDate + " " + isComplete + "\n";
 	}
+	*/
 }

@@ -3,12 +3,14 @@ package sg.edu.nus.cs2103.sudo.logic;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Scanner;
 
 import sg.edu.nus.cs2103.sudo.COMMAND_TYPE;
 import org.joda.time.DateTime;
 
 import com.joestelmach.natty.DateGroup;
 import com.joestelmach.natty.Parser;
+import sg.edu.nus.cs2103.sudo.COMMAND_TYPE;;
 
 public class InputParser {
 
@@ -21,25 +23,40 @@ public class InputParser {
 	 * @author Yos Riady 
 	 */
 	
-	
 	private static final String TO = " to ";
 	private static final String FROM = " from ";	
 	private static final String DOUBLE_QUOTE = "\"";
-
+	
+	private TaskManager manager; 
+	
+	public InputParser() {
+		manager = new TaskManager();
+	}
+	
 	/**
 	 * Executes the user's input
 	 * @param userInput 	string of the user's input
 	 * @return executes the appropriate high level command
 	 */
-	public static void executeCommand(String userInput){
-		String userCommand = parseCommand(userInput); 
+	public void executeCommand(String userInput){
+		String userCommand = parseCommand(userInput); 		
+		String taskDescription = parseDescription(userInput);
+		ArrayList<DateTime> dateTimes = parseDateTime(userInput);
+		
 		COMMAND_TYPE userCommandType = getCommandType(userCommand);
 		
-		// here need to parse description, and later parse datetime objects
-		String taskDescription = parseDescription(userInput);
-		
 		//executes the method associated with userCommandType, methods not yet written
-		
+		switch(userCommandType){
+		case DISPLAY:
+			this.manager.displayAllTasks();
+			return;
+		case ADD:
+			this.manager.addTask(new FloatingTask(taskDescription));
+			return;
+		default:
+			//some error message
+			return;
+		}
 	}
 	
 	/**
@@ -56,6 +73,15 @@ public class InputParser {
 		return dateTimes;
 	}
 
+	/**
+	 * Reads the user input for command
+	 * @param userCommand 	the user's input command 
+	 */
+	public static String readCommand(Scanner userCommand){
+		System.out.print("command:");
+		return userCommand.nextLine();
+	}	
+	
 	public static String parseCommand(String userInput){
 		return userInput.substring(0, userInput.indexOf(" "));
 	}	

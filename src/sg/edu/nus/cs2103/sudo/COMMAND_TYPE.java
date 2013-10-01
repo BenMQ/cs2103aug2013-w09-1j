@@ -5,5 +5,5 @@ package sg.edu.nus.cs2103.sudo;
 
 // ipsita says hi again
 public enum COMMAND_TYPE {  
-    ADD, DELETE, EDIT, UNDO, REDO, SEARCH, SORT, HELP
+    ADD, DELETE, EDIT, UNDO, REDO, SEARCH, SORT, HELP, DISPLAY
 }

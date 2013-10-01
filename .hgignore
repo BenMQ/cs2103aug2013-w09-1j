@@ -1,0 +1,15 @@
+syntax: glob
+
+# Mac OS X
+.DS_Store
+
+# Windows
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+*.class
+
+.classpath
+.settings
+.project

@@ -1,0 +1,140 @@
+package sg.edu.nus.cs2103.sudo.logic;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Scanner;
+
+import sg.edu.nus.cs2103.sudo.COMMAND_TYPE;
+import org.joda.time.DateTime;
+
+import com.joestelmach.natty.DateGroup;
+import com.joestelmach.natty.Parser;
+import sg.edu.nus.cs2103.sudo.COMMAND_TYPE;;
+
+public class InputParser {
+
+	/**
+	 * This InputParser class is responsible for extracting commands
+	 * and description/time parameters from user string inputs,
+	 * delegating to subclasses whenever necessary. 
+	 * It then calls the appropriate CRUD methods.
+	 * 
+	 * @author Yos Riady 
+	 */
+	
+	private static final String TO = " to ";
+	private static final String FROM = " from ";	
+	private static final String DOUBLE_QUOTE = "\"";
+	
+	private TaskManager manager; 
+	
+	public InputParser() {
+		manager = new TaskManager();
+	}
+	
+	/**
+	 * Executes the user's input
+	 * @param userInput 	string of the user's input
+	 * @return executes the appropriate high level command
+	 */
+	public void executeCommand(String userInput){
+		String userCommand = parseCommand(userInput); 		
+		String taskDescription = parseDescription(userInput);
+		ArrayList<DateTime> dateTimes = parseDateTime(userInput);
+		
+		COMMAND_TYPE userCommandType = getCommandType(userCommand);
+		
+		switch(userCommandType){
+		case DISPLAY:
+			System.out.println("Displaying all tasks");
+			this.manager.displayAllTasks();
+			return;
+		case ADD:
+			System.out.println("Adding floating task:" + taskDescription);
+			this.manager.addTask(new FloatingTask(taskDescription));
+			return;
+		default:
+			//some error message
+			return;
+		}
+	}
+	
+	/**
+	 * Parses dates from the user's input string
+	 * @param userInput 			string of the user's input
+	 * @return ArrayList<DateTime>	A list of DateTime objects
+	 */	
+	public static ArrayList<DateTime> parseDateTime(String userInput){
+		Parser dtparser = new Parser();
+		List<DateGroup> dateGroups = dtparser.parse(userInput); //Each DateGroup contains a list of Date
+		ArrayList<List<Date>> dateLists = getDateLists(dateGroups);	
+		ArrayList<DateTime> dateTimes = convertToDateTimes(dateLists);
+		
+		return dateTimes;
+	}
+
+	/**
+	 * Reads the user input for command
+	 * @param userCommand 	the user's input command 
+	 */
+	public static String readCommand(Scanner userCommand){
+		System.out.print("command:");
+		return userCommand.nextLine();
+	}	
+	
+	public static String parseCommand(String userInput){
+		if(userInput.indexOf(" ") == -1){
+			return userInput;
+		}
+		return userInput.substring(0, userInput.indexOf(" "));
+	}	
+
+	public static String parseDescription(String userInput){
+		return userInput.substring(userInput.indexOf(" ")+1);
+	}	
+	
+	public static COMMAND_TYPE getCommandType(String userCommand){
+		//here need to catch exceptions and tolerate some user typos
+		return COMMAND_TYPE.valueOf(userCommand.toUpperCase());
+	}
+	
+	
+	
+	
+	
+	// Helper method
+	private static ArrayList<List<Date>> getDateLists(List<DateGroup> dateGroups) {
+		ArrayList<List<Date>> dateLists = new ArrayList<List<Date>>();
+		for(DateGroup dateGroup:dateGroups) {
+			  List<Date> dateList = dateGroup.getDates();
+			  dateLists.add(dateList);
+		}
+		
+		return dateLists;
+	}
+	
+	// Helper method
+	public static ArrayList<DateTime> convertToDateTimes(ArrayList<List<Date>> dateLists){
+		ArrayList<DateTime> dateTimes = new ArrayList<DateTime>();
+		if(dateLists.isEmpty()){
+			return dateTimes;
+		}
+		
+		List<Date> dates = dateLists.get(0);
+		for(Date date:dates){ //cast Date to joda-DateTime
+			DateTime dt = new DateTime(date);
+			dateTimes.add(dt);
+		}
+		
+		return dateTimes;
+	}	
+	
+	
+	public static void main(String[] args) {
+		System.out.println(parseDateTime("add task"));
+		
+		
+	}
+}
+

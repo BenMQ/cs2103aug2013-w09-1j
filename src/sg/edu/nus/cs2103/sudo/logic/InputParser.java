@@ -41,11 +41,10 @@ public class InputParser {
 	public void executeCommand(String userInput){
 		String userCommand = parseCommand(userInput); 		
 		String taskDescription = parseDescription(userInput);
-//		ArrayList<DateTime> dateTimes = parseDateTime(userInput);
+		ArrayList<DateTime> dateTimes = parseDateTime(userInput);
 		
 		COMMAND_TYPE userCommandType = getCommandType(userCommand);
 		
-		//executes the method associated with userCommandType, methods not yet written
 		switch(userCommandType){
 		case DISPLAY:
 			System.out.println("Displaying all tasks");
@@ -67,8 +66,8 @@ public class InputParser {
 	 * @return ArrayList<DateTime>	A list of DateTime objects
 	 */	
 	public static ArrayList<DateTime> parseDateTime(String userInput){
-		Parser parser = new Parser();
-		List<DateGroup> dateGroups = parser.parse(userInput); //Each DateGroup contains a list of Date
+		Parser dtparser = new Parser();
+		List<DateGroup> dateGroups = dtparser.parse(userInput); //Each DateGroup contains a list of Date
 		ArrayList<List<Date>> dateLists = getDateLists(dateGroups);	
 		ArrayList<DateTime> dateTimes = convertToDateTimes(dateLists);
 		
@@ -117,8 +116,12 @@ public class InputParser {
 	
 	// Helper method
 	public static ArrayList<DateTime> convertToDateTimes(ArrayList<List<Date>> dateLists){
-		List<Date> dates = dateLists.get(0);
 		ArrayList<DateTime> dateTimes = new ArrayList<DateTime>();
+		if(dateLists.isEmpty()){
+			return dateTimes;
+		}
+		
+		List<Date> dates = dateLists.get(0);
 		for(Date date:dates){ //cast Date to joda-DateTime
 			DateTime dt = new DateTime(date);
 			dateTimes.add(dt);
@@ -126,4 +129,12 @@ public class InputParser {
 		
 		return dateTimes;
 	}	
+	
+	
+	public static void main(String[] args) {
+		System.out.println(parseDateTime("add task"));
+		
+		
+	}
 }
+

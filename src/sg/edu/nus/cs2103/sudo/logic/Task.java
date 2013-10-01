@@ -29,6 +29,10 @@ public abstract class Task implements Comparable<Task>{
 		return id;
 	}
 
+	public boolean getComplete() {
+		return isComplete;
+	}
+	
 	/**
 	 * Converts the task object into a string with the following format:
 	 * 1) Timed task: desc from x to y

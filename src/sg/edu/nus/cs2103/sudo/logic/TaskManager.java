@@ -117,7 +117,9 @@ public class TaskManager {
     }
     
     /**
-     * Searches for Task objects matching the input search string.
+     * Search for Task objects matching the input search string.
+     * By default only incomplete tasks will be searched.
+     * 
      * Prints out the list of searched Task objects.
      */
     public void searchAndDisplay(String searchStr) {
@@ -149,6 +151,7 @@ public class TaskManager {
     
     /**
      * Searches for Task objects matching the input search string.
+     * By default only incomplete tasks will be searched.
      * Returns searchResults in the form of an ArrayList of Task objects. 
      */
     private ArrayList<Task> search(String searchStr) {
@@ -158,7 +161,7 @@ public class TaskManager {
 		for (int i=0; i<normalTasks.size(); i++) {
 			Task currTask = normalTasks.get(i);
 			String currTaskStr = currTask.toString();
-			if (currTaskStr.contains(searchStr)) {
+			if (currTaskStr.contains(searchStr) && !currTask.getComplete()) {
 				searchResults.add(currTask);
 			}
 		}

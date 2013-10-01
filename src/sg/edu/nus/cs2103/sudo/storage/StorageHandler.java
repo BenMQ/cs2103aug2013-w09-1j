@@ -21,10 +21,9 @@ public class StorageHandler {
 	 * @author Liu Dake
 	 */
 	private String fileName;
-	private static final String TASK_LIST_BOUNDARY = "#boundary_here";
 	private static final String MESSAGE_IO_ERROR = null;
 
-	public void StorageHandler(String fileName, ArrayList floatingTask, ArrayList deadLine, ArrayList timedTask){
+	public void StorageHandler(String fileName, ArrayList tasks){
 		this.fileName = fileName;
 		try {
 			File file = new File(fileName);
@@ -34,16 +33,8 @@ public class StorageHandler {
 				BufferedReader iptBuff = new BufferedReader(new FileReader(
 						fileName));
 				String temp = iptBuff.readLine();
-				while (temp != null && temp!=TASK_LIST_BOUNDARY) {
-					floatingTask.add(new FloatingTask());
-					temp = iptBuff.readLine();
-				}
-				while (temp != null && temp!=TASK_LIST_BOUNDARY) {
-					deadLine.add(new DeadlineTask());
-					temp = iptBuff.readLine();
-				}
-				while (temp != null && temp!=TASK_LIST_BOUNDARY) {
-					timedTask.add(new TimedTask());
+				while (temp != null) {
+					tasks.add(new FloatingTask(temp));
 					temp = iptBuff.readLine();
 				}
 				iptBuff.close();
@@ -65,16 +56,13 @@ public class StorageHandler {
 			output.write((taskList.get(i)).toString());
 			output.newLine();
 		}
-		output.write(TASK_LIST_BOUNDARY);
 		output.newLine();
 		output.close();
 	}
 	
-	public void save(ArrayList floatingTask, ArrayList deadLine, ArrayList timedTask) throws IOException{
+	public void save(ArrayList tasks) throws IOException{
 		File file = new File(fileName);
-		saveOneList(file, floatingTask);
-		saveOneList(file, deadLine);
-		saveOneList(file, timedTask);
+		saveOneList(file, tasks);
 	}
 	
 }

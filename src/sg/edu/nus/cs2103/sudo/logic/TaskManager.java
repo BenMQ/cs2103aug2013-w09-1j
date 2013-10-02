@@ -2,8 +2,6 @@ package sg.edu.nus.cs2103.sudo.logic;
 
 import java.util.ArrayList;
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
 /**
  * 
  * @author chenminqi
@@ -40,7 +38,7 @@ public class TaskManager {
      * @see preloadTasks; 
      */
     public void preloadFloatingTasks(ArrayList<Task> floatingTasks) {
-        throw new NotImplementedException();
+        throw new UnsupportedOperationException();
     }
     
     
@@ -50,7 +48,7 @@ public class TaskManager {
      */
     
     public void preloadNormalTasks(ArrayList<Task> normalTasks) {
-        throw new NotImplementedException();
+        throw new UnsupportedOperationException();
     }
     
     /**
@@ -71,7 +69,7 @@ public class TaskManager {
      * @return ArrayList of IDs of the tasks that meets the search criteria
      */
     public ArrayList<Integer> searchTaskID(String text, boolean searchAll) {
-        throw new NotImplementedException();
+        throw new UnsupportedOperationException();
     }
     
     /**
@@ -81,7 +79,7 @@ public class TaskManager {
      * @return ArrayList of the tasks that meets the search criteria.
      */
     public ArrayList<Task> searchTask(String text, boolean searchAll) {
-        throw new NotImplementedException();
+        throw new UnsupportedOperationException();
     }
     
     /**
@@ -90,7 +88,7 @@ public class TaskManager {
      * @return returns the task if found, null if it doesn't exist
      */
     public Task getTask(int ID) {
-        throw new NotImplementedException();
+        throw new UnsupportedOperationException();
     }
     
     /**

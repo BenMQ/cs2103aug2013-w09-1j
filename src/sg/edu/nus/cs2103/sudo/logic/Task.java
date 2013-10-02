@@ -13,6 +13,7 @@ public abstract class Task implements Comparable<Task>{
 	protected Boolean isComplete = false;
 	protected DateTime startTime;
 	protected DateTime endTime;
+	protected static int numOfTasks = 0;
 	
 	// Task object constructor
 	public Task() {
@@ -29,6 +30,10 @@ public abstract class Task implements Comparable<Task>{
 		return id;
 	}
 
+	public boolean getComplete() {
+		return isComplete;
+	}
+	
 	/**
 	 * Converts the task object into a string with the following format:
 	 * 1) Timed task: desc from x to y
@@ -44,6 +49,10 @@ public abstract class Task implements Comparable<Task>{
 	    }
 	    
 	    return output;
+	}
+	
+	public void editId(int id) {
+		this.id = id;
 	}
 	
 	public void editDescription(String newDescription) {

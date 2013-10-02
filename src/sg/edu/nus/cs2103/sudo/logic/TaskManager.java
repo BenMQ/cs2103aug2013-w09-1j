@@ -97,12 +97,10 @@ public class TaskManager {
      * @param showAll set to true to include completed task
      */
     public void displayAllTasks(boolean showAll) {
-        int serial = 0;
         for (int i = 0; i < normalTasks.size(); i ++) {
             Task task = normalTasks.get(i);
             if (showAll || !task.isComplete) {
-                serial++;
-                System.out.println(serial + " " + task.toString());
+            	System.out.println(task.toString());
             }
         }
     }
@@ -132,15 +130,30 @@ public class TaskManager {
      * If there are multiple matches, display 
      * all searchResults to user. Wait for user input to delete again. 
      */
-    public void delete(String searchStr) {
+    public int delete(String searchStr) {
     	ArrayList<Task> searchResults = search(searchStr);
     	int numResults = searchResults.size();
     	if (numResults == 0) {
     		System.out.println(NOTHING_TO_DELETE);
     	} else if (numResults == 1) {
     		delete(searchResults.get(0).getId());
-    	} else { // needs amendments!!
+    	} 
+    	else { 
     		displaySearchResults(searchResults);
+    	}
+    	return numResults;
+    }
+    
+    
+    /**
+     * Given the id of the task, the task is deleted from normalTasks 
+     */
+    public void delete(int id) {
+    	normalTasks.remove(id-1);
+    	Task.editNumOfTasks(Task.getNumOfTasks()-1);
+    	// update the id of all subsequent tasks
+    	for (int i=id-1; i<normalTasks.size(); i++) {
+    		normalTasks.get(i).editId(i+1);
     	}
     }
     
@@ -151,7 +164,8 @@ public class TaskManager {
     /**
      * Searches for Task objects matching the input search string.
      * By default only incomplete tasks will be searched.
-     * Returns searchResults in the form of an ArrayList of Task objects. 
+     * Returns searchResults in the form of an ArrayList of Task objects 
+     * with the same id as the index in the ArrayList 
      */
     private ArrayList<Task> search(String searchStr) {
 		searchStr = searchStr.trim();
@@ -171,15 +185,17 @@ public class TaskManager {
      * Prints out the list of search results containing Task objects.
      */
     private void displaySearchResults(ArrayList<Task> searchResults) {
+    	if (searchResults.isEmpty()) {
+    		System.out.println("No search results!");
+    		return;
+    	} 
+    	
+    	System.out.println();
+		System.out.println("Search Results");
 		for (int i=0; i<searchResults.size(); i++) {
-			System.out.println((i+1) + ". " + searchResults.get(i).toString());
+			System.out.println(searchResults.get(i).toString());
 		}
 	}
     
-    /**
-     * Given the id of the task, the task is deleted from normalTasks 
-     */
-    private void delete(int id) {
-    	normalTasks.remove(id-1);
-    }
+
 }

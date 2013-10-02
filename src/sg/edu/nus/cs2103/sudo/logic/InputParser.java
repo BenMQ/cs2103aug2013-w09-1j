@@ -27,6 +27,8 @@ public class InputParser {
 	private static final String FROM = " from ";	
 	private static final String DOUBLE_QUOTE = "\"";
 	
+	private static Scanner sc = new Scanner(System.in);
+	
 	private TaskManager manager; 
 	
 	public InputParser() {
@@ -60,14 +62,20 @@ public class InputParser {
 			return;
 		case DELETE:
 			System.out.println("Deleting:" + taskDescription);
-			this.manager.delete(taskDescription);
+			int numResults = this.manager.delete(taskDescription);
+			if (numResults > 1 ) {
+				System.out.println("Please enter task id:");
+				int id = sc.nextInt(); // change this to take in any input and throw error if invalid integer
+				System.out.println("Deleting task id " + id);
+				this.manager.delete(id);
+			}
 			return;			
 		default:
 			//some error message
 			return;
 		}
 	}
-	
+
 	/**
 	 * Parses dates from the user's input string
 	 * @param userInput 			string of the user's input

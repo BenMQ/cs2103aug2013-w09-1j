@@ -2,8 +2,6 @@ package sg.edu.nus.cs2103.sudo.logic;
 
 import java.util.ArrayList;
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
 /**
  * 
  * @author chenminqi
@@ -40,7 +38,7 @@ public class TaskManager {
      * @see preloadTasks; 
      */
     public void preloadFloatingTasks(ArrayList<Task> floatingTasks) {
-        throw new NotImplementedException();
+        throw new UnsupportedOperationException();
     }
     
     
@@ -50,7 +48,7 @@ public class TaskManager {
      */
     
     public void preloadNormalTasks(ArrayList<Task> normalTasks) {
-        throw new NotImplementedException();
+        throw new UnsupportedOperationException();
     }
     
     /**
@@ -71,7 +69,7 @@ public class TaskManager {
      * @return ArrayList of IDs of the tasks that meets the search criteria
      */
     public ArrayList<Integer> searchTaskID(String text, boolean searchAll) {
-        throw new NotImplementedException();
+        throw new UnsupportedOperationException();
     }
     
     /**
@@ -81,7 +79,7 @@ public class TaskManager {
      * @return ArrayList of the tasks that meets the search criteria.
      */
     public ArrayList<Task> searchTask(String text, boolean searchAll) {
-        throw new NotImplementedException();
+        throw new UnsupportedOperationException();
     }
     
     /**
@@ -90,7 +88,7 @@ public class TaskManager {
      * @return returns the task if found, null if it doesn't exist
      */
     public Task getTask(int ID) {
-        throw new NotImplementedException();
+        throw new UnsupportedOperationException();
     }
     
     /**
@@ -117,7 +115,9 @@ public class TaskManager {
     }
     
     /**
-     * Searches for Task objects matching the input search string.
+     * Search for Task objects matching the input search string.
+     * By default only incomplete tasks will be searched.
+     * 
      * Prints out the list of searched Task objects.
      */
     public void searchAndDisplay(String searchStr) {
@@ -127,8 +127,9 @@ public class TaskManager {
    
 	/**
      * Removes the task by first searching for the search string
-     * in the task description. If there is exactly one match,
-     * just delete it. If there are multiple matches, display 
+     * in the task description. 
+     * If there is exactly one match, just delete it. 
+     * If there are multiple matches, display 
      * all searchResults to user. Wait for user input to delete again. 
      */
     public void delete(String searchStr) {
@@ -138,7 +139,7 @@ public class TaskManager {
     		System.out.println(NOTHING_TO_DELETE);
     	} else if (numResults == 1) {
     		delete(searchResults.get(0).getId());
-    	} else {
+    	} else { // needs amendments!!
     		displaySearchResults(searchResults);
     	}
     }
@@ -149,6 +150,7 @@ public class TaskManager {
     
     /**
      * Searches for Task objects matching the input search string.
+     * By default only incomplete tasks will be searched.
      * Returns searchResults in the form of an ArrayList of Task objects. 
      */
     private ArrayList<Task> search(String searchStr) {
@@ -158,7 +160,7 @@ public class TaskManager {
 		for (int i=0; i<normalTasks.size(); i++) {
 			Task currTask = normalTasks.get(i);
 			String currTaskStr = currTask.toString();
-			if (currTaskStr.contains(searchStr)) {
+			if (currTaskStr.contains(searchStr) && !currTask.getComplete()) {
 				searchResults.add(currTask);
 			}
 		}

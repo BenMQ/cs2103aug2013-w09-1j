@@ -26,6 +26,11 @@ public abstract class Task implements Comparable<Task>{
 	    this.endTime = endTime;
 	}
 	
+	
+	public static int getNumOfTasks() {
+		return numOfTasks;
+	}
+	
 	public int getId() {
 		return id;
 	}
@@ -41,7 +46,7 @@ public abstract class Task implements Comparable<Task>{
 	 * 3) Floating task: desc
 	 */
 	public String toString() {
-	    String output = description;
+		String output = id + ". " + description;
 	    if (startTime != null) {
 	        output += " from " + startTime.toString() + " to " + endTime.toString();
 	    } else if (endTime != null) {
@@ -50,6 +55,11 @@ public abstract class Task implements Comparable<Task>{
 	    
 	    return output;
 	}
+	
+	public static void editNumOfTasks(int num) {
+		numOfTasks = num;
+	}
+	
 	
 	public void editId(int id) {
 		this.id = id;
@@ -98,5 +108,9 @@ public abstract class Task implements Comparable<Task>{
             }
         }
 	}
+	
+	public abstract String toStringForFile();
+
+	
 	
 }

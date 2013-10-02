@@ -53,7 +53,7 @@ public class StorageHandler {
 	private void saveOneList(File file, ArrayList taskList) throws IOException{
 		BufferedWriter output = new BufferedWriter(new FileWriter(file, false));
 		for (int i = 0; i < taskList.size(); i++) {
-			output.write((taskList.get(i)).toString());
+			output.write((taskList.get(i)).toStringForFile());
 			output.newLine();
 		}
 		output.newLine();

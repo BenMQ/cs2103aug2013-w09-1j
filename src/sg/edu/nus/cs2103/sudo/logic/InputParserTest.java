@@ -14,4 +14,17 @@ public class InputParserTest {
 		assertEquals(dates.size(), 2);
 	}
 
+	@Test
+	public void testParseDescription(){
+	    String[] testcases = new String[] {
+	        "'sudo' is an amazing app",
+		    "sudo is an amazing 'app'",
+		    "sudo is an 'amazing' app",
+	    };	
+	    
+	    assertEquals(InputParser.parseDescription(testcases[0]),"sudo");
+	    assertEquals(InputParser.parseDescription(testcases[1]), "app");
+	    assertEquals(InputParser.parseDescription(testcases[2]), "amazing");
+	}
+	
 }

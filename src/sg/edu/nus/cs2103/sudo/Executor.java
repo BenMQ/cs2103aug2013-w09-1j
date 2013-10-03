@@ -15,7 +15,7 @@ public class Executor {
 		Scanner user = new Scanner( System.in );
 		InputParser parser = new InputParser();
 		while (true) {
-			String userInput = InputParser.readCommand(user);
+			String userInput = InputParser.readCommand(user); //listen to scanner
 			parser.executeCommand(userInput);
 		}
 

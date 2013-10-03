@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import sg.edu.nus.cs2103.sudo.COMMAND_TYPE;
 import org.joda.time.DateTime;
@@ -22,6 +24,15 @@ public class InputParser {
 	 * 
 	 * @author Yos Riady 
 	 */
+	
+    static final String[] testcases = new String[] {
+        "'Tumblr' is an amazing app",
+    "Tumblr is an amazing 'app'",
+    "Tumblr is an 'amazing' app",
+    "Tumblr is 'awesome' and 'amazing' ",
+    "Tumblr's users' are disappointed ",
+    "Tumblr's 'acquisition' complete but users' loyalty doubtful"
+    };	
 	
 	private static final String TO = " to ";
 	private static final String FROM = " from ";	
@@ -107,7 +118,17 @@ public class InputParser {
 	}	
 
 	public static String parseDescription(String userInput){
-		return userInput.substring(userInput.indexOf(" ")+1);
+		Pattern p = Pattern.compile("(?:^|)'([^']*?)'(?:$|)", Pattern.MULTILINE);
+        Matcher m = p.matcher(userInput);
+        if (m.find()) {
+//                System.out.print(m.group());
+//                while (m.find()) System.out.print(", "+m.group());
+            return m.group().substring(1,m.group().length()-1); //refactor regex to do this pruning
+        } else {
+            System.out.println("NO DESCRIPTION");
+            return null;
+        }
+         
 	}	
 	
 	public static COMMAND_TYPE getCommandType(String userCommand){
@@ -150,6 +171,20 @@ public class InputParser {
 	public static void main(String[] args) {
 		System.out.println(parseDateTime("add task"));
 		
+		System.out.println(parseDescription("add 'helllooo'"));
+		
+		Pattern p = Pattern.compile("(?:^|\\s)'([^']*?)'(?:$|\\s)", Pattern.MULTILINE);
+        for (String arg : testcases) {
+            System.out.print("Input: "+arg+" -> Matches: ");
+            Matcher m = p.matcher(arg);
+            if (m.find()) {
+                System.out.print(m.group());
+                while (m.find()) System.out.print(", "+m.group());
+                System.out.println();
+            } else {
+                System.out.println("NONE");
+            }
+        } 		
 		
 	}
 }

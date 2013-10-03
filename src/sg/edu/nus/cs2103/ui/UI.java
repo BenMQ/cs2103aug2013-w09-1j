@@ -1,14 +1,10 @@
-package sg.edu.nus.cs2103.sudo;
+package sg.edu.nus.cs2103.ui;
 
 import java.util.Scanner;
 
 import sg.edu.nus.cs2103.sudo.logic.InputParser;
 
-public class Executor {
-
-	/**
-	 * The main Executor class
-	 */
+public class UI {
 	
 	public static void main(String[] args) {
 		
@@ -19,7 +15,6 @@ public class Executor {
 			parser.executeCommand(userInput);
 		}
 
-		
 	}
 
 }

@@ -38,7 +38,6 @@ public class TaskManagerTest {
 		floatingTasks = manager.addFloatingTask(new FloatingTask("start salsa lessons"));
 		floatingTasks = manager.editFloatingTask(2, new FloatingTask("resume pilates classes in NUS"));
 		assertEquals("1. learn how to fish with dad\n2. resume pilates classes in NUS\n3. start salsa lessons\n", displayTasks(floatingTasks));
-
 	}
 	
 	/**
@@ -56,10 +55,17 @@ public class TaskManagerTest {
 		assertEquals("1. learn how to fish\n2. resume pilates in NUS\n3. start salsa lessons at Nus\n", displayTasks(floatingTasks));
 		assertEquals("1. learn how to fish\n", displayTasks(manager.search("fish")));
 		assertEquals("2. resume pilates in NUS\n3. start salsa lessons at Nus\n", displayTasks(manager.search("nus")));
+		assertEquals("Nothing to display.\n", displayTasks(manager.search("fishes")));
+
 	}
 	
 	private String displayTasks(ArrayList<Task> tasks) {
 		String str = "";
+		
+		if (tasks.isEmpty()) {
+			str += "Nothing to display.\n";
+			return str;
+		}
 		
 		for (int i=0; i< tasks.size(); i++) {
 			str += tasks.get(i) + "\n";

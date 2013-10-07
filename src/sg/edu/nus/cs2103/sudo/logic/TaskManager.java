@@ -91,8 +91,13 @@ public class TaskManager {
 	 * @return floatingTasks after editing
 	 */
 	public ArrayList<Task> editFloatingTask(int displayId, Task newTask) {
+		int index = displayId - 1;
+		if (index < 0 || index > floatingTasks.size()) {
+			// throw exception here! 
+			// throw new IndexOutOfBoundsException("Invalid id.");
+		}
 		newTask.setId(displayId);
-		floatingTasks.set(displayId - 1, newTask);
+		floatingTasks.set(index, newTask);
 		return floatingTasks;
 	}
 

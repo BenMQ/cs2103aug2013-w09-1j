@@ -13,7 +13,6 @@ public abstract class Task implements Comparable<Task>{
 	protected Boolean isComplete = false;
 	protected DateTime startTime;
 	protected DateTime endTime;
-	protected static int numOfTasks = 0;
 	
 	// Task object constructor
 	public Task() {
@@ -24,11 +23,6 @@ public abstract class Task implements Comparable<Task>{
 	    this.description = desc;
 	    this.startTime = startTime;
 	    this.endTime = endTime;
-	}
-	
-	
-	public static int getNumOfTasks() {
-		return numOfTasks;
 	}
 	
 	public int getId() {
@@ -56,24 +50,19 @@ public abstract class Task implements Comparable<Task>{
 	    return output;
 	}
 	
-	public static void editNumOfTasks(int num) {
-		numOfTasks = num;
-	}
-	
-	
-	public void editId(int id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 	
-	public void editDescription(String newDescription) {
+	public void setDescription(String newDescription) {
 		description = newDescription;
 	}
 	
-	public void editStartTime(DateTime startTime) {
+	public void setStartTime(DateTime startTime) {
 		this.startTime = startTime;
 	}
 	
-	public void editEndTime(DateTime endTime) {
+	public void setEndTime(DateTime endTime) {
 		this.endTime = endTime;
 	}
 	

@@ -12,9 +12,7 @@ public class FloatingTask extends Task {
 	
 	// Floating object constructor
 	public FloatingTask(String description) {
-		editDescription(description);
-		numOfTasks++;
-		editId(numOfTasks);
+		setDescription(description);
 	}
 	
 	// To be used to store in .txt 

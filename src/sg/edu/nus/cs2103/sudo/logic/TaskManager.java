@@ -5,7 +5,8 @@ import java.util.ArrayList;
 /**
  * 
  * @author chenminqi
- *
+ * @author Ipsita 
+ * 
  */
 public class TaskManager {
     
@@ -52,13 +53,43 @@ public class TaskManager {
     }
     
     /**
-     * Adds a new constructed task.
+     * Adds a new constructed floating task.
      * @param newTask
+     * @return floatingTasks with new additions 
      */
-    public void addTask(Task newTask) {
+    public ArrayList<Task> addFloatingTask(Task newTask) {
         // the new task should be inserted such that the memory list is 
         // maintained as a sorted list
+    	
+    	newTask.setId(floatingTasks.size()+1);
+        floatingTasks.add(newTask);
+        return floatingTasks;
+    }
+    
+    /**
+     * Adds a new constructed normal task which includes timed and/or deadline tasks
+     * @param newTask
+     * @return 
+     */
+    public ArrayList<Task> addNormalTask(Task newTask) {
+        // the new task should be inserted such that the memory list is 
+        // maintained as a sorted list
+    	newTask.setId(normalTasks.size()+1);
         normalTasks.add(newTask);
+        return normalTasks;
+    }
+    
+    /**
+     * Replaces the floating task indicated by the displayId with the newTask
+     * 
+     * @param displayId 
+     * @param newTask
+     * @return floatingTasks after editing 
+     */
+    public ArrayList<Task> editFloatingTask(int displayId, Task newTask) {
+    	newTask.setId(displayId);
+    	floatingTasks.set(displayId-1, newTask);
+		return floatingTasks;
     }
     
     /**
@@ -97,8 +128,8 @@ public class TaskManager {
      * @param showAll set to true to include completed task
      */
     public void displayAllTasks(boolean showAll) {
-        for (int i = 0; i < normalTasks.size(); i ++) {
-            Task task = normalTasks.get(i);
+        for (int i = 0; i < floatingTasks.size(); i ++) {
+            Task task = floatingTasks.get(i);
             if (showAll || !task.isComplete) {
             	System.out.println(task.toString());
             }
@@ -146,19 +177,15 @@ public class TaskManager {
     
     
     /**
-     * Given the id of the task, the task is deleted from normalTasks 
+     * Given the id of the task, the task is deleted from floatingTasks 
      */
     public void delete(int id) {
-    	normalTasks.remove(id-1);
-    	Task.editNumOfTasks(Task.getNumOfTasks()-1);
+    	floatingTasks.remove(id-1);
     	// update the id of all subsequent tasks
-    	for (int i=id-1; i<normalTasks.size(); i++) {
-    		normalTasks.get(i).editId(i+1);
+    	for (int i=id-1; i<floatingTasks.size(); i++) {
+    		floatingTasks.get(i).setId(i+1);
     	}
     }
-    
-    
-    
     
     
     /**
@@ -167,12 +194,12 @@ public class TaskManager {
      * Returns searchResults in the form of an ArrayList of Task objects 
      * with the same id as the index in the ArrayList 
      */
-    private ArrayList<Task> search(String searchStr) {
+    public ArrayList<Task> search(String searchStr) {
 		searchStr = searchStr.trim();
 		ArrayList<Task> searchResults = new ArrayList<Task>();
 		
-		for (int i=0; i<normalTasks.size(); i++) {
-			Task currTask = normalTasks.get(i);
+		for (int i=0; i<floatingTasks.size(); i++) {
+			Task currTask = floatingTasks.get(i);
 			String currTaskStr = currTask.toString();
 			if (currTaskStr.contains(searchStr) && !currTask.getComplete()) {
 				searchResults.add(currTask);
@@ -184,7 +211,7 @@ public class TaskManager {
     /**
      * Prints out the list of search results containing Task objects.
      */
-    private void displaySearchResults(ArrayList<Task> searchResults) {
+    public void displaySearchResults(ArrayList<Task> searchResults) {
     	if (searchResults.isEmpty()) {
     		System.out.println("No search results!");
     		return;

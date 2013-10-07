@@ -65,7 +65,7 @@ public class InputParser {
 			return;
 		case ADD:
 			System.out.println("Adding floating task:" + taskDescription);
-			this.manager.addTask(new FloatingTask(taskDescription));
+			this.manager.addFloatingTask(new FloatingTask(taskDescription));
 			return;
 		case SEARCH:
 			System.out.println("Searching:" + taskDescription);

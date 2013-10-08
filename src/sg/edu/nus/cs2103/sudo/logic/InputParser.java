@@ -25,15 +25,6 @@ public class InputParser {
 	 * @author Yos Riady 
 	 */
 	
-    static final String[] testcases = new String[] {
-        "'Tumblr' is an amazing app",
-    "Tumblr is an amazing 'app'",
-    "Tumblr is an 'amazing' app",
-    "Tumblr is 'awesome' and 'amazing' ",
-    "Tumblr's users' are disappointed ",
-    "Tumblr's 'acquisition' complete but users' loyalty doubtful"
-    };	
-	
 	private static final String TO = " to ";
 	private static final String FROM = " from ";	
 	private static final String DOUBLE_QUOTE = "\"";
@@ -157,10 +148,6 @@ public class InputParser {
 		return COMMAND_TYPE.valueOf(userCommand.toUpperCase());
 	}
 	
-	
-	
-	
-	
 	// Helper method
 	private static ArrayList<List<Date>> getDateLists(List<DateGroup> dateGroups) {
 		ArrayList<List<Date>> dateLists = new ArrayList<List<Date>>();
@@ -188,25 +175,5 @@ public class InputParser {
 		return dateTimes;
 	}	
 	
-	
-	public static void main(String[] args) {
-		System.out.println(parseDateTime("add task"));
-		
-		System.out.println(parseDescription("add 'helllooo'"));
-		
-		Pattern p = Pattern.compile("(?:^|\\s)'([^']*?)'(?:$|\\s)", Pattern.MULTILINE);
-        for (String arg : testcases) {
-            System.out.print("Input: "+arg+" -> Matches: ");
-            Matcher m = p.matcher(arg);
-            if (m.find()) {
-                System.out.print(m.group());
-                while (m.find()) System.out.print(", "+m.group());
-                System.out.println();
-            } else {
-                System.out.println("NONE");
-            }
-        } 		
-		
-	}
 }
 

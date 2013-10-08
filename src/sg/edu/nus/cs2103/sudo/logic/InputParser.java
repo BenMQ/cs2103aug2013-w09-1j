@@ -54,6 +54,7 @@ public class InputParser {
 	public void executeCommand(String userInput){
 		String userCommand = parseCommand(userInput); 		
 		String taskDescription = parseDescription(userInput);
+		int targetId = parseId(userInput);
 		ArrayList<DateTime> dateTimes = parseDateTime(userInput);
 		
 		COMMAND_TYPE userCommandType = getCommandType(userCommand);
@@ -80,7 +81,11 @@ public class InputParser {
 				System.out.println("Deleting task id " + id);
 				this.manager.delete(id);
 			}
-			return;			
+			return;
+		case EDIT:
+		    System.out.println("Editing " + targetId);
+		    this.manager.editFloatingTask(targetId, new FloatingTask(taskDescription));
+		    return;
 		default:
 			//some error message
 			return;
@@ -129,7 +134,23 @@ public class InputParser {
             return null;
         }
          
-	}	
+	}
+	
+	// attempts to get the content between first and second space, and parse as integer. -1 for unsuccessful parsing.
+	public static int parseId(String userInput) {
+	    final int NOT_FOUND = -1;
+	    String[] spaceDelimitedInput = userInput.split("\\s+");
+	    if (spaceDelimitedInput.length < 2) {
+	        return NOT_FOUND;
+	    }
+	    String firstArgument = spaceDelimitedInput[1];
+	    try {
+	        int id = Integer.parseInt(firstArgument, 10);
+	        return id;
+	    } catch (NumberFormatException e) {
+	        return -1;
+	    }
+	}
 	
 	public static COMMAND_TYPE getCommandType(String userCommand){
 		//here need to catch exceptions and tolerate some user typos

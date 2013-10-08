@@ -2,6 +2,8 @@ package sg.edu.nus.cs2103.sudo.logic;
 
 import java.util.ArrayList;
 
+import org.joda.time.DateTime;
+
 /**
  * 
  * @author chenminqi
@@ -93,12 +95,130 @@ public class TaskManager {
 	public ArrayList<Task> editFloatingTask(int displayId, Task newTask) {
 		int index = displayId - 1;
 		if (index < 0 || index > floatingTasks.size()) {
-			// throw exception here! 
+			// throw exception here!
 			// throw new IndexOutOfBoundsException("Invalid id.");
 		}
 		newTask.setId(displayId);
 		floatingTasks.set(index, newTask);
+
+		// the new task should be inserted such that the memory list is
+		// maintained as a sorted list
 		return floatingTasks;
+	}
+
+	/**
+	 * Replaces the task with the index with the newTask
+	 * and sorts the normalTasks again
+	 * 
+	 * @param displayId
+	 * @param newTask
+	 * @return
+	 */
+	public ArrayList<Task> editNormalTask(int index, Task newTask) {
+		newTask.setId(index);
+		normalTasks.set(index, newTask);
+
+		// TODO: the new task should be inserted such that the memory list is
+		// maintained as a sorted list
+		
+		return normalTasks;
+	}
+
+	/**
+	 * InputParser calls this. 
+	 * Edits the description of Timed or Deadline Task
+	 * 
+	 * @param displayId
+	 * @param description
+	 * @return
+	 */
+	public ArrayList<Task> editNormalTask(int displayId, String description) {
+		int index = displayId - 1;
+		if (index < 0 || index > normalTasks.size()) {
+			// throw exception here!
+			// throw new IndexOutOfBoundsException("Invalid id.");
+		}
+		Task newTask = normalTasks.get(index);
+		newTask.setDescription(description);
+		
+		editNormalTask(index, newTask);
+		
+		return normalTasks;
+	}
+
+	/**
+	 * InputParser calls this. 
+	 * Edits the endTime for Deadline Task
+	 * 
+	 * @param displayId
+	 * @param startTime
+	 * @return
+	 */
+	public ArrayList<Task> editNormalTask(int displayId, DateTime endTime) {
+		int index = displayId - 1;
+		if (index < 0 || index > normalTasks.size()) {
+			// throw exception here!
+			// throw new IndexOutOfBoundsException("Invalid id.");
+		}
+		Task newTask = normalTasks.get(index);
+		newTask.setEndTime(endTime);
+		
+		editNormalTask(index, newTask);
+
+		return normalTasks;
+	}
+
+	/**
+	 * InputParser calls this. 
+	 * Edits the startTime and endTime of Timed Task
+	 * 
+	 * @param displayId
+	 * @param description
+	 * @param startTime
+	 * @param endTime
+	 * @return
+	 */
+	public ArrayList<Task> editNormalTask(int displayId, DateTime startTime,
+			DateTime endTime) {
+		int index = displayId - 1;
+		if (index < 0 || index > normalTasks.size()) {
+			// throw exception here!
+			// throw new IndexOutOfBoundsException("Invalid id.");
+		}
+		
+		Task newTask = normalTasks.get(index);
+		newTask.setEndTime(endTime);
+		
+		editNormalTask(index, newTask);
+
+		return normalTasks;
+	}
+
+	/**
+	 * InputParser calls this. Edits the Timed Task
+	 * 
+	 * @param displayId
+	 * @param description
+	 * @param startTime
+	 * @param endTime
+	 * @return
+	 */
+	public ArrayList<Task> editNormalTask(int displayId, String description,
+			DateTime startTime, DateTime endTime) {
+		int index = displayId - 1;
+		if (index < 0 || index > normalTasks.size()) {
+			// throw exception here!
+			// throw new IndexOutOfBoundsException("Invalid id.");
+		}
+		
+		Task newTask = normalTasks.get(index);
+		newTask.setDescription(description);
+		newTask.setStartTime(startTime);
+		newTask.setEndTime(endTime);
+		
+		editNormalTask(index, newTask);
+		
+		return normalTasks;
 	}
 
 	/**
@@ -204,12 +324,12 @@ public class TaskManager {
 		}
 	}
 
-
-	/** Searches the floatingTasks for matches with the searchStr
-	 * By default, only incomplete tasks will be searched
+	/**
+	 * Searches the floatingTasks for matches with the searchStr By default,
+	 * only incomplete tasks will be searched
 	 * 
 	 * @param searchStr
-	 * @return ArrayList of Task objects 
+	 * @return ArrayList of Task objects
 	 */
 	public ArrayList<Task> search(String searchStr) {
 		searchStr = searchStr.trim();

@@ -139,7 +139,7 @@ public class InputParser {
 	        int id = Integer.parseInt(firstArgument, 10);
 	        return id;
 	    } catch (NumberFormatException e) {
-	        return -1;
+	        return NOT_FOUND;
 	    }
 	}
 	

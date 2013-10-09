@@ -121,7 +121,7 @@ public class InputParser {
 //                while (m.find()) System.out.print(", "+m.group());
             return m.group().substring(1,m.group().length()-1); //refactor regex to do this pruning
         } else {
-            System.out.println("NO DESCRIPTION");
+//            System.out.println("NO DESCRIPTION");
             return null;
         }
          

@@ -28,8 +28,8 @@ public class InputParser {
 	private static Scanner sc = new Scanner(System.in);
 	private TaskManager manager; 
 	
-	public InputParser() {
-		manager = new TaskManager();
+	public InputParser(TaskManager m) {
+		manager = m;
 	}
 	
 	/**

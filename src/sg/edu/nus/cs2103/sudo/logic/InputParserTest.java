@@ -9,8 +9,14 @@ import org.junit.Test;
 public class InputParserTest {
 
 	@Test
+	public void testParseOneDate() {
+		ArrayList<DateTime> dates = InputParser.parseDateTime("add 'finish homework' by 29 december");
+		assertEquals(dates.size(), 1);
+	}
+	
+	@Test
 	public void testParseTwoDates() {
-		ArrayList<DateTime> dates = InputParser.parseDateTime("add golf from the day before next thursday to 19 december");
+		ArrayList<DateTime> dates = InputParser.parseDateTime("add 'golf' from the day before next thursday to 19 december");
 		assertEquals(dates.size(), 2);
 	}
 

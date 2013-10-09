@@ -364,9 +364,4 @@ public class TaskManager {
 		}
 	}
 
-	public void addDeadlineTask(FloatingTask floatingTask) {
-		// TODO Auto-generated method stub
-		
-	}
-
 }

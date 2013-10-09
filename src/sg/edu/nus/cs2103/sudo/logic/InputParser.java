@@ -25,12 +25,7 @@ public class InputParser {
 	 * @author Yos Riady 
 	 */
 	
-	private static final String TO = " to ";
-	private static final String FROM = " from ";	
-	private static final String DOUBLE_QUOTE = "\"";
-	
 	private static Scanner sc = new Scanner(System.in);
-	
 	private TaskManager manager; 
 	
 	public InputParser() {
@@ -56,8 +51,19 @@ public class InputParser {
 			this.manager.displayAllTasks();
 			return;
 		case ADD:
-			System.out.println("Adding floating task:" + taskDescription);
-			this.manager.addFloatingTask(new FloatingTask(taskDescription));
+			int num_dates = dateTimes.size();
+			if(num_dates == 0){ //need to refactor this later
+					System.out.println("Adding floating task:" + taskDescription);
+					this.manager.addFloatingTask(new FloatingTask(taskDescription));
+			} else if(num_dates == 1){
+					System.out.println("Adding deadline task:" + taskDescription);
+					this.manager.addNormalTask(new DeadlineTask(taskDescription, dateTimes));
+			} else if(num_dates == 2){
+					System.out.println("Adding timed task:" + taskDescription);
+					this.manager.addNormalTask(new TimedTask(taskDescription, dateTimes));
+			} else {
+					System.out.println("Invalid number of dates");
+			}
 			return;
 		case SEARCH:
 			System.out.println("Searching:" + taskDescription);

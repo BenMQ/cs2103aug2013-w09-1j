@@ -17,7 +17,7 @@ public class FloatingTask extends Task {
 	
 	// To be used to store in .txt 
 	public String toStringForFile() {
-		return description + " " + isComplete + "\n";
+		return "floating"+"#"+description+"#"+isComplete+"\n";
 	}
 
 }

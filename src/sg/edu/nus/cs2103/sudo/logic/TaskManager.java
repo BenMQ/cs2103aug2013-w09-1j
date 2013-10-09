@@ -73,6 +73,7 @@ public class TaskManager {
 	/**
 	 * Adds a new constructed normal task which includes timed and/or deadline
 	 * tasks
+	 * TODO: Sorting after adding 
 	 * 
 	 * @param newTask
 	 * @return
@@ -85,6 +86,7 @@ public class TaskManager {
 		return normalTasks;
 	}
 
+	
 	/**
 	 * Replaces the floating task indicated by the displayId with the newTask
 	 * 

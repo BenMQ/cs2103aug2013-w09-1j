@@ -3,6 +3,10 @@
  */
 package sg.edu.nus.cs2103.sudo.logic;
 
+import java.util.ArrayList;
+
+import org.joda.time.DateTime;
+
 /**
  * @author Ipsita
  *
@@ -10,9 +14,10 @@ package sg.edu.nus.cs2103.sudo.logic;
 public class DeadlineTask extends Task {
 	
 	// Deadline Task constructor
-	public DeadlineTask() {
+	public DeadlineTask(String taskDescription, ArrayList<DateTime> dateTimes) {
+		// TODO Auto-generated constructor stub
 	}
-	
+
 	public String toStringForFile() {
 		return "DEADLINE"+"#"+description+"#"+ "BY"+endTime + "#" + isComplete + "\n";
 	}

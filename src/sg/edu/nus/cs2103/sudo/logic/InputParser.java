@@ -101,7 +101,7 @@ public class InputParser {
 	 * Reads the user input for command
 	 * @param userCommand 	the user's input command 
 	 */
-	public static String readCommand(Scanner userCommand){
+	public String readCommand(Scanner userCommand){
 		System.out.print("command:");
 		return userCommand.nextLine();
 	}	

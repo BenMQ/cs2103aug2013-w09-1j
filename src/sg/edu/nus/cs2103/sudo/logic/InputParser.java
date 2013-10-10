@@ -8,11 +8,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import sg.edu.nus.cs2103.sudo.COMMAND_TYPE;
+import sg.edu.nus.cs2103.sudo.Constants;
+
 import org.joda.time.DateTime;
 
 import com.joestelmach.natty.DateGroup;
 import com.joestelmach.natty.Parser;
-import sg.edu.nus.cs2103.sudo.COMMAND_TYPE;;
 
 public class InputParser {
 
@@ -24,7 +25,7 @@ public class InputParser {
 	 * 
 	 * @author Yos Riady 
 	 */
-	
+		
 	private static Scanner sc = new Scanner(System.in);
 	private TaskManager manager; 
 	
@@ -45,28 +46,28 @@ public class InputParser {
 		
 		switch(userCommand){
 		case INVALID:
-			System.out.println("Invalid command");
+			System.out.print(Constants.MESSAGE_INVALID_COMMAND);
 			return;		
 		case INCOMPLETE:
-			System.out.println("Incomplete command");
+			System.out.print(Constants.MESSAGE_INCOMPLETE_COMMAND);
 			return;
 		case DISPLAY:
-			System.out.println("Displaying all tasks");
+			System.out.println(Constants.MESSAGE_DISPLAY);
 			this.manager.displayAllTasks();
 			return;
 		case ADD:
 			int num_dates = dateTimes.size();
 			if(num_dates == 0){ //need to refactor this later
-					System.out.println("Add floating task: " + taskDescription);
+					System.out.println(Constants.MESSAGE_ADD_FLOATING + taskDescription);
 					this.manager.addFloatingTask(new FloatingTask(taskDescription));
 			} else if(num_dates == 1){
-					System.out.println("Add deadline task: " + taskDescription);
+					System.out.println(Constants.MESSAGE_ADD_DEADLINE + taskDescription);
 					this.manager.addNormalTask(new DeadlineTask(taskDescription, dateTimes));
 			} else if(num_dates == 2){
-					System.out.println("Add timed task: " + taskDescription);
+					System.out.println(Constants.MESSAGE_ADD_TIMED + taskDescription);
 					this.manager.addNormalTask(new TimedTask(taskDescription, dateTimes));
 			} else {
-					System.out.println("Invalid number of dates");
+					System.out.println(Constants.MESSAGE_INVALID_NUMBER_OF_DATES);
 			}
 			return;
 		case SEARCH:
@@ -77,7 +78,7 @@ public class InputParser {
 			System.out.println("Deleting:" + taskDescription);
 			int numResults = this.manager.delete(taskDescription); //need to refactor this
 			if (numResults > 1 ) {
-				System.out.println("Please enter task id:");
+				System.out.println(Constants.MESSAGE_ENTER_TASK_ID);
 				int id = sc.nextInt(); // change this to take in any input and throw error if invalid integer
 				System.out.println("Deleting task id " + id);
 				this.manager.delete(id);
@@ -222,12 +223,16 @@ public class InputParser {
 	 * In other words, this method checks if the command is in COMMAND_TYPE
 	 */		
 	private static COMMAND_TYPE getCommandType(String userCommand){
-		COMMAND_TYPE commandType = COMMAND_TYPE.valueOf(userCommand.toUpperCase());
-	    for (COMMAND_TYPE c : COMMAND_TYPE.values()) {
-	        if (c.name().equals(commandType.name())) {
-	        	return commandType;
-	        }
-	    }
+		try{
+			COMMAND_TYPE commandType = COMMAND_TYPE.valueOf(userCommand.toUpperCase());
+		    for (COMMAND_TYPE c : COMMAND_TYPE.values()) {
+		        if (c.name().equals(commandType.name())) {
+		        	return commandType;
+		        }
+		    }
+		} catch(IllegalArgumentException e){
+			return COMMAND_TYPE.INVALID;
+		}
 	    return COMMAND_TYPE.INVALID;
 	}
 

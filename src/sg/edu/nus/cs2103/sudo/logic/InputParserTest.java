@@ -53,12 +53,12 @@ public class InputParserTest {
 	@Test
 	public void testIncompleteCommand() throws IOException{
 		testCommand("add", Constants.MESSAGE_INCOMPLETE_COMMAND);
-	}	
+	}
 	
 	@Test
 	public void testInvalidCommand() throws IOException{
 		testCommand("fishing", Constants.MESSAGE_INVALID_COMMAND);
-	}	
+	}
 
 	// Helper test method to test console output
 	private void testCommand(String userInput, String expectedOutput) throws IOException{		

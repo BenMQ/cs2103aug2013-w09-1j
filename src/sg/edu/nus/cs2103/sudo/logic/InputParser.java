@@ -102,8 +102,8 @@ public class InputParser {
 	public static ArrayList<DateTime> parseDateTime(String userInput){
 		Parser dtparser = new Parser();
 		List<DateGroup> dateGroups = dtparser.parse(userInput); //Each DateGroup contains a list of Date
-		ArrayList<List<Date>> dateLists = getDateLists(dateGroups);	
-		ArrayList<DateTime> dateTimes = convertToDateTimes(dateLists);
+		ArrayList<List<Date>> dateLists = ParserUtils.getDateLists(dateGroups);	
+		ArrayList<DateTime> dateTimes = ParserUtils.convertToDateTimes(dateLists);
 		
 		return dateTimes;
 	}
@@ -123,10 +123,10 @@ public class InputParser {
 	 * @return COMMAND_TYPE 
 	 */	
 	public static COMMAND_TYPE parseCommand(String userInput){
-		String commandWord = getCommandWord(userInput);
-		COMMAND_TYPE commandType = getCommandType(commandWord);
-		int numOfWords = countWords(userInput);
-		if (numOfWords < getNumOfWordsNeeded(commandType)) {
+		String commandWord = ParserUtils.getCommandWord(userInput);
+		COMMAND_TYPE commandType = ParserUtils.getCommandType(commandWord);
+		int numOfWords = ParserUtils.countWords(userInput);
+		if (numOfWords < ParserUtils.getNumOfWordsNeeded(commandType)) {
 			return COMMAND_TYPE.INCOMPLETE;
 		} else {
 			return commandType;
@@ -148,7 +148,6 @@ public class InputParser {
         } else {
             return null;
         }
-         
 	}
 	
 	/**
@@ -169,103 +168,5 @@ public class InputParser {
 	        return NOT_FOUND;
 	    }
 	}
-
-	
-//	Helper methods
-	
-	/**
-	 * Retrieves date List objects from joda-datetime DateGroup objects
-	 * @param ArrayList of DateGroup objects
-	 * @return ArrayList of Date Lists
-	 */
-	private static ArrayList<List<Date>> getDateLists(List<DateGroup> dateGroups) {
-		ArrayList<List<Date>> dateLists = new ArrayList<List<Date>>();
-		for(DateGroup dateGroup:dateGroups) {
-			  List<Date> dateList = dateGroup.getDates();
-			  dateLists.add(dateList);
-		}
-		
-		return dateLists;
-	}
-	
-	/**
-	 * Convert DateLists to joda-DateTime objects
-	 * @param ArrayList of Date Lists
-	 * @return ArrayList of DateTime objects
-	 */
-	private static ArrayList<DateTime> convertToDateTimes(ArrayList<List<Date>> dateLists){
-		ArrayList<DateTime> dateTimes = new ArrayList<DateTime>();
-		if(dateLists.isEmpty()){
-			return dateTimes;
-		}
-		
-		List<Date> dates = dateLists.get(0);
-		for(Date date:dates){ //cast Date to joda-DateTime
-			DateTime dt = new DateTime(date);
-			dateTimes.add(dt);
-		}
-		
-		return dateTimes;
-	}	
-	
-	/**
-	 * Get the first word (the command word) from the user input
-	 * @param String userInput
-	 * @return String first word
-	 */
-	private static String getCommandWord(String userInput) {
-		String[] words = userInput.trim().split(" ");
-		return words[0];
-	}		
-	
-	/**
-	 * Validates that the first word (command word) is a valid COMMAND_TYPE
-	 * In other words, this method checks if the command is in COMMAND_TYPE
-	 */		
-	private static COMMAND_TYPE getCommandType(String userCommand){
-		try{
-			COMMAND_TYPE commandType = COMMAND_TYPE.valueOf(userCommand.toUpperCase());
-		    for (COMMAND_TYPE c : COMMAND_TYPE.values()) {
-		        if (c.name().equals(commandType.name())) {
-		        	return commandType;
-		        }
-		    }
-		} catch(IllegalArgumentException e){
-			return COMMAND_TYPE.INVALID;
-		}
-	    return COMMAND_TYPE.INVALID;
-	}
-
-	/**
-	 * Count the number of words in a string
-	 * @param String inputString
-	 * @return number of words
-	 */
-	private static int countWords(String inputString) {
-		if (inputString.trim().isEmpty()) {
-			return 0;
-		} else {
-			return inputString.trim().split("\\s+").length;
-		}
-	}
-	
-	/**
-	 * Returns the minimum number of words required
-	 * for a valid command
-	 * @param COMMAND_TYPE commandType
-	 * @return number of words
-	 */
-	private static int getNumOfWordsNeeded(COMMAND_TYPE commandType) {
-		switch (commandType) {
-		case ADD:
-		case DELETE:
-		case EDIT:
-		case SEARCH:
-			return 2;
-
-		default:
-			return 1;
-		}
-	}	
 }
 

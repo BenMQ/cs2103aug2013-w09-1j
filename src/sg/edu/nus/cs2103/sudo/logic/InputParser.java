@@ -75,7 +75,7 @@ public class InputParser {
 			return;
 		case DELETE:
 			System.out.println("Deleting:" + taskDescription);
-			int numResults = this.manager.delete(taskDescription);
+			int numResults = this.manager.delete(taskDescription); //need to refactor this
 			if (numResults > 1 ) {
 				System.out.println("Please enter task id:");
 				int id = sc.nextInt(); // change this to take in any input and throw error if invalid integer
@@ -109,13 +109,18 @@ public class InputParser {
 
 	/**
 	 * Reads the user input for command
-	 * @param userCommand 	the user's input command 
+	 * @return String 	the user's input command 
 	 */
 	public String readCommand(Scanner userCommand){
 		System.out.print("command:");
 		return userCommand.nextLine();
 	}	
 	
+	/**
+	 * Validates the user input for a specific COMMAND_TYPE
+	 * @param String	the user's input
+	 * @return COMMAND_TYPE 
+	 */	
 	public static COMMAND_TYPE parseCommand(String userInput){
 		String commandWord = getCommandWord(userInput);
 		COMMAND_TYPE commandType = getCommandType(commandWord);
@@ -127,6 +132,11 @@ public class InputParser {
 		}
 	}
 
+	/**
+	 * Parses the user input for task descriptions
+	 * @param String 	the user's input
+	 * @return String	task description 
+	 */	
 	public static String parseDescription(String userInput){
 		Pattern p = Pattern.compile("(?:^|)'([^']*?)'(?:$|)", Pattern.MULTILINE);
         Matcher m = p.matcher(userInput);
@@ -140,7 +150,10 @@ public class InputParser {
          
 	}
 	
-	// attempts to get the content between first and second space, and parse as integer. -1 for unsuccessful parsing.
+	/**
+	 * Attempts to get the content between first and second space, 
+	 * and parse as integer. -1 for unsuccessful parsing. 
+	 */	
 	public static int parseId(String userInput) {
 	    final int NOT_FOUND = -1;
 	    String[] spaceDelimitedInput = userInput.split("\\s+");
@@ -155,17 +168,7 @@ public class InputParser {
 	        return NOT_FOUND;
 	    }
 	}
-	
-	public static COMMAND_TYPE getCommandType(String userCommand){
-		COMMAND_TYPE commandType = COMMAND_TYPE.valueOf(userCommand.toUpperCase());
-	
-		if(containsCommandType(commandType)){
-			return commandType;
-		} else {
-			return COMMAND_TYPE.INVALID;
-		}
-		
-	}
+
 	
 //	Helper methods
 	
@@ -215,6 +218,20 @@ public class InputParser {
 	}		
 	
 	/**
+	 * Validates that the first word (command word) is a valid COMMAND_TYPE
+	 * In other words, this method checks if the command is in COMMAND_TYPE
+	 */		
+	private static COMMAND_TYPE getCommandType(String userCommand){
+		COMMAND_TYPE commandType = COMMAND_TYPE.valueOf(userCommand.toUpperCase());
+	    for (COMMAND_TYPE c : COMMAND_TYPE.values()) {
+	        if (c.name().equals(commandType.name())) {
+	        	return commandType;
+	        }
+	    }
+	    return COMMAND_TYPE.INVALID;
+	}
+
+	/**
 	 * Count the number of words in a string
 	 * @param String inputString
 	 * @return number of words
@@ -244,21 +261,6 @@ public class InputParser {
 		default:
 			return 1;
 		}
-	}	
-	
-	/**
-	 * Checks if a user command is valid / exists
-	 * @param COMMAND_TYPE commandType
-	 * @return boolean
-	 */
-	private static boolean containsCommandType(COMMAND_TYPE commandType) {
-	    for (COMMAND_TYPE c : COMMAND_TYPE.values()) {
-	        if (c.name().equals(commandType.name())) {
-	            return true;
-	        }
-	    }
-
-	    return false;
 	}	
 }
 

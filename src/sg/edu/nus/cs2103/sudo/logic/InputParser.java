@@ -27,10 +27,20 @@ public class InputParser {
 	 */
 		
 	private static Scanner sc = new Scanner(System.in);
-	private TaskManager manager; 
+	private static InputParser parser;
+	private static TaskManager manager; 
 	
-	public InputParser(TaskManager m) {
+//	Constructor is private because this is a singleton class
+	private InputParser(TaskManager m) {
 		manager = m;
+	}
+	
+//	We have public methods to access the single instance of InputParser
+	public static InputParser getInputParser(TaskManager m){
+		if(parser == null){
+			parser = new InputParser(m);
+		}
+		return parser;
 	}
 	
 	/**

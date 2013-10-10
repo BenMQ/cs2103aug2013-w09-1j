@@ -11,7 +11,7 @@ public class UI {
 		
 		Scanner user = new Scanner( System.in );
 		TaskManager manager = new TaskManager();
-		InputParser parser = new InputParser(manager);
+		InputParser parser = InputParser.getInputParser(manager);
 		while (true) {
 			String userInput = parser.readCommand(user); //listen to scanner
 			parser.executeCommand(userInput);

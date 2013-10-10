@@ -38,14 +38,18 @@ public class InputParser {
 	 * @return executes the appropriate high level command
 	 */
 	public void executeCommand(String userInput){
-		String userCommand = parseCommand(userInput); 		
+		COMMAND_TYPE userCommand = parseCommand(userInput); 		
 		String taskDescription = parseDescription(userInput);
 		int targetId = parseId(userInput);
 		ArrayList<DateTime> dateTimes = parseDateTime(userInput);
 		
-		COMMAND_TYPE userCommandType = getCommandType(userCommand);
-		
-		switch(userCommandType){
+		switch(userCommand){
+		case INVALID:
+			System.out.println("Invalid command");
+			return;		
+		case INCOMPLETE:
+			System.out.println("Incomplete command");
+			return;
 		case DISPLAY:
 			System.out.println("Displaying all tasks");
 			this.manager.displayAllTasks();
@@ -53,13 +57,13 @@ public class InputParser {
 		case ADD:
 			int num_dates = dateTimes.size();
 			if(num_dates == 0){ //need to refactor this later
-					System.out.println("Adding floating task:" + taskDescription);
+					System.out.println("Add floating task: " + taskDescription);
 					this.manager.addFloatingTask(new FloatingTask(taskDescription));
 			} else if(num_dates == 1){
-					System.out.println("Adding deadline task:" + taskDescription);
+					System.out.println("Add deadline task: " + taskDescription);
 					this.manager.addNormalTask(new DeadlineTask(taskDescription, dateTimes));
 			} else if(num_dates == 2){
-					System.out.println("Adding timed task:" + taskDescription);
+					System.out.println("Add timed task: " + taskDescription);
 					this.manager.addNormalTask(new TimedTask(taskDescription, dateTimes));
 			} else {
 					System.out.println("Invalid number of dates");
@@ -112,12 +116,16 @@ public class InputParser {
 		return userCommand.nextLine();
 	}	
 	
-	public static String parseCommand(String userInput){
-		if(userInput.indexOf(" ") == -1){
-			return userInput;
+	public static COMMAND_TYPE parseCommand(String userInput){
+		String commandWord = getCommandWord(userInput);
+		COMMAND_TYPE commandType = getCommandType(commandWord);
+		int numOfWords = countWords(userInput);
+		if (numOfWords < getNumOfWordsNeeded(commandType)) {
+			return COMMAND_TYPE.INCOMPLETE;
+		} else {
+			return commandType;
 		}
-		return userInput.substring(0, userInput.indexOf(" "));
-	}	
+	}
 
 	public static String parseDescription(String userInput){
 		Pattern p = Pattern.compile("(?:^|)'([^']*?)'(?:$|)", Pattern.MULTILINE);
@@ -127,7 +135,6 @@ public class InputParser {
 //                while (m.find()) System.out.print(", "+m.group());
             return m.group().substring(1,m.group().length()-1); //refactor regex to do this pruning
         } else {
-//            System.out.println("NO DESCRIPTION");
             return null;
         }
          
@@ -150,11 +157,23 @@ public class InputParser {
 	}
 	
 	public static COMMAND_TYPE getCommandType(String userCommand){
-		//here need to catch exceptions and tolerate some user typos
-		return COMMAND_TYPE.valueOf(userCommand.toUpperCase());
+		COMMAND_TYPE commandType = COMMAND_TYPE.valueOf(userCommand.toUpperCase());
+	
+		if(containsCommandType(commandType)){
+			return commandType;
+		} else {
+			return COMMAND_TYPE.INVALID;
+		}
+		
 	}
 	
-	// Helper method
+//	Helper methods
+	
+	/**
+	 * Retrieves date List objects from joda-datetime DateGroup objects
+	 * @param ArrayList of DateGroup objects
+	 * @return ArrayList of Date Lists
+	 */
 	private static ArrayList<List<Date>> getDateLists(List<DateGroup> dateGroups) {
 		ArrayList<List<Date>> dateLists = new ArrayList<List<Date>>();
 		for(DateGroup dateGroup:dateGroups) {
@@ -165,8 +184,12 @@ public class InputParser {
 		return dateLists;
 	}
 	
-	// Helper method
-	public static ArrayList<DateTime> convertToDateTimes(ArrayList<List<Date>> dateLists){
+	/**
+	 * Convert DateLists to joda-DateTime objects
+	 * @param ArrayList of Date Lists
+	 * @return ArrayList of DateTime objects
+	 */
+	private static ArrayList<DateTime> convertToDateTimes(ArrayList<List<Date>> dateLists){
 		ArrayList<DateTime> dateTimes = new ArrayList<DateTime>();
 		if(dateLists.isEmpty()){
 			return dateTimes;
@@ -181,5 +204,61 @@ public class InputParser {
 		return dateTimes;
 	}	
 	
+	/**
+	 * Get the first word (the command word) from the user input
+	 * @param String userInput
+	 * @return String first word
+	 */
+	private static String getCommandWord(String userInput) {
+		String[] words = userInput.trim().split(" ");
+		return words[0];
+	}		
+	
+	/**
+	 * Count the number of words in a string
+	 * @param String inputString
+	 * @return number of words
+	 */
+	private static int countWords(String inputString) {
+		if (inputString.trim().isEmpty()) {
+			return 0;
+		} else {
+			return inputString.trim().split("\\s+").length;
+		}
+	}
+	
+	/**
+	 * Returns the minimum number of words required
+	 * for a valid command
+	 * @param COMMAND_TYPE commandType
+	 * @return number of words
+	 */
+	private static int getNumOfWordsNeeded(COMMAND_TYPE commandType) {
+		switch (commandType) {
+		case ADD:
+		case DELETE:
+		case EDIT:
+		case SEARCH:
+			return 2;
+
+		default:
+			return 1;
+		}
+	}	
+	
+	/**
+	 * Checks if a user command is valid / exists
+	 * @param COMMAND_TYPE commandType
+	 * @return boolean
+	 */
+	private static boolean containsCommandType(COMMAND_TYPE commandType) {
+	    for (COMMAND_TYPE c : COMMAND_TYPE.values()) {
+	        if (c.name().equals(commandType.name())) {
+	            return true;
+	        }
+	    }
+
+	    return false;
+	}	
 }
 

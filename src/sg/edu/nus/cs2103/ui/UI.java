@@ -10,7 +10,8 @@ public class UI {
 	public static void main(String[] args) {
 		
 		Scanner user = new Scanner( System.in );
-		InputParser parser = new InputParser(new TaskManager());
+		TaskManager manager = new TaskManager();
+		InputParser parser = new InputParser(manager);
 		while (true) {
 			String userInput = parser.readCommand(user); //listen to scanner
 			parser.executeCommand(userInput);

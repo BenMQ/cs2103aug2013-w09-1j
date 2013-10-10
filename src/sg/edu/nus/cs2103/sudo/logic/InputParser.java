@@ -31,7 +31,7 @@ public class InputParser {
 	private static TaskManager manager; 
 	
 //	Constructor is private because this is a singleton class
-	private InputParser(TaskManager m) {
+	InputParser(TaskManager m) {
 		manager = m;
 	}
 	

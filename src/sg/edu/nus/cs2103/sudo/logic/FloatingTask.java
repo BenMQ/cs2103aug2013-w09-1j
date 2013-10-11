@@ -7,12 +7,10 @@ package sg.edu.nus.cs2103.sudo.logic;
 public class FloatingTask extends Task {
 	
 	// Floating object constructor
-	public FloatingTask() {
-	}
-	
-	// Floating object constructor
-	public FloatingTask(String description) {
-		setDescription(description);
+	public FloatingTask(String taskDescription) {
+		assert (taskDescription != null);
+		
+		this.description = taskDescription;
 	}
 	
 	// To be used to store in .txt 

@@ -76,13 +76,13 @@ public class InputParser {
 						return;
 					}
 					System.out.println(Constants.MESSAGE_ADD_FLOATING + taskDescription);
-					this.manager.addFloatingTask(new FloatingTask(taskDescription));
+					this.manager.addTask(new FloatingTask(taskDescription));
 			} else if(num_dates == 1){
 					System.out.println(Constants.MESSAGE_ADD_DEADLINE + taskDescription);
-					this.manager.addNormalTask(new DeadlineTask(taskDescription, dateTimes));
+					this.manager.addTask(new DeadlineTask(taskDescription, dateTimes));
 			} else if(num_dates == 2){
 					System.out.println(Constants.MESSAGE_ADD_TIMED + taskDescription);
-					this.manager.addNormalTask(new TimedTask(taskDescription, dateTimes));
+					this.manager.addTask(new TimedTask(taskDescription, dateTimes));
 			} else {
 					System.out.println(Constants.MESSAGE_INVALID_NUMBER_OF_DATES);
 			}
@@ -103,7 +103,7 @@ public class InputParser {
 			return;
 		case EDIT:
 		    System.out.println("Editing " + targetId);
-		    this.manager.editFloatingTask(targetId, new FloatingTask(taskDescription));
+		    this.manager.editTask(targetId, new FloatingTask(taskDescription));
 		    return;
 		default:
 			//some error message

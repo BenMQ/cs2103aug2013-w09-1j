@@ -29,7 +29,7 @@ public abstract class Task implements Comparable<Task>{
 		return id;
 	}
 
-	public boolean getComplete() {
+	public boolean isComplete() {
 		return isComplete;
 	}
 	

@@ -21,7 +21,7 @@ public class TaskManagerTest {
 	@Test
 	public void testAddFloatingTasks() {
 		ArrayList<Task> floatingTasks; 
-		floatingTasks = manager.addFloatingTask(new FloatingTask("learn how to fish"));
+		floatingTasks = manager.addTask(new FloatingTask("learn how to fish"));
 		
 		assertEquals("1. learn how to fish\n", displayTasks(floatingTasks));
 	}
@@ -30,13 +30,13 @@ public class TaskManagerTest {
 	public void testEditFloatingTasks() {
 		ArrayList<Task> floatingTasks; 
 		
-		floatingTasks = manager.addFloatingTask(new FloatingTask("learn how to fish"));
-		floatingTasks = manager.editFloatingTask(1, new FloatingTask("learn how to fish with dad"));
+		floatingTasks = manager.addTask(new FloatingTask("learn how to fish"));
+		floatingTasks = manager.editTask(1, new FloatingTask("learn how to fish with dad"));
 		assertEquals("1. learn how to fish with dad\n", displayTasks(floatingTasks));
 		
-		floatingTasks = manager.addFloatingTask(new FloatingTask("resume pilates"));
-		floatingTasks = manager.addFloatingTask(new FloatingTask("start salsa lessons"));
-		floatingTasks = manager.editFloatingTask(2, new FloatingTask("resume pilates classes in NUS"));
+		floatingTasks = manager.addTask(new FloatingTask("resume pilates"));
+		floatingTasks = manager.addTask(new FloatingTask("start salsa lessons"));
+		floatingTasks = manager.editTask(2, new FloatingTask("resume pilates classes in NUS"));
 		assertEquals("1. learn how to fish with dad\n2. resume pilates classes in NUS\n3. start salsa lessons\n", displayTasks(floatingTasks));
 	}
 	
@@ -48,14 +48,14 @@ public class TaskManagerTest {
 	public void testSearchFloatingTasks() {
 		ArrayList<Task> floatingTasks; 
 		
-		floatingTasks = manager.addFloatingTask(new FloatingTask("learn how to fish"));
-		floatingTasks = manager.addFloatingTask(new FloatingTask("resume pilates in NUS"));
-		floatingTasks = manager.addFloatingTask(new FloatingTask("start salsa lessons at Nus"));
+		floatingTasks = manager.addTask(new FloatingTask("learn how to fish"));
+		floatingTasks = manager.addTask(new FloatingTask("resume pilates in NUS"));
+		floatingTasks = manager.addTask(new FloatingTask("start salsa lessons at Nus"));
 		
 		assertEquals("1. learn how to fish\n2. resume pilates in NUS\n3. start salsa lessons at Nus\n", displayTasks(floatingTasks));
-		assertEquals("1. learn how to fish\n", displayTasks(manager.search("fish")));
-		assertEquals("2. resume pilates in NUS\n3. start salsa lessons at Nus\n", displayTasks(manager.search("nus")));
-		assertEquals("Nothing to display.\n", displayTasks(manager.search("fishes")));
+		assertEquals("1. learn how to fish\n", displayTasks(manager.search("fish", true)));
+		assertEquals("2. resume pilates in NUS\n3. start salsa lessons at Nus\n", displayTasks(manager.search("nus", true)));
+		assertEquals("Nothing to display.\n", displayTasks(manager.search("fishes", true)));
 
 	}
 	

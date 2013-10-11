@@ -13,7 +13,12 @@ public class TimedTask extends Task {
 	
 	// Timed Task constructor	
 	public TimedTask(String taskDescription, ArrayList<DateTime> dateTimes) {
-		// TODO Auto-generated constructor stub
+		assert (taskDescription != null); 
+		assert (dateTimes.size() == 2);
+
+		this.description = taskDescription;
+		this.startTime = dateTimes.get(0);
+		this.endTime = dateTimes.get(1); 
 	}
 
 	// To be used to store in .txt 

@@ -1,6 +1,7 @@
 package sg.edu.nus.cs2103.sudo.logic;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * 
@@ -8,6 +9,10 @@ import java.util.ArrayList;
  * @author Ipsita
  * 
  */
+
+// TODO: Singleton pattern implementation.
+// TODO: Throw exceptions where necessary.
+
 public class TaskManager {
 
 	private static final String NOTHING_TO_DELETE = "Nothing to delete!";
@@ -33,7 +38,7 @@ public class TaskManager {
 
 	/**
 	 * Adds a new task into the list. Maintains a sorted list of items after
-	 * each add. TODO: Sort!
+	 * each add. TODO: Unit testing of deadline and timed tasks
 	 * 
 	 * @param newTask
 	 * @return floatingTasks with new additions
@@ -41,12 +46,16 @@ public class TaskManager {
 	public ArrayList<Task> addTask(Task newTask) {
 		newTask.setId(tasks.size() + 1);
 		tasks.add(newTask);
-		// Note to self: id of newTask has not been set!
+
+		sortTasks();
+		updateAllIds();
+
 		return tasks;
 	}
 
 	/**
-	 * Replaces the floating task indicated by the displayId with the newTask
+	 * Replaces the task indicated by the displayId with the newTask
+	 * TODO: Unit testing of deadline and timed tasks
 	 * 
 	 * @param displayId
 	 * @param newTask
@@ -54,15 +63,18 @@ public class TaskManager {
 	 */
 	public ArrayList<Task> editTask(int displayId, Task newTask) {
 		int index = displayId - 1;
+		
 		if (index < 0 || index > tasks.size()) {
 			// throw exception here!
 			// throw new IndexOutOfBoundsException("Invalid id.");
 		}
+		
 		newTask.setId(displayId);
 		tasks.set(index, newTask);
-
-		// the new task should be inserted such that the memory list is
-		// maintained as a sorted list
+		
+		sortTasks();
+		updateAllIds();
+		
 		return tasks;
 	}
 
@@ -76,6 +88,7 @@ public class TaskManager {
 	public void displayAllTasks(boolean showAll) {
 		for (int i = 0; i < tasks.size(); i++) {
 			Task task = tasks.get(i);
+			
 			if (showAll || !task.isComplete) {
 				System.out.println(task.toString());
 			}
@@ -88,19 +101,7 @@ public class TaskManager {
 	public void displayAllTasks() {
 		displayAllTasks(false);
 	}
-	
-	/**
-	 * Search for Task objects matching the input search string.
-	 * Searches all Task objects.
-	 * 
-	 * Prints out the list of searched Task objects.
-	 */
-	public void searchAllAndDisplay(String searchStr) {
-		ArrayList<Task> searchResults = search(searchStr, true);
-		displaySearchResults(searchResults);
-	}
-	
-	
+
 	/**
 	 * Search for Task objects matching the input search string. By default,
 	 * only incomplete tasks will be searched.
@@ -109,6 +110,17 @@ public class TaskManager {
 	 */
 	public void searchAndDisplay(String searchStr) {
 		ArrayList<Task> searchResults = search(searchStr, false);
+		displaySearchResults(searchResults);
+	}
+
+	/**
+	 * Search for Task objects matching the input search string. Searches all
+	 * Task objects.
+	 * 
+	 * Prints out the list of searched Task objects.
+	 */
+	public void searchAllAndDisplay(String searchStr) {
+		ArrayList<Task> searchResults = search(searchStr, true);
 		displaySearchResults(searchResults);
 	}
 
@@ -137,11 +149,27 @@ public class TaskManager {
 	}
 
 	/**
+	 * Prints out the list of search results containing Task objects.
+	 */
+	public void displaySearchResults(ArrayList<Task> searchResults) {
+		if (searchResults.isEmpty()) {
+			System.out.println("No search results!");
+			return;
+		}
+
+		System.out.println();
+		System.out.println("Search Results");
+		for (int i = 0; i < searchResults.size(); i++) {
+			System.out.println(searchResults.get(i).toString());
+		}
+	}
+
+	/**
 	 * Removes the task by first searching for the search string in the task
 	 * description. If there is exactly one match, just delete it. If there are
 	 * multiple matches, display all searchResults to user. By default,
-	 * searchResults search through all the tasks. Wait for user input to delete
-	 * again.
+	 * searchResults searches through incomplete tasks only. Wait for user input
+	 * to delete again.
 	 */
 	public int delete(String searchStr) {
 		ArrayList<Task> searchResults = search(searchStr, false);
@@ -159,27 +187,28 @@ public class TaskManager {
 	/**
 	 * Given the id of the task, the task is deleted from floatingTasks
 	 */
-	public void delete(int id) {
-		tasks.remove(id - 1);
-		// update the id of all subsequent tasks
-		for (int i = id - 1; i < tasks.size(); i++) {
-			tasks.get(i).setId(i + 1);
-		}
+	public void delete(int taskId) {
+		tasks.remove(taskId - 1);
+		updateAllIds();
 	}
 
 	/**
-	 * Prints out the list of search results containing Task objects.
+	 * Sorts all the Task objects according to end time. TODO: Incomplete tasks
+	 * should appear first. TODO: Unit Testing
 	 */
-	public void displaySearchResults(ArrayList<Task> searchResults) {
-		if (searchResults.isEmpty()) {
-			System.out.println("No search results!");
-			return;
-		}
+	private ArrayList<Task> sortTasks() {
+		Collections.sort(tasks);
+		updateAllIds();
+		return tasks;
+	}
 
-		System.out.println();
-		System.out.println("Search Results");
-		for (int i = 0; i < searchResults.size(); i++) {
-			System.out.println(searchResults.get(i).toString());
+	/**
+	 * Updates the id of each of the Task objects. To be done after every
+	 * operation.
+	 */
+	private void updateAllIds() {
+		for (int i = 0; i < tasks.size(); i++) {
+			tasks.get(i).setId(i + 1);
 		}
 	}
 

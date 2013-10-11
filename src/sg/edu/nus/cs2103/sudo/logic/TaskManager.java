@@ -14,14 +14,22 @@ import java.util.Collections;
 // TODO: Throw exceptions where necessary.
 
 public class TaskManager {
-
+	
 	private static final String NOTHING_TO_DELETE = "Nothing to delete!";
+	private static TaskManager taskManager;
 
 	// A list of timed, deadline and floating tasks
 	private ArrayList<Task> tasks;
 
-	public TaskManager() {
+	private TaskManager() {
 		tasks = new ArrayList<Task>();
+	}
+	
+	public static TaskManager getTaskManager() {
+		if (taskManager == null) {
+			taskManager = new TaskManager();
+		}
+		return taskManager;
 	}
 
 	/**

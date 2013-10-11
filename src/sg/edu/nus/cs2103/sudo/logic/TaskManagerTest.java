@@ -11,7 +11,8 @@ import java.util.ArrayList;
  *
  */
 public class TaskManagerTest {
-	TaskManager manager = new TaskManager();
+	private static TaskManager manager = TaskManager.getTaskManager();
+	private static ArrayList<Task> tasks;
 	
 	/**
 	 * Tests adding floating tasks and 
@@ -20,24 +21,22 @@ public class TaskManagerTest {
 	 */
 	@Test
 	public void testAddFloatingTasks() {
-		ArrayList<Task> floatingTasks; 
-		floatingTasks = manager.addTask(new FloatingTask("learn how to fish"));
+		tasks = manager.addTask(new FloatingTask("learn how to fish"));
 		
-		assertEquals("1. learn how to fish\n", displayTasks(floatingTasks));
+		assertEquals("1. learn how to fish\n", displayTasks(tasks));
 	}
 	
 	@Test
 	public void testEditFloatingTasks() {
-		ArrayList<Task> floatingTasks; 
+		tasks = manager.editTask(1, new FloatingTask("learn how to fish with dad"));
+		assertEquals("1. learn how to fish with dad\n", displayTasks(tasks));
 		
-		floatingTasks = manager.addTask(new FloatingTask("learn how to fish"));
-		floatingTasks = manager.editTask(1, new FloatingTask("learn how to fish with dad"));
-		assertEquals("1. learn how to fish with dad\n", displayTasks(floatingTasks));
+		tasks = manager.addTask(new FloatingTask("resume pilates"));
+		tasks = manager.addTask(new FloatingTask("start salsa lessons"));
+		tasks = manager.editTask(2, new FloatingTask("resume pilates classes in NUS"));
+		tasks = manager.editTask(3, new FloatingTask("start salsa lessons in Nus"));
 		
-		floatingTasks = manager.addTask(new FloatingTask("resume pilates"));
-		floatingTasks = manager.addTask(new FloatingTask("start salsa lessons"));
-		floatingTasks = manager.editTask(2, new FloatingTask("resume pilates classes in NUS"));
-		assertEquals("1. learn how to fish with dad\n2. resume pilates classes in NUS\n3. start salsa lessons\n", displayTasks(floatingTasks));
+		assertEquals("1. learn how to fish with dad\n2. resume pilates classes in NUS\n3. start salsa lessons in Nus\n", displayTasks(tasks));
 	}
 	
 	/**
@@ -46,15 +45,9 @@ public class TaskManagerTest {
 	 */
 	@Test
 	public void testSearchFloatingTasks() {
-		ArrayList<Task> floatingTasks; 
-		
-		floatingTasks = manager.addTask(new FloatingTask("learn how to fish"));
-		floatingTasks = manager.addTask(new FloatingTask("resume pilates in NUS"));
-		floatingTasks = manager.addTask(new FloatingTask("start salsa lessons at Nus"));
-		
-		assertEquals("1. learn how to fish\n2. resume pilates in NUS\n3. start salsa lessons at Nus\n", displayTasks(floatingTasks));
-		assertEquals("1. learn how to fish\n", displayTasks(manager.search("fish", true)));
-		assertEquals("2. resume pilates in NUS\n3. start salsa lessons at Nus\n", displayTasks(manager.search("nus", true)));
+		assertEquals("1. learn how to fish with dad\n2. resume pilates classes in NUS\n3. start salsa lessons in Nus\n", displayTasks(tasks));
+		assertEquals("1. learn how to fish with dad\n", displayTasks(manager.search("fish", true)));
+		assertEquals("2. resume pilates classes in NUS\n3. start salsa lessons in Nus\n", displayTasks(manager.search("nus", false)));
 		assertEquals("Nothing to display.\n", displayTasks(manager.search("fishes", true)));
 
 	}

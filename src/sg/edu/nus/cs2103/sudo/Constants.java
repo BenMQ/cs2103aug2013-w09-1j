@@ -9,5 +9,6 @@ public class Constants {
 	public static final String MESSAGE_ADD_TIMED = "Add timed task: ";
 	public static final String MESSAGE_ADD_DEADLINE = "Add deadline task: ";
 	public static final String MESSAGE_ADD_FLOATING = "Add floating task: ";
-	public static final String MESSAGE_ENTER_TASK_ID = "Please enter task id:";	
+	public static final String MESSAGE_ENTER_TASK_ID = "Please enter task id:";
+	public static final String MESSAGE_MISSING_DESCRIPTION = "Task description should be between single quotes";	
 }

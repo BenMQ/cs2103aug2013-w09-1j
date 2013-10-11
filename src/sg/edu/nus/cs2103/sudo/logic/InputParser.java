@@ -71,6 +71,10 @@ public class InputParser {
 		case ADD:
 			int num_dates = dateTimes.size();
 			if(num_dates == 0){ //need to refactor this later
+					if(taskDescription == null){
+						System.out.println(Constants.MESSAGE_MISSING_DESCRIPTION);
+						return;
+					}
 					System.out.println(Constants.MESSAGE_ADD_FLOATING + taskDescription);
 					this.manager.addFloatingTask(new FloatingTask(taskDescription));
 			} else if(num_dates == 1){

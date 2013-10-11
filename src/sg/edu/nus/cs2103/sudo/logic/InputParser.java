@@ -32,6 +32,9 @@ public class InputParser {
 	
 //	Constructor is private because this is a singleton class
 	InputParser(TaskManager m) {
+		if (m == null){
+			throw new NullPointerException("TaskManager is null!");
+		}
 		manager = m;
 	}
 	

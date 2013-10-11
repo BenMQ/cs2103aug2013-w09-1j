@@ -21,7 +21,7 @@ public class InputParserTest {
 	@Before
 	public void setUp() {
 		manager = new TaskManager();
-		parser = new InputParser(manager);
+		parser = InputParser.getInputParser(manager);
 		System.setOut(new PrintStream(outContent));
     }
 	

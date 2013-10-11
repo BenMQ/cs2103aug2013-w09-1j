@@ -28,17 +28,17 @@ public class InputParser {
 		
 	private static Scanner sc = new Scanner(System.in);
 	private static InputParser parser;
-	private static TaskManager manager; 
+	private TaskManager manager; 
 	
 //	Constructor is private because this is a singleton class
-	InputParser(TaskManager m) {
+	private InputParser(TaskManager m) {
 		if (m == null){
-			throw new NullPointerException("TaskManager is null!");
+			throw new NullPointerException("TaskManager cannot be null!");
 		}
 		manager = m;
 	}
 	
-//	We have public methods to access the single instance of InputParser
+//	We have public methods to access the single static instance of InputParser
 	public static InputParser getInputParser(TaskManager m){
 		if(parser == null){
 			parser = new InputParser(m);
@@ -57,7 +57,7 @@ public class InputParser {
 		int targetId = parseId(userInput);
 		ArrayList<DateTime> dateTimes = parseDateTime(userInput);
 		
-		switch(userCommand){
+		switch(userCommand){ //we can refactor this using the Command pattern
 		case INVALID:
 			System.out.print(Constants.MESSAGE_INVALID_COMMAND);
 			return;		

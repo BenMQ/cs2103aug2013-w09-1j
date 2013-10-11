@@ -20,7 +20,7 @@ public class InputParserTest {
 	
 	@Before
 	public void setUp() {
-		manager = new TaskManager();
+		manager = TaskManager.getTaskManager();
 		parser = InputParser.getInputParser(manager);
 		System.setOut(new PrintStream(outContent));
     }

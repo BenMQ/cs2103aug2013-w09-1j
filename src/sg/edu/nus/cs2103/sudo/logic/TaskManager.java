@@ -109,7 +109,12 @@ public class TaskManager {
 		displayAllTasks(false);
 	}
 
-	public void markAsCompleted(int taskId) {		
+	/**
+	 * Mark an incomplete task as completed. 
+	 * 
+	 * @param taskId
+	 */
+	public void markAsComplete(int taskId) {		
 		if (taskId < 1 || taskId > tasks.size()) {
 			// throw exception
 		} 
@@ -120,6 +125,24 @@ public class TaskManager {
 		}
 		
 		currTask.setComplete(true);
+	}
+	
+	/**
+	 * Mark a completed task as incomplete. 
+	 * 
+	 * @param taskId
+	 */
+	public void markAsInomplete(int taskId) {		
+		if (taskId < 1 || taskId > tasks.size()) {
+			// throw exception
+		} 
+		
+		Task currTask = tasks.get(taskId - 1);
+		if (!currTask.isComplete()) {
+			// throw exception: completed already! 
+		}
+		
+		currTask.setComplete(false);
 	}
 	
 	/**
@@ -188,11 +211,11 @@ public class TaskManager {
 	 * Removes the task by first searching for the search string in the task
 	 * description. If there is exactly one match, just delete it. If there are
 	 * multiple matches, display all searchResults to user. By default,
-	 * searchResults searches through incomplete tasks only. Wait for user input
+	 * searchResults searches through all tasks. Wait for user input
 	 * to delete again.
 	 */
 	public int delete(String searchStr) {
-		ArrayList<Task> searchResults = search(searchStr, false);
+		ArrayList<Task> searchResults = search(searchStr, true);
 		int numResults = searchResults.size();
 		if (numResults == 0) {
 			System.out.println(NOTHING_TO_DELETE);

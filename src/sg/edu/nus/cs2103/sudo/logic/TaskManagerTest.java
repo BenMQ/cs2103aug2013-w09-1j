@@ -1,6 +1,8 @@
 package sg.edu.nus.cs2103.sudo.logic;
 
 import static org.junit.Assert.*; 
+
+import org.joda.time.DateTime;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -20,14 +22,21 @@ public class TaskManagerTest {
 	 * TODO: Test displaying of completed floating tasks  
 	 */
 	@Test
-	public void testAddFloatingTasks() {
-		tasks = manager.addTask(new FloatingTask("learn how to fish"));
+	public void testAddTasks() {
+		// ArrayList<DateTime> dateTimes = new ArrayList<DateTime>();
 		
+		tasks = manager.addTask(new FloatingTask("learn how to fish"));
 		assertEquals("1. learn how to fish\n", displayTasks(tasks));
+		
+		// tasks = manager.addTask(new DeadlineTask("Buy birthday gift", dateTimes));
+		// assertEquals("", displayTasks(tasks));
+		
+		// tasks = manager.addTask(new FloatingTask("learn how to fish"));
+		// assertEquals("", displayTasks(tasks));
 	}
 	
 	@Test
-	public void testEditFloatingTasks() {
+	public void testEditTasks() {
 		tasks = manager.editTask(1, new FloatingTask("learn how to fish with dad"));
 		assertEquals("1. learn how to fish with dad\n", displayTasks(tasks));
 		
@@ -44,7 +53,7 @@ public class TaskManagerTest {
 	 * TODO: Test search for both complete and incomplete floating tasks
 	 */
 	@Test
-	public void testSearchFloatingTasks() {
+	public void testSearchTasks() {
 		assertEquals("1. learn how to fish with dad\n2. resume pilates classes in NUS\n3. start salsa lessons in Nus\n", displayTasks(tasks));
 		assertEquals("1. learn how to fish with dad\n", displayTasks(manager.search("fish", true)));
 		assertEquals("2. resume pilates classes in NUS\n3. start salsa lessons in Nus\n", displayTasks(manager.search("nus", false)));

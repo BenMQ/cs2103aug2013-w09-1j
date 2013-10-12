@@ -114,7 +114,7 @@ public class TaskManager {
 	 * 
 	 * @param taskId
 	 */
-	public void markAsComplete(int taskId) {		
+	public ArrayList<Task> markAsComplete(int taskId) {		
 		if (taskId < 1 || taskId > tasks.size()) {
 			// throw exception
 		} 
@@ -125,6 +125,7 @@ public class TaskManager {
 		}
 		
 		currTask.setComplete(true);
+		return tasks;
 	}
 	
 	/**
@@ -132,7 +133,7 @@ public class TaskManager {
 	 * 
 	 * @param taskId
 	 */
-	public void markAsInomplete(int taskId) {		
+	public ArrayList<Task> markAsInomplete(int taskId) {		
 		if (taskId < 1 || taskId > tasks.size()) {
 			// throw exception
 		} 
@@ -143,6 +144,7 @@ public class TaskManager {
 		}
 		
 		currTask.setComplete(false);
+		return tasks;
 	}
 	
 	/**

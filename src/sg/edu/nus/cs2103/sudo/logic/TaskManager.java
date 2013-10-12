@@ -345,4 +345,12 @@ public class TaskManager {
 		}
 	}
 
+	
+	public ArrayList<Task> getTasks(){
+		return this.tasks;
+	}
+	
+	public void clearTasks(){
+		this.tasks.clear();
+	}	
 }

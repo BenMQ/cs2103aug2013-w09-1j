@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -25,7 +27,9 @@ public class InputParser {
 	 * 
 	 * @author Yos Riady 
 	 */
-		
+	
+	private static Logger logger = Logger.getLogger(InputParser.class.getName());
+	
 	private static Scanner sc = new Scanner(System.in);
 	private static InputParser parser;
 	private TaskManager manager; 
@@ -33,6 +37,7 @@ public class InputParser {
 //	Constructor is private because this is a singleton class
 	private InputParser(TaskManager m) {
 		if (m == null){
+			logger.log(Level.SEVERE, "Task Manager is null when creating InputParser");
 			throw new NullPointerException("TaskManager cannot be null!");
 		}
 		manager = m;
@@ -52,16 +57,20 @@ public class InputParser {
 	 * @return executes the appropriate high level command
 	 */
 	public void executeCommand(String userInput){
-		COMMAND_TYPE userCommand = parseCommand(userInput); 		
+		COMMAND_TYPE userCommand = parseCommand(userInput);
+		assert(userCommand != null);
+		
 		String taskDescription = parseDescription(userInput);
 		int targetId = parseId(userInput);
 		ArrayList<DateTime> dateTimes = parseDateTime(userInput);
 		
 		switch(userCommand){ //we can refactor this using the Command pattern
 		case INVALID:
+			logger.log(Level.SEVERE, userInput + "has invalid command");
 			System.out.print(Constants.MESSAGE_INVALID_COMMAND);
 			return;		
 		case INCOMPLETE:
+			logger.log(Level.SEVERE, userInput + "has incomplete command");
 			System.out.print(Constants.MESSAGE_INCOMPLETE_COMMAND);
 			return;
 		case DISPLAY:

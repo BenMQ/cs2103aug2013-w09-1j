@@ -66,16 +66,8 @@ public abstract class Task {
 		this.endTime = endTime;
 	}
 	
-	public void markCompleted() {
-		this.isComplete = true;
-	}
-	
-	public void markNotCompleted() {
-	    this.isComplete = false;
-	}
-	
-	public void toggleCompleted() {
-	    this.isComplete = !this.isComplete;
+	public void setComplete(Boolean isComplete) {
+		this.isComplete = isComplete;
 	}
 	
 	public abstract String toStringForFile();

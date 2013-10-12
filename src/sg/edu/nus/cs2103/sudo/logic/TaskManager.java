@@ -2,7 +2,6 @@ package sg.edu.nus.cs2103.sudo.logic;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 
 /**
  * 
@@ -11,7 +10,6 @@ import java.util.Comparator;
  * 
  */
 
-// TODO: Singleton pattern implementation.
 // TODO: Throw exceptions where necessary.
 
 public class TaskManager {
@@ -99,7 +97,7 @@ public class TaskManager {
 			Task task = tasks.get(i);
 
 			if (showAll || !task.isComplete) {
-				System.out.println(task.toString());
+				System.out.println(task.toString() + " " + task.isComplete());
 			}
 		}
 	}
@@ -111,6 +109,19 @@ public class TaskManager {
 		displayAllTasks(false);
 	}
 
+	public void markAsCompleted(int taskId) {		
+		if (taskId < 1 || taskId > tasks.size()) {
+			// throw exception
+		} 
+		
+		Task currTask = tasks.get(taskId - 1);
+		if (currTask.isComplete()) {
+			// throw exception: completed already! 
+		}
+		
+		currTask.setComplete(true);
+	}
+	
 	/**
 	 * Search for Task objects matching the input search string. By default,
 	 * only incomplete tasks will be searched.

@@ -27,9 +27,6 @@ public class InputParser {
 	 * 
 	 * @author Yos Riady 
 	 */
-	
-	private static Logger logger = Logger.getLogger(InputParser.class.getName());
-	
 	private static Scanner sc = new Scanner(System.in);
 	private static InputParser parser;
 	private TaskManager manager; 
@@ -37,7 +34,7 @@ public class InputParser {
 //	Constructor is private because this is a singleton class
 	private InputParser(TaskManager m) {
 		if (m == null){
-			logger.log(Level.SEVERE, "Task Manager is null when creating InputParser");
+			Constants.parserLogger.log(Level.WARNING, "Task Manager is null when creating InputParser");
 			throw new NullPointerException("TaskManager cannot be null!");
 		}
 		manager = m;
@@ -66,11 +63,11 @@ public class InputParser {
 		
 		switch(userCommand){ //we can refactor this using the Command pattern
 		case INVALID:
-			logger.log(Level.SEVERE, userInput + "has invalid command");
+			Constants.parserLogger.log(Level.WARNING, userInput + " input has invalid command");
 			System.out.print(Constants.MESSAGE_INVALID_COMMAND);
 			return;		
 		case INCOMPLETE:
-			logger.log(Level.SEVERE, userInput + "has incomplete command");
+			Constants.parserLogger.log(Level.WARNING, userInput + " input has incomplete command");
 			System.out.print(Constants.MESSAGE_INCOMPLETE_COMMAND);
 			return;
 		case DISPLAY:
@@ -81,7 +78,7 @@ public class InputParser {
 			int num_dates = dateTimes.size();
 			if(num_dates == 0){ //need to refactor this later
 					if(taskDescription == null){
-						System.out.println(Constants.MESSAGE_MISSING_DESCRIPTION);
+						System.out.print(Constants.MESSAGE_MISSING_DESCRIPTION);
 						return;
 					}
 					System.out.println(Constants.MESSAGE_ADD_FLOATING + taskDescription);

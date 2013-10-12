@@ -2,7 +2,6 @@ package sg.edu.nus.cs2103.sudo.logic;
 
 import static org.junit.Assert.*; 
 
-import org.joda.time.DateTime;
 import org.junit.Test;
 
 import java.util.ArrayList;

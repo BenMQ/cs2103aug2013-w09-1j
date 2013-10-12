@@ -71,19 +71,15 @@ public class TaskManager {
 	 */
 	public ArrayList<Task> editTask(int displayId, Task newTask)
 			throws IllegalStateException, IndexOutOfBoundsException {
-		
+
 		assert (newTask != null);
-		
+
 		if (tasks.isEmpty()) {
 			throw new IllegalStateException(Constants.MESSAGE_EMPTY_LIST);
 		}
-		
+
 		int index = displayId - 1;
-		if (index < 0 || index > tasks.size()) {
-			throw new IndexOutOfBoundsException(
-					Constants.MESSAGE_INVALID_TASK_INDEX);
-			// to be caught by InputParser
-		}
+		checkValidityIndex(index);
 
 		newTask.setId(displayId);
 		tasks.set(index, newTask);
@@ -102,11 +98,11 @@ public class TaskManager {
 	 *            set to true to include completed tasks
 	 */
 	public void displayAllTasks(boolean showAll) throws IllegalStateException {
-		
+
 		if (tasks.isEmpty()) {
 			throw new IllegalStateException(Constants.MESSAGE_EMPTY_LIST);
 		}
-		
+
 		for (int i = 0; i < tasks.size(); i++) {
 			Task task = tasks.get(i);
 
@@ -122,18 +118,17 @@ public class TaskManager {
 	public void displayAllTasks() throws IllegalStateException {
 		displayAllTasks(false);
 	}
-	
+
 	/**
-	 * Displays the floating tasks only.
-	 * To be shown in the side bar in the GUI
+	 * Displays the floating tasks only. To be shown in the side bar in the GUI
 	 */
 	public void displayFloatingTasks() throws IllegalStateException {
-		int count = 0; 
-		
+		int count = 0;
+
 		if (tasks.isEmpty()) {
 			throw new IllegalStateException(Constants.MESSAGE_EMPTY_LIST);
 		}
-		
+
 		for (int i = 0; i < tasks.size(); i++) {
 			Task task = tasks.get(i);
 
@@ -142,12 +137,12 @@ public class TaskManager {
 				System.out.println(task.toString() + " " + task.isComplete());
 			}
 		}
-		
+
 		if (count == 0) {
 			System.out.println(Constants.MESSAGE_NO_FLOATING_TASKS);
 		}
 	}
-	
+
 	/**
 	 * Mark an incomplete task as completed.
 	 * 
@@ -155,12 +150,11 @@ public class TaskManager {
 	 */
 	public ArrayList<Task> markAsComplete(int taskId)
 			throws IndexOutOfBoundsException, UnsupportedOperationException {
-		if (taskId < 1 || taskId > tasks.size()) {
-			throw new IndexOutOfBoundsException(
-					Constants.MESSAGE_INVALID_TASK_INDEX);
-		}
+		
+		int index = taskId - 1;
+		checkValidityIndex(index);
 
-		Task currTask = tasks.get(taskId - 1);
+		Task currTask = tasks.get(index);
 		if (currTask.isComplete()) {
 			throw new UnsupportedOperationException(
 					Constants.MESSAGE_ALREADY_COMPLETE);
@@ -177,13 +171,10 @@ public class TaskManager {
 	 */
 	public ArrayList<Task> markAsIncomplete(int taskId)
 			throws IndexOutOfBoundsException, UnsupportedOperationException {
-		
-		if (taskId < 1 || taskId > tasks.size()) {
-			throw new IndexOutOfBoundsException(
-					Constants.MESSAGE_INVALID_TASK_INDEX);
-		}
+		int index = taskId - 1;
+		checkValidityIndex(index);
 
-		Task currTask = tasks.get(taskId - 1);
+		Task currTask = tasks.get(index);
 		if (!currTask.isComplete()) {
 			throw new UnsupportedOperationException(
 					Constants.MESSAGE_ALREADY_INCOMPLETE);
@@ -193,7 +184,6 @@ public class TaskManager {
 		return tasks;
 	}
 
-	
 	/**
 	 * Search for Task objects matching the input search string. By default,
 	 * only incomplete tasks will be searched.
@@ -202,7 +192,7 @@ public class TaskManager {
 	 */
 	public void searchAndDisplay(String searchStr) throws NullPointerException,
 			IllegalStateException {
-		
+
 		ArrayList<Task> searchResults = search(searchStr, false);
 		displaySearchResults(searchResults);
 	}
@@ -215,7 +205,7 @@ public class TaskManager {
 	 */
 	public void searchAllAndDisplay(String searchStr)
 			throws NullPointerException, IllegalStateException {
-		
+
 		ArrayList<Task> searchResults = search(searchStr, true);
 		displaySearchResults(searchResults);
 	}
@@ -229,7 +219,7 @@ public class TaskManager {
 	 */
 	public ArrayList<Task> search(String searchStr, boolean searchAll)
 			throws NullPointerException, IllegalStateException {
-		
+
 		if (searchStr == null) {
 			throw new NullPointerException(Constants.MESSAGE_INVALID_SEARCH);
 		}
@@ -278,7 +268,7 @@ public class TaskManager {
 	 */
 	public int delete(String searchStr) throws NullPointerException,
 			IllegalStateException, IndexOutOfBoundsException {
-		
+
 		if (searchStr == null) {
 			throw new NullPointerException(Constants.MESSAGE_INVALID_DELETE);
 		}
@@ -301,12 +291,10 @@ public class TaskManager {
 	 * Given the id of the task, the task is deleted from floatingTasks
 	 */
 	public void delete(int taskId) throws IndexOutOfBoundsException {
-		if (taskId < 1 || taskId > tasks.size()) {
-			throw new IndexOutOfBoundsException(
-					Constants.MESSAGE_INVALID_TASK_INDEX);
-		}
+		int index = taskId - 1;
+		checkValidityIndex(index);
 
-		tasks.remove(taskId - 1);
+		tasks.remove(index);
 		updateAllIds();
 	}
 
@@ -347,6 +335,13 @@ public class TaskManager {
 	private void updateAllIds() {
 		for (int i = 0; i < tasks.size(); i++) {
 			tasks.get(i).setId(i + 1);
+		}
+	}
+	
+	private void checkValidityIndex(int index) throws IndexOutOfBoundsException {
+		if (index < 0 || index > tasks.size()) {
+			throw new IndexOutOfBoundsException(
+					Constants.MESSAGE_INVALID_TASK_INDEX);
 		}
 	}
 

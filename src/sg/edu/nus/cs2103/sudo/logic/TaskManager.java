@@ -2,6 +2,7 @@ package sg.edu.nus.cs2103.sudo.logic;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 
 /**
  * 
@@ -14,7 +15,7 @@ import java.util.Collections;
 // TODO: Throw exceptions where necessary.
 
 public class TaskManager {
-	
+
 	private static final String NOTHING_TO_DELETE = "Nothing to delete!";
 	private static TaskManager taskManager;
 
@@ -24,7 +25,7 @@ public class TaskManager {
 	private TaskManager() {
 		tasks = new ArrayList<Task>();
 	}
-	
+
 	public static TaskManager getTaskManager() {
 		if (taskManager == null) {
 			taskManager = new TaskManager();
@@ -62,8 +63,8 @@ public class TaskManager {
 	}
 
 	/**
-	 * Replaces the task indicated by the displayId with the newTask
-	 * TODO: Unit testing of deadline and timed tasks
+	 * Replaces the task indicated by the displayId with the newTask TODO: Unit
+	 * testing of deadline and timed tasks
 	 * 
 	 * @param displayId
 	 * @param newTask
@@ -71,18 +72,18 @@ public class TaskManager {
 	 */
 	public ArrayList<Task> editTask(int displayId, Task newTask) {
 		int index = displayId - 1;
-		
+
 		if (index < 0 || index > tasks.size()) {
 			// throw exception here!
 			// throw new IndexOutOfBoundsException("Invalid id.");
 		}
-		
+
 		newTask.setId(displayId);
 		tasks.set(index, newTask);
-		
+
 		sortTasks();
 		updateAllIds();
-		
+
 		return tasks;
 	}
 
@@ -96,7 +97,7 @@ public class TaskManager {
 	public void displayAllTasks(boolean showAll) {
 		for (int i = 0; i < tasks.size(); i++) {
 			Task task = tasks.get(i);
-			
+
 			if (showAll || !task.isComplete) {
 				System.out.println(task.toString());
 			}
@@ -205,7 +206,8 @@ public class TaskManager {
 	 * should appear first. TODO: Unit Testing
 	 */
 	private ArrayList<Task> sortTasks() {
-		Collections.sort(tasks);
+		Collections.sort(tasks, new SortTasksByCompletedComparator());
+		Collections.sort(tasks, new SortTasksByEndTimeComparator());
 		updateAllIds();
 		return tasks;
 	}

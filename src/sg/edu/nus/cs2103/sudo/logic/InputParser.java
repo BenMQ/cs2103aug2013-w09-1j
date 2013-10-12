@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -61,59 +60,66 @@ public class InputParser {
 		int targetId = parseId(userInput);
 		ArrayList<DateTime> dateTimes = parseDateTime(userInput);
 		
-		switch(userCommand){ //we can refactor this using the Command pattern
-		case INVALID:
-			Constants.parserLogger.log(Level.WARNING, userInput + " input has invalid command");
-			System.out.print(Constants.MESSAGE_INVALID_COMMAND);
-			return;		
-		case INCOMPLETE:
-			Constants.parserLogger.log(Level.WARNING, userInput + " input has incomplete command");
-			System.out.print(Constants.MESSAGE_INCOMPLETE_COMMAND);
-			return;
-		case DISPLAY:
-			System.out.println(Constants.MESSAGE_DISPLAY);
-			this.manager.displayAllTasks();
-			return;
-		case ADD:
-			int num_dates = dateTimes.size();
-			if(num_dates == 0){ //need to refactor this later
-					if(taskDescription == null){
-						System.out.print(Constants.MESSAGE_MISSING_DESCRIPTION);
-						return;
-					}
-					System.out.println(Constants.MESSAGE_ADD_FLOATING + taskDescription);
-					this.manager.addTask(new FloatingTask(taskDescription));
-			} else if(num_dates == 1){
-					System.out.println(Constants.MESSAGE_ADD_DEADLINE + taskDescription);
-					this.manager.addTask(new DeadlineTask(taskDescription, dateTimes));
-			} else if(num_dates == 2){
-					System.out.println(Constants.MESSAGE_ADD_TIMED + taskDescription);
-					this.manager.addTask(new TimedTask(taskDescription, dateTimes));
-			} else {
-					System.out.println(Constants.MESSAGE_INVALID_NUMBER_OF_DATES);
+		try { //I'm sorry about this gigantic try/catch block
+			switch(userCommand){ //we can refactor this using the Command pattern
+			case INVALID:
+				Constants.parserLogger.log(Level.WARNING, userInput + " input has invalid command");
+				System.out.print(Constants.MESSAGE_INVALID_COMMAND);
+				return;		
+			case INCOMPLETE:
+				Constants.parserLogger.log(Level.WARNING, userInput + " input has incomplete command");
+				System.out.print(Constants.MESSAGE_INCOMPLETE_COMMAND);
+				return;
+			case DISPLAY:
+				System.out.println(Constants.MESSAGE_DISPLAY);
+				this.manager.displayAllTasks();
+				return;
+			case FINISH:
+				System.out.println(Constants.MESSAGE_FINISH);
+				this.manager.markAsComplete(targetId);
+				return;			
+			case ADD:
+				int num_dates = dateTimes.size();
+				if(num_dates == 0){ //need to refactor this later
+						if(taskDescription == null){
+							System.out.print(Constants.MESSAGE_MISSING_DESCRIPTION);
+							return;
+						}
+						this.manager.addTask(new FloatingTask(taskDescription));
+						System.out.println(Constants.MESSAGE_ADD_FLOATING + taskDescription);
+				} else if(num_dates == 1){
+						this.manager.addTask(new DeadlineTask(taskDescription, dateTimes));
+						System.out.println(Constants.MESSAGE_ADD_DEADLINE + taskDescription);
+				} else if(num_dates == 2){
+						this.manager.addTask(new TimedTask(taskDescription, dateTimes));
+						System.out.println(Constants.MESSAGE_ADD_TIMED + taskDescription);						
+				} else {
+						System.out.println(Constants.MESSAGE_INVALID_NUMBER_OF_DATES);
+				}
+				return;
+			case SEARCH:
+				System.out.println("Searching:" + taskDescription);
+				this.manager.searchAndDisplay(taskDescription);
+				return;
+			case DELETE:
+				System.out.println("Deleting:" + taskDescription);
+				int numResults = this.manager.delete(taskDescription); //need to refactor this
+				if (numResults > 1 ) {
+					System.out.println(Constants.MESSAGE_ENTER_TASK_ID);
+					int id = sc.nextInt(); // change this to take in any input and throw error if invalid integer
+					this.manager.delete(id);
+				}
+				return;
+			case EDIT:
+			    System.out.println("Editing " + targetId);
+			    this.manager.editTask(targetId, new FloatingTask(taskDescription));
+			    return;
+			default:
+				//some error message
+				return;
 			}
-			return;
-		case SEARCH:
-			System.out.println("Searching:" + taskDescription);
-			this.manager.searchAndDisplay(taskDescription);
-			return;
-		case DELETE:
-			System.out.println("Deleting:" + taskDescription);
-			int numResults = this.manager.delete(taskDescription); //need to refactor this
-			if (numResults > 1 ) {
-				System.out.println(Constants.MESSAGE_ENTER_TASK_ID);
-				int id = sc.nextInt(); // change this to take in any input and throw error if invalid integer
-				System.out.println("Deleting task id " + id);
-				this.manager.delete(id);
-			}
-			return;
-		case EDIT:
-		    System.out.println("Editing " + targetId);
-		    this.manager.editTask(targetId, new FloatingTask(taskDescription));
-		    return;
-		default:
-			//some error message
-			return;
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
 		}
 	}
 

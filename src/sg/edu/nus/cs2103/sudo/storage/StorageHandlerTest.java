@@ -14,7 +14,7 @@ import org.joda.time.DateTime;
 import org.junit.Test;
 
 public class StorageHandlerTest {
-
+//This is just a temporary test used only by me......will do another one later
 	public static void main(String[] args) throws Exception {
 		
 		//dummy
@@ -23,9 +23,10 @@ public class StorageHandlerTest {
 		FloatingTask floating2 = new FloatingTask("drink coke");
 		StorageHandler testee = new StorageHandler("testing", tasks);
 		tasks.add(floating1);
-		//testee.save(tasks);
+		testee.save(tasks);
+		floating2.setComplete(true);
 		tasks.add(floating2);
-		//testee.save(tasks);
+		testee.save(tasks);
 	 //   assertEquals(InputParser.parseDescription(testcases[1]), "app");
 	   // assertEquals(InputParser.parseDescription(testcases[2]), "amazing");
 		

@@ -20,6 +20,7 @@ public class Constants {
 	public static final String MESSAGE_ALREADY_COMPLETE = "The task specified is complete.\n";
 	public static final String MESSAGE_ALREADY_INCOMPLETE = "The task specified is incomplete.\n";
 	public static final String MESSAGE_NO_SEARCH_RESULTS = "No search results found.\n";
+	public static final String MESSAGE_NO_FLOATING_TASKS = "No floating tasks.\n";
 	
 	
 }

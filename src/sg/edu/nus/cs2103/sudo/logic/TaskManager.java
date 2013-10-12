@@ -70,10 +70,14 @@ public class TaskManager {
 	 * @return floatingTasks after editing
 	 */
 	public ArrayList<Task> editTask(int displayId, Task newTask)
-			throws IndexOutOfBoundsException {
+			throws IllegalStateException, IndexOutOfBoundsException {
 		
 		assert (newTask != null);
-
+		
+		if (tasks.isEmpty()) {
+			throw new IllegalStateException(Constants.MESSAGE_EMPTY_LIST);
+		}
+		
 		int index = displayId - 1;
 		if (index < 0 || index > tasks.size()) {
 			throw new IndexOutOfBoundsException(
@@ -118,7 +122,32 @@ public class TaskManager {
 	public void displayAllTasks() throws IllegalStateException {
 		displayAllTasks(false);
 	}
+	
+	/**
+	 * Displays the floating tasks only.
+	 * To be shown in the side bar in the GUI
+	 */
+	public void displayFloatingTasks() throws IllegalStateException {
+		int count = 0; 
+		
+		if (tasks.isEmpty()) {
+			throw new IllegalStateException(Constants.MESSAGE_EMPTY_LIST);
+		}
+		
+		for (int i = 0; i < tasks.size(); i++) {
+			Task task = tasks.get(i);
 
+			if (task instanceof FloatingTask) {
+				count++;
+				System.out.println(task.toString() + " " + task.isComplete());
+			}
+		}
+		
+		if (count == 0) {
+			System.out.println(Constants.MESSAGE_NO_FLOATING_TASKS);
+		}
+	}
+	
 	/**
 	 * Mark an incomplete task as completed.
 	 * 
@@ -146,7 +175,7 @@ public class TaskManager {
 	 * 
 	 * @param taskId
 	 */
-	public ArrayList<Task> markAsInomplete(int taskId)
+	public ArrayList<Task> markAsIncomplete(int taskId)
 			throws IndexOutOfBoundsException, UnsupportedOperationException {
 		
 		if (taskId < 1 || taskId > tasks.size()) {
@@ -164,6 +193,7 @@ public class TaskManager {
 		return tasks;
 	}
 
+	
 	/**
 	 * Search for Task objects matching the input search string. By default,
 	 * only incomplete tasks will be searched.

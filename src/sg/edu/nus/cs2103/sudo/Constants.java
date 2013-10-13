@@ -30,5 +30,8 @@ public class Constants {
 	public static final String FILE_NAME = "sudo.sav";
 	public static final String HISTORY_NAME = "sudo.his";
 	
+	private static final String MESSAGE_HISTORY_LOAD_ERROR = "Loading history file error: file can not be found.";
+	private static final String MESSAGE_LAST_HISTORY = "No more histories. Can not undo.";
+	
 	public static Logger parserLogger = Logger.getLogger(InputParser.class.getName());
 }

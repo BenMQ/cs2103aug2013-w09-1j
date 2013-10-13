@@ -114,6 +114,17 @@ public class InputParser {
 			    System.out.println("Editing " + targetId);
 			    this.manager.editTask(targetId, new FloatingTask(taskDescription));
 			    return;
+			case UNDO:
+				 this.manager.undo();
+			    return; 
+			case REDO:
+				 this.manager.redo();
+			    return;
+			case EXIT:
+				this.manager.saveTasks();
+				System.exit(0);
+			    return; 
+			    
 			default:
 				//some error message
 				return;

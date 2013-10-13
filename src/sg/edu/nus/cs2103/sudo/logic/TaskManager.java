@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import sg.edu.nus.cs2103.sudo.Constants;
+import sg.edu.nus.cs2103.sudo.storage.NoHistoryException;
 import sg.edu.nus.cs2103.sudo.storage.StorageHandler;
 
 /**
@@ -26,6 +27,7 @@ public class TaskManager {
 	private TaskManager() {
 		tasks = new ArrayList<Task>();
 		storage = StorageHandler.getStorageHandler(Constants.FILE_NAME, tasks);
+		updateAllIds();
 	}
 
 	public static TaskManager getTaskManager() {
@@ -63,7 +65,7 @@ public class TaskManager {
 
 		sortTasks();
 		updateAllIds();
-		storage.save(tasks);
+		storage.save(tasks, true);
 		return tasks;
 	}
 
@@ -93,7 +95,7 @@ public class TaskManager {
 
 		sortTasks();
 		updateAllIds();
-		storage.save(tasks);
+		storage.save(tasks, true);
 		return tasks;
 	}
 
@@ -169,7 +171,7 @@ public class TaskManager {
 		}
 
 		currTask.setComplete(true);
-		storage.save(tasks);
+		storage.save(tasks, true);
 		return tasks;
 	}
 
@@ -191,7 +193,7 @@ public class TaskManager {
 		}
 
 		currTask.setComplete(false);
-		storage.save(tasks);
+		storage.save(tasks, true);
 		return tasks;
 	}
 
@@ -294,6 +296,7 @@ public class TaskManager {
 		} else {
 			displaySearchResults(searchResults);
 		}
+		
 		return numResults;
 	}
 
@@ -306,7 +309,7 @@ public class TaskManager {
 		checkValidityIndex(index);
 
 		tasks.remove(index);
-		storage.save(tasks);
+		storage.save(tasks, true);
 		updateAllIds();
 	}
 
@@ -314,9 +317,16 @@ public class TaskManager {
 	 * If history does not exist, throw Exception
 	 * 
 	 * @return
+	 * @throws Exception 
 	 */
-	public ArrayList<Task> undo() {
-
+	public ArrayList<Task> undo() throws Exception {
+		tasks = storage.undo();
+		updateAllIds();
+		return tasks;
+	}
+	
+	public ArrayList<Task> saveTasks() throws Exception {
+		storage.save(tasks, false);
 		return tasks;
 	}
 
@@ -324,9 +334,11 @@ public class TaskManager {
 	 * If no redo provision exists in history, throw Exception
 	 * 
 	 * @return
+	 * @throws Exception 
 	 */
-	public ArrayList<Task> redo() {
-
+	public ArrayList<Task> redo() throws Exception {
+		tasks = storage.redo();
+		updateAllIds();
 		return tasks;
 	}
 
@@ -338,7 +350,6 @@ public class TaskManager {
 		Collections.sort(tasks, new SortTasksByCompletedComparator());
 		Collections.sort(tasks, new SortTasksByEndTimeComparator());
 		updateAllIds();
-		storage.save(tasks);
 		return tasks;
 	}
 
@@ -358,7 +369,6 @@ public class TaskManager {
 					Constants.MESSAGE_INVALID_TASK_INDEX);
 		}
 	}
-
 	
 	public ArrayList<Task> getTasks(){
 		return this.tasks;

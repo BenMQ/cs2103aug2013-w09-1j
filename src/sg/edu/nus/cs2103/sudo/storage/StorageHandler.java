@@ -7,7 +7,10 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+
 import org.joda.time.DateTime;
+
+import sg.edu.nus.cs2103.sudo.Constants;
 import sg.edu.nus.cs2103.sudo.logic.DeadlineTask;
 import sg.edu.nus.cs2103.sudo.logic.FloatingTask;
 import sg.edu.nus.cs2103.sudo.logic.InputParser;
@@ -24,33 +27,38 @@ public class StorageHandler {
 	 * @author Liu Dake
 	 */
 	private String fileName;
-	private static final String HISTORY_NAME = "sudoHistory.dat";
-	private static final String MESSAGE_HISTORY_LOAD_ERROR = "Loading history file error: file can not be found.";
-	private static final String MESSAGE_LAST_HISTORY = "No more histories. Can not undo.";
 	private ArrayList<ArrayList<String>> history;
 	private ArrayList<ArrayList<String>> history_redo;
 
 	private static StorageHandler storageHandler;
-	
-//	This is a singleton class.
+	/**
+	 * (This is a singleton class)
+	 * Build a StorageHandler.
+	 * @param String of the file name, ArrayList of all Task objects
+	 */
 	private StorageHandler(String fileName, ArrayList<Task> tasks) {
 		this.fileName = fileName;
 		try {
 			File file = new File(fileName);
+			//Initialize the redo ArrayList
 			history_redo = new ArrayList<ArrayList<String>>();
 			if (!file.exists()) {
+				//Create new files if can't find previously saved task file
 				history = new ArrayList<ArrayList<String>>();
+				//Add a null task list to the bottom
 				ArrayList<String> nullTasks = new ArrayList<String>();
 				history.add(nullTasks);
-				XMLSerializer.write(history, HISTORY_NAME);
+				saveHistory();
 				file.createNewFile();
 			} else {
-				history = XMLSerializer.read(HISTORY_NAME);
+				//read history and task file
+				history = XMLSerializer.read(Constants.HISTORY_NAME);
 				System.out.println(history);
 				BufferedReader iptBuff = new BufferedReader(new FileReader(
 						fileName));
 				String temp = iptBuff.readLine();
 				while (temp != null) {
+					//read line by line
 					Task nextTask = stringToTask(temp);
 					tasks.add(nextTask);
 					temp = iptBuff.readLine();
@@ -67,6 +75,7 @@ public class StorageHandler {
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			//Exception part will be finished after we create the Exception package
 		}
 	}
 	
@@ -84,7 +93,11 @@ public class StorageHandler {
 	
 	}
 
-	
+	/**
+	 * Convert one String into one Task
+	 * @param String which describes the task
+	 * @return Task described by the  String
+	 */	
 	private Task stringToTask(String input){
 		int bound = input.indexOf("#");
 		String taskKind = input.substring(0, bound);
@@ -105,6 +118,9 @@ public class StorageHandler {
 			String finished = next.substring(bound+1);
 			ArrayList<DateTime> dateTimes = InputParser.parseDateTime("fake fake "+dateAndTime);
 			DeadlineTask ddt = new DeadlineTask(descrbtion, dateTimes);
+			if(finished.equals("true")){
+				ddt.setComplete(true);
+			}
 			return ddt;
 		}else if(taskKind.equals("TIMED")){
 			bound = next.indexOf("#");
@@ -115,13 +131,21 @@ public class StorageHandler {
 			String finished = next.substring(bound+1);
 			ArrayList<DateTime> dateTimes = InputParser.parseDateTime("fake fake "+dateAndTime);
 			TimedTask tmt = new TimedTask(descrbtion, dateTimes );
+			if(finished.equals("true")){
+				tmt.setComplete(true);
+			}
 			return tmt;
 		}else{
-			//throw exception
+			//should throw exception instead of return null...
 			return null;
 		}
 	}
 	
+	/**
+	 * Convert a list of Strings into a list of Tasks
+	 * @param ArrayList<String> which describes the tasks
+	 * @return ArrayList<Task> described by the  Strings
+	 */	
 	private ArrayList<Task> stringsToTasks(ArrayList<String> str){
 		ArrayList<Task> tasks = new ArrayList<Task>();
 		for(String i: str){
@@ -130,7 +154,11 @@ public class StorageHandler {
 		return tasks;
 	}
 	
-		
+	/**
+	 * Convert a list of Tasks into a list of Strings
+	 * @param ArrayList<Task> described by the  Strings
+	 * @return ArrayList<String> which describes the tasks
+	 */	
 	private ArrayList<String> tasksToStrings(ArrayList<Task> tasks){
 		ArrayList<String> toReturn = new ArrayList<String>();
 		
@@ -140,60 +168,58 @@ public class StorageHandler {
 		return toReturn;
 	}
 	
+	//Save the history
 	private void saveHistory() throws Exception{
-		XMLSerializer.write(history, HISTORY_NAME);
+		XMLSerializer.write(history, Constants.HISTORY_NAME);
 	}
 	
+	/**
+	 * Save all the tasks and undo-history(optional) into the disc
+	 * 
+	 * @param ArrayList<Task>	The ArrayList of the tasks.
+	 * 	      Boolean			save the history or not
+	 */	
 	public void save(ArrayList<Task> taskList, Boolean saveHistory)
 			throws Exception {
 		File file = new File(fileName);
 		BufferedWriter output = new BufferedWriter(new FileWriter(file, false));
+		//Save line by line
 		for (int i = 0; i < taskList.size(); i++) {
 			output.write((taskList.get(i)).toStringForFile()+"\n");
-			//output.newLine();
-			//System.out.print("Saving:" + i+"th, "+(taskList.get(i)).toString() + "\n");
 		}
 		history_redo.clear();
 		if(saveHistory){
 		System.out.println("Recording new history: "+tasksToStrings(taskList));
 		history.add(tasksToStrings(taskList));
-		XMLSerializer.write(history, HISTORY_NAME);
+		saveHistory();
 		}
 		output.close();
 	}
 	
+	/**
+	 * Undo returns the last change made by the user.
+	 * It will be saved after user exit sudo
+	 * @return ArrayList<Task> the result of undo
+	 */	
 	public ArrayList<Task> undo() throws Exception{
-		System.out.println("Undoing!");
+
 		if(history.size()>1){
-			System.out.println("History size >1!");
 			history_redo.add(history.get(history.size()-1));
-			System.out.println("redo is good");
-			System.out.println("passing to redo:"+history.get(history.size()-1));
-			
 			history.remove(history.size()-1);
-			System.out.println("now the latest should be: "+history.get(history.size()-1));
-			
-		ArrayList<String> clone = (ArrayList<String>) history.get(history.size()-1);
-		saveHistory();
-		return stringsToTasks(clone);
-		
+			saveHistory();
+		return stringsToTasks(history_redo.get(history_redo.size()-1));
 		}else{
 			throw new NoHistoryException("Cant do this");
 		}
 	}
 
 	public ArrayList<Task> redo() throws Exception{
-		System.out.println("Redoing!");
 		if(history_redo.size()>0){
-			System.out.println("Redo History size >0!");
 			history.add(history_redo.get(history_redo.size()-1));
-			System.out.println("passing to undo:"+history.get(history.size()-1));
-			System.out.println("now the latest should be: "+history.get(history.size()-1));
-			ArrayList<String> clone = (ArrayList<String>) history_redo.get(history_redo.size()-1);
-			
+			ArrayList<String> toReturn = history_redo.get(history_redo.size()-1);
 			history_redo.remove(history_redo.size()-1);
 			saveHistory();
-		return stringsToTasks(clone);
+		return stringsToTasks(toReturn);
 		}else{
 			throw new NoHistoryException("Cant do this");
 		}

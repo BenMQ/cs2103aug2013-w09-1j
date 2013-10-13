@@ -19,9 +19,10 @@ public class TaskManagerTest {
 	 * Tests adding floating tasks and 
 	 * displaying of all uncompleted floating tasks. 
 	 * TODO: Test displaying of completed floating tasks  
+	 * @throws Exception 
 	 */
 	@Test
-	public void testAddTasks() {
+	public void testAddTasks() throws Exception {
 		// ArrayList<DateTime> dateTimes = new ArrayList<DateTime>();
 		
 		tasks = manager.addTask(new FloatingTask("learn how to fish"));
@@ -35,7 +36,7 @@ public class TaskManagerTest {
 	}
 	
 	@Test
-	public void testEditTasks() {
+	public void testEditTasks() throws Exception {
 		tasks = manager.editTask(1, new FloatingTask("learn how to fish with dad"));
 		assertEquals("1. learn how to fish with dad\n", displayTasks(tasks));
 		

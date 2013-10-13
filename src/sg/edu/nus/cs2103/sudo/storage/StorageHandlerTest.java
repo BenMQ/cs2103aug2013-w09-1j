@@ -23,13 +23,11 @@ public class StorageHandlerTest {
 		FloatingTask floating2 = new FloatingTask("drink coke");
 		StorageHandler testee = StorageHandler.getStorageHandler("testing", tasks);
 		tasks.add(floating1);
-		testee.save(tasks);
+		testee.save(tasks, true);
 		floating2.setComplete(true);
 		tasks.add(floating2);
-		testee.save(tasks);
-	 //   assertEquals(InputParser.parseDescription(testcases[1]), "app");
-	   // assertEquals(InputParser.parseDescription(testcases[2]), "amazing");
-		
+		testee.save(tasks, true);
+
 		//taskList
 		
 	}

@@ -25,7 +25,7 @@ public class TaskManager {
 
 	private TaskManager() {
 		tasks = new ArrayList<Task>();
-		storage = new StorageHandler(Constants.FILE_NAME, tasks);
+		storage = StorageHandler.getStorageHandler(Constants.FILE_NAME, tasks);
 	}
 
 	public static TaskManager getTaskManager() {
@@ -53,8 +53,9 @@ public class TaskManager {
 	 * 
 	 * @param newTask
 	 * @return floatingTasks with new additions
+	 * @throws Exception 
 	 */
-	public ArrayList<Task> addTask(Task newTask) {
+	public ArrayList<Task> addTask(Task newTask) throws Exception {
 		assert (newTask != null);
 
 		newTask.setId(tasks.size() + 1);
@@ -62,7 +63,7 @@ public class TaskManager {
 
 		sortTasks();
 		updateAllIds();
-
+		storage.save(tasks);
 		return tasks;
 	}
 
@@ -73,9 +74,10 @@ public class TaskManager {
 	 * @param displayId
 	 * @param newTask
 	 * @return floatingTasks after editing
+	 * @throws Exception 
 	 */
 	public ArrayList<Task> editTask(int displayId, Task newTask)
-			throws IllegalStateException, IndexOutOfBoundsException {
+			throws Exception {
 
 		assert (newTask != null);
 
@@ -91,7 +93,7 @@ public class TaskManager {
 
 		sortTasks();
 		updateAllIds();
-
+		storage.save(tasks);
 		return tasks;
 	}
 
@@ -152,9 +154,10 @@ public class TaskManager {
 	 * Mark an incomplete task as completed.
 	 * 
 	 * @param taskId
+	 * @throws Exception 
 	 */
 	public ArrayList<Task> markAsComplete(int taskId)
-			throws IndexOutOfBoundsException, UnsupportedOperationException {
+			throws Exception {
 		
 		int index = taskId - 1;
 		checkValidityIndex(index);
@@ -166,6 +169,7 @@ public class TaskManager {
 		}
 
 		currTask.setComplete(true);
+		storage.save(tasks);
 		return tasks;
 	}
 
@@ -173,9 +177,10 @@ public class TaskManager {
 	 * Mark a completed task as incomplete.
 	 * 
 	 * @param taskId
+	 * @throws Exception 
 	 */
 	public ArrayList<Task> markAsIncomplete(int taskId)
-			throws IndexOutOfBoundsException, UnsupportedOperationException {
+			throws Exception {
 		int index = taskId - 1;
 		checkValidityIndex(index);
 
@@ -186,6 +191,7 @@ public class TaskManager {
 		}
 
 		currTask.setComplete(false);
+		storage.save(tasks);
 		return tasks;
 	}
 
@@ -270,9 +276,9 @@ public class TaskManager {
 	 * multiple matches, display all searchResults to user. By default,
 	 * searchResults searches through all tasks. Wait for user input to delete
 	 * again.
+	 * @throws Exception 
 	 */
-	public int delete(String searchStr) throws NullPointerException,
-			IllegalStateException, IndexOutOfBoundsException {
+	public int delete(String searchStr) throws Exception {
 
 		if (searchStr == null) {
 			throw new NullPointerException(Constants.MESSAGE_INVALID_DELETE);
@@ -288,18 +294,19 @@ public class TaskManager {
 		} else {
 			displaySearchResults(searchResults);
 		}
-
 		return numResults;
 	}
 
 	/**
 	 * Given the id of the task, the task is deleted from floatingTasks
+	 * @throws Exception 
 	 */
-	public void delete(int taskId) throws IndexOutOfBoundsException {
+	public void delete(int taskId) throws Exception {
 		int index = taskId - 1;
 		checkValidityIndex(index);
 
 		tasks.remove(index);
+		storage.save(tasks);
 		updateAllIds();
 	}
 
@@ -325,11 +332,13 @@ public class TaskManager {
 
 	/**
 	 * Sorts all the Task objects according to end time. TODO: Unit Testing
+	 * @throws Exception 
 	 */
-	private ArrayList<Task> sortTasks() {
+	private ArrayList<Task> sortTasks() throws Exception {
 		Collections.sort(tasks, new SortTasksByCompletedComparator());
 		Collections.sort(tasks, new SortTasksByEndTimeComparator());
 		updateAllIds();
+		storage.save(tasks);
 		return tasks;
 	}
 

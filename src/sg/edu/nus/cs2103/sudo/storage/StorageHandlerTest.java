@@ -21,7 +21,7 @@ public class StorageHandlerTest {
 		ArrayList<Task> tasks = new ArrayList<Task>();
 		FloatingTask floating1 = new FloatingTask("eat pizza");
 		FloatingTask floating2 = new FloatingTask("drink coke");
-		StorageHandler testee = new StorageHandler("testing", tasks);
+		StorageHandler testee = StorageHandler.getStorageHandler("testing", tasks);
 		tasks.add(floating1);
 		testee.save(tasks);
 		floating2.setComplete(true);

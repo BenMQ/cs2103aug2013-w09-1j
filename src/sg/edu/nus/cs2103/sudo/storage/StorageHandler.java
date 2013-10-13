@@ -12,15 +12,21 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
+import org.joda.time.DateTime;
+
 import sg.edu.nus.cs2103.sudo.logic.DeadlineTask;
 import sg.edu.nus.cs2103.sudo.logic.FloatingTask;
+import sg.edu.nus.cs2103.sudo.logic.InputParser;
 import sg.edu.nus.cs2103.sudo.logic.Task;
+import sg.edu.nus.cs2103.sudo.logic.TaskManager;
+import sg.edu.nus.cs2103.sudo.logic.TimedTask;
 
 public class StorageHandler {
 	/**
 	 * This StorageHandler class is responsible for:
 	 * 1.Open and read file from the disk, and write changes to disk.
 	 * 2.Keep track of the history, capture every change and save to the file.
+	 * 3.Provide undo/redo functions
 	 * 
 	 * @author Liu Dake
 	 */
@@ -33,7 +39,10 @@ public class StorageHandler {
 	private ArrayList<ArrayList<String>> history;
 	private ArrayList<ArrayList<String>> history_redo;
 
-	public StorageHandler(String fileName, ArrayList<Task> tasks) {
+	private static StorageHandler storageHandler;
+	
+//	This is a singleton class.
+	private StorageHandler(String fileName, ArrayList<Task> tasks) {
 		this.fileName = fileName;
 		try {
 			File file = new File(fileName);
@@ -60,21 +69,30 @@ public class StorageHandler {
 				iptBuff.close();
 			}
 		} catch (ClassNotFoundException e) {
-			displayError(MESSAGE_HISTORY_LOAD_ERROR);
+			//displayError(MESSAGE_HISTORY_LOAD_ERROR);
 			System.exit(0);
 
 		} catch (IOException e) {
-			displayError(MESSAGE_IO_ERROR);
+			//displayError(MESSAGE_IO_ERROR);
 			System.exit(0);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
+	
+	public static StorageHandler getStorageHandler(String fileName, ArrayList<Task> tasks) {
+		if (storageHandler == null) {
+			storageHandler = new StorageHandler(fileName, tasks);
+		}
+		return storageHandler;
+	}
+	
+	
 
-	private void displayError(String messageIoError) {
-		// TODO Auto-generated method stub
-
+	//DO NOT delete
+	private void display(String message) {
+	
 	}
 
 	
@@ -82,21 +100,37 @@ public class StorageHandler {
 		int bound = input.indexOf("#");
 		String taskKind = input.substring(0, bound);
 		String next = input.substring(bound+1);
-		//if(taskKind.equals("floating")){
+		if(taskKind.equals("floating")){
 			bound = next.indexOf("#");
 			FloatingTask flt = new FloatingTask(next.substring(0, bound));
 			if(next.substring(bound+1).equals("true")){
 				flt.setComplete(true);
 			}
 			return flt;
-		//}else if(taskKind.equals("DEADLINE")){
-			
-		//}else if(taskKind.equals("TIMED")){
-			
-		//}else{
-			
-		//}
-	
+		}else if(taskKind.equals("DEADLINE")){
+			bound = next.indexOf("#");
+			String descrbtion = next.substring(0, bound);
+			next=next.substring(bound+1);
+			bound = next.indexOf("#");
+			String dateAndTime =  next.substring(0, bound);
+			String finished = next.substring(bound+1);
+			ArrayList<DateTime> dateTimes = InputParser.parseDateTime("fake fake "+dateAndTime);
+			DeadlineTask ddt = new DeadlineTask(descrbtion, dateTimes);
+			return ddt;
+		}else if(taskKind.equals("TIMED")){
+			bound = next.indexOf("#");
+			String descrbtion = next.substring(0, bound);
+			next=next.substring(bound+1);
+			bound = next.indexOf("#");
+			String dateAndTime =  next.substring(0, bound);
+			String finished = next.substring(bound+1);
+			ArrayList<DateTime> dateTimes = InputParser.parseDateTime("fake fake "+dateAndTime);
+			TimedTask tmt = new TimedTask(descrbtion, dateTimes );
+			return tmt;
+		}else{
+			//throw exception
+			return null;
+		}
 	}
 	
 	private ArrayList<Task> stringsToTasks(ArrayList<String> str){

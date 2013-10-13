@@ -23,6 +23,6 @@ public class DeadlineTask extends Task {
 	}
 
 	public String toStringForFile() {
-		return "DEADLINE"+"#"+description+"#"+ "BY"+endTime + "#" + isComplete + "\n";
+		return "DEADLINE"+"#"+description+"#"+endTime + "#" + isComplete;
 	}
 }

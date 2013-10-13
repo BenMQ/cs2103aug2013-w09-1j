@@ -171,6 +171,8 @@ public class TaskManager {
 		}
 
 		currTask.setComplete(true);
+		sortTasks();
+		updateAllIds();
 		storage.save(tasks, true);
 		return tasks;
 	}
@@ -193,6 +195,8 @@ public class TaskManager {
 		}
 
 		currTask.setComplete(false);
+		sortTasks();
+		updateAllIds();
 		storage.save(tasks, true);
 		return tasks;
 	}

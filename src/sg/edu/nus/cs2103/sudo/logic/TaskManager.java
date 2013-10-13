@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import sg.edu.nus.cs2103.sudo.Constants;
+import sg.edu.nus.cs2103.sudo.storage.StorageHandler;
 
 /**
  * 
@@ -18,9 +19,13 @@ public class TaskManager {
 
 	// A list of timed, deadline and floating tasks
 	private ArrayList<Task> tasks;
+	
+	//The storage handler
+	private StorageHandler storage;
 
 	private TaskManager() {
 		tasks = new ArrayList<Task>();
+		storage = new StorageHandler(Constants.FILE_NAME, tasks);
 	}
 
 	public static TaskManager getTaskManager() {

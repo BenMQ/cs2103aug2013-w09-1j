@@ -27,5 +27,8 @@ public class Constants {
 	public static final String MESSAGE_NO_FLOATING_TASKS = "No floating tasks.\n";
 	public static final String MESSAGE_FINISH = "Finishing task.";
 	
+	public static final String FILE_NAME = "sudo.sav";
+	public static final String HISTORY_NAME = "sudo.his";
+	
 	public static Logger parserLogger = Logger.getLogger(InputParser.class.getName());
 }

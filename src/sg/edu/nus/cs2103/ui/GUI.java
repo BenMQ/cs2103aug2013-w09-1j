@@ -46,102 +46,103 @@ public class GUI extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        jTextArea3 = new javax.swing.JTextArea();
-        jTextField1 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList();
-        jLabel1 = new javax.swing.JLabel();
-        jProgressBar1 = new javax.swing.JProgressBar();
-        jLabel2 = new javax.swing.JLabel();
+        foundationPanel = new javax.swing.JPanel();
+        mainTextFrameScrollPane = new javax.swing.JScrollPane();
+        mainTextFrame = new javax.swing.JTextArea();
+        inputText = new javax.swing.JTextField();
+        sudooleButton = new javax.swing.JButton();
+        floatingTaskScrollPane = new javax.swing.JScrollPane();
+        floatingList = new javax.swing.JList();
+        labelFloatingTasks = new javax.swing.JLabel();
+        progressBar = new javax.swing.JProgressBar();
+        complecationRate = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTextArea3.setEditable(false);
-        jTextArea3.setColumns(20);
-        jTextArea3.setRows(5);
-        jScrollPane3.setViewportView(jTextArea3);
+        mainTextFrame.setEditable(false);
+        mainTextFrame.setColumns(20);
+        mainTextFrame.setRows(5);
+        mainTextFrameScrollPane.setViewportView(mainTextFrame);
 
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+        inputText.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
+                inputTextActionPerformed(evt);
             }
         });
-        jTextField1.addKeyListener(new KeyAdapter()
+        inputText.addKeyListener(new KeyAdapter()
             {
                 public void keyPressed(KeyEvent e)
                 {
                     if(e.getKeyCode() == KeyEvent.VK_ENTER){
-                    	jTextArea3.setText("You inputed "+jTextField1.getText() + ".\nThis is a ready-to-use GUI, need to get String and other data to use.");
-                        jTextField1.setText("");
+                    	mainTextFrame.setText("Search result for \"homework\":\n1. CS2101 homework by tomorrow 4pm.\n2. CS1101s JFDI homework by Sep 25th.");
+                        inputText.setText("");
                     }
                 }
             });
 
-            jButton1.setText("Sudoole");
-            jButton1.addActionListener(new java.awt.event.ActionListener() {
+        progressBar.setValue(10);
+            sudooleButton.setText("Sudoole");
+            sudooleButton.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    jButton1ActionPerformed(evt);
+                    sudooleButtonActionPerformed(evt);
                 }
             });
 
-            jList1.setModel(new javax.swing.AbstractListModel() {
-                String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            floatingList.setModel(new javax.swing.AbstractListModel() {
+                String[] strings = { "Buy an iPad", "Learn to smoke", "Play GTA5", "Find the ID card", "Watch TV" };
                 public int getSize() { return strings.length; }
                 public Object getElementAt(int i) { return strings[i]; }
             });
-            jScrollPane1.setViewportView(jList1);
+            floatingTaskScrollPane.setViewportView(floatingList);
 
-            jLabel1.setText("Floating Tasks");
+            labelFloatingTasks.setText("Floating Tasks");
 
-            jLabel2.setText("Complecation rate");
+            complecationRate.setText("Complecation rate");
 
-            org.jdesktop.layout.GroupLayout jPanel1Layout = new org.jdesktop.layout.GroupLayout(jPanel1);
-            jPanel1.setLayout(jPanel1Layout);
-            jPanel1Layout.setHorizontalGroup(
-                jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                .add(jPanel1Layout.createSequentialGroup()
-                    .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                        .add(jPanel1Layout.createSequentialGroup()
-                            .add(jTextField1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 518, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+            org.jdesktop.layout.GroupLayout foundationPanelLayout = new org.jdesktop.layout.GroupLayout(foundationPanel);
+            foundationPanel.setLayout(foundationPanelLayout);
+            foundationPanelLayout.setHorizontalGroup(
+                foundationPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                .add(foundationPanelLayout.createSequentialGroup()
+                    .add(foundationPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                        .add(foundationPanelLayout.createSequentialGroup()
+                            .add(inputText, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 518, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                            .add(jButton1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .add(jPanel1Layout.createSequentialGroup()
+                            .add(sudooleButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .add(foundationPanelLayout.createSequentialGroup()
                             .addContainerGap()
-                            .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                                .add(jPanel1Layout.createSequentialGroup()
+                            .add(foundationPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                                .add(foundationPanelLayout.createSequentialGroup()
                                     .add(6, 6, 6)
-                                    .add(jLabel2)
+                                    .add(complecationRate)
                                     .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .add(jProgressBar1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 521, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                                .add(jPanel1Layout.createSequentialGroup()
-                                    .add(jScrollPane3)
+                                    .add(progressBar, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 521, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                                .add(foundationPanelLayout.createSequentialGroup()
+                                    .add(mainTextFrameScrollPane)
                                     .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                                    .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                                        .add(jScrollPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 173, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                                        .add(org.jdesktop.layout.GroupLayout.TRAILING, jLabel1))))))
+                                    .add(foundationPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                                        .add(floatingTaskScrollPane, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 173, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                                        .add(org.jdesktop.layout.GroupLayout.TRAILING, labelFloatingTasks))))))
                     .addContainerGap())
             );
-            jPanel1Layout.setVerticalGroup(
-                jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel1Layout.createSequentialGroup()
+            foundationPanelLayout.setVerticalGroup(
+                foundationPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                .add(org.jdesktop.layout.GroupLayout.TRAILING, foundationPanelLayout.createSequentialGroup()
                     .addContainerGap()
-                    .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                        .add(jPanel1Layout.createSequentialGroup()
-                            .add(jLabel1)
+                    .add(foundationPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                        .add(foundationPanelLayout.createSequentialGroup()
+                            .add(labelFloatingTasks)
                             .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                            .add(jScrollPane1))
-                        .add(jScrollPane3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 193, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                            .add(floatingTaskScrollPane))
+                        .add(mainTextFrameScrollPane, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 193, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                     .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                    .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                        .add(jProgressBar1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .add(jLabel2))
+                    .add(foundationPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                        .add(progressBar, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .add(complecationRate))
                     .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                    .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                        .add(jTextField1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .add(jButton1)))
+                    .add(foundationPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                        .add(inputText, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .add(sudooleButton)))
             );
 
             org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
@@ -149,24 +150,24 @@ public class GUI extends javax.swing.JFrame {
             layout.setHorizontalGroup(
                 layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                 .add(layout.createSequentialGroup()
-                    .add(jPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(foundationPanel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(0, 0, Short.MAX_VALUE))
             );
             layout.setVerticalGroup(
                 layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                .add(jPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .add(foundationPanel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
             );
 
             pack();
         }// </editor-fold>                        
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {                                            
+    private void inputTextActionPerformed(java.awt.event.ActionEvent evt) {                                            
        
     }                                           
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {                                         
-    	jTextArea3.setText("You inputed "+jTextField1.getText() + ".\nThis is a ready-to-use GUI, need to get String and other data to use.");
-        jTextField1.setText("");
+    private void sudooleButtonActionPerformed(java.awt.event.ActionEvent evt) {                                         
+    	mainTextFrame.setText("You inputed "+inputText.getText() + ".\nThis is a ready-to-use GUI, need to get String and other data to use.");
+        inputText.setText("");
     }                                        
 
     /**
@@ -204,16 +205,16 @@ public class GUI extends javax.swing.JFrame {
         });
     }
     // Variables declaration - do not modify                     
-    private javax.swing.JButton jButton1;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JList jList1;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JProgressBar jProgressBar1;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JTextArea jTextArea3;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JButton sudooleButton;
+    private javax.swing.JLabel labelFloatingTasks;
+    private javax.swing.JLabel complecationRate;
+    private javax.swing.JList floatingList;
+    private javax.swing.JPanel foundationPanel;
+    private javax.swing.JProgressBar progressBar;
+    private javax.swing.JScrollPane floatingTaskScrollPane;
+    private javax.swing.JScrollPane mainTextFrameScrollPane;
+    private javax.swing.JTextArea mainTextFrame;
+    private javax.swing.JTextField inputText;
     private TaskManager manager;
     private InputParser parser;
     // End of variables declaration                   

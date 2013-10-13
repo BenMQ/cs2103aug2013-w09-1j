@@ -43,7 +43,7 @@ public class StorageHandler {
 		try {
 			File file = new File(fileName);
 			if (!file.exists()) {
-				saveHistory();
+			saveHistory();
 				file.createNewFile();
 			} else {
 				readHistory();
@@ -190,9 +190,7 @@ public class StorageHandler {
 			output.write((taskList.get(i)).toStringForFile()+"\n");
 		}
 		history_redo.clear();
-		System.out.println("aaa");
 		if(saveHistory){
-		System.out.println("Recording new history: "+tasksToStrings(taskList));
 		history.add(tasksToStrings(taskList));
 		saveHistory();
 		}

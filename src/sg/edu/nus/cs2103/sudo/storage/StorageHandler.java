@@ -52,11 +52,9 @@ public class StorageHandler {
 				history.add(nullTasks);
 				history_redo = new ArrayList<ArrayList<String>>();
 				XMLSerializer.write(history, HISTORY_NAME);
-				XMLSerializer.write(history_redo, HISTORY_REDO_NAME);
 				file.createNewFile();
 			} else {
 				history = XMLSerializer.read(HISTORY_NAME);
-				history_redo = XMLSerializer.read(HISTORY_REDO_NAME);
 			//	System.out.print("ahhhhhhhhh");
 				BufferedReader iptBuff = new BufferedReader(new FileReader(
 						fileName));
@@ -151,30 +149,40 @@ public class StorageHandler {
 		return toReturn;
 	}
 	
+	private void saveHistory() throws Exception{
+		XMLSerializer.write(history, HISTORY_NAME);
+	}
 	
-	public void save(ArrayList<Task> taskList)
+	public void save(ArrayList<Task> taskList, Boolean saveHistory)
 			throws Exception {
 		File file = new File(fileName);
 		BufferedWriter output = new BufferedWriter(new FileWriter(file, false));
 		for (int i = 0; i < taskList.size(); i++) {
 			output.write((taskList.get(i)).toStringForFile()+"\n");
 			//output.newLine();
-			System.out.print("Saving:" + i+"th, "+(taskList.get(i)).toString() + "\n");
+			//System.out.print("Saving:" + i+"th, "+(taskList.get(i)).toString() + "\n");
 		}
-		history.add(tasksToStrings(taskList));
 		history_redo.clear();
+		if(saveHistory){
+		System.out.println("Recording new history: "+tasksToStrings(taskList));
+		history.add(tasksToStrings(taskList));
 		XMLSerializer.write(history, HISTORY_NAME);
-		XMLSerializer.write(history_redo, HISTORY_REDO_NAME);
-		//output.newLine();
+		}
 		output.close();
 	}
 	
-	public ArrayList<Task> undo() throws NoHistoryException{
+	public ArrayList<Task> undo() throws Exception{
+		System.out.println("Undoing!");
 		if(history.size()>1){
+			System.out.println("History size >1!");
 			history_redo.add(history.get(history.size()-1));
+			System.out.println("passing to redo:"+history.get(history.size()-1));
+			
 			history.remove(history.size()-1);
+			System.out.println("now the latest should be: "+history.get(history.size()-1));
 			
 		ArrayList<String> clone = (ArrayList<String>) history.get(history.size()-1);
+		saveHistory();
 		return stringsToTasks(clone);
 		
 		}else{
@@ -182,11 +190,17 @@ public class StorageHandler {
 		}
 	}
 
-	public ArrayList<Task> redo() throws NoHistoryException{
+	public ArrayList<Task> redo() throws Exception{
+		System.out.println("Redoing!");
 		if(history_redo.size()>0){
+			System.out.println("Redo History size >0!");
 			history.add(history_redo.get(history_redo.size()-1));
+			System.out.println("passing to undo:"+history.get(history.size()-1));
+			System.out.println("now the latest should be: "+history.get(history.size()-1));
 			ArrayList<String> clone = (ArrayList<String>) history_redo.get(history_redo.size()-1);
+			
 			history_redo.remove(history_redo.size()-1);
+			saveHistory();
 		return stringsToTasks(clone);
 		}else{
 			throw new NoHistoryException("Cant do this");

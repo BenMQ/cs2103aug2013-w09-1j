@@ -3,6 +3,7 @@ package sg.edu.nus.cs2103.sudo.storage;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -38,42 +39,22 @@ public class StorageHandler {
 	 */
 	private StorageHandler(String fileName, ArrayList<Task> tasks) {
 		this.fileName = fileName;
+		initializeHistory();
 		try {
 			File file = new File(fileName);
-			//Initialize the redo ArrayList
-			history_redo = new ArrayList<ArrayList<String>>();
 			if (!file.exists()) {
-				//Create new files if can't find previously saved task file
-				history = new ArrayList<ArrayList<String>>();
-				//Add a null task list to the bottom
-				ArrayList<String> nullTasks = new ArrayList<String>();
-				history.add(nullTasks);
 				saveHistory();
 				file.createNewFile();
 			} else {
-				//read history and task file
-				history = XMLSerializer.read(Constants.HISTORY_NAME);
-				System.out.println(history);
-				BufferedReader iptBuff = new BufferedReader(new FileReader(
-						fileName));
-				String temp = iptBuff.readLine();
-				while (temp != null) {
-					//read line by line
-					Task nextTask = stringToTask(temp);
-					tasks.add(nextTask);
-					temp = iptBuff.readLine();
-				}
-				iptBuff.close();
+				readHistory();
+				prepareFile(tasks);
 			}
 		} catch (ClassNotFoundException e) {
-			//displayError(MESSAGE_HISTORY_LOAD_ERROR);
 			System.exit(0);
 
 		} catch (IOException e) {
-			//displayError(MESSAGE_IO_ERROR);
 			System.exit(0);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			//Exception part will be finished after we create the Exception package
 		}
@@ -87,12 +68,31 @@ public class StorageHandler {
 	}
 	
 	
-
-	//DO NOT delete
-	private void display(String message) {
-	
+	private void initializeHistory(){
+		history_redo = new ArrayList<ArrayList<String>>();
+		history = new ArrayList<ArrayList<String>>();
+		//Add a null task list to the bottom
+		ArrayList<String> nullTasks = new ArrayList<String>();
+		history.add(nullTasks);
 	}
-
+	
+	private void readHistory() throws Exception{
+		history = XMLSerializer.read(Constants.HISTORY_NAME);
+	}
+	
+	private void prepareFile(ArrayList<Task> tasks) throws IOException{
+		BufferedReader iptBuff = new BufferedReader(new FileReader(
+				fileName));
+		String temp = iptBuff.readLine();
+		while (temp != null) {
+			//read line by line
+			Task nextTask = stringToTask(temp);
+			tasks.add(nextTask);
+			temp = iptBuff.readLine();
+		}
+		iptBuff.close();
+	}
+	
 	/**
 	 * Convert one String into one Task
 	 * @param String which describes the task
@@ -182,12 +182,15 @@ public class StorageHandler {
 	public void save(ArrayList<Task> taskList, Boolean saveHistory)
 			throws Exception {
 		File file = new File(fileName);
+		
 		BufferedWriter output = new BufferedWriter(new FileWriter(file, false));
 		//Save line by line
+		
 		for (int i = 0; i < taskList.size(); i++) {
 			output.write((taskList.get(i)).toStringForFile()+"\n");
 		}
 		history_redo.clear();
+		System.out.println("aaa");
 		if(saveHistory){
 		System.out.println("Recording new history: "+tasksToStrings(taskList));
 		history.add(tasksToStrings(taskList));
@@ -207,7 +210,7 @@ public class StorageHandler {
 			history_redo.add(history.get(history.size()-1));
 			history.remove(history.size()-1);
 			saveHistory();
-		return stringsToTasks(history_redo.get(history_redo.size()-1));
+		return stringsToTasks(history.get(history.size()-1));
 		}else{
 			throw new NoHistoryException("Cant do this");
 		}

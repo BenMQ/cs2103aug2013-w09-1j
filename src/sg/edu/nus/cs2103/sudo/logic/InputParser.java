@@ -141,9 +141,20 @@ public class InputParser {
 	 */	
 	public static ArrayList<DateTime> parseDateTime(String userInput){
 		Parser dtparser = new Parser();
+		
+//		System.out.println("Parsing: " + userInput);
+
+		//remove Description
+		String desc = parseDescription(userInput);
+		if(desc != null){
+			userInput = userInput.replace(desc, "");
+		}
+		
 		List<DateGroup> dateGroups = dtparser.parse(userInput); //Each DateGroup contains a list of Date
 		ArrayList<List<Date>> dateLists = ParserUtils.getDateLists(dateGroups);	
 		ArrayList<DateTime> dateTimes = ParserUtils.convertToDateTimes(dateLists);
+		
+		//Here need to validate DateTimes!
 		
 		return dateTimes;
 	}

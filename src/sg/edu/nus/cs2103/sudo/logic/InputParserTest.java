@@ -33,7 +33,11 @@ public class InputParserTest {
         manager.clearTasks();
     }	
 	
-	
+//	@Test
+//	public void testParseStringDate(){
+//		ArrayList<DateTime> dates = InputParser.parseDateTime("fake 'fake' from 2013-10-14T14:00 to 2013-10-14T16:00");
+//		assertEquals(2, dates.size());		
+//	}
 	
 	@Test
 	public void testParseOneDate() {

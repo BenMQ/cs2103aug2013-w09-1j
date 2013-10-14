@@ -7,7 +7,7 @@ import sg.edu.nus.cs2103.sudo.logic.TaskManager;
 
 public class UI {
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 		
 		Scanner user = new Scanner( System.in );
 		TaskManager manager = TaskManager.getTaskManager();

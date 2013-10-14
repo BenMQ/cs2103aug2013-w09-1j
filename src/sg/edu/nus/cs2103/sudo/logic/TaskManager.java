@@ -24,15 +24,21 @@ public class TaskManager {
 	//The storage handler
 	private StorageHandler storage;
 
-	private TaskManager() {
+	private TaskManager() throws Exception {
 		tasks = new ArrayList<Task>();
-		storage = StorageHandler.getStorageHandler(Constants.FILE_NAME, tasks);
+		storage = StorageHandler.getStorageHandler(Constants.FILE_NAME);
+		storage.prepareFile(tasks);
 		updateAllIds();
 	}
 
-	public static TaskManager getTaskManager() {
+	public static TaskManager getTaskManager(){
+		try{
 		if (taskManager == null) {
 			taskManager = new TaskManager();
+		}
+		return taskManager;
+		}catch(Exception e){
+			
 		}
 		return taskManager;
 	}
@@ -65,7 +71,7 @@ public class TaskManager {
 
 		sortTasks();
 		updateAllIds();
-		storage.save(tasks, true);
+		storage.save(true);
 		return tasks;
 	}
 
@@ -95,7 +101,7 @@ public class TaskManager {
 
 		sortTasks();
 		updateAllIds();
-		storage.save(tasks, true);
+		storage.save(true);
 		return tasks;
 	}
 
@@ -173,7 +179,7 @@ public class TaskManager {
 		currTask.setComplete(true);
 		sortTasks();
 		updateAllIds();
-		storage.save(tasks, true);
+		storage.save(true);
 		return tasks;
 	}
 
@@ -197,7 +203,7 @@ public class TaskManager {
 		currTask.setComplete(false);
 		sortTasks();
 		updateAllIds();
-		storage.save(tasks, true);
+		storage.save(true);
 		return tasks;
 	}
 
@@ -313,7 +319,7 @@ public class TaskManager {
 		checkValidityIndex(index);
 
 		tasks.remove(index);
-		storage.save(tasks, true);
+		storage.save(true);
 		updateAllIds();
 	}
 
@@ -323,14 +329,14 @@ public class TaskManager {
 	 * @return
 	 * @throws Exception 
 	 */
-	public ArrayList<Task> undo() throws Exception {
-		tasks = storage.undo();
+	public void undo() throws Exception {
+		tasks=(ArrayList<Task>) storage.undo().clone();
 		updateAllIds();
-		return tasks;
+		//return tasks;
 	}
 	
 	public ArrayList<Task> saveTasks() throws Exception {
-		storage.save(tasks, false);
+		storage.save(false);
 		return tasks;
 	}
 
@@ -340,10 +346,10 @@ public class TaskManager {
 	 * @return
 	 * @throws Exception 
 	 */
-	public ArrayList<Task> redo() throws Exception {
-		tasks = storage.redo();
+	public void redo() throws Exception {
+		tasks=(ArrayList<Task>) storage.redo().clone();
 		updateAllIds();
-		return tasks;
+		//return tasks;
 	}
 
 	/**

@@ -1,5 +1,9 @@
 syntax: glob
 
+# Ignore history and save files
+.his
+.sav
+
 # Mac OS X
 .DS_Store
 

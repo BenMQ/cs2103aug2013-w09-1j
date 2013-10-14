@@ -23,8 +23,14 @@ public class TimedTask extends Task {
 
 	// To be used to store in .txt 
 	public String toStringForFile() {
-		return "TIMED"+"#"+description+"# from "+startTime+" to "+endTime+"#"+isComplete;
+		
+		int bound = startTime.toString().indexOf(":");
+		String returnedStartTime = this.startTime.toString().substring(0, bound+3);
+		int bound2 = endTime.toString().indexOf(":");
+		String returnedEndTime = this.endTime.toString().substring(0, bound+3);
+		return "TIMED"+"#"+description+"#"+returnedStartTime+" to "+returnedEndTime+"#"+isComplete;
 	}
+	
 
 	
 }

@@ -116,7 +116,7 @@ public class StorageHandler {
 			bound = next.indexOf("#");
 			String dateAndTime =  next.substring(0, bound);
 			String finished = next.substring(bound+1);
-			ArrayList<DateTime> dateTimes = InputParser.parseDateTime("fake fake "+dateAndTime);
+			ArrayList<DateTime> dateTimes = InputParser.parseDateTime("fake 'fake' "+dateAndTime);
 			DeadlineTask ddt = new DeadlineTask(descrbtion, dateTimes);
 			if(finished.equals("true")){
 				ddt.setComplete(true);
@@ -128,8 +128,12 @@ public class StorageHandler {
 			next=next.substring(bound+1);
 			bound = next.indexOf("#");
 			String dateAndTime =  next.substring(0, bound);
+			System.out.println(dateAndTime);
 			String finished = next.substring(bound+1);
-			ArrayList<DateTime> dateTimes = InputParser.parseDateTime("fake fake "+dateAndTime);
+			
+			ArrayList<DateTime> dateTimes = InputParser.parseDateTime("fake 'fake' "+dateAndTime);
+			System.out.println(dateTimes);
+			
 			TimedTask tmt = new TimedTask(descrbtion, dateTimes );
 			if(finished.equals("true")){
 				tmt.setComplete(true);

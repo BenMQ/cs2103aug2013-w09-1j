@@ -20,17 +20,9 @@ public class StorageHandlerTest {
 	private static StorageHandler storage;
 	
 	@Test
-	public void testAddTasks() throws Exception {
-		// ArrayList<DateTime> dateTimes = new ArrayList<DateTime>();
-		
-		tasks = manager.addTask(new FloatingTask("learn how to fish"));
-		assertEquals("1. learn how to fish\n", displayTasks(tasks));
-		
-		// tasks = manager.addTask(new DeadlineTask("Buy birthday gift", dateTimes));
-		// assertEquals("", displayTasks(tasks));
-		
-		// tasks = manager.addTask(new FloatingTask("learn how to fish"));
-		// assertEquals("", displayTasks(tasks));
+	public void initializatinoTest() throws Exception {
+		ArrayList<DateTime> dateTimes = new ArrayList<DateTime>();
+		storage = StorageHandler.getStorageHandler("Test", tasks);
 	}
 	
 

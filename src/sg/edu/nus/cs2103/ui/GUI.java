@@ -33,8 +33,8 @@ public class GUI extends javax.swing.JFrame {
      */
     public GUI() {
         initComponents();
-		manager = TaskManager.getTaskManager();
-		InputParser parser = InputParser.getInputParser(manager);
+		//manager = TaskManager.getTaskManager();
+		//InputParser parser = InputParser.getInputParser(manager);
     }
 
     /**
@@ -166,7 +166,7 @@ public class GUI extends javax.swing.JFrame {
     }                                           
 
     private void sudooleButtonActionPerformed(java.awt.event.ActionEvent evt) {                                         
-    	mainTextFrame.setText("You inputed "+inputText.getText() + ".\nThis is a ready-to-use GUI, need to get String and other data to use.");
+    	mainTextFrame.setText("Search result for \"homework\":\n1. CS2101 homework by tomorrow 4pm.\n2. CS1101s JFDI homework by Sep 25th.");
         inputText.setText("");
     }                                        
 

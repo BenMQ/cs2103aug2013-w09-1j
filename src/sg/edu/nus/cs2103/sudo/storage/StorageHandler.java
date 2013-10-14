@@ -28,8 +28,8 @@ public class StorageHandler {
 	 * @author Liu Dake
 	 */
 	private String fileName;
-	private ArrayList<ArrayList<String>> history;
-	private ArrayList<ArrayList<String>> history_redo;
+	public ArrayList<ArrayList<String>> history;
+	public ArrayList<ArrayList<String>> history_redo;
 	
 	private ArrayList<Task> tasks;
 	
@@ -51,11 +51,27 @@ public class StorageHandler {
 		return storageHandler;
 	}
 	
+	public static void resetStorageHandler() {
+			storageHandler.history.clear();
+			storageHandler.history_redo.clear();
+			storageHandler = null;
+	}
+	
+	public static void resetAll(String fileName) {
+		File file = new File(fileName);
+		File historyFile = new File(Constants.HISTORY_NAME);
+		if (file.exists()) {
+			file.delete();
+			historyFile.delete();
+		}
+		storageHandler = null;
+}
+	
 	
 	private void initializeHistory(){
 		history_redo = new ArrayList<ArrayList<String>>();
 		history = new ArrayList<ArrayList<String>>();
-		//Add a null task list to the bottom
+		//Add a null task list to the bottom if it is first time started
 		ArrayList<String> nullTasks = new ArrayList<String>();
 		history.add(nullTasks);
 	}
@@ -66,12 +82,10 @@ public class StorageHandler {
 	
 	public void prepareFile(ArrayList<Task> taskIn) throws Exception{
 		tasks = taskIn;
-		
-		
 		try {
 			File file = new File(fileName);
 			if (!file.exists()) {
-			saveHistory();
+				saveHistory();
 				file.createNewFile();
 			} else {
 				BufferedReader iptBuff = new BufferedReader(new FileReader(

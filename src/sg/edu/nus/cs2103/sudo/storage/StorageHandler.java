@@ -30,39 +30,23 @@ public class StorageHandler {
 	private String fileName;
 	private ArrayList<ArrayList<String>> history;
 	private ArrayList<ArrayList<String>> history_redo;
-
+	
+	private ArrayList<Task> tasks;
+	
 	private static StorageHandler storageHandler;
 	/**
 	 * (This is a singleton class)
 	 * Build a StorageHandler.
 	 * @param String of the file name, ArrayList of all Task objects
 	 */
-	private StorageHandler(String fileName, ArrayList<Task> tasks) {
+	private StorageHandler(String fileName) {
 		this.fileName = fileName;
 		initializeHistory();
-		try {
-			File file = new File(fileName);
-			if (!file.exists()) {
-			saveHistory();
-				file.createNewFile();
-			} else {
-				readHistory();
-				prepareFile(tasks);
-			}
-		} catch (ClassNotFoundException e) {
-			System.exit(0);
-
-		} catch (IOException e) {
-			System.exit(0);
-		} catch (Exception e) {
-			e.printStackTrace();
-			//Exception part will be finished after we create the Exception package
-		}
 	}
 	
-	public static StorageHandler getStorageHandler(String fileName, ArrayList<Task> tasks) {
+	public static StorageHandler getStorageHandler(String fileName) {
 		if (storageHandler == null) {
-			storageHandler = new StorageHandler(fileName, tasks);
+			storageHandler = new StorageHandler(fileName);
 		}
 		return storageHandler;
 	}
@@ -80,17 +64,37 @@ public class StorageHandler {
 		history = XMLSerializer.read(Constants.HISTORY_NAME);
 	}
 	
-	private void prepareFile(ArrayList<Task> tasks) throws IOException{
-		BufferedReader iptBuff = new BufferedReader(new FileReader(
-				fileName));
-		String temp = iptBuff.readLine();
-		while (temp != null) {
-			//read line by line
-			Task nextTask = stringToTask(temp);
-			tasks.add(nextTask);
-			temp = iptBuff.readLine();
+	public void prepareFile(ArrayList<Task> taskIn) throws Exception{
+		tasks = taskIn;
+		
+		
+		try {
+			File file = new File(fileName);
+			if (!file.exists()) {
+			saveHistory();
+				file.createNewFile();
+			} else {
+				BufferedReader iptBuff = new BufferedReader(new FileReader(
+						fileName));
+				String temp = iptBuff.readLine();
+				while (temp != null) {
+					//read line by line
+					Task nextTask = stringToTask(temp);
+					tasks.add(nextTask);
+					temp = iptBuff.readLine();
+				}
+				iptBuff.close();
+				readHistory();
+			}
+		} catch (ClassNotFoundException e) {
+			System.exit(0);
+
+		} catch (IOException e) {
+			System.exit(0);
+		} catch (Exception e) {
+			e.printStackTrace();
+			//Exception part will be finished after we create the Exception package
 		}
-		iptBuff.close();
 	}
 	
 	/**
@@ -179,19 +183,19 @@ public class StorageHandler {
 	 * @param ArrayList<Task>	The ArrayList of the tasks.
 	 * 	      Boolean			save the history or not
 	 */	
-	public void save(ArrayList<Task> taskList, Boolean saveHistory)
+	public void save(Boolean saveHistory)
 			throws Exception {
 		File file = new File(fileName);
 		
 		BufferedWriter output = new BufferedWriter(new FileWriter(file, false));
 		//Save line by line
 		
-		for (int i = 0; i < taskList.size(); i++) {
-			output.write((taskList.get(i)).toStringForFile()+"\n");
+		for (int i = 0; i < tasks.size(); i++) {
+			output.write((tasks.get(i)).toStringForFile()+"\n");
 		}
 		history_redo.clear();
 		if(saveHistory){
-		history.add(tasksToStrings(taskList));
+		history.add(tasksToStrings(tasks));
 		saveHistory();
 		}
 		output.close();
@@ -208,6 +212,7 @@ public class StorageHandler {
 			history_redo.add(history.get(history.size()-1));
 			history.remove(history.size()-1);
 			saveHistory();
+			tasks = stringsToTasks(history.get(history.size()-1));
 		return stringsToTasks(history.get(history.size()-1));
 		}else{
 			throw new NoHistoryException("Cant do this");
@@ -220,6 +225,7 @@ public class StorageHandler {
 			ArrayList<String> toReturn = history_redo.get(history_redo.size()-1);
 			history_redo.remove(history_redo.size()-1);
 			saveHistory();
+			tasks = stringsToTasks(toReturn);
 		return stringsToTasks(toReturn);
 		}else{
 			throw new NoHistoryException("Cant do this");

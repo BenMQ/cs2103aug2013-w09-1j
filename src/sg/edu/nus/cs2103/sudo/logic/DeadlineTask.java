@@ -23,6 +23,9 @@ public class DeadlineTask extends Task {
 	}
 
 	public String toStringForFile() {
-		return "DEADLINE"+"#"+description+"#"+endTime + "#" + isComplete;
+		int bound = endTime.toString().indexOf(":");
+		String returnedEndTime = this.endTime.toString().substring(0, bound+3);
+		
+		return "DEADLINE"+"#"+description+"#"+ returnedEndTime + "#" + isComplete;
 	}
 }

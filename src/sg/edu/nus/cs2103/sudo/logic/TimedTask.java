@@ -23,7 +23,7 @@ public class TimedTask extends Task {
 
 	// To be used to store in .txt 
 	public String toStringForFile() {
-		return "TIMED"+"#"+description+"#"+startTime+" "+endTime+"#"+isComplete;
+		return "TIMED"+"#"+description+"# from "+startTime+" to "+endTime+"#"+isComplete;
 	}
 
 	

@@ -130,7 +130,6 @@ public class StorageHandler {
 			String dateAndTime =  next.substring(0, bound);
 			System.out.println(dateAndTime);
 			String finished = next.substring(bound+1);
-			
 			ArrayList<DateTime> dateTimes = InputParser.parseDateTime("fake 'fake' "+dateAndTime);
 			System.out.println(dateTimes);
 			

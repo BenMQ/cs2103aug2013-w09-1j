@@ -1,0 +1,5 @@
+package sg.edu.nus.cs2103.sudo;
+
+public enum COMMAND_TYPE {  
+    ADD, DELETE, EDIT, FINISH, UNDO, REDO, SEARCH, SORT, HELP, DISPLAY, INVALID, EXIT, INCOMPLETE
+}

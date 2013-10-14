@@ -27,9 +27,7 @@ public class StorageHandlerTest {
 		floating2.setComplete(true);
 		tasks.add(floating2);
 		testee.save(tasks, true);
-
 		//taskList
-		
 	}
 	
 }

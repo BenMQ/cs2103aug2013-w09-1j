@@ -167,13 +167,10 @@ public class StorageHandlerTest {
 		tasks=(ArrayList<Task>) storage.undo().clone();
 		tasks=(ArrayList<Task>) storage.redo().clone();
 		storage.save(false);
-		
 		StorageHandler.resetStorageHandler();
 		tasks.clear();
-		
 		assertEquals(true, file.exists());
 		assertEquals(true, historyFile.exists());
-		
 		storage = StorageHandler.getStorageHandler(TEST_NAME);
 		storage.prepareFile(tasks);
 		assertEquals("TIMED#CS2100 Tutorial#2013-10-14T12:00 to 2013-10-14T13:00#false", tasks.get(0).toStringForFile());

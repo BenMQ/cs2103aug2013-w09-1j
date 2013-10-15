@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import org.joda.time.DateTime;
 
 import sg.edu.nus.cs2103.sudo.Constants;
+import sg.edu.nus.cs2103.sudo.exceptions.NoHistoryException;
 import sg.edu.nus.cs2103.sudo.logic.DeadlineTask;
 import sg.edu.nus.cs2103.sudo.logic.FloatingTask;
 import sg.edu.nus.cs2103.sudo.logic.InputParser;

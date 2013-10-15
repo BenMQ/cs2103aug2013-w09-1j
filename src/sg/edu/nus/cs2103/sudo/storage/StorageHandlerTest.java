@@ -34,13 +34,13 @@ public class StorageHandlerTest {
 	private File file;
 	private File historyFile;
 	
-	private final static String userInput1 = "add 'Sleeping' from 1am to 7am";
-	private final static String userInput2 = "add 'Kanji Homework' by 10am";
-	private final static String userInput3 = "add 'CS2101' from 10am to 12pm";
-	private final static String userInput4 = "add 'CS2100 Tutorial' from 12pm to 1 pm";
-	private final static String userInput5 = "add 'Japanese Tutorial A' from 2pm to 4pm";
+	private final static String userInput1 = "add 'Sleeping' from october 14th 1am to october 14th 7am";
+	private final static String userInput2 = "add 'Kanji Homework' by october 14th";
+	private final static String userInput3 = "add 'CS2101' from october 14th 10am to 12pm";
+	private final static String userInput4 = "add 'CS2100 Tutorial' from october 11th 12pm to october 14th 1 pm";
+	private final static String userInput5 = "add 'Japanese Tutorial A' from october 14th 2pm to october 14th 4pm";
 	private final static String userInput6 = "add 'Have Dinner With A Friend'";
-	private final static String userInput7 = "add 'Study' by 11pm";
+	private final static String userInput7 = "add 'Study' by october 14th 11pm";
 	
 
 	@Before
@@ -75,8 +75,8 @@ public class StorageHandlerTest {
 		tasks.add(timed);
 		storage.save(true);
 		taskDescription = InputParser.parseDescription(userInput2);
-		dates = InputParser.parseDateTime(userInput2);
-		DeadlineTask dead = new DeadlineTask(taskDescription, dates);
+		//dates = InputParser.parseDateTime(userInput2);
+		FloatingTask dead = new FloatingTask(taskDescription);
 		tasks.add(dead);
 		storage.save(true);
 		taskDescription = InputParser.parseDescription(userInput3);
@@ -92,7 +92,8 @@ public class StorageHandlerTest {
 		String temp = iptBuff.readLine();
 		assertEquals("TIMED#Sleeping#2013-10-14T01:00 to 2013-10-14T07:00#false", temp);
 		temp = iptBuff.readLine();
-		assertEquals("DEADLINE#Kanji Homework#2013-10-14T10:00#false", temp);
+		//assertEquals("DEADLINE#Kanji Homework#2013-10-14T10:00#false", temp);
+		assertEquals("floating#Kanji Homework#false", temp);
 		temp = iptBuff.readLine();
 		assertEquals("TIMED#CS2101#2013-10-14T10:00 to 2013-10-14T12:00#false", temp);
 		iptBuff.close();

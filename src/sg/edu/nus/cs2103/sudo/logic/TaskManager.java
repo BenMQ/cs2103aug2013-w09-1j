@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import sg.edu.nus.cs2103.sudo.Constants;
-import sg.edu.nus.cs2103.sudo.storage.NoHistoryException;
 import sg.edu.nus.cs2103.sudo.storage.StorageHandler;
 
 /**

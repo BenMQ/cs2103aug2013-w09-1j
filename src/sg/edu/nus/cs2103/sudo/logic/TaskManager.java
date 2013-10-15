@@ -340,11 +340,11 @@ public class TaskManager {
 			storage.rebuildHistory();
 			UI.forcePrint("History file missing, New history file was built.");
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
 		} catch (NoHistoryException e) {
 			UI.forcePrint("No more undo steps recorded.");
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 		updateAllIds();
 		//return tasks;
@@ -367,11 +367,11 @@ public class TaskManager {
 			storage.rebuildHistory();
 			UI.forcePrint("History file missing, New history file was built.");
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
 		} catch (NoHistoryException e) {
 			UI.forcePrint("No more redo steps recorded.");
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 		updateAllIds();
 		//return tasks;

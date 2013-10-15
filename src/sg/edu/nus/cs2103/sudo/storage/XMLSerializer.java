@@ -5,8 +5,10 @@ import java.beans.XMLDecoder;
 import java.io.*;
 import java.util.ArrayList;
 
+import sg.edu.nus.cs2103.sudo.exceptions.MissingFileException;
+
 public class XMLSerializer {
-    public static void write(ArrayList<ArrayList<String>> h, String name) throws Exception{
+    public static void write(ArrayList<ArrayList<String>> h, String name) throws FileNotFoundException{
         XMLEncoder encoder =
            new XMLEncoder(
               new BufferedOutputStream(
@@ -15,7 +17,7 @@ public class XMLSerializer {
         encoder.close();
     }
 
-    public static ArrayList<ArrayList<String>> read(String filename) throws Exception {
+    public static ArrayList<ArrayList<String>> read(String filename) throws FileNotFoundException {
         XMLDecoder decoder =
             new XMLDecoder(new BufferedInputStream(
                 new FileInputStream(filename)));

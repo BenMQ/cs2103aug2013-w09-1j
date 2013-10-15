@@ -12,12 +12,14 @@ import java.util.ArrayList;
 import org.joda.time.DateTime;
 
 import sg.edu.nus.cs2103.sudo.Constants;
+import sg.edu.nus.cs2103.sudo.exceptions.MissingFileException;
 import sg.edu.nus.cs2103.sudo.exceptions.NoHistoryException;
 import sg.edu.nus.cs2103.sudo.logic.DeadlineTask;
 import sg.edu.nus.cs2103.sudo.logic.FloatingTask;
 import sg.edu.nus.cs2103.sudo.logic.InputParser;
 import sg.edu.nus.cs2103.sudo.logic.Task;
 import sg.edu.nus.cs2103.sudo.logic.TimedTask;
+import sg.edu.nus.cs2103.ui.UI;
 
 public class StorageHandler {
 	/**
@@ -77,11 +79,16 @@ public class StorageHandler {
 		history.add(nullTasks);
 	}
 	
-	private void readHistory() throws Exception{
+	public void rebuildHistory(){
+		initializeHistory();
+		saveHistory();
+	}
+	
+	private void readHistory() throws FileNotFoundException{
 		history = XMLSerializer.read(Constants.HISTORY_NAME);
 	}
 	
-	public void prepareFile(ArrayList<Task> taskIn) throws Exception{
+	public void prepareFile(ArrayList<Task> taskIn) {
 		tasks = taskIn;
 		try {
 			File file = new File(fileName);
@@ -101,14 +108,13 @@ public class StorageHandler {
 				iptBuff.close();
 				readHistory();
 			}
-		} catch (ClassNotFoundException e) {
-			System.exit(0);
-
-		} catch (IOException e) {
-			System.exit(0);
-		} catch (Exception e) {
+		} catch (FileNotFoundException e) {
+			UI.forcePrint("History file was removed or deleted.");
+			saveHistory();
 			e.printStackTrace();
-			//Exception part will be finished after we create the Exception package
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 	
@@ -188,8 +194,13 @@ public class StorageHandler {
 	}
 	
 	//Save the history
-	private void saveHistory() throws Exception{
-		XMLSerializer.write(history, Constants.HISTORY_NAME);
+	private void saveHistory(){
+			try {
+				XMLSerializer.write(history, Constants.HISTORY_NAME);
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 	}
 	
 	/**
@@ -197,9 +208,9 @@ public class StorageHandler {
 	 * 
 	 * @param ArrayList<Task>	The ArrayList of the tasks.
 	 * 	      Boolean			save the history or not
+	 * @throws IOException 
 	 */	
-	public void save(Boolean saveHistory)
-			throws Exception {
+	public void save(Boolean saveHistory) throws IOException {
 		File file = new File(fileName);
 		
 		BufferedWriter output = new BufferedWriter(new FileWriter(file, false));
@@ -220,8 +231,10 @@ public class StorageHandler {
 	 * Undo returns the last change made by the user.
 	 * It will be saved after user exit sudo
 	 * @return ArrayList<Task> the result of undo
+	 * @throws NoHistoryException
+	 * @throws FileNotFoundException 
 	 */	
-	public ArrayList<Task> undo() throws Exception{
+	public ArrayList<Task> undo() throws NoHistoryException, FileNotFoundException{
 
 		if(history.size()>1){
 			history_redo.add(history.get(history.size()-1));
@@ -230,21 +243,20 @@ public class StorageHandler {
 			tasks = stringsToTasks(history.get(history.size()-1));
 		return stringsToTasks(history.get(history.size()-1));
 		}else{
-			throw new NoHistoryException("Cant do this");
+			throw new NoHistoryException("Can not undo anymore.");
 		}
 	}
 
-	public ArrayList<Task> redo() throws Exception{
+	public ArrayList<Task> redo() throws NoHistoryException, FileNotFoundException{
 		if(history_redo.size()>0){
 			history.add(history_redo.get(history_redo.size()-1));
 			ArrayList<String> toReturn = history_redo.get(history_redo.size()-1);
 			history_redo.remove(history_redo.size()-1);
-			saveHistory();
+				saveHistory();
 			tasks = stringsToTasks(toReturn);
 		return stringsToTasks(toReturn);
 		}else{
-			throw new NoHistoryException("Cant do this");
+			throw new NoHistoryException("Can not redo anymore.");
 		}
 	}
-
 }

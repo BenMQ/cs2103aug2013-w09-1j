@@ -1,10 +1,14 @@
 package sg.edu.nus.cs2103.sudo.logic;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 
 import sg.edu.nus.cs2103.sudo.Constants;
+import sg.edu.nus.cs2103.sudo.exceptions.NoHistoryException;
 import sg.edu.nus.cs2103.sudo.storage.StorageHandler;
+import sg.edu.nus.cs2103.ui.UI;
 
 /**
  * 
@@ -287,9 +291,10 @@ public class TaskManager {
 	 * multiple matches, display all searchResults to user. By default,
 	 * searchResults searches through all tasks. Wait for user input to delete
 	 * again.
+	 * @throws IOException 
 	 * @throws Exception 
 	 */
-	public int delete(String searchStr) throws Exception {
+	public int delete(String searchStr) throws IOException {
 
 		if (searchStr == null) {
 			throw new NullPointerException(Constants.MESSAGE_INVALID_DELETE);
@@ -311,9 +316,10 @@ public class TaskManager {
 
 	/**
 	 * Given the id of the task, the task is deleted from floatingTasks
+	 * @throws IOException 
 	 * @throws Exception 
 	 */
-	public void delete(int taskId) throws Exception {
+	public void delete(int taskId) throws IOException {
 		int index = taskId - 1;
 		checkValidityIndex(index);
 
@@ -326,15 +332,25 @@ public class TaskManager {
 	 * If history does not exist, throw Exception
 	 * 
 	 * @return
-	 * @throws Exception 
 	 */
-	public void undo() throws Exception {
-		tasks=(ArrayList<Task>) storage.undo().clone();
+	public void undo() {
+		try {
+			tasks=(ArrayList<Task>) storage.undo().clone();
+		} catch (FileNotFoundException e) {
+			storage.rebuildHistory();
+			UI.forcePrint("History file missing, New history file was built.");
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NoHistoryException e) {
+			UI.forcePrint("No more undo steps recorded.");
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		updateAllIds();
 		//return tasks;
 	}
 	
-	public ArrayList<Task> saveTasks() throws Exception {
+	public ArrayList<Task> saveTasks() throws IOException {
 		storage.save(false);
 		return tasks;
 	}
@@ -343,10 +359,20 @@ public class TaskManager {
 	 * If no redo provision exists in history, throw Exception
 	 * 
 	 * @return
-	 * @throws Exception 
 	 */
-	public void redo() throws Exception {
-		tasks=(ArrayList<Task>) storage.redo().clone();
+	public void redo() {
+		try {
+			tasks=(ArrayList<Task>) storage.redo().clone();
+		} catch (FileNotFoundException e) {
+			storage.rebuildHistory();
+			UI.forcePrint("History file missing, New history file was built.");
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NoHistoryException e) {
+			UI.forcePrint("No more redo steps recorded.");
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		updateAllIds();
 		//return tasks;
 	}
@@ -355,7 +381,7 @@ public class TaskManager {
 	 * Sorts all the Task objects according to end time. TODO: Unit Testing
 	 * @throws Exception 
 	 */
-	private ArrayList<Task> sortTasks() throws Exception {
+	private ArrayList<Task> sortTasks() {
 		Collections.sort(tasks, new SortTasksByCompletedComparator());
 		Collections.sort(tasks, new SortTasksByEndTimeComparator());
 		updateAllIds();

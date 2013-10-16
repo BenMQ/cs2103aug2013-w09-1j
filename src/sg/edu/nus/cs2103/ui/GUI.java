@@ -165,15 +165,22 @@ public class GUI extends javax.swing.JFrame {
        
     }                                           
 
-    private void sudooleButtonActionPerformed(java.awt.event.ActionEvent evt) {                                         
+    private void sudooleButtonActionPerformed(java.awt.event.ActionEvent evt) {
+    	
     	mainTextFrame.setText("Search result for \"homework\":\n1. CS2101 homework by tomorrow 4pm.\n2. CS1101s JFDI homework by Sep 25th.");
         inputText.setText("");
-    }                                        
+    }
+    
+    public static void setOutPut(String message){
+    	
+    	mainTextFrame.setText(message);
+    	
+    }
 
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
+    public static void runGUI() {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -196,7 +203,7 @@ public class GUI extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(GUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-
+        
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -204,6 +211,7 @@ public class GUI extends javax.swing.JFrame {
             }
         });
     }
+    
     // Variables declaration - do not modify                     
     private javax.swing.JButton sudooleButton;
     private javax.swing.JLabel labelFloatingTasks;
@@ -213,7 +221,7 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.JProgressBar progressBar;
     private javax.swing.JScrollPane floatingTaskScrollPane;
     private javax.swing.JScrollPane mainTextFrameScrollPane;
-    private javax.swing.JTextArea mainTextFrame;
+    private static javax.swing.JTextArea mainTextFrame;
     private javax.swing.JTextField inputText;
     private TaskManager manager;
     private InputParser parser;

@@ -30,7 +30,6 @@ public class InputParser {
 	private static InputParser parser;
 	private TaskManager manager; 
 	
-//	Constructor is private because this is a singleton class
 	private InputParser(TaskManager m) {
 		if (m == null){
 			Constants.parserLogger.log(Level.WARNING, "Task Manager is null when creating InputParser");
@@ -39,7 +38,6 @@ public class InputParser {
 		manager = m;
 	}
 	
-//	We have public methods to access the single static instance of InputParser
 	public static InputParser getInputParser(TaskManager m){
 		if(parser == null){
 			parser = new InputParser(m);
@@ -60,14 +58,12 @@ public class InputParser {
 		int targetId = parseId(userInput);
 		ArrayList<DateTime> dateTimes = parseDateTime(userInput);
 		
-		try { //I'm sorry about this gigantic try/catch block
+		try {
 			switch(userCommand){ //we can refactor this using the Command pattern
 			case INVALID:
-				Constants.parserLogger.log(Level.WARNING, userInput + " input has invalid command");
 				System.out.print(Constants.MESSAGE_INVALID_COMMAND);
 				return;		
 			case INCOMPLETE:
-				Constants.parserLogger.log(Level.WARNING, userInput + " input has incomplete command");
 				System.out.print(Constants.MESSAGE_INCOMPLETE_COMMAND);
 				return;
 			case DISPLAY:
@@ -105,7 +101,7 @@ public class InputParser {
 				int numResults = this.manager.delete(taskDescription); //need to refactor this
 				if (numResults > 1 ) {
 					System.out.println(Constants.MESSAGE_ENTER_TASK_ID);
-					int id = sc.nextInt(); // change this to take in any input and throw error if invalid integer
+					int id = sc.nextInt();
 					this.manager.delete(id);
 				}
 				return;
@@ -125,7 +121,7 @@ public class InputParser {
 			    return; 
 			    
 			default:
-				//some error message
+				assert false; //Unreachable code. Invalid commands must be caught.
 				return;
 			}
 		} catch (Exception e) {
@@ -140,8 +136,6 @@ public class InputParser {
 	 */	
 	public static ArrayList<DateTime> parseDateTime(String userInput){
 		Parser dtparser = new Parser();
-		
-//		System.out.println("Parsing: " + userInput);
 
 		//remove Description
 		String desc = parseDescription(userInput);

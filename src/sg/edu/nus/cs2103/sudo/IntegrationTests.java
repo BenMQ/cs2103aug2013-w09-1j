@@ -26,7 +26,7 @@ public class IntegrationTests {
 	/**
 	 * Integration Test ideas:
 	 * 1. Test task adding, check state of all components: UI, parser, taskmanager, storage  
-	 * 2.
+	 * 2. 
 	 * 
 	 * 
 	 */	

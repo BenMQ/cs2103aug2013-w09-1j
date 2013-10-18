@@ -2,7 +2,12 @@ package sg.edu.nus.cs2103.sudo;
 
 import static org.junit.Assert.*;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -26,30 +31,98 @@ public class IntegrationTests {
 	 * 
 	 */	
 
+	private static final String SAVE_FILENAME = "integration_test.sav";
+	private static final String HISTORY_FILENAME = "integration_history.sav";
+	
 	private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
-	StorageHandler storage;
-	TaskManager manager;
-	InputParser parser;	
+	BufferedReader savefile_reader;
+	private static StorageHandler storage;
+	private static TaskManager manager;
+	private static InputParser parser;	
+	
+	private File savefile;
+	private File historyfile;
 	
 	@Before
-	public void setUp() {
-//		storage = StorageHandler.getStorageHandler(Constants.FILE_NAME, new ArrayList<Task>());
+	public void setUp() throws FileNotFoundException {
+		savefile = new File(SAVE_FILENAME);
+		historyfile = new File(HISTORY_FILENAME);
+		storage = StorageHandler.getStorageHandler(SAVE_FILENAME);
 		manager = TaskManager.getTaskManager();
 		parser = InputParser.getInputParser(manager);
 		System.setOut(new PrintStream(outContent));
     }
 	
 	@After
-    public void tearDown() {
+    public void tearDown() throws IOException {
         manager.clearTasks();
-        //have to clear storage also
-        
+        savefile.delete();
     }		
 	
 	
 	@Test
-	public void test() {
-		fail("Not yet implemented");
+	public void testAddFloatingTask() throws IOException {
+		String userInput = "add 'make waffles for breakfast'";
+		String taskDescription = InputParser.parseDescription(userInput);
+		String expectedOutput = Constants.MESSAGE_ADD_FLOATING + taskDescription;
+		
+		testCommand(userInput, expectedOutput);
+		testStorageContent();
 	}
 
+	@Test
+	public void testAddDeadlineTask() throws IOException {
+		String userInput = "add 'make waffles for breakfast' by Monday 14 October 2pm";
+		String taskDescription = InputParser.parseDescription(userInput);
+		String expectedOutput = Constants.MESSAGE_ADD_DEADLINE + taskDescription;
+		
+		testCommand(userInput, expectedOutput);
+		testStorageContent();
+	}	
+	
+	@Test
+	public void testDelete() throws IOException{
+		String userInput = "add 'make waffles for breakfast' by Monday 14 October 2pm";
+		String taskDescription = InputParser.parseDescription(userInput);
+		testCommand(userInput, Constants.MESSAGE_ADD_DEADLINE + taskDescription);
+		String expectedOutput = Constants.MESSAGE_DELETE + taskDescription;
+		
+		testCommand("delete 'waffle'", expectedOutput);
+		testStorageContent();
+	}	
+	
+	@Test
+	public void testEdit(){
+		assert true;
+	}	
+	
+	@Test
+	public void testSearch(){
+		assert true;
+	}
+
+	@Test
+	public void testSort(){
+		assert true;
+	}		
+
+	
+	// Helper test method to also test console output
+	private void testCommand(String userInput, String expectedOutput) throws IOException{		
+		parser.executeCommand(userInput);
+		assertEquals(expectedOutput +"\n", outContent.toString());
+		outContent.reset();
+	}
+
+	// Helper test method to automatically test storage content
+	public void testStorageContent() throws FileNotFoundException, IOException {
+		savefile_reader = new BufferedReader(new FileReader(
+				SAVE_FILENAME));
+		for (Task task : manager.getTasks()){
+			String taskString = task.toStringForFile();
+			assertEquals(savefile_reader.readLine(), taskString);
+		}
+		savefile_reader.close();
+	}	
+	
 }

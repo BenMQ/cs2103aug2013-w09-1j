@@ -113,33 +113,9 @@ public class InputParserTest {
 
 	@Test
 	public void testParseAddInvalidNumberOfDates() throws IOException{
-		assert true;
+		testCommand("add 'time travel' from 19 October 2013 to 22 October 2014 to 24 November 2016", Constants.MESSAGE_INVALID_NUMBER_OF_DATES);
+		assertEquals(0, manager.getTasks().size());
 	}		
-	
-	@Test
-	public void testParseDisplayCommand(){
-		assert true;
-	}
-	
-	@Test
-	public void testParseDeleteCommand(){
-		assert true;
-	}	
-	
-	@Test
-	public void testParseEditCommand(){
-		assert true;
-	}	
-	
-	@Test
-	public void testParseSearchCommand(){
-		assert true;
-	}
-
-	@Test
-	public void testParseSortCommand(){
-		assert true;
-	}	
 	
 	// Helper test method to test console output
 	private void testCommand(String userInput, String expectedOutput) throws IOException{		

@@ -77,7 +77,7 @@ public class InputParser {
 			case FINISH:
 				System.out.println(Constants.MESSAGE_FINISH);
 				this.manager.markAsComplete(targetId);
-				return;			
+				return;	
 			case ADD:
 				int num_dates = dateTimes.size();
 				if(num_dates == 0){ //need to refactor this later
@@ -94,7 +94,7 @@ public class InputParser {
 						this.manager.addTask(new TimedTask(taskDescription, dateTimes));
 						System.out.println(Constants.MESSAGE_ADD_TIMED + taskDescription);						
 				} else {
-						System.out.println(Constants.MESSAGE_INVALID_NUMBER_OF_DATES);
+						System.out.print(Constants.MESSAGE_INVALID_NUMBER_OF_DATES);
 				}
 				return;
 			case SEARCH:
@@ -102,7 +102,6 @@ public class InputParser {
 				this.manager.searchAndDisplay(taskDescription);
 				return;
 			case DELETE:
-				System.out.println("Deleting:" + taskDescription);
 				int numResults = this.manager.delete(taskDescription); //need to refactor this
 				if (numResults > 1 ) {
 					System.out.println(Constants.MESSAGE_ENTER_TASK_ID);
@@ -153,8 +152,6 @@ public class InputParser {
 		List<DateGroup> dateGroups = dtparser.parse(userInput); //Each DateGroup contains a list of Date
 		ArrayList<List<Date>> dateLists = ParserUtils.getDateLists(dateGroups);	
 		ArrayList<DateTime> dateTimes = ParserUtils.convertToDateTimes(dateLists);
-		
-		//Here need to validate DateTimes!
 		
 		return dateTimes;
 	}

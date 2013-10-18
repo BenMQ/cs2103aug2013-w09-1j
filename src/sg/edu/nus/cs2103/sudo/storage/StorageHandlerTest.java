@@ -92,10 +92,10 @@ public class StorageHandlerTest {
 		String temp = iptBuff.readLine();
 		assertEquals("TIMED#Sleeping#2013-10-14T01:00 to 2013-10-14T07:00#false", temp);
 		temp = iptBuff.readLine();
-		//assertEquals("DEADLINE#Kanji Homework#2013-10-14T10:00#false", temp);
+		//assertEquals("DEADLINE#Kanji Homework#2013-10-18T10:00#false", temp);
 		assertEquals("floating#Kanji Homework#false", temp);
 		temp = iptBuff.readLine();
-		assertEquals("TIMED#CS2101#2013-10-14T10:00 to 2013-10-14T12:00#false", temp);
+		assertEquals("TIMED#CS2101#2013-10-18T10:00 to 2013-10-18T12:00#false", temp);
 		iptBuff.close();
 		
 	}
@@ -129,10 +129,10 @@ public class StorageHandlerTest {
 		
 		storage = StorageHandler.getStorageHandler(TEST_NAME);
 		storage.prepareFile(tasks);
-		assertEquals("TIMED#CS2100 Tutorial#2013-10-14T12:00 to 2013-10-14T13:00#false", tasks.get(0).toStringForFile());
+		assertEquals("TIMED#CS2100 Tutorial#2013-10-18T12:00 to 2013-10-14T13:00#false", tasks.get(0).toStringForFile());
 		assertEquals("TIMED#Japanese Tutorial A#2013-10-14T14:00 to 2013-10-14T16:00#false", tasks.get(1).toStringForFile());
 		assertEquals("floating#Have Dinner With A Friend#false", tasks.get(2).toStringForFile());
-		assertEquals("DEADLINE#Study#2013-10-14T23:00#false", tasks.get(3).toStringForFile());
+		assertEquals("DEADLINE#Study#2013-10-18T23:00#false", tasks.get(3).toStringForFile());
 	}
 	
 	@Test
@@ -174,10 +174,10 @@ public class StorageHandlerTest {
 		assertEquals(true, historyFile.exists());
 		storage = StorageHandler.getStorageHandler(TEST_NAME);
 		storage.prepareFile(tasks);
-		assertEquals("TIMED#CS2100 Tutorial#2013-10-14T12:00 to 2013-10-14T13:00#false", tasks.get(0).toStringForFile());
+		assertEquals("TIMED#CS2100 Tutorial#2013-10-18T12:00 to 2013-10-14T13:00#false", tasks.get(0).toStringForFile());
 		assertEquals("TIMED#Japanese Tutorial A#2013-10-14T14:00 to 2013-10-14T16:00#false", tasks.get(1).toStringForFile());
 		assertEquals("floating#Have Dinner With A Friend#false", tasks.get(2).toStringForFile());
-		assertEquals("DEADLINE#Study#2013-10-14T23:00#false", tasks.get(3).toStringForFile());
+		assertEquals("DEADLINE#Study#2013-10-18T23:00#false", tasks.get(3).toStringForFile());
 		assertEquals(4, tasks.size());
 		tasks.clear();
 		StorageHandler.resetStorageHandler();
@@ -188,14 +188,14 @@ public class StorageHandlerTest {
 		tasks=(ArrayList<Task>) storage.undo().clone();
 		tasks=(ArrayList<Task>) storage.undo().clone();
 		storage.save(false);
-		assertEquals("TIMED#CS2100 Tutorial#2013-10-14T12:00 to 2013-10-14T13:00#false", tasks.get(0).toStringForFile());
+		assertEquals("TIMED#CS2100 Tutorial#2013-10-18T12:00 to 2013-10-14T13:00#false", tasks.get(0).toStringForFile());
 		assertEquals("TIMED#Japanese Tutorial A#2013-10-14T14:00 to 2013-10-14T16:00#false", tasks.get(1).toStringForFile());
 		assertEquals(2, tasks.size());
 		tasks=(ArrayList<Task>) storage.undo().clone();
 		tasks=(ArrayList<Task>) storage.undo().clone();
 		assertEquals(true, tasks.isEmpty());
 		tasks=(ArrayList<Task>) storage.redo().clone();
-		assertEquals("TIMED#CS2100 Tutorial#2013-10-14T12:00 to 2013-10-14T13:00#false", tasks.get(0).toStringForFile());
+		assertEquals("TIMED#CS2100 Tutorial#2013-10-18T12:00 to 2013-10-14T13:00#false", tasks.get(0).toStringForFile());
 	}
 	
 }

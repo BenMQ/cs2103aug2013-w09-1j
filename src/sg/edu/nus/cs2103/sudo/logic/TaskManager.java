@@ -13,7 +13,13 @@ import sg.edu.nus.cs2103.ui.UI;
 /**
  * 
  * @author chenminqi
- * @author Ipsita
+ * @author Ipsita Mohapatra A0101286N
+ * 
+ *         This is a singleton class responsible for handling the Task objects.
+ *         The appropriate methods are called upon by the InputParser to execute
+ *         user commands such as adding, editing, searching and deleting Task
+ *         objects. It is also responsible for throwing exceptions when
+ *         necessary.
  * 
  */
 
@@ -22,8 +28,8 @@ public class TaskManager {
 
 	// A list of timed, deadline and floating tasks
 	private ArrayList<Task> tasks;
-	
-	//The storage handler
+
+	// The storage handler
 	private StorageHandler storage;
 
 	private TaskManager() throws Exception {
@@ -33,14 +39,14 @@ public class TaskManager {
 		updateAllIds();
 	}
 
-	public static TaskManager getTaskManager(){
-		try{
-		if (taskManager == null) {
-			taskManager = new TaskManager();
-		}
-		return taskManager;
-		}catch(Exception e){
-			
+	public static TaskManager getTaskManager() {
+		try {
+			if (taskManager == null) {
+				taskManager = new TaskManager();
+			}
+			return taskManager;
+		} catch (Exception e) {
+
 		}
 		return taskManager;
 	}
@@ -63,7 +69,7 @@ public class TaskManager {
 	 * 
 	 * @param newTask
 	 * @return floatingTasks with new additions
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	public ArrayList<Task> addTask(Task newTask) throws Exception {
 		assert (newTask != null);
@@ -84,7 +90,7 @@ public class TaskManager {
 	 * @param displayId
 	 * @param newTask
 	 * @return floatingTasks after editing
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	public ArrayList<Task> editTask(int displayId, Task newTask)
 			throws Exception {
@@ -164,11 +170,10 @@ public class TaskManager {
 	 * Mark an incomplete task as completed.
 	 * 
 	 * @param taskId
-	 * @throws Exception 
+	 * @throws Exception
 	 */
-	public ArrayList<Task> markAsComplete(int taskId)
-			throws Exception {
-		
+	public ArrayList<Task> markAsComplete(int taskId) throws Exception {
+
 		int index = taskId - 1;
 		checkValidityIndex(index);
 
@@ -189,10 +194,9 @@ public class TaskManager {
 	 * Mark a completed task as incomplete.
 	 * 
 	 * @param taskId
-	 * @throws Exception 
+	 * @throws Exception
 	 */
-	public ArrayList<Task> markAsIncomplete(int taskId)
-			throws Exception {
+	public ArrayList<Task> markAsIncomplete(int taskId) throws Exception {
 		int index = taskId - 1;
 		checkValidityIndex(index);
 
@@ -290,8 +294,9 @@ public class TaskManager {
 	 * multiple matches, display all searchResults to user. By default,
 	 * searchResults searches through all tasks. Wait for user input to delete
 	 * again.
-	 * @throws IOException 
-	 * @throws Exception 
+	 * 
+	 * @throws IOException
+	 * @throws Exception
 	 */
 	public int delete(String searchStr) throws IOException {
 
@@ -306,18 +311,20 @@ public class TaskManager {
 			throw new IllegalStateException(Constants.MESSAGE_NO_SEARCH_RESULTS);
 		} else if (numResults == 1) {
 			delete(searchResults.get(0).getId());
-			System.out.println(Constants.MESSAGE_DELETE + searchResults.get(0).description);
+			System.out.println(Constants.MESSAGE_DELETE
+					+ searchResults.get(0).description);
 		} else {
 			displaySearchResults(searchResults);
 		}
-		
+
 		return numResults;
 	}
 
 	/**
 	 * Given the id of the task, the task is deleted from floatingTasks
-	 * @throws IOException 
-	 * @throws Exception 
+	 * 
+	 * @throws IOException
+	 * @throws Exception
 	 */
 	public void delete(int taskId) throws IOException {
 		int index = taskId - 1;
@@ -335,21 +342,21 @@ public class TaskManager {
 	 */
 	public void undo() {
 		try {
-			tasks=(ArrayList<Task>) storage.undo().clone();
+			tasks = (ArrayList<Task>) storage.undo().clone();
 		} catch (FileNotFoundException e) {
 			storage.rebuildHistory();
 			UI.forcePrint("History file missing, New history file was built.");
 			// TODO Auto-generated catch block
-			//e.printStackTrace();
+			// e.printStackTrace();
 		} catch (NoHistoryException e) {
 			UI.forcePrint("No more undo steps recorded.");
 			// TODO Auto-generated catch block
-			//e.printStackTrace();
+			// e.printStackTrace();
 		}
 		updateAllIds();
-		//return tasks;
+		// return tasks;
 	}
-	
+
 	public ArrayList<Task> saveTasks() throws IOException {
 		storage.save(false);
 		return tasks;
@@ -362,24 +369,25 @@ public class TaskManager {
 	 */
 	public void redo() {
 		try {
-			tasks=(ArrayList<Task>) storage.redo().clone();
+			tasks = (ArrayList<Task>) storage.redo().clone();
 		} catch (FileNotFoundException e) {
 			storage.rebuildHistory();
 			UI.forcePrint("History file missing, New history file was built.");
 			// TODO Auto-generated catch block
-			//e.printStackTrace();
+			// e.printStackTrace();
 		} catch (NoHistoryException e) {
 			UI.forcePrint("No more redo steps recorded.");
 			// TODO Auto-generated catch block
-			//e.printStackTrace();
+			// e.printStackTrace();
 		}
 		updateAllIds();
-		//return tasks;
+		// return tasks;
 	}
 
 	/**
 	 * Sorts all the Task objects according to end time. TODO: Unit Testing
-	 * @throws Exception 
+	 * 
+	 * @throws Exception
 	 */
 	private ArrayList<Task> sortTasks() {
 		Collections.sort(tasks, new SortTasksByCompletedComparator());
@@ -397,19 +405,19 @@ public class TaskManager {
 			tasks.get(i).setId(i + 1);
 		}
 	}
-	
+
 	private void checkValidityIndex(int index) throws IndexOutOfBoundsException {
 		if (index < 0 || index > tasks.size()) {
 			throw new IndexOutOfBoundsException(
 					Constants.MESSAGE_INVALID_TASK_INDEX);
 		}
 	}
-	
-	public ArrayList<Task> getTasks(){
+
+	public ArrayList<Task> getTasks() {
 		return this.tasks;
 	}
-	
-	public void clearTasks(){
+
+	public void clearTasks() {
 		this.tasks.clear();
-	}	
+	}
 }

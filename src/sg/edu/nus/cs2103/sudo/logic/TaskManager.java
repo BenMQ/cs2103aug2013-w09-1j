@@ -336,6 +336,8 @@ public class TaskManager {
 	}
 
 	/**
+	 * @author Liu Dake
+	 * 
 	 * If history does not exist, throw Exception
 	 * 
 	 * @return
@@ -363,6 +365,8 @@ public class TaskManager {
 	}
 
 	/**
+	 * @author Liu Dake
+	 * 
 	 * If no redo provision exists in history, throw Exception
 	 * 
 	 * @return

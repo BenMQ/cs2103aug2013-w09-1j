@@ -3,8 +3,12 @@ package sg.edu.nus.cs2103.sudo.logic;
 import org.joda.time.DateTime;
 
 /**
- * @author Ipsita 
+ * @author Ipsita Mohapatra A0101286N
  *
+ * This class stores the information about all types of Tasks.
+ * This abstract class is the parent class of TimedTask, DeadlineTask and FloatingTask
+ * Some of the fields like endTime and/or startTime may be empty.
+ * 
  */
 
 public abstract class Task {
@@ -71,7 +75,5 @@ public abstract class Task {
 	}
 	
 	public abstract String toStringForFile();
-
-	
 	
 }

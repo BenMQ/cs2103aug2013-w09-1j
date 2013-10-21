@@ -45,12 +45,15 @@ public class InputParser {
 	}
 	
 	/**
-	 * Executes the user's input
+	 * Parses and executes the appropriate manager method based on the user's input.
+	 * Via this method, InputParser becomes a facade class between
+	 * UI and Logic.
+	 * 
 	 * @param userInput 	string of the user's input
 	 * @return executes the appropriate high level command
 	 */
-	public void executeCommand(String userInput){
-		COMMAND_TYPE userCommand = parseCommand(userInput);
+	public void parseCommand(String userInput){
+		COMMAND_TYPE userCommand = parseCommandType(userInput);
 		assert(userCommand != null);
 		
 		String taskDescription = parseDescription(userInput);
@@ -166,7 +169,7 @@ public class InputParser {
 	 * @param String	the user's input
 	 * @return COMMAND_TYPE 
 	 */	
-	public static COMMAND_TYPE parseCommand(String userInput){
+	public static COMMAND_TYPE parseCommandType(String userInput){
 		String commandWord = ParserUtils.getCommandWord(userInput);
 		COMMAND_TYPE commandType = ParserUtils.getCommandType(commandWord);
 		int numOfWords = ParserUtils.countWords(userInput);

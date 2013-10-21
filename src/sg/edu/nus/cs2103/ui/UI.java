@@ -18,8 +18,8 @@ public class UI {
 		TaskManager manager = TaskManager.getTaskManager();
 		InputParser parser = InputParser.getInputParser(manager);
 		while (true) {
-			String userInput = parser.readCommand(user); //listen to scanner
-			parser.executeCommand(userInput);
+			String userInput = parser.readCommand(user);
+			parser.parseCommand(userInput);
 		}
 
 	}

@@ -110,7 +110,7 @@ public class IntegrationTests {
 	
 	// Helper test method to also test console output
 	private void testCommand(String userInput, String expectedOutput) throws IOException{		
-		parser.executeCommand(userInput);
+		parser.parseCommand(userInput);
 		assertEquals(expectedOutput, outContent.toString());
 		outContent.reset();
 	}

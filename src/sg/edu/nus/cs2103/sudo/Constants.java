@@ -14,9 +14,11 @@ public class Constants {
 	
 	public static final String MESSAGE_DISPLAY = "Displaying all tasks";
 	public static final String MESSAGE_INVALID_NUMBER_OF_DATES = "Invalid number of dates.\n";
-	public static final String MESSAGE_ADD_TIMED = "Add timed task: ";
-	public static final String MESSAGE_ADD_DEADLINE = "Add deadline task: ";
-	public static final String MESSAGE_ADD_FLOATING = "Add floating task: ";
+	public static final String MESSAGE_ADD_TIMED = "Add timed task: %s\n";
+	public static final String MESSAGE_ADD_DEADLINE = "Add deadline task: %s\n";
+	public static final String MESSAGE_ADD_FLOATING = "Add floating task: %s\n";
+	public static final String MESSAGE_SEARCH = "Searching: %s\n";
+	public static final String MESSAGE_EDIT = "Editing: %s\n";
 	public static final String MESSAGE_DELETE = "Deleted: ";
 	public static final String MESSAGE_ENTER_TASK_ID = "Please enter task id:";
 	public static final String MESSAGE_MISSING_DESCRIPTION = "Task description should be between single quotes.\n";

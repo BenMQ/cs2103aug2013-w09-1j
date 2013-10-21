@@ -34,7 +34,15 @@ public class DeadlineTask extends Task {
 
 		this.endTime = endTime;
 	}
-
+	
+	public DeadlineTask(int id, String taskDescription, boolean isComplete, DateTime endTime) {
+		this.id = id;
+		this.description = taskDescription;
+		this.isComplete = isComplete;
+		this.endTime = endTime;
+	}
+	
+	/* TO BE REMOVED
 	private void checkValidityTimes(DateTime endTime) {
 		checkTimeWithCurrentTime(endTime);
 	}
@@ -52,7 +60,7 @@ public class DeadlineTask extends Task {
 		}
 		
 	}
-
+	*/
 	public String toStringForFile() {
 		int bound = endTime.toString().indexOf(":");
 		String returnedEndTime = this.endTime.toString()

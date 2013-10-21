@@ -1,9 +1,5 @@
 package sg.edu.nus.cs2103.sudo;
 
-import java.util.logging.Logger;
-
-import sg.edu.nus.cs2103.sudo.logic.InputParser;
-
 public class Constants {
 
 	public static final String MESSAGE_INVALID_COMMAND = "Invalid command\n";
@@ -12,7 +8,7 @@ public class Constants {
 	public static final String MESSAGE_INVALID_SEARCH = "Search is invalid.\n";
 	public static final String MESSAGE_INVALID_DELETE = "Search term for delete is invalid.\n";
 	
-	public static final String MESSAGE_DISPLAY = "Displaying all tasks";
+	public static final String MESSAGE_DISPLAY = "Displaying incomplete tasks";
 	public static final String MESSAGE_INVALID_NUMBER_OF_DATES = "Invalid number of dates.\n";
 	public static final String MESSAGE_ADD_TIMED = "Add timed task: %s\n";
 	public static final String MESSAGE_ADD_DEADLINE = "Add deadline task: %s\n";

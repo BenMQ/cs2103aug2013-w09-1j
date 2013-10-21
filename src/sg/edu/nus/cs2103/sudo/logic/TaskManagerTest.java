@@ -3,6 +3,8 @@ package sg.edu.nus.cs2103.sudo.logic;
 import static org.junit.Assert.*;
 
 import org.joda.time.DateTime;
+import org.joda.time.Interval;
+import org.joda.time.MutableInterval;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -152,7 +154,56 @@ public class TaskManagerTest {
 				displayTasks(manager.search("fishes", true)));
 
 	}
-
+	/**
+	 * Tests getOccupiedIntervals
+	 * @throws Exception
+	 * @author chenminqi
+	 */
+	@Test
+	public void testGetOccupiedIntervals() throws Exception {
+        DateTime now = new DateTime();
+        DateTime dt0000 = new DateTime(now.getYear(), now.getMonthOfYear(), now.getDayOfMonth(), 0, 0, 0);
+        DateTime dt2359 = new DateTime(now.getYear(), now.getMonthOfYear(), now.getDayOfMonth(), 23, 59, 59);
+        
+        ArrayList<MutableInterval> actual;
+        ArrayList<MutableInterval> expected;
+        // Floating and Deadline tasks should be ignored 
+	    manager.addTask(new FloatingTask("floating task1"));
+	    manager.addTask(new DeadlineTask(0, "deadline", false, now));
+	    actual = manager.getOccupiedIntervals();
+	    expected = new ArrayList<MutableInterval>();
+	    expected.add(new MutableInterval(dt2359, dt2359));
+	    assertEquals(expected, actual);
+	    
+	    
+	    // Test task that is at the middle of the day
+        manager.addTask(new TimedTask(0, "timed", false, today(8, 0), today(10, 0)));
+        actual = manager.getOccupiedIntervals();
+        expected = new ArrayList<MutableInterval>();
+        expected.add(new MutableInterval(today(8, 0), today(10, 0)));
+        expected.add(new MutableInterval(dt2359, dt2359));
+        assertEquals(expected, actual);
+        
+        // boundary case for overlapping tasks
+        manager.addTask(new TimedTask(0, "timed", false, today(9, 0), today(11, 0)));
+        actual = manager.getOccupiedIntervals();
+        expected = new ArrayList<MutableInterval>();
+        expected.add(new MutableInterval(today(8, 0), today(11, 0)));
+        expected.add(new MutableInterval(dt2359, dt2359));
+        assertEquals(expected, actual);
+        
+        // boundary case for abut tasks
+        manager.addTask(new TimedTask(0, "timed", false, today(11, 0), today(12, 0)));
+        actual = manager.getOccupiedIntervals();
+        expected = new ArrayList<MutableInterval>();
+        expected.add(new MutableInterval(today(8, 0), today(12, 0)));
+        expected.add(new MutableInterval(dt2359, dt2359));
+        assertEquals(expected, actual);
+        
+        // boundary case for gap between tasks
+	    
+	}
+	
 	private String displayTasks(ArrayList<Task> tasks) {
 
 		String str = "";
@@ -168,5 +219,9 @@ public class TaskManagerTest {
 
 		return str;
 
+	}
+	private DateTime today(int hours, int minutes) {
+        DateTime now = DateTime.now();
+        return new DateTime(now.getYear(), now.getMonthOfYear(), now.getDayOfMonth(), hours, minutes, 0);
 	}
 }

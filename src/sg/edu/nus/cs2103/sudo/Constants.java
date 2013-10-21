@@ -33,7 +33,9 @@ public class Constants {
 
     public static final String MESSAGE_NO_FREE_SLOTS = "No free slots found. :(";
     public static final String MESSAGE_FREE_SLOTS_PREFIX = "Here are your free time slots for today:";
-	
+
+    public static final int FREE_SLOT_MINIMUM_DURATION_IN_MINUTES = 10;
+    public static final int FREE_SLOT_MINIMUM_DURATION = FREE_SLOT_MINIMUM_DURATION_IN_MINUTES * 60 * 1000; // milliseconds
 	
 	public static final String FILE_NAME = "sudo.sav";
 	public static final String HISTORY_NAME = "sudo.his";

@@ -310,8 +310,6 @@ public class TaskManager {
 	 * @author chenminqi
 	 */
     public void searchForFreeIntervals() {
-        final int MINIMUM_DURATION_IN_MINUTES = 10;
-        final int MINIMUM_DURATION = MINIMUM_DURATION_IN_MINUTES * 60 * 1000; // milliseconds
         ArrayList<MutableInterval> free = getFreeIntervals();
         if (free.size() == 0) {
             System.out.println(Constants.MESSAGE_NO_FREE_SLOTS);
@@ -319,7 +317,7 @@ public class TaskManager {
             System.out.println(Constants.MESSAGE_FREE_SLOTS_PREFIX);
             for (int i = 0; i < free.size(); i++) {
                 MutableInterval interval = free.get(i);
-                if (interval.toDurationMillis() >= MINIMUM_DURATION) {
+                if (interval.toDurationMillis() >= Constants.FREE_SLOT_MINIMUM_DURATION) {
                     String output = interval.getStart().toString("hh:mm a") + " to " + interval.getEnd().toString("hh:mm a");
                     System.out.println(output);
                 }

@@ -31,6 +31,7 @@ public class Constants {
 	public static final String MESSAGE_NO_FLOATING_TASKS = "No floating tasks.\n";
 	public static final String MESSAGE_FINISH = "Finishing task.";
 	
+	public static final String MESSAGE_NO_FREE_SLOTS = "No free slots found. :(";
 	public static final String FILE_NAME = "sudo.sav";
 	public static final String HISTORY_NAME = "sudo.his";
 	
@@ -38,5 +39,6 @@ public class Constants {
 	
 	private static final String MESSAGE_HISTORY_LOAD_ERROR = "Loading history file error: file can not be found.";
 	private static final String MESSAGE_LAST_HISTORY = "No more histories. Can not undo.";
+	
 	
 }

@@ -303,7 +303,30 @@ public class TaskManager {
 			System.out.println(searchResults.get(i).toString());
 		}
 	}
-
+	
+	/**
+	 * Search and prints out intervals that are free during the current day.
+	 * Intervals shorter than 10 minutes are ignored.
+	 * @author chenminqi
+	 */
+    public void searchForFreeIntervals() {
+        final int MINIMUM_DURATION_IN_MINUTES = 10;
+        final int MINIMUM_DURATION = MINIMUM_DURATION_IN_MINUTES * 60 * 1000; // milliseconds
+        ArrayList<MutableInterval> free = getFreeIntervals();
+        if (free.size() == 0) {
+            System.out.println(Constants.MESSAGE_NO_FREE_SLOTS);
+        } else {
+            for (int i = 0; i < free.size(); i++) {
+                MutableInterval interval = free.get(i);
+                if (interval.toDurationMillis() >= MINIMUM_DURATION) {
+                    String output = interval.getStart().toString("hh:mm a") + " to " + interval.getEnd().toString("hh:mm a");
+                    System.out.println(output);
+                }
+            }
+        }
+        
+    }
+    
 	/**
 	 * Searches for all occupied time slots of today. If the actual slot of the day ends before 2359hrs,
 	 * an interval [2359hrs, 2359hrs] which lasts for 0 seconds will be inserted at the end.
@@ -374,6 +397,7 @@ public class TaskManager {
         }
         return free;
 	}
+	
 	
 	/**
 	 * Removes the task by first searching for the search string in the task

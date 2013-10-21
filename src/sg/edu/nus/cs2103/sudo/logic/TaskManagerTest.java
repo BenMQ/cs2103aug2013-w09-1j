@@ -286,14 +286,15 @@ public class TaskManagerTest {
         
         // No task
         manager.searchForFreeIntervals();
-        assertEquals("12:00 AM to 11:59 PM\n", outContent.toString());
+        assertEquals(Constants.MESSAGE_FREE_SLOTS_PREFIX + "\n12:00 AM to 11:59 PM\n", outContent.toString());
         outContent.reset();
         
         // some slots
         manager.addTask(new TimedTask(0, "timed", false, today(11, 0), today(12, 0)));
         manager.addTask(new TimedTask(0, "timed", false, today(17, 0), today(18, 0)));
         manager.searchForFreeIntervals();
-        assertEquals("12:00 AM to 11:00 AM\n12:00 PM to 05:00 PM\n06:00 PM to 11:59 PM\n", outContent.toString());
+        assertEquals(Constants.MESSAGE_FREE_SLOTS_PREFIX + "\n"
+                + "12:00 AM to 11:00 AM\n12:00 PM to 05:00 PM\n06:00 PM to 11:59 PM\n", outContent.toString());
         outContent.reset();
 
         manager.addTask(new TimedTask(0, "timed", false, dt0000, dt2359));

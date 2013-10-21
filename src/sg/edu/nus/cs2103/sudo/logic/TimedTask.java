@@ -37,7 +37,7 @@ public class TimedTask extends Task {
 	}
 
 	private void checkValidityTimes(DateTime startTime, DateTime endTime) {
-		checkTimesWithCurrentTime(startTime, endTime); 
+		// checkTimesWithCurrentTime(startTime, endTime); 
 		checkStartAndEndTime(startTime, endTime);
 	}
 

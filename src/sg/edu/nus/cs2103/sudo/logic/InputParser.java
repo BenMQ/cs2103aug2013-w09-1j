@@ -99,6 +99,9 @@ public class InputParser {
 				System.out.printf(Constants.MESSAGE_SEARCH, taskDescription);
 				this.manager.searchAndDisplay(taskDescription);
 				return;
+			case FREE:
+			    this.manager.searchForFreeIntervals();
+			    return;
 			case DELETE:
 				int numResults = this.manager.delete(taskDescription); //need to refactor this
 				if (numResults > 1 ) {

@@ -46,9 +46,9 @@ public abstract class Task {
 	public String toString() {
 		String output = id + ". " + description;
 	    if (startTime != null) {
-	        output += " from " + startTime.toString() + " to " + endTime.toString();
+	        output += " from " + startTime.toString("E dd MMMM, yyyy HH:mm a") + " to " + endTime.toString("E dd MMMM, yyyy HH:mm a");
 	    } else if (endTime != null) {
-	        output += " by " + endTime.toString();
+	        output += " by " + endTime.toString("E dd MMMM, yyyy HH:mm a");
 	    }
 	    
 	    return output;

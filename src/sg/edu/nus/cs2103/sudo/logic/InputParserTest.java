@@ -118,7 +118,7 @@ public class InputParserTest {
 	
 	// Helper test method to test console output
 	private void testCommand(String userInput, String expectedOutput) throws IOException{		
-		parser.executeCommand(userInput);
+		parser.parseCommand(userInput);
 		assertEquals(outContent.toString(), expectedOutput);
 		outContent.reset();
 	}

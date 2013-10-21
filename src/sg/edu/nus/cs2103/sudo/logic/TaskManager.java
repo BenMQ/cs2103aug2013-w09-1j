@@ -316,6 +316,7 @@ public class TaskManager {
         if (free.size() == 0) {
             System.out.println(Constants.MESSAGE_NO_FREE_SLOTS);
         } else {
+            System.out.println(Constants.MESSAGE_FREE_SLOTS_PREFIX);
             for (int i = 0; i < free.size(); i++) {
                 MutableInterval interval = free.get(i);
                 if (interval.toDurationMillis() >= MINIMUM_DURATION) {
@@ -324,7 +325,6 @@ public class TaskManager {
                 }
             }
         }
-        
     }
     
 	/**

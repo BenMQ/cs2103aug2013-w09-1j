@@ -9,6 +9,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import sg.edu.nus.cs2103.sudo.Constants;
 import sg.edu.nus.cs2103.sudo.storage.StorageHandler;
 
 import java.io.BufferedReader;
@@ -277,6 +278,30 @@ public class TaskManagerTest {
         assertEquals(expected, actual);
 	}
 	
+	@Test
+    public void testSearchForFreeIntervals() throws Exception {
+	    DateTime now = new DateTime();
+        DateTime dt0000 = new DateTime(now.getYear(), now.getMonthOfYear(), now.getDayOfMonth(), 0, 0, 0);
+        DateTime dt2359 = new DateTime(now.getYear(), now.getMonthOfYear(), now.getDayOfMonth(), 23, 59, 59);
+        
+        // No task
+        manager.searchForFreeIntervals();
+        assertEquals("12:00 AM to 11:59 PM\n", outContent.toString());
+        outContent.reset();
+        
+        // some slots
+        manager.addTask(new TimedTask(0, "timed", false, today(11, 0), today(12, 0)));
+        manager.addTask(new TimedTask(0, "timed", false, today(17, 0), today(18, 0)));
+        manager.searchForFreeIntervals();
+        assertEquals("12:00 AM to 11:00 AM\n12:00 PM to 05:00 PM\n06:00 PM to 11:59 PM\n", outContent.toString());
+        outContent.reset();
+
+        manager.addTask(new TimedTask(0, "timed", false, dt0000, dt2359));
+        manager.searchForFreeIntervals();
+        assertEquals(Constants.MESSAGE_NO_FREE_SLOTS+"\n", outContent.toString());
+        outContent.reset();
+        
+	}
 	private String displayTasks(ArrayList<Task> tasks) {
 
 		String str = "";

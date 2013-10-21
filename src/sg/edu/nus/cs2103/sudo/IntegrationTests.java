@@ -9,6 +9,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.text.Format;
 import java.util.ArrayList;
 import java.util.logging.Level;
 
@@ -64,7 +65,7 @@ public class IntegrationTests {
 	public void testAddFloatingTask() throws IOException {
 		String userInput = "add 'make waffles for breakfast'";
 		String taskDescription = InputParser.parseDescription(userInput);
-		String expectedOutput = Constants.MESSAGE_ADD_FLOATING + taskDescription;
+		String expectedOutput = String.format(Constants.MESSAGE_ADD_FLOATING, taskDescription);
 		
 		testCommand(userInput, expectedOutput);
 		testStorageContent();
@@ -74,7 +75,7 @@ public class IntegrationTests {
 	public void testAddDeadlineTask() throws IOException {
 		String userInput = "add 'make waffles for breakfast' by Monday 14 October 2pm";
 		String taskDescription = InputParser.parseDescription(userInput);
-		String expectedOutput = Constants.MESSAGE_ADD_DEADLINE + taskDescription;
+		String expectedOutput = String.format(Constants.MESSAGE_ADD_DEADLINE, taskDescription);
 		
 		testCommand(userInput, expectedOutput);
 		testStorageContent();
@@ -84,7 +85,7 @@ public class IntegrationTests {
 	public void testDelete() throws IOException{
 		String userInput = "add 'make waffles for breakfast' by Monday 14 October 2pm";
 		String taskDescription = InputParser.parseDescription(userInput);
-		testCommand(userInput, Constants.MESSAGE_ADD_DEADLINE + taskDescription);
+		testCommand(userInput, String.format(Constants.MESSAGE_ADD_DEADLINE, taskDescription));
 		String expectedOutput = Constants.MESSAGE_DELETE + taskDescription;
 		
 		testCommand("delete 'waffle'", expectedOutput);
@@ -110,7 +111,7 @@ public class IntegrationTests {
 	// Helper test method to also test console output
 	private void testCommand(String userInput, String expectedOutput) throws IOException{		
 		parser.executeCommand(userInput);
-		assertEquals(expectedOutput +"\n", outContent.toString());
+		assertEquals(expectedOutput, outContent.toString());
 		outContent.reset();
 	}
 

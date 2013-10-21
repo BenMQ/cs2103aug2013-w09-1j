@@ -82,19 +82,19 @@ public class InputParser {
 							return;
 						}
 						this.manager.addTask(new FloatingTask(taskDescription));
-						System.out.println(Constants.MESSAGE_ADD_FLOATING + taskDescription);
+						System.out.printf(Constants.MESSAGE_ADD_FLOATING, taskDescription);
 				} else if(num_dates == 1){
 						this.manager.addTask(new DeadlineTask(taskDescription, dateTimes));
-						System.out.println(Constants.MESSAGE_ADD_DEADLINE + taskDescription);
+						System.out.printf(Constants.MESSAGE_ADD_DEADLINE, taskDescription);
 				} else if(num_dates == 2){
 						this.manager.addTask(new TimedTask(taskDescription, dateTimes));
-						System.out.println(Constants.MESSAGE_ADD_TIMED + taskDescription);						
+						System.out.printf(Constants.MESSAGE_ADD_TIMED, taskDescription);						
 				} else {
 						System.out.print(Constants.MESSAGE_INVALID_NUMBER_OF_DATES);
 				}
 				return;
 			case SEARCH:
-				System.out.println("Searching:" + taskDescription);
+				System.out.printf(Constants.MESSAGE_SEARCH, taskDescription);
 				this.manager.searchAndDisplay(taskDescription);
 				return;
 			case DELETE:
@@ -106,9 +106,12 @@ public class InputParser {
 				}
 				return;
 			case EDIT:
-			    System.out.println("Editing " + targetId);
+			    System.out.printf(Constants.MESSAGE_EDIT, targetId);
 			    this.manager.editTask(targetId, new FloatingTask(taskDescription));
 			    return;
+			case HELP:
+				 this.manager.undo();
+			    return;			    
 			case UNDO:
 				 this.manager.undo();
 			    return; 

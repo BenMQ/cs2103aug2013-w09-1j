@@ -80,15 +80,15 @@ public class TaskManager {
 		newTask.setId(tasks.size() + 1);
 		tasks.add(newTask);
 
-		sortTasks();
-		updateAllIds();
-		storage.save(true);
+		sortAndUpdateIds();
+		saveToHistory();
 		return tasks;
 	}
 
 	/**
-	 * Replaces the task indicated by the displayId with the newTask TODO: Unit
-	 * testing of deadline and timed tasks
+	 * Replaces the task indicated by the displayId with the newTask
+	 * 
+	 * TODO: REFACTOR!
 	 * 
 	 * @param displayId
 	 * @param newTask
@@ -99,37 +99,38 @@ public class TaskManager {
 			ArrayList<DateTime> dates) throws IllegalStateException,
 			IndexOutOfBoundsException, Exception {
 		assert (dates.size() <= 2);
-		
-		if (tasks.isEmpty()) {
-			throw new IllegalStateException(Constants.MESSAGE_EMPTY_LIST);
-		}
+
+		checkEmptyList();
 
 		int index = taskId - 1;
 		checkValidityIndex(index);
-		
+
 		Task oldTask = tasks.remove(index);
 		if (taskDescription != null) {
 			oldTask.setDescription(taskDescription);
-		} 
+		}
 		if (dates.size() == 1) {
-			if (!(oldTask instanceof DeadlineTask)) { 
-				oldTask = new DeadlineTask(oldTask.getId(), oldTask.getDescription(), oldTask.isComplete(), dates.get(0));
+			if (!(oldTask instanceof DeadlineTask)) {
+				oldTask = new DeadlineTask(oldTask.getId(),
+						oldTask.getDescription(), oldTask.isComplete(),
+						dates.get(0));
 			} else {
 				oldTask.setEndTime(dates.get(0));
 			}
 		} else if (dates.size() == 2) {
 			checkValidityTimes(dates.get(0), dates.get(1));
 			if (!(oldTask instanceof TimedTask)) {
-				oldTask = new TimedTask(oldTask.getId(), oldTask.getDescription(), oldTask.isComplete(), dates.get(0), dates.get(1));
+				oldTask = new TimedTask(oldTask.getId(),
+						oldTask.getDescription(), oldTask.isComplete(),
+						dates.get(0), dates.get(1));
 			} else {
 				oldTask.setStartTime(dates.get(0));
 				oldTask.setEndTime(dates.get(1));
 			}
 		}
- 		
-		sortTasks();
-		updateAllIds();
-		storage.save(true);
+
+		sortAndUpdateIds();
+		saveToHistory();
 		return tasks;
 	}
 
@@ -141,10 +142,7 @@ public class TaskManager {
 	 *            set to true to include completed tasks
 	 */
 	public void displayAllTasks(boolean showAll) throws IllegalStateException {
-
-		if (tasks.isEmpty()) {
-			throw new IllegalStateException(Constants.MESSAGE_EMPTY_LIST);
-		}
+		checkEmptyList();
 
 		for (int i = 0; i < tasks.size(); i++) {
 			Task task = tasks.get(i);
@@ -166,12 +164,9 @@ public class TaskManager {
 	 * Displays the floating tasks only. To be shown in the side bar in the GUI
 	 */
 	public void displayFloatingTasks() throws IllegalStateException {
+		checkEmptyList();
+
 		int count = 0;
-
-		if (tasks.isEmpty()) {
-			throw new IllegalStateException(Constants.MESSAGE_EMPTY_LIST);
-		}
-
 		for (int i = 0; i < tasks.size(); i++) {
 			Task task = tasks.get(i);
 
@@ -204,9 +199,9 @@ public class TaskManager {
 		}
 
 		currTask.setComplete(true);
-		sortTasks();
-		updateAllIds();
-		storage.save(true);
+
+		sortAndUpdateIds();
+		saveToHistory();
 		return tasks;
 	}
 
@@ -227,9 +222,9 @@ public class TaskManager {
 		}
 
 		currTask.setComplete(false);
-		sortTasks();
-		updateAllIds();
-		storage.save(true);
+
+		sortAndUpdateIds();
+		saveToHistory();
 		return tasks;
 	}
 
@@ -344,15 +339,14 @@ public class TaskManager {
 	 * Given the id of the task, the task is deleted from floatingTasks
 	 * 
 	 * @throws IOException
-	 * @throws Exception
 	 */
 	public void delete(int taskId) throws IOException {
 		int index = taskId - 1;
 		checkValidityIndex(index);
 
 		tasks.remove(index);
-		storage.save(true);
-		updateAllIds();
+		sortAndUpdateIds();
+		saveToHistory();
 	}
 
 	/**
@@ -379,6 +373,11 @@ public class TaskManager {
 		// return tasks;
 	}
 
+	/**
+	 * @author Liu Dake
+	 * @return
+	 * @throws IOException
+	 */
 	public ArrayList<Task> saveTasks() throws IOException {
 		storage.save(false);
 		return tasks;
@@ -409,14 +408,42 @@ public class TaskManager {
 	}
 
 	/**
-	 * Sorts all the Task objects according to end time. TODO: Unit Testing
+	 * To check if the task list is empty. If yes, throw exception.
+	 */
+	private void checkEmptyList() {
+		if (tasks.isEmpty()) {
+			throw new IllegalStateException(Constants.MESSAGE_EMPTY_LIST);
+		}
+	}
+
+	/**
+	 * Saves the task list to history and also saves the file. To be executed
+	 * after each operation is completed.
+	 * 
+	 * @throws IOException
+	 */
+	private void saveToHistory() throws IOException {
+		storage.save(true);
+	}
+
+	/**
+	 * Sorts all the Task objects and updates all the ids. The ArrayList is now
+	 * ready for saving to history and file.
+	 */
+	private void sortAndUpdateIds() {
+		sortTasks();
+		updateAllIds();
+	}
+
+	/**
+	 * Sorts all the Task objects according to end time and incomplete tasks
+	 * before completed tasks.
 	 * 
 	 * @throws Exception
 	 */
 	private ArrayList<Task> sortTasks() {
 		Collections.sort(tasks, new SortTasksByEndTimeComparator());
 		Collections.sort(tasks, new SortTasksByCompletedComparator());
-		updateAllIds();
 		return tasks;
 	}
 
@@ -430,6 +457,13 @@ public class TaskManager {
 		}
 	}
 
+	/**
+	 * Checks for the validity of the index used in operations. If invalid,
+	 * throw exception.
+	 * 
+	 * @param index
+	 * @throws IndexOutOfBoundsException
+	 */
 	private void checkValidityIndex(int index) throws IndexOutOfBoundsException {
 		if (index < 0 || index > tasks.size()) {
 			throw new IndexOutOfBoundsException(
@@ -437,10 +471,24 @@ public class TaskManager {
 		}
 	}
 
+	/**
+	 * Helper method Checks the validity of 2 DateTimes. To be valid, the first
+	 * DateTime must occur chronologically before the second DateTime. If
+	 * invalid, throw exception.
+	 * 
+	 * @param startTime
+	 * @param endTime
+	 */
 	private void checkValidityTimes(DateTime startTime, DateTime endTime) {
 		checkStartAndEndTime(startTime, endTime);
 	}
-	
+
+	/**
+	 * Helper method
+	 * 
+	 * @param startTime
+	 * @param endTime
+	 */
 	private void checkStartAndEndTime(DateTime startTime, DateTime endTime) {
 		DateTimeComparator dtComp = DateTimeComparator.getInstance();
 
@@ -462,6 +510,7 @@ public class TaskManager {
 			}
 		}
 	}
+
 	public ArrayList<Task> getTasks() {
 		return this.tasks;
 	}

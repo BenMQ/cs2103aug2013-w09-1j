@@ -296,7 +296,15 @@ public class TaskManagerTest {
         assertEquals(Constants.MESSAGE_FREE_SLOTS_PREFIX + "\n"
                 + "12:00 AM to 11:00 AM\n12:00 PM to 05:00 PM\n06:00 PM to 11:59 PM\n", outContent.toString());
         outContent.reset();
-
+        
+        // almost whole day
+        manager.addTask(new TimedTask(0, "timed", false, today(0, 0), today(12, 0)));
+        manager.addTask(new TimedTask(0, "timed", false, today(12, 1), dt2359));
+        manager.searchForFreeIntervals();
+        assertEquals(Constants.MESSAGE_NO_FREE_SLOTS+"\n", outContent.toString());
+        outContent.reset();
+        
+        // whole day
         manager.addTask(new TimedTask(0, "timed", false, dt0000, dt2359));
         manager.searchForFreeIntervals();
         assertEquals(Constants.MESSAGE_NO_FREE_SLOTS+"\n", outContent.toString());

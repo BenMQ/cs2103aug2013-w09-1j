@@ -311,17 +311,21 @@ public class TaskManager {
 	 */
     public void searchForFreeIntervals() {
         ArrayList<MutableInterval> free = getFreeIntervals();
-        if (free.size() == 0) {
-            System.out.println(Constants.MESSAGE_NO_FREE_SLOTS);
-        } else {
-            System.out.println(Constants.MESSAGE_FREE_SLOTS_PREFIX);
-            for (int i = 0; i < free.size(); i++) {
-                MutableInterval interval = free.get(i);
-                if (interval.toDurationMillis() >= Constants.FREE_SLOT_MINIMUM_DURATION) {
-                    String output = interval.getStart().toString("hh:mm a") + " to " + interval.getEnd().toString("hh:mm a");
-                    System.out.println(output);
+        boolean noSlotsFound = true;
+        
+        for (int i = 0; i < free.size(); i++) {
+            MutableInterval interval = free.get(i);
+            if (interval.toDurationMillis() >= Constants.FREE_SLOT_MINIMUM_DURATION) {
+                if (noSlotsFound) {
+                    System.out.println(Constants.MESSAGE_FREE_SLOTS_PREFIX);
+                    noSlotsFound = false;
                 }
+                String output = interval.getStart().toString("hh:mm a") + " to " + interval.getEnd().toString("hh:mm a");
+                System.out.println(output);
             }
+        }
+        if (noSlotsFound) {
+            System.out.println(Constants.MESSAGE_NO_FREE_SLOTS);
         }
     }
     

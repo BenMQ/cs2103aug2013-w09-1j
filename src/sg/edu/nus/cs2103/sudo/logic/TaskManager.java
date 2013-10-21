@@ -327,15 +327,10 @@ public class TaskManager {
             if (task.isComplete() || ! (task instanceof TimedTask)) {
                 // we are only concerned with incomplete TimedTask
                 continue;
-            }
-            
-	        if (task.endTime.compareTo(startOfToday) <=0) {
+            } else if (task.endTime.compareTo(startOfToday) <=0) {
 	            // all unprocessed items ends before today, no more items needs processing
 	            break;
-	        }
-	        
-	        
-	        if (task.startTime.compareTo(last.getStart()) >= 0) {
+	        } else if (task.startTime.compareTo(last.getStart()) >= 0) {
 	            // we are only concerned with tasks that starts before the last occupied slot
 	            continue;
 	        } else if (task.endTime.compareTo(last.getStart()) >=0) {

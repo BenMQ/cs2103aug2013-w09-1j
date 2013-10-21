@@ -387,14 +387,15 @@ public class TaskManager {
         ArrayList<MutableInterval> free = new ArrayList<MutableInterval>();
         
         ArrayList<MutableInterval> occupied = getOccupiedIntervals();
+
+        if (occupied.get(0).getStart().isAfter(startOfToday)) {
+            free.add(new MutableInterval(startOfToday, occupied.get(0).getStart()));
+        }
         
         for (int i = 0; i < occupied.size() - 1; i ++) {
             free.add(new MutableInterval(occupied.get(i).getEnd(), occupied.get(i + 1).getStart()));
         }
         
-        if (occupied.get(0).getStart().isAfter(startOfToday)) {
-            free.add(new MutableInterval(startOfToday, occupied.get(0).getStart()));
-        }
         return free;
 	}
 	

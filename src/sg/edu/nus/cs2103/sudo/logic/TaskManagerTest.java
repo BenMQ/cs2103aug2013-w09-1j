@@ -175,7 +175,6 @@ public class TaskManagerTest {
 	    expected.add(new MutableInterval(dt2359, dt2359));
 	    assertEquals(expected, actual);
 	    
-	    
 	    // Test task that is at the middle of the day
         manager.addTask(new TimedTask(0, "timed", false, today(8, 0), today(10, 0)));
         actual = manager.getOccupiedIntervals();
@@ -201,7 +200,37 @@ public class TaskManagerTest {
         assertEquals(expected, actual);
         
         // boundary case for gap between tasks
-	    
+        manager.addTask(new TimedTask(0, "timed", false, today(17, 0), today(18, 0)));
+        actual = manager.getOccupiedIntervals();
+        expected = new ArrayList<MutableInterval>();
+        expected.add(new MutableInterval(today(8, 0), today(12, 0)));
+        expected.add(new MutableInterval(today(17, 0), today(18, 0)));
+        expected.add(new MutableInterval(dt2359, dt2359));
+        assertEquals(expected, actual);
+        
+        // boundary case for tasks that extends to next day
+        manager.addTask(new TimedTask(0, "timed", false, today(20, 0), today(20, 0).plusDays(1)));
+        actual = manager.getOccupiedIntervals();
+        expected = new ArrayList<MutableInterval>();
+        expected.add(new MutableInterval(today(8, 0), today(12, 0)));
+        expected.add(new MutableInterval(today(17, 0), today(18, 0)));
+        expected.add(new MutableInterval(today(20, 0), dt2359));
+        assertEquals(expected, actual);
+        
+        // boundary case for tasks that extends to the previous day
+        manager.addTask(new TimedTask(0, "timed", false, today(1, 0).minusDays(1), today(1, 0)));
+        actual = manager.getOccupiedIntervals();
+        expected = new ArrayList<MutableInterval>();
+        expected.add(new MutableInterval(today(0, 0), today(1, 0)));
+        expected.add(new MutableInterval(today(8, 0), today(12, 0)));
+        expected.add(new MutableInterval(today(17, 0), today(18, 0)));
+        expected.add(new MutableInterval(today(20, 0), dt2359));
+        assertEquals(expected, actual);
+        
+        // completed tasks should be ignored
+        manager.addTask(new TimedTask(0, "timed", true, today(2, 0), today(3, 0)));
+        actual = manager.getOccupiedIntervals();
+        assertEquals(expected, actual);
 	}
 	
 	private String displayTasks(ArrayList<Task> tasks) {

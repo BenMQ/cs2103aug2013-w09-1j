@@ -22,7 +22,6 @@ public class InputParserTest {
 	
 	@Before
 	public void setUp() {
-		Constants.parserLogger.setLevel(Level.OFF); // turns off logging
 		manager = TaskManager.getTaskManager();
 		parser = InputParser.getInputParser(manager);
 		System.setOut(new PrintStream(outContent));

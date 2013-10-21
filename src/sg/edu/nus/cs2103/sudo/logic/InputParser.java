@@ -32,7 +32,6 @@ public class InputParser {
 	
 	private InputParser(TaskManager m) {
 		if (m == null){
-			Constants.parserLogger.log(Level.WARNING, "Task Manager is null when creating InputParser");
 			throw new NullPointerException("TaskManager cannot be null!");
 		}
 		manager = m;

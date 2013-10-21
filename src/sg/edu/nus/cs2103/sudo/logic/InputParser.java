@@ -26,7 +26,7 @@ public class InputParser {
 	 * 
 	 * @author Yos Riady 
 	 */
-	private static Scanner sc = new Scanner(System.in);
+	private static Scanner scanner = new Scanner(System.in);
 	private static InputParser parser;
 	private TaskManager manager; 
 	
@@ -100,7 +100,7 @@ public class InputParser {
 				int numResults = this.manager.delete(taskDescription); //need to refactor this
 				if (numResults > 1 ) {
 					System.out.println(Constants.MESSAGE_ENTER_TASK_ID);
-					int id = sc.nextInt();
+					int id = scanner.nextInt();
 					this.manager.delete(id);
 				}
 				return;

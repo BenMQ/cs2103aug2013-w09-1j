@@ -7,6 +7,7 @@ import java.util.Collections;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeComparator;
+import org.joda.time.MutableInterval;
 
 import sg.edu.nus.cs2103.sudo.Constants;
 import sg.edu.nus.cs2103.sudo.exceptions.NoHistoryException;
@@ -303,6 +304,58 @@ public class TaskManager {
 		}
 	}
 
+	/**
+	 * Searches for all occupied time slots of today
+	 * @return intervals that are occupied today, the last item may be an Interval that
+	 *         starts and ends at 2359h (lasting 0 seconds)
+	 * @author chenminqi
+	 */
+	public ArrayList<MutableInterval> getOccupiedIntervals() {
+	    sortTasks();
+	    
+	    DateTime now = new DateTime();
+	    DateTime startOfToday = new DateTime(now.getYear(), now.getMonthOfYear(), now.getDayOfMonth(), 0, 0, 0);
+	    DateTime endOfToday = new DateTime(now.getYear(), now.getMonthOfYear(), now.getDayOfMonth(), 23, 59, 59);
+	    
+	    ArrayList<MutableInterval> occupied = new ArrayList<MutableInterval>();
+	    MutableInterval last = new MutableInterval(endOfToday, endOfToday);
+	    occupied.add(last);
+	    
+	    for (int i = tasks.size() - 1; i >= 0 ; i--) {
+	        Task task = tasks.get(i);
+
+            if (task.isComplete() || ! (task instanceof TimedTask)) {
+                // we are only concerned with incomplete TimedTask
+                continue;
+            }
+            
+	        if (task.endTime.compareTo(startOfToday) <=0) {
+	            // all unprocessed items ends before today, no more items needs processing
+	            break;
+	        }
+	        
+	        
+	        if (task.startTime.compareTo(last.getStart()) >= 0) {
+	            // we are only concerned with tasks that starts before the last occupied slot
+	            continue;
+	        } else if (task.endTime.compareTo(last.getStart()) >=0) {
+	            // overlap between task's end time and the last occupied slot's start time
+	            last.setStart(task.startTime);
+	        } else {
+	            // there is a gap
+	            last = new MutableInterval(task.startTime, task.endTime);
+	            occupied.add(last);
+	            if (task.startTime.compareTo(startOfToday) <= 0) {
+	                // reached the start of the day, no more processing needed.
+	                last.setStart(startOfToday);
+	                break;
+	            }
+	        }
+	        
+	    }
+	    Collections.reverse(occupied);
+	    return occupied;
+	}
 	/**
 	 * Removes the task by first searching for the search string in the task
 	 * description. If there is exactly one match, just delete it. If there are

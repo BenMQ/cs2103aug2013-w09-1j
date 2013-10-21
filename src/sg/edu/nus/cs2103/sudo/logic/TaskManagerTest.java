@@ -233,6 +233,50 @@ public class TaskManagerTest {
         assertEquals(expected, actual);
 	}
 	
+	@Test
+	public void testGetFreeIntervals() throws Exception {
+	    DateTime now = new DateTime();
+        DateTime dt0000 = new DateTime(now.getYear(), now.getMonthOfYear(), now.getDayOfMonth(), 0, 0, 0);
+        DateTime dt2359 = new DateTime(now.getYear(), now.getMonthOfYear(), now.getDayOfMonth(), 23, 59, 59);
+        
+        ArrayList<MutableInterval> actual;
+        ArrayList<MutableInterval> expected;
+        
+        // No task
+        actual = manager.getFreeIntervals();
+        expected = new ArrayList<MutableInterval>();
+        expected.add(new MutableInterval(dt0000, dt2359));
+        assertEquals(expected, actual);
+        
+        // boundary case for slots that occupied the start of the day
+        manager.addTask(new TimedTask(0, "timed", false, dt0000, today(1, 0)));
+        actual = manager.getFreeIntervals();
+        expected = new ArrayList<MutableInterval>();
+        expected.add(new MutableInterval(today(1, 0), dt2359));
+        assertEquals(expected, actual);
+        
+        // boundary case for slots that occupied the end of the day
+        manager.addTask(new TimedTask(0, "timed", false, today(23, 0), dt2359));
+        actual = manager.getFreeIntervals();
+        expected = new ArrayList<MutableInterval>();
+        expected.add(new MutableInterval(today(1, 0), today(23, 0)));
+        assertEquals(expected, actual);
+        
+        // boundary case for slots that is in the middle of the day
+        manager.addTask(new TimedTask(0, "timed", false, today(11, 0), today(12, 0)));
+        actual = manager.getFreeIntervals();
+        expected = new ArrayList<MutableInterval>();
+        expected.add(new MutableInterval(today(1, 0), today(11, 0)));
+        expected.add(new MutableInterval(today(12, 0), today(23, 0)));
+        assertEquals(expected, actual);
+        
+        // boundary case for the whole day to be occupied
+        manager.addTask(new TimedTask(0, "timed", false, dt0000, dt2359));
+        actual = manager.getFreeIntervals();
+        expected = new ArrayList<MutableInterval>();
+        assertEquals(expected, actual);
+	}
+	
 	private String displayTasks(ArrayList<Task> tasks) {
 
 		String str = "";

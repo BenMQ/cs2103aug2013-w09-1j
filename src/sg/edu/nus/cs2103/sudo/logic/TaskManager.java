@@ -305,9 +305,10 @@ public class TaskManager {
 	}
 
 	/**
-	 * Searches for all occupied time slots of today
-	 * @return intervals that are occupied today, the last item may be an Interval that
-	 *         starts and ends at 2359h (lasting 0 seconds)
+	 * Searches for all occupied time slots of today. If the actual slot of the day ends before 2359hrs,
+	 * an interval [2359hrs, 2359hrs] which lasts for 0 seconds will be inserted at the end.
+	 * @return intervals that are occupied today, the last item is guaranteed to end at 2359hrs, and hence
+	 *         guaranteed to have at least 1 item returned.
 	 * @author chenminqi
 	 */
 	public ArrayList<MutableInterval> getOccupiedIntervals() {
@@ -351,6 +352,29 @@ public class TaskManager {
 	    Collections.reverse(occupied);
 	    return occupied;
 	}
+	
+	/**
+     * Searches for all free time slots of today
+     * @return intervals that are free today
+     * @author chenminqi
+     */
+	public ArrayList<MutableInterval> getFreeIntervals() {
+	    DateTime now = new DateTime();
+        DateTime startOfToday = new DateTime(now.getYear(), now.getMonthOfYear(), now.getDayOfMonth(), 0, 0, 0);
+        ArrayList<MutableInterval> free = new ArrayList<MutableInterval>();
+        
+        ArrayList<MutableInterval> occupied = getOccupiedIntervals();
+        
+        for (int i = 0; i < occupied.size() - 1; i ++) {
+            free.add(new MutableInterval(occupied.get(i).getEnd(), occupied.get(i + 1).getStart()));
+        }
+        
+        if (occupied.get(0).getStart().isAfter(startOfToday)) {
+            free.add(new MutableInterval(startOfToday, occupied.get(0).getStart()));
+        }
+        return free;
+	}
+	
 	/**
 	 * Removes the task by first searching for the search string in the task
 	 * description. If there is exactly one match, just delete it. If there are

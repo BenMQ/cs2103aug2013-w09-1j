@@ -328,20 +328,20 @@ public class TaskManager {
             if (task.isComplete() || ! (task instanceof TimedTask)) {
                 // we are only concerned with incomplete TimedTask
                 continue;
-            } else if (task.endTime.compareTo(startOfToday) <=0) {
+            } else if (! task.endTime.isAfter(startOfToday)) {
 	            // all unprocessed items ends before today, no more items needs processing
 	            break;
-	        } else if (task.startTime.compareTo(last.getStart()) >= 0) {
+	        } else if (! task.startTime.isBefore(last.getStart())) {
 	            // we are only concerned with tasks that starts before the last occupied slot
 	            continue;
-	        } else if (task.endTime.compareTo(last.getStart()) >=0) {
+	        } else if (! task.endTime.isBefore(last.getStart())) {
 	            // overlap between task's end time and the last occupied slot's start time
 	            last.setStart(task.startTime);
 	        } else {
 	            // there is a gap
 	            last = new MutableInterval(task.startTime, task.endTime);
 	            occupied.add(last);
-	            if (task.startTime.compareTo(startOfToday) <= 0) {
+	            if (! task.startTime.isAfter(startOfToday)) {
 	                // reached the start of the day, no more processing needed.
 	                last.setStart(startOfToday);
 	                break;

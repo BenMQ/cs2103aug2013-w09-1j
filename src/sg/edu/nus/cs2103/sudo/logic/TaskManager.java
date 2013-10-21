@@ -68,7 +68,7 @@ public class TaskManager {
 
 	/**
 	 * Adds a new task into the list. Maintains a sorted list of items after
-	 * each add. TODO: Unit testing of deadline and timed tasks
+	 * each add.
 	 * 
 	 * @param newTask
 	 * @return floatingTasks with new additions
@@ -465,7 +465,7 @@ public class TaskManager {
 	 * @throws IndexOutOfBoundsException
 	 */
 	private void checkValidityIndex(int index) throws IndexOutOfBoundsException {
-		if (index < 0 || index > tasks.size()) {
+		if (index < 0 || index >= tasks.size()) {
 			throw new IndexOutOfBoundsException(
 					Constants.MESSAGE_INVALID_TASK_INDEX);
 		}

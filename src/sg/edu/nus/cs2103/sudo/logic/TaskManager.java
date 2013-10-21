@@ -5,6 +5,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeComparator;
+
 import sg.edu.nus.cs2103.sudo.Constants;
 import sg.edu.nus.cs2103.sudo.exceptions.NoHistoryException;
 import sg.edu.nus.cs2103.sudo.storage.StorageHandler;
@@ -92,21 +95,38 @@ public class TaskManager {
 	 * @return floatingTasks after editing
 	 * @throws Exception
 	 */
-	public ArrayList<Task> editTask(int displayId, Task newTask)
-			throws Exception {
-
-		assert (newTask != null);
-
+	public ArrayList<Task> editTask(int taskId, String taskDescription,
+			ArrayList<DateTime> dates) throws IllegalStateException,
+			IndexOutOfBoundsException, Exception {
+		assert (dates.size() <= 2);
+		
 		if (tasks.isEmpty()) {
 			throw new IllegalStateException(Constants.MESSAGE_EMPTY_LIST);
 		}
 
-		int index = displayId - 1;
+		int index = taskId - 1;
 		checkValidityIndex(index);
-
-		newTask.setId(displayId);
-		tasks.set(index, newTask);
-
+		
+		Task oldTask = tasks.remove(index);
+		if (taskDescription != null) {
+			oldTask.setDescription(taskDescription);
+		} 
+		if (dates.size() == 1) {
+			if (!(oldTask instanceof DeadlineTask)) { 
+				oldTask = new DeadlineTask(oldTask.getId(), oldTask.getDescription(), oldTask.isComplete(), dates.get(0));
+			} else {
+				oldTask.setEndTime(dates.get(0));
+			}
+		} else if (dates.size() == 2) {
+			checkValidityTimes(dates.get(0), dates.get(1));
+			if (!(oldTask instanceof TimedTask)) {
+				oldTask = new TimedTask(oldTask.getId(), oldTask.getDescription(), oldTask.isComplete(), dates.get(0), dates.get(1));
+			} else {
+				oldTask.setStartTime(dates.get(0));
+				oldTask.setEndTime(dates.get(1));
+			}
+		}
+ 		
 		sortTasks();
 		updateAllIds();
 		storage.save(true);
@@ -338,7 +358,7 @@ public class TaskManager {
 	/**
 	 * @author Liu Dake
 	 * 
-	 * If history does not exist, throw Exception
+	 *         If history does not exist, throw Exception
 	 * 
 	 * @return
 	 */
@@ -367,7 +387,7 @@ public class TaskManager {
 	/**
 	 * @author Liu Dake
 	 * 
-	 * If no redo provision exists in history, throw Exception
+	 *         If no redo provision exists in history, throw Exception
 	 * 
 	 * @return
 	 */
@@ -394,8 +414,8 @@ public class TaskManager {
 	 * @throws Exception
 	 */
 	private ArrayList<Task> sortTasks() {
-		Collections.sort(tasks, new SortTasksByCompletedComparator());
 		Collections.sort(tasks, new SortTasksByEndTimeComparator());
+		Collections.sort(tasks, new SortTasksByCompletedComparator());
 		updateAllIds();
 		return tasks;
 	}
@@ -417,6 +437,31 @@ public class TaskManager {
 		}
 	}
 
+	private void checkValidityTimes(DateTime startTime, DateTime endTime) {
+		checkStartAndEndTime(startTime, endTime);
+	}
+	
+	private void checkStartAndEndTime(DateTime startTime, DateTime endTime) {
+		DateTimeComparator dtComp = DateTimeComparator.getInstance();
+
+		int check = dtComp.compare(endTime, startTime);
+
+		// check == 0 if the startTime and endTime are the same (Invalid
+		// TimedTask)
+		// check == -1 if endTime occurs before startTime (Invalid TimedTask)
+		// check == 1 if endTime occurs after startTime (Valid TimedTask)
+		boolean sameStartAndEnd = check == 0;
+		if (sameStartAndEnd) {
+			throw new IllegalArgumentException(
+					Constants.MESSAGE_SAME_START_END_TIME);
+		} else {
+			boolean invalidStartAndEnd = check == -1;
+			if (invalidStartAndEnd) {
+				throw new IllegalArgumentException(
+						Constants.MESSAGE_END_BEFORE_START_TIME);
+			}
+		}
+	}
 	public ArrayList<Task> getTasks() {
 		return this.tasks;
 	}

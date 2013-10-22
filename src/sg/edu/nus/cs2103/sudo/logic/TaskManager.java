@@ -129,6 +129,8 @@ public class TaskManager {
 				oldTask.setEndTime(dates.get(1));
 			}
 		}
+		
+		tasks.add(oldTask);
 
 		sortAndUpdateIds();
 		saveToHistory();

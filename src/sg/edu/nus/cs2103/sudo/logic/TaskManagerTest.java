@@ -25,8 +25,8 @@ import java.util.ArrayList;
  * 
  */
 public class TaskManagerTest {
-	private static final String SAVE_FILENAME = "integration_test.sav";
-	private static final String HISTORY_FILENAME = "integration_history.sav";
+	private static final String SAVE_FILENAME = "taskmanagertest_save.sav";
+	private static final String HISTORY_FILENAME = "taskmanager_history.sav";
 
 	private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
 	BufferedReader savefile_reader;

@@ -6,7 +6,10 @@ import java.io.PrintStream;
 import java.util.Scanner;
 
 import sg.edu.nus.cs2103.sudo.logic.InputParser;
+
 import sg.edu.nus.cs2103.sudo.logic.TaskManager;
+
+import sg.edu.nus.cs2103.sudo.Constants;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -37,7 +40,6 @@ public class GUI extends javax.swing.JFrame {
     	manager = TaskManager.getTaskManager();
 		parser = InputParser.getInputParser(manager);
         initComponents();
-		
     }
 
     /**
@@ -69,7 +71,12 @@ public class GUI extends javax.swing.JFrame {
         mainTextFrame.setColumns(20);
         mainTextFrame.setRows(5);
         mainTextFrameScrollPane.setViewportView(mainTextFrame);
-
+        if(manager.isReloaded()){
+        	mainTextFrame.setText(Constants.MESSAGE_WELCOME_TO_SUDO_RELOAD);
+        }else{
+        	mainTextFrame.setText(Constants.MESSAGE_WELCOME_TO_SUDO_FIRST);
+        }
+        
         inputText.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 inputTextActionPerformed(evt);
@@ -209,7 +216,7 @@ public class GUI extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(GUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-        
+
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -221,6 +228,7 @@ public class GUI extends javax.swing.JFrame {
     
     
     // Variables declaration - do not modify   
+   
     private ByteArrayOutputStream outContent;
     private javax.swing.JButton sudooleButton;
     private javax.swing.JLabel labelFloatingTasks;

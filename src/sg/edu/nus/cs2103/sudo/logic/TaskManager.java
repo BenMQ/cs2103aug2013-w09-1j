@@ -35,11 +35,14 @@ public class TaskManager {
 
 	// The storage handler
 	private StorageHandler storage;
+	
+	//is this the first time sudo is run?
+	private boolean isReloaded = false;
 
 	private TaskManager() throws Exception {
 		tasks = new ArrayList<Task>();
 		storage = StorageHandler.getStorageHandler(Constants.FILE_NAME);
-		storage.prepareFile(tasks);
+		isReloaded = storage.prepareFile(tasks);
 		updateAllIds();
 	}
 
@@ -623,6 +626,10 @@ public class TaskManager {
 
 	public void clearTasks() {
 		this.tasks.clear();
+	}
+	
+	public boolean isReloaded(){
+		return isReloaded;
 	}
 	
 	public int getTaskNumber() {

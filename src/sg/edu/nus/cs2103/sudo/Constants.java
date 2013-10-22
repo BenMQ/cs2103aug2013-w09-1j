@@ -4,7 +4,7 @@ public class Constants {
 	
 	public static final String MESSAGE_WELCOME_TO_SUDO_FIRST = "Welcome to the world of Sudo!\nTake some time to get yourself familiar with\n"
 																							+ "the most advancd personal todo-list app ever.";
-	public static final String MESSAGE_WELCOME_TO_SUDO_RELOAD = "Welcome back, dear user. Your previous record was loaded successfully.";
+	public static final String MESSAGE_WELCOME_TO_SUDO_RELOAD = "Welcome back, dear user.\nYour previous record was loaded successfully.";
 	
 
 	public static final String MESSAGE_INVALID_COMMAND = "Invalid command\n";

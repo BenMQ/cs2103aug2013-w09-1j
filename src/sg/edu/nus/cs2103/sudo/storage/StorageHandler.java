@@ -88,13 +88,15 @@ public class StorageHandler {
 		history = XMLSerializer.read(Constants.HISTORY_NAME);
 	}
 	
-	public void prepareFile(ArrayList<Task> taskIn) {
+	public boolean prepareFile(ArrayList<Task> taskIn) {
 		tasks = taskIn;
+		boolean isReloaded = true;
 		try {
 			File file = new File(fileName);
 			if (!file.exists()) {
 				saveHistory();
 				file.createNewFile();
+				isReloaded=false;
 			} else {
 				BufferedReader iptBuff = new BufferedReader(new FileReader(
 						fileName));
@@ -107,7 +109,9 @@ public class StorageHandler {
 				}
 				iptBuff.close();
 				readHistory();
+				
 			}
+			return isReloaded;
 		} catch (FileNotFoundException e) {
 			UI.forcePrint("History file was removed or deleted.");
 			saveHistory();
@@ -116,6 +120,7 @@ public class StorageHandler {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		return isReloaded;
 	}
 	
 	/**

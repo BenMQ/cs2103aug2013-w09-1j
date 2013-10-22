@@ -1,6 +1,8 @@
 
 package sg.edu.nus.cs2103.ui;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.util.Scanner;
 
 import sg.edu.nus.cs2103.sudo.logic.InputParser;
@@ -33,8 +35,8 @@ public class GUI extends javax.swing.JFrame {
      */
     public GUI() {
         initComponents();
-		//manager = TaskManager.getTaskManager();
-		//InputParser parser = InputParser.getInputParser(manager);
+		manager = TaskManager.getTaskManager();
+		parser = InputParser.getInputParser(manager);
     }
 
     /**
@@ -45,7 +47,8 @@ public class GUI extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
     private void initComponents() {
-
+    	outContent = new ByteArrayOutputStream();
+		System.setOut(new PrintStream(outContent));
         foundationPanel = new javax.swing.JPanel();
         mainTextFrameScrollPane = new javax.swing.JScrollPane();
         mainTextFrame = new javax.swing.JTextArea();
@@ -74,8 +77,12 @@ public class GUI extends javax.swing.JFrame {
                 public void keyPressed(KeyEvent e)
                 {
                     if(e.getKeyCode() == KeyEvent.VK_ENTER){
-                    	mainTextFrame.setText("Search result for \"homework\":\n1. CS2101 homework by tomorrow 4pm.\n2. CS1101s JFDI homework by Sep 25th.");
-                        inputText.setText("");
+                    	//mainTextFrame.setText("Search result for \"homework\":\n1. CS2101 homework by tomorrow 4pm.\n2. CS1101s JFDI homework by Sep 25th.");
+                        //inputText.setText("");
+                    	String userInput =  inputText.getText();
+            			parser.parseCommand(userInput);
+            			inputText.setText("");
+            			mainTextFrame.setText(outContent.toString());
                     }
                 }
             });
@@ -166,21 +173,16 @@ public class GUI extends javax.swing.JFrame {
     }                                           
 
     private void sudooleButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    	
-    	mainTextFrame.setText("Search result for \"homework\":\n1. CS2101 homework by tomorrow 4pm.\n2. CS1101s JFDI homework by Sep 25th.");
-        inputText.setText("");
-    }
-    
-    public static void setOutPut(String message){
-    	
-    	mainTextFrame.setText(message);
-    	
+    	String userInput =  inputText.getText();
+		parser.parseCommand(userInput);
+		inputText.setText("");
+		mainTextFrame.setText(outContent.toString());
     }
 
     /**
      * @param args the command line arguments
      */
-    public static void runGUI() {
+    public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -212,7 +214,10 @@ public class GUI extends javax.swing.JFrame {
         });
     }
     
-    // Variables declaration - do not modify                     
+    
+    
+    // Variables declaration - do not modify   
+    private ByteArrayOutputStream outContent;
     private javax.swing.JButton sudooleButton;
     private javax.swing.JLabel labelFloatingTasks;
     private javax.swing.JLabel complecationRate;
@@ -221,7 +226,7 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.JProgressBar progressBar;
     private javax.swing.JScrollPane floatingTaskScrollPane;
     private javax.swing.JScrollPane mainTextFrameScrollPane;
-    private static javax.swing.JTextArea mainTextFrame;
+    private javax.swing.JTextArea mainTextFrame;
     private javax.swing.JTextField inputText;
     private TaskManager manager;
     private InputParser parser;

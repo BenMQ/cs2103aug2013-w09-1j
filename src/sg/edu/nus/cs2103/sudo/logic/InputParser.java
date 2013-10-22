@@ -112,7 +112,7 @@ public class InputParser {
 				return;
 			case EDIT:
 			    System.out.printf(Constants.MESSAGE_EDIT, targetId);
-			    // this.manager.editTask(targetId, new FloatingTask(taskDescription));
+			    this.manager.editTask(targetId, taskDescription, dateTimes);
 			    return;
 			case HELP:
 				 this.manager.undo();

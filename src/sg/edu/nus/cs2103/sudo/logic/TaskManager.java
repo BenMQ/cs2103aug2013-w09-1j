@@ -623,4 +623,21 @@ public class TaskManager {
 	public void clearTasks() {
 		this.tasks.clear();
 	}
+	
+	public int getTaskNumber() {
+		return this.tasks.size();
+	}
+	public int getCompletedPercentage() {
+		int completed = 0;
+		for(Task t:tasks){
+			if(t.isComplete){
+				completed++;
+			}
+		}
+		int toReturn = 100*completed/this.tasks.size();
+		if(toReturn==100){
+			System.out.println("You have finished all tasks!");
+			};
+		return toReturn;
+	}
 }

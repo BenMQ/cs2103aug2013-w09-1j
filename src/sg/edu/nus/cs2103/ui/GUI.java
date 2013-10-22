@@ -34,9 +34,10 @@ public class GUI extends javax.swing.JFrame {
      * Creates new form GUI
      */
     public GUI() {
-        initComponents();
-		manager = TaskManager.getTaskManager();
+    	manager = TaskManager.getTaskManager();
 		parser = InputParser.getInputParser(manager);
+        initComponents();
+		
     }
 
     /**
@@ -47,6 +48,7 @@ public class GUI extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
     private void initComponents() {
+    	
     	outContent = new ByteArrayOutputStream();
 		System.setOut(new PrintStream(outContent));
         foundationPanel = new javax.swing.JPanel();
@@ -59,7 +61,8 @@ public class GUI extends javax.swing.JFrame {
         labelFloatingTasks = new javax.swing.JLabel();
         progressBar = new javax.swing.JProgressBar();
         complecationRate = new javax.swing.JLabel();
-
+        complecationRate.setVisible(true);
+        progressBar.setValue(manager.getCompletedPercentage());
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         mainTextFrame.setEditable(false);
@@ -83,11 +86,12 @@ public class GUI extends javax.swing.JFrame {
             			parser.parseCommand(userInput);
             			inputText.setText("");
             			mainTextFrame.setText(outContent.toString());
+            			progressBar.setValue(manager.getCompletedPercentage());
                     }
                 }
             });
 
-        progressBar.setValue(10);
+        
             sudooleButton.setText("Sudoole");
             sudooleButton.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -96,7 +100,7 @@ public class GUI extends javax.swing.JFrame {
             });
 
             floatingList.setModel(new javax.swing.AbstractListModel() {
-                String[] strings = { "Buy an iPad", "Learn to smoke", "Play GTA5", "Find the ID card", "Watch TV" };
+                String[] strings = { "This part is", "currently", "underconstruction"};
                 public int getSize() { return strings.length; }
                 public Object getElementAt(int i) { return strings[i]; }
             });

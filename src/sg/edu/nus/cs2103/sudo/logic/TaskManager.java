@@ -206,7 +206,7 @@ public class TaskManager {
 		}
 
 		currTask.setComplete(true);
-
+		System.out.print(Constants.MESSAGE_FINISH);
 		sortAndUpdateIds();
 		saveToHistory();
 		return tasks;
@@ -229,7 +229,7 @@ public class TaskManager {
 		}
 
 		currTask.setComplete(false);
-
+		System.out.print(Constants.MESSAGE_FINISH);
 		sortAndUpdateIds();
 		saveToHistory();
 		return tasks;

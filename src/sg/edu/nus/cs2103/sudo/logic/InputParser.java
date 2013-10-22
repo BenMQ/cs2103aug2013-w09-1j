@@ -73,9 +73,11 @@ public class InputParser {
 				this.manager.displayAllTasks();
 				return;
 			case FINISH:
-				System.out.print(Constants.MESSAGE_FINISH);
 				this.manager.markAsComplete(targetId);
-				return;	
+				return;
+			case UNFINISH:
+				this.manager.markAsIncomplete(targetId);
+				return;					
 			case ADD:
 				int num_dates = dateTimes.size();
 				if(num_dates == 0){ //need to refactor this later

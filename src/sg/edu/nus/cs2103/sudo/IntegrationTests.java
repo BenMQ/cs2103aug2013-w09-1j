@@ -87,7 +87,7 @@ public class IntegrationTests {
 		String taskDescription = InputParser.parseDescription(userInput);
 		testCommand(userInput,
 				String.format(Constants.MESSAGE_ADD_DEADLINE, taskDescription));
-		String expectedOutput = Constants.MESSAGE_DELETE + taskDescription;
+		String expectedOutput = String.format(Constants.MESSAGE_DELETE, taskDescription);
 
 		testCommand("delete 'waffle'", expectedOutput);
 		testStorageContent();

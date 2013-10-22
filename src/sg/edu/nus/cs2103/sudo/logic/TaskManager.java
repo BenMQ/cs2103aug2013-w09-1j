@@ -634,6 +634,9 @@ public class TaskManager {
 				completed++;
 			}
 		}
+		if(this.tasks.size()==0){
+			return 0;
+		}
 		int toReturn = 100*completed/this.tasks.size();
 		if(toReturn==100){
 			System.out.println("You have finished all tasks!");

@@ -69,11 +69,11 @@ public class InputParser {
 				System.out.print(Constants.MESSAGE_INCOMPLETE_COMMAND);
 				return;
 			case DISPLAY:
-				System.out.println(Constants.MESSAGE_DISPLAY);
+				System.out.print(Constants.MESSAGE_DISPLAY);
 				this.manager.displayAllTasks();
 				return;
 			case FINISH:
-				System.out.println(Constants.MESSAGE_FINISH);
+				System.out.print(Constants.MESSAGE_FINISH);
 				this.manager.markAsComplete(targetId);
 				return;	
 			case ADD:
@@ -133,7 +133,7 @@ public class InputParser {
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			System.out.printf(e.getMessage());
 		}
 	}
 

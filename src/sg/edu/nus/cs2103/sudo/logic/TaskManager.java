@@ -235,11 +235,12 @@ public class TaskManager {
 	 * 
 	 * Prints out the list of searched Task objects.
 	 */
-	public void searchAndDisplay(String searchStr) throws NullPointerException,
+	public ArrayList<Task> searchAndDisplay(String searchStr) throws NullPointerException,
 			IllegalStateException {
 
 		ArrayList<Task> searchResults = search(searchStr, false);
 		displaySearchResults(searchResults);
+		return searchResults;
 	}
 
 	/**
@@ -248,11 +249,12 @@ public class TaskManager {
 	 * 
 	 * Prints out the list of searched Task objects.
 	 */
-	public void searchAllAndDisplay(String searchStr)
+	public ArrayList<Task> searchAllAndDisplay(String searchStr)
 			throws NullPointerException, IllegalStateException {
 
 		ArrayList<Task> searchResults = search(searchStr, true);
 		displaySearchResults(searchResults);
+		return searchResults;
 	}
 
 	/**
@@ -425,7 +427,7 @@ public class TaskManager {
 			throw new IllegalStateException(Constants.MESSAGE_NO_SEARCH_RESULTS);
 		} else if (numResults == 1) {
 			delete(searchResults.get(0).getId());
-			System.out.print(Constants.MESSAGE_DELETE
+			System.out.println(Constants.MESSAGE_DELETE
 					+ searchResults.get(0).description);
 		} else {
 			displaySearchResults(searchResults);

@@ -118,12 +118,14 @@ public class InputParser {
 			    return;
 			case HELP:
 				 this.manager.undo();
-			    return;			    
+			    return;
 			case UNDO:
 				 this.manager.undo();
+				 this.manager.displayAllTasks(true);
 			    return; 
 			case REDO:
 				 this.manager.redo();
+				 this.manager.displayAllTasks(true);
 			    return;
 			case EXIT:
 				this.manager.saveTasks();

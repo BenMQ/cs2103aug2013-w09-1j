@@ -3,12 +3,12 @@ package sg.edu.nus.cs2103.ui;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.util.ArrayList;
 import java.util.Scanner;
 
+import sg.edu.nus.cs2103.sudo.logic.FloatingTask;
 import sg.edu.nus.cs2103.sudo.logic.InputParser;
-
 import sg.edu.nus.cs2103.sudo.logic.TaskManager;
-
 import sg.edu.nus.cs2103.sudo.Constants;
 
 import java.awt.event.KeyAdapter;
@@ -68,6 +68,7 @@ public class GUI extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         mainTextFrame.setEditable(false);
+        mainTextFrame.setFont(new java.awt.Font("Monaco", 0, 13)); // NOI18N
         mainTextFrame.setColumns(20);
         mainTextFrame.setRows(5);
         mainTextFrameScrollPane.setViewportView(mainTextFrame);
@@ -93,7 +94,10 @@ public class GUI extends javax.swing.JFrame {
             			parser.parseCommand(userInput);
             			inputText.setText("");
             			mainTextFrame.setText(outContent.toString());
+            			outContent.reset();
             			progressBar.setValue(manager.getCompletedPercentage());
+    //        			String[] floatings = updateFloating(manager.getFloatingTask());
+            			
                     }
                 }
             });
@@ -107,7 +111,7 @@ public class GUI extends javax.swing.JFrame {
             });
 
             floatingList.setModel(new javax.swing.AbstractListModel() {
-                String[] strings = { "This part is", "currently", "underconstruction"};
+                String[] strings = {"Floating task", "manager", "coming", "soon"};
                 public int getSize() { return strings.length; }
                 public Object getElementAt(int i) { return strings[i]; }
             });
@@ -184,10 +188,11 @@ public class GUI extends javax.swing.JFrame {
     }                                           
 
     private void sudooleButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    	String userInput =  inputText.getText();
-		parser.parseCommand(userInput);
-		inputText.setText("");
-		mainTextFrame.setText(outContent.toString());
+        	String userInput =  inputText.getText();
+			parser.parseCommand(userInput);
+			inputText.setText("");
+			mainTextFrame.setText(outContent.toString());
+			progressBar.setValue(manager.getCompletedPercentage());
     }
 
     /**
@@ -225,6 +230,14 @@ public class GUI extends javax.swing.JFrame {
         });
     }
     
+    /*private String[] updateFloating(ArrayList<FloatingTask> ft){
+    	ArrayList<String> FloatingTaskString = new ArrayList<String>();
+    	for(FloatingTask flt:ft){
+    		FloatingTaskString.add(flt.toString());
+    	}
+    	return (String[]) FloatingTaskString.toArray();
+    }
+    */
     
     
     // Variables declaration - do not modify   

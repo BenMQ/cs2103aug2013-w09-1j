@@ -149,17 +149,17 @@ public class TaskManager {
 	 */
 	public void displayAllTasks(boolean showAll) throws IllegalStateException {
 		checkEmptyList();
-
 		for (int i = 0; i < tasks.size(); i++) {
+			
 			Task task = tasks.get(i);
-
+			String completed = "";
+			if(task.isComplete()){
+				completed = "✓";
+			}
 			if (showAll || !task.isComplete) {
-				String completed = "";
-				if(task.isComplete()){
-					completed = "✓";
-				}
 				System.out.println(task.toString() + " " + completed);
 			}
+			
 		}
 	}
 
@@ -468,13 +468,14 @@ public class TaskManager {
 	public void undo() {
 		try {
 			tasks = (ArrayList<Task>) storage.undo().clone();
+			System.out.println("Undo...");
 		} catch (FileNotFoundException e) {
 			storage.rebuildHistory();
-			UI.forcePrint("History file missing, New history file was built.");
+			System.out.println("History file missing, New history file was built.");
 			// TODO Auto-generated catch block
 			// e.printStackTrace();
 		} catch (NoHistoryException e) {
-			UI.forcePrint("No more undo steps recorded.");
+			System.out.println("No more undo steps recorded.");
 			// TODO Auto-generated catch block
 			// e.printStackTrace();
 		}
@@ -502,13 +503,14 @@ public class TaskManager {
 	public void redo() {
 		try {
 			tasks = (ArrayList<Task>) storage.redo().clone();
+			System.out.println("Redo...");
 		} catch (FileNotFoundException e) {
 			storage.rebuildHistory();
-			UI.forcePrint("History file missing, New history file was built.");
+			System.out.println("History file missing, New history file was built.");
 			// TODO Auto-generated catch block
 			// e.printStackTrace();
 		} catch (NoHistoryException e) {
-			UI.forcePrint("No more redo steps recorded.");
+			System.out.println("No more redo steps recorded.");
 			// TODO Auto-generated catch block
 			// e.printStackTrace();
 		}
@@ -619,11 +621,28 @@ public class TaskManager {
 			}
 		}
 	}
-
+	/**
+	 * Help method shows help message when called
+	 * 
+	 */
+	public void getHelp() {
+		
+	}
+	
 	public ArrayList<Task> getTasks() {
 		return this.tasks;
 	}
 
+	public ArrayList<FloatingTask> getFloatingTask(){
+		ArrayList<FloatingTask> toReturn = new ArrayList<FloatingTask>();
+		for(Task tsk:this.tasks){
+			if((tsk instanceof FloatingTask)){
+				toReturn.add((FloatingTask) tsk);
+			}
+		}
+		return toReturn;
+	}
+	
 	public void clearTasks() {
 		this.tasks.clear();
 	}
@@ -647,7 +666,7 @@ public class TaskManager {
 		}
 		int toReturn = 100*completed/this.tasks.size();
 		if(toReturn==100){
-			System.out.println("You have finished all tasks!");
+			//System.out.println("You have finished all tasks!");
 			};
 		return toReturn;
 	}

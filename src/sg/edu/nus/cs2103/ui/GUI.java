@@ -68,7 +68,8 @@ public class GUI extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         mainTextFrame.setEditable(false);
-        mainTextFrame.setFont(new java.awt.Font("Monaco", 0, 13)); // NOI18N
+        mainTextFrame.setFont(new java.awt.Font("Monaco", 0, 13));
+        mainTextFrame.setForeground(new java.awt.Color(92, 100, 245));
         mainTextFrame.setColumns(20);
         mainTextFrame.setRows(5);
         mainTextFrameScrollPane.setViewportView(mainTextFrame);

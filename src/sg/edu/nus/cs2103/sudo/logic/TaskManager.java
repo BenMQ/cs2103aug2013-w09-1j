@@ -431,8 +431,7 @@ public class TaskManager {
 			throw new IllegalStateException(Constants.MESSAGE_NO_SEARCH_RESULTS);
 		} else if (numResults == 1) {
 			delete(searchResults.get(0).getId());
-			System.out.println(Constants.MESSAGE_DELETE
-					+ searchResults.get(0).description);
+			System.out.printf(Constants.MESSAGE_DELETE, searchResults.get(0).description);
 		} else {
 			displaySearchResults(searchResults);
 		}

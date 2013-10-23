@@ -111,6 +111,7 @@ public class InputParserTest {
 	}	
 
 	@Test
+	//Test boundary conditions
 	public void testParseAddInvalidNumberOfDates() throws IOException{
 		testCommand("add 'time travel' from 19 October 2013 to 22 October 2014 to 24 November 2016", Constants.MESSAGE_INVALID_NUMBER_OF_DATES);
 		assertEquals(0, manager.getTasks().size());

@@ -33,6 +33,7 @@ public class Constants {
 	public static final String MESSAGE_NO_SEARCH_RESULTS = "No search results found.\n";
 	public static final String MESSAGE_NO_FLOATING_TASKS = "No floating tasks.\n";
 	public static final String MESSAGE_FINISH = "Finishing task.\n";
+	public static final String MESSAGE_UNFINISH = "Un-Finishing task.\n";
 
     public static final String MESSAGE_NO_FREE_SLOTS = "No free slots found. :(";
     public static final String MESSAGE_FREE_SLOTS_PREFIX = "Here are your free time slots for today:";

@@ -29,7 +29,7 @@ public class IntegrationTests {
 	/**
 	 * Integration Test ideas: 1. Test task adding, check state of all
 	 * components: UI, parser, taskmanager, storage 2.
-	 * 
+	 * Need to test history
 	 * 
 	 */
 
@@ -117,11 +117,9 @@ public class IntegrationTests {
 		String searchTerm = InputParser.parseDescription(userInput);
 		String expectedOutput = String.format(Constants.MESSAGE_SEARCH,
 				searchTerm);
-		// Failed test
-		/*
+
 		testCommand(userInput, expectedOutput
 				+ "\nSearch Results\n1. submit proposal to tutor at NUS by Sat 26 October 06:00 PM\n2. have coffee with mentor in Nus from Sun 27 October 09:00 AM to Sun 27 October 10:00 AM\n");
-		*/
 	}
 	
 	@Test
@@ -129,14 +127,12 @@ public class IntegrationTests {
 		assert true;
 	}
 	
-	// Failed Test
-	/*
 	@Test 
 	public void testExceptionalCase() throws IOException {
 		String userInput = "display";
 		testCommand(userInput, Constants.MESSAGE_DISPLAY+Constants.MESSAGE_EMPTY_LIST);
 	}
-	*/
+	
 	
 	// Helper test method to also test console output
 	private void testCommand(String userInput, String expectedOutput)

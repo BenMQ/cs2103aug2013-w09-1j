@@ -232,7 +232,7 @@ public class TaskManager {
 		}
 
 		currTask.setComplete(false);
-		System.out.print(Constants.MESSAGE_FINISH);
+		System.out.print(Constants.MESSAGE_UNFINISH);
 		sortAndUpdateIds();
 		saveToHistory();
 		return tasks;

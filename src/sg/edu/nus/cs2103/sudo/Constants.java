@@ -1,5 +1,7 @@
 package sg.edu.nus.cs2103.sudo;
 
+import java.util.HashMap;
+
 public class Constants {
 	
 	public static final String MESSAGE_WELCOME_TO_SUDO_FIRST = "Welcome to the world of Sudo!\nTake some time to get yourself familiar with\n"
@@ -49,6 +51,35 @@ public class Constants {
 	
 	private static final String MESSAGE_HISTORY_LOAD_ERROR = "Loading history file error: file can not be found.";
 	private static final String MESSAGE_LAST_HISTORY = "No more histories. Can not undo.";
+	
+	public static final HashMap<String, COMMAND_TYPE > aliases = new HashMap<String, COMMAND_TYPE>(){{
+        put("ADD",COMMAND_TYPE.ADD);
+        put("DO",COMMAND_TYPE.ADD);
+        
+        put("DELETE",COMMAND_TYPE.DELETE);
+        put("DEL",COMMAND_TYPE.DELETE);
+        
+        put("EDIT",COMMAND_TYPE.EDIT);
+        put("CHANGE",COMMAND_TYPE.EDIT);
+        put("MODIFY",COMMAND_TYPE.EDIT);
+        
+        put("FINISH",COMMAND_TYPE.FINISH);
+        put("COMPLETE",COMMAND_TYPE.FINISH);
+        
+        put("SEARCH",COMMAND_TYPE.SEARCH);
+        put("FIND",COMMAND_TYPE.SEARCH);
+        
+        put("DISPLAY",COMMAND_TYPE.DISPLAY);
+        put("SHOW",COMMAND_TYPE.DISPLAY);
+        
+        put("UNDO",COMMAND_TYPE.UNDO);
+        put("REDO",COMMAND_TYPE.REDO);        
+        put("FREE",COMMAND_TYPE.FREE);
+        put("SORT",COMMAND_TYPE.SORT);
+        put("HELP",COMMAND_TYPE.HELP);
+        put("ALL",COMMAND_TYPE.ALL);
+        put("UNFINISH",COMMAND_TYPE.UNFINISH);
+    }};
 	
 	
 }

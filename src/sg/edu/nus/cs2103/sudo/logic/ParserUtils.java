@@ -7,6 +7,7 @@ import java.util.List;
 import org.joda.time.DateTime;
 
 import sg.edu.nus.cs2103.sudo.COMMAND_TYPE;
+import sg.edu.nus.cs2103.sudo.Constants;
 
 import com.joestelmach.natty.DateGroup;
 
@@ -61,17 +62,11 @@ public class ParserUtils {
 	 * In other words, this method checks if the command is in COMMAND_TYPE
 	 */		
 	public static COMMAND_TYPE getCommandType(String userCommand){
-		try{
-			COMMAND_TYPE commandType = COMMAND_TYPE.valueOf(userCommand.toUpperCase());
-		    for (COMMAND_TYPE c : COMMAND_TYPE.values()) {
-		        if (c.name().equals(commandType.name())) {
-		        	return commandType;
-		        }
-		    }
-		} catch(IllegalArgumentException e){
+		COMMAND_TYPE commandType = Constants.aliases.get(userCommand.toUpperCase());
+		if(commandType == null){
 			return COMMAND_TYPE.INVALID;
 		}
-	    return COMMAND_TYPE.INVALID;
+		return commandType;	
 	}
 
 	/**

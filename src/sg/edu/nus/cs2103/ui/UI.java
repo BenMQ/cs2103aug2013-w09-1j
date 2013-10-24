@@ -2,7 +2,10 @@ package sg.edu.nus.cs2103.ui;
 
 import java.util.Scanner;
 
+import javax.xml.ws.handler.LogicalHandler;
+
 import sg.edu.nus.cs2103.sudo.logic.InputParser;
+import sg.edu.nus.cs2103.sudo.logic.LogicHandler;
 import sg.edu.nus.cs2103.sudo.logic.TaskManager;
 
 public class UI {
@@ -16,10 +19,10 @@ public class UI {
 		
 		Scanner user = new Scanner( System.in );
 		TaskManager manager = TaskManager.getTaskManager();
-		InputParser parser = InputParser.getInputParser(manager);
+		LogicHandler logicHandler = LogicHandler.getLogicHandler(manager, user);
 		while (true) {
-			String userInput = parser.readCommand(user);
-			parser.parseCommand(userInput);
+			String userInput = InputParser.readCommand(user);
+			logicHandler.executeCommand(userInput);
 		}
 
 	}

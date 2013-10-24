@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.text.Format;
 import java.util.ArrayList;
+import java.util.Scanner;
 import java.util.logging.Level;
 
 import org.junit.After;
@@ -18,6 +19,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import sg.edu.nus.cs2103.sudo.logic.InputParser;
+import sg.edu.nus.cs2103.sudo.logic.LogicHandler;
 import sg.edu.nus.cs2103.sudo.logic.Task;
 import sg.edu.nus.cs2103.sudo.logic.TaskManager;
 import sg.edu.nus.cs2103.sudo.storage.StorageHandler;
@@ -36,9 +38,10 @@ public class IntegrationTests {
 
 	private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
 	BufferedReader savefile_reader;
+	Scanner user = new Scanner(System.in);
 	private static StorageHandler storage;
+	private static LogicHandler logicHandler;
 	private static TaskManager manager;
-	private static InputParser parser;
 
 	private File savefile;
 	private File historyfile;
@@ -49,7 +52,7 @@ public class IntegrationTests {
 		historyfile = new File(HISTORY_FILENAME);
 		storage = StorageHandler.getStorageHandler(SAVE_FILENAME);
 		manager = TaskManager.getTaskManager();
-		parser = InputParser.getInputParser(manager);
+		logicHandler = LogicHandler.getLogicHandler(manager, user);
 		System.setOut(new PrintStream(outContent));
 	}
 
@@ -138,7 +141,7 @@ public class IntegrationTests {
 	// Helper test method to also test console output
 	private void testCommand(String userInput, String expectedOutput)
 			throws IOException {
-		parser.parseCommand(userInput);
+		logicHandler.executeCommand(userInput);
 		assertEquals(expectedOutput, outContent.toString());
 		outContent.reset();
 	}

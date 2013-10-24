@@ -19,6 +19,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 /**
  * @author Ipsita Mohapatra A0101286N
@@ -30,6 +31,7 @@ public class TaskManagerTest {
 
 	private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
 	BufferedReader savefile_reader;
+	Scanner user = new Scanner(System.in);
 	private static TaskManager manager;
 	private File savefile;
 
@@ -39,7 +41,6 @@ public class TaskManagerTest {
 		new File(HISTORY_FILENAME);
 		StorageHandler.getStorageHandler(SAVE_FILENAME);
 		manager = TaskManager.getTaskManager();
-		InputParser.getInputParser(manager);
 		System.setOut(new PrintStream(outContent));
 	}
 

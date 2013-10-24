@@ -6,6 +6,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.Scanner;
 import java.util.logging.Level;
 
 import sg.edu.nus.cs2103.sudo.Constants;
@@ -17,13 +18,15 @@ import org.junit.Test;
 
 public class InputParserTest {
 	private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+	Scanner user = new Scanner(System.in);
 	TaskManager manager;
+	LogicHandler logicHandler;
 	InputParser parser;
 	
 	@Before
 	public void setUp() {
 		manager = TaskManager.getTaskManager();
-		parser = InputParser.getInputParser(manager);
+		logicHandler = LogicHandler.getLogicHandler(manager, user);
 		System.setOut(new PrintStream(outContent));
     }
 	
@@ -119,7 +122,7 @@ public class InputParserTest {
 	
 	// Helper test method to test console output
 	private void testCommand(String userInput, String expectedOutput) throws IOException{		
-		parser.parseCommand(userInput);
+		logicHandler.executeCommand(userInput); //this method calls all parser methods
 		assertEquals(outContent.toString(), expectedOutput);
 		outContent.reset();
 	}

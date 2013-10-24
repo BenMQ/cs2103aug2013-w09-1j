@@ -8,6 +8,7 @@ import java.util.Scanner;
 
 import sg.edu.nus.cs2103.sudo.logic.FloatingTask;
 import sg.edu.nus.cs2103.sudo.logic.InputParser;
+import sg.edu.nus.cs2103.sudo.logic.LogicHandler;
 import sg.edu.nus.cs2103.sudo.logic.TaskManager;
 import sg.edu.nus.cs2103.sudo.Constants;
 
@@ -38,7 +39,8 @@ public class GUI extends javax.swing.JFrame {
      */
     public GUI() {
     	manager = TaskManager.getTaskManager();
-		parser = InputParser.getInputParser(manager);
+		//parser = InputParser.getInputParser(manager);
+		logicHandler = LogicHandler.getLogicHandler(manager, null);
         initComponents();
     }
 
@@ -92,7 +94,7 @@ public class GUI extends javax.swing.JFrame {
                     	//mainTextFrame.setText("Search result for \"homework\":\n1. CS2101 homework by tomorrow 4pm.\n2. CS1101s JFDI homework by Sep 25th.");
                         //inputText.setText("");
                     	String userInput =  inputText.getText();
-            			parser.parseCommand(userInput);
+                    	logicHandler.executeCommand(userInput);
             			inputText.setText("");
             			mainTextFrame.setText(outContent.toString());
             			outContent.reset();
@@ -190,7 +192,7 @@ public class GUI extends javax.swing.JFrame {
 
     private void sudooleButtonActionPerformed(java.awt.event.ActionEvent evt) {
         	String userInput =  inputText.getText();
-			parser.parseCommand(userInput);
+        	logicHandler.executeCommand(userInput);
 			inputText.setText("");
 			mainTextFrame.setText(outContent.toString());
 			progressBar.setValue(manager.getCompletedPercentage());
@@ -255,6 +257,7 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.JTextArea mainTextFrame;
     private javax.swing.JTextField inputText;
     private TaskManager manager;
-    private InputParser parser;
+    private LogicHandler logicHandler; 
+   // private InputParser parser;
     // End of variables declaration                   
 }

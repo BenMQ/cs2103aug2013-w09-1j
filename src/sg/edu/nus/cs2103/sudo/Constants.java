@@ -58,6 +58,7 @@ public class Constants {
         
         put("DELETE",COMMAND_TYPE.DELETE);
         put("DEL",COMMAND_TYPE.DELETE);
+        put("REMOVE",COMMAND_TYPE.DELETE);
         
         put("EDIT",COMMAND_TYPE.EDIT);
         put("CHANGE",COMMAND_TYPE.EDIT);

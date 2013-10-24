@@ -85,6 +85,29 @@ public class IntegrationTests {
 	}
 
 	@Test
+	public void testValidAliases() throws IOException {
+		String userInput = "do 'make waffles for breakfast' by Monday 14 October 2pm";
+		String taskDescription = InputParser.parseDescription(userInput);
+		
+		String expectedOutput = String.format(Constants.MESSAGE_ADD_DEADLINE,
+				taskDescription);
+		testCommand(userInput, expectedOutput);
+		
+		expectedOutput = String.format(Constants.MESSAGE_DELETE, taskDescription);
+		testCommand("remove 'waffle'", expectedOutput);		
+		
+		testStorageContent();
+	}	
+	
+	@Test
+	public void testInvalidAliases() throws IOException {
+		String userInput = "bamboozle 'make waffles for breakfast' by Monday 14 October 2pm";
+		String taskDescription = InputParser.parseDescription(userInput);
+		
+		testCommand(userInput, Constants.MESSAGE_INVALID_COMMAND);
+	}	
+	
+	@Test
 	public void testDelete() throws IOException {
 		String userInput = "add 'make waffles for breakfast' by Monday 14 October 2pm";
 		String taskDescription = InputParser.parseDescription(userInput);
@@ -126,9 +149,19 @@ public class IntegrationTests {
 	public void testSort() {
 		assert true;
 	}
+
+	@Test
+	public void testFinishTask() {
+		assert true;
+	}	
+	
+	@Test
+	public void testDisplayAll() {
+		assert true;
+	}
 	
 	@Test 
-	public void testExceptionalCase() throws IOException {
+	public void testEmptyDisplay() throws IOException {
 		String userInput = "display";
 		testCommand(userInput, Constants.MESSAGE_DISPLAY+Constants.MESSAGE_EMPTY_LIST);
 	}

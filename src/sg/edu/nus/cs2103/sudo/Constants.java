@@ -55,6 +55,7 @@ public class Constants {
 	public static final HashMap<String, COMMAND_TYPE > aliases = new HashMap<String, COMMAND_TYPE>(){{
         put("ADD",COMMAND_TYPE.ADD);
         put("DO",COMMAND_TYPE.ADD);
+        put("SUDO",COMMAND_TYPE.ADD);
         
         put("DELETE",COMMAND_TYPE.DELETE);
         put("DEL",COMMAND_TYPE.DELETE);

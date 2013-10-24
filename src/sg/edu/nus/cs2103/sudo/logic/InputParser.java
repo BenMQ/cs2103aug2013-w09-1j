@@ -4,12 +4,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
-import java.util.logging.Level; 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import sg.edu.nus.cs2103.sudo.COMMAND_TYPE;
-import sg.edu.nus.cs2103.sudo.Constants;
 
 import org.joda.time.DateTime;
 
@@ -20,126 +18,11 @@ public class InputParser {
 
 	/**
 	 * This InputParser class is responsible for extracting commands
-	 * and description/time parameters from user string inputs,
-	 * delegating to subclasses whenever necessary. 
-	 * It then calls the appropriate CRUD methods.
+	 * and description/time parameters from user string inputs.
 	 * 
 	 * @author Yos Riady 
 	 */
-	private static Scanner scanner = new Scanner(System.in);
-	private static InputParser parser;
-	private TaskManager manager; 
-	
-	private InputParser(TaskManager m) {
-		if (m == null){
-			throw new NullPointerException("TaskManager cannot be null!");
-		}
-		manager = m;
-	}
-	
-	public static InputParser getInputParser(TaskManager m){
-		if(parser == null){
-			parser = new InputParser(m);
-		}
-		return parser;
-	}
-	
-	/**
-	 * Parses and executes the appropriate manager method based on the user's input.
-	 * Via this method, InputParser becomes a facade class between
-	 * UI and Logic.
-	 * 
-	 * @param userInput 	string of the user's input
-	 * @return executes the appropriate high level command
-	 */
-	public void parseCommand(String userInput){
-		COMMAND_TYPE userCommand = parseCommandType(userInput);
-		assert(userCommand != null);
-		
-		String taskDescription = parseDescription(userInput);
-		int targetId = parseId(userInput);
-		ArrayList<DateTime> dateTimes = parseDateTime(userInput);
-		
-		try {
-			switch(userCommand){ //we can refactor this using the Command pattern
-			case INVALID:
-				System.out.print(Constants.MESSAGE_INVALID_COMMAND);
-				return;		
-			case INCOMPLETE:
-				System.out.print(Constants.MESSAGE_INCOMPLETE_COMMAND);
-				return;
-			case DISPLAY:
-				System.out.print(Constants.MESSAGE_DISPLAY);
-				this.manager.displayAllTasks();
-				return;
-			case FINISH:
-				this.manager.markAsComplete(targetId);
-				return;
-			case UNFINISH:
-				this.manager.markAsIncomplete(targetId);
-				return;					
-			case ADD:
-				int num_dates = dateTimes.size();
-				if(num_dates == 0){ //need to refactor this later
-						if(taskDescription == null){
-							System.out.print(Constants.MESSAGE_MISSING_DESCRIPTION);
-							return;
-						}
-						this.manager.addTask(new FloatingTask(taskDescription));
-						System.out.printf(Constants.MESSAGE_ADD_FLOATING, taskDescription);
-				} else if(num_dates == 1){
-						this.manager.addTask(new DeadlineTask(taskDescription, dateTimes));
-						System.out.printf(Constants.MESSAGE_ADD_DEADLINE, taskDescription);
-				} else if(num_dates == 2){
-						this.manager.addTask(new TimedTask(taskDescription, dateTimes));
-						System.out.printf(Constants.MESSAGE_ADD_TIMED, taskDescription);						
-				} else {
-						System.out.print(Constants.MESSAGE_INVALID_NUMBER_OF_DATES);
-				}
-				return;
-			case SEARCH:
-				System.out.printf(Constants.MESSAGE_SEARCH, taskDescription);
-				this.manager.searchAndDisplay(taskDescription);
-				return;
-			case FREE:
-			    this.manager.searchForFreeIntervals();
-			    return;
-			case DELETE:
-				int numResults = this.manager.delete(taskDescription); //need to refactor this
-				if (numResults > 1 ) {
-					System.out.println(Constants.MESSAGE_ENTER_TASK_ID);
-					int id = scanner.nextInt();
-					this.manager.delete(id);
-				}
-				return;
-			case EDIT:
-			    System.out.printf(Constants.MESSAGE_EDIT, targetId);
-			    this.manager.editTask(targetId, taskDescription, dateTimes);
-			    return;
-			case HELP:
-				 this.manager.undo();
-			    return;
-			case UNDO:
-				 this.manager.undo();
-				 this.manager.displayAllTasks(true);
-			    return; 
-			case REDO:
-				 this.manager.redo();
-				 this.manager.displayAllTasks(true);
-			    return;
-			case EXIT:
-				this.manager.saveTasks();
-				System.exit(0);
-			    return; 
-			    
-			default:
-				assert false; //Unreachable code. Invalid commands must be caught.
-				return;
-			}
-		} catch (Exception e) {
-			System.out.printf(e.getMessage());
-		}
-	}
+
 
 	/**
 	 * Parses dates from the user's input string
@@ -166,9 +49,9 @@ public class InputParser {
 	 * Reads the user input for command
 	 * @return String 	the user's input command 
 	 */
-	public String readCommand(Scanner userCommand){
+	public static String readCommand(Scanner user){
 		System.out.print("command:");
-		return userCommand.nextLine();
+		return user.nextLine();
 	}	
 	
 	/**

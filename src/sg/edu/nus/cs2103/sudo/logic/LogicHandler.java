@@ -57,6 +57,10 @@ public class LogicHandler {
 				System.out.print(Constants.MESSAGE_DISPLAY);
 				this.manager.displayAllTasks();
 				return;
+			case ALL:
+				System.out.print(Constants.MESSAGE_DISPLAY_ALL);
+				this.manager.displayAllTasks(true);
+				return;				
 			case FINISH:
 				this.manager.markAsComplete(targetId);
 				return;

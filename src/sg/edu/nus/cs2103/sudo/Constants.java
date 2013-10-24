@@ -81,6 +81,9 @@ public class Constants {
         put("HELP",COMMAND_TYPE.HELP);
         put("ALL",COMMAND_TYPE.ALL);
         put("UNFINISH",COMMAND_TYPE.UNFINISH);
+        
+        put("EXIT",COMMAND_TYPE.EXIT);
+        put("QUIT",COMMAND_TYPE.EXIT);
     }};
 	
 	

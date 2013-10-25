@@ -23,6 +23,11 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
+import org.jnativehook.GlobalScreen;
+import org.jnativehook.NativeHookException;
+import org.jnativehook.keyboard.NativeKeyEvent;
+import org.jnativehook.keyboard.NativeKeyListener;
+
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -32,7 +37,7 @@ import java.awt.event.KeyEvent;
  *
  * @author GekimoeAsagi
  */
-public class GUI extends javax.swing.JFrame {
+public class GUI extends javax.swing.JFrame implements NativeKeyListener {
 
     /**
      * Creates new form GUI
@@ -42,8 +47,42 @@ public class GUI extends javax.swing.JFrame {
 		//parser = InputParser.getInputParser(manager);
 		logicHandler = LogicHandler.getLogicHandler(manager, null);
         initComponents();
+        this.setVisible(true);
     }
 
+    public void nativeKeyPressed(NativeKeyEvent e) {
+            currentKey = e.getKeyCode();
+            if(currentKey == 9){
+            	keyOne = true;
+            }
+            if(currentKey == 32){
+            	keyTwo = true;
+            }
+            if(keyOne && keyTwo){
+            	if(isShown){
+            		isShown = false;
+            		toInvisible();
+            	}else{
+            		isShown = true;
+            		toVisible();
+            	}
+            }
+            if (e.getKeyCode() == NativeKeyEvent.VK_ESCAPE) {
+                    GlobalScreen.unregisterNativeHook();
+                    System.exit(0);
+            }
+    }
+
+    public void nativeKeyReleased(NativeKeyEvent e) {
+    	currentKey = e.getKeyCode();
+    	if(currentKey == 9){
+        	keyOne = false;
+        }
+        if(currentKey == 32){
+        	keyTwo = false;
+        }
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -122,7 +161,7 @@ public class GUI extends javax.swing.JFrame {
 
             labelFloatingTasks.setText("Floating Tasks");
 
-            complecationRate.setText("Complecation rate");
+            complecationRate.setText("Completion rate");
 
             org.jdesktop.layout.GroupLayout foundationPanelLayout = new org.jdesktop.layout.GroupLayout(foundationPanel);
             foundationPanel.setLayout(foundationPanelLayout);
@@ -188,7 +227,7 @@ public class GUI extends javax.swing.JFrame {
 
     private void inputTextActionPerformed(java.awt.event.ActionEvent evt) {                                            
        
-    }                                           
+    }                        
 
     private void sudooleButtonActionPerformed(java.awt.event.ActionEvent evt) {
         	String userInput =  inputText.getText();
@@ -201,13 +240,21 @@ public class GUI extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
+    public void toInvisible(){
+    	this.setVisible(false);
+    }
+    public void toVisible(){
+    	this.setVisible(true);
+    }
+    
+    public static void main(String[] argv) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
         try {
+        	GlobalScreen.registerNativeHook();
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
@@ -222,13 +269,18 @@ public class GUI extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(GUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(GUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
+        }catch (NativeHookException ex) {
+            System.err.println("There was a problem registering the native hook.");
+            System.err.println(ex.getMessage());
+            System.exit(1);
+    }
         //</editor-fold>
 
         /* Create and display the form */
+        
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new GUI().setVisible(true);
+            	GlobalScreen.getInstance().addNativeKeyListener(new GUI());
             }
         });
     }
@@ -244,7 +296,10 @@ public class GUI extends javax.swing.JFrame {
     
     
     // Variables declaration - do not modify   
-   
+	private int currentKey;
+	private Boolean keyOne = false;
+	private Boolean keyTwo = false;
+	private Boolean isShown = true;
     private ByteArrayOutputStream outContent;
     private javax.swing.JButton sudooleButton;
     private javax.swing.JLabel labelFloatingTasks;
@@ -260,4 +315,9 @@ public class GUI extends javax.swing.JFrame {
     private LogicHandler logicHandler; 
    // private InputParser parser;
     // End of variables declaration                   
+	@Override
+	public void nativeKeyTyped(NativeKeyEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
 }

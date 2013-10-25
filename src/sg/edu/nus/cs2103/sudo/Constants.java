@@ -52,6 +52,9 @@ public class Constants {
 	private static final String MESSAGE_HISTORY_LOAD_ERROR = "Loading history file error: file can not be found.";
 	private static final String MESSAGE_LAST_HISTORY = "No more histories. Can not undo.";
 	
+	public static final int KEYBOARD_SPACE = 32;
+	public static final int KEYBOARD_TAB = 9;
+	
 	public static final HashMap<String, COMMAND_TYPE > aliases = new HashMap<String, COMMAND_TYPE>(){{
         put("ADD",COMMAND_TYPE.ADD);
         put("DO",COMMAND_TYPE.ADD);

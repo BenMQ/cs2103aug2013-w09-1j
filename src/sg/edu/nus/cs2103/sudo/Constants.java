@@ -50,7 +50,7 @@ public class Constants {
 	public static final String HISTORY_NAME_TEST = "test.his";
 	
 	private static final String MESSAGE_HISTORY_LOAD_ERROR = "Loading history file error: file can not be found.";
-	private static final String MESSAGE_LAST_HISTORY = "No more histories. Can not undo.";
+	private static final String MESSAGE_LAST_HISTORY = "No more histories. Cannot undo.";
 	
 	public static final int KEYBOARD_SPACE = 32;
 	public static final int KEYBOARD_TAB = 9;

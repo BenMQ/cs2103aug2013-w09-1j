@@ -31,7 +31,7 @@ public class LogicHandler {
 	
 	/**
 	 * Parses and executes the appropriate manager method based on the user's input.
-	 * Via this method, InputParser becomes a facade class between
+	 * Via this method, LogicHandler becomes a facade class between
 	 * UI and Logic.
 	 * 
 	 * @param userInput 	string of the user's input

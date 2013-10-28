@@ -78,10 +78,13 @@ public class LogicHandler {
 						System.out.printf(Constants.MESSAGE_ADD_FLOATING, taskDescription);
 				} else if(num_dates == 1){
 						this.manager.addTask(new DeadlineTask(taskDescription, dateTimes));
-						System.out.printf(Constants.MESSAGE_ADD_DEADLINE, taskDescription);
+						String endTime = dateTimes.get(0).toString("EEE dd MMMM hh:mm a");
+						System.out.printf(Constants.MESSAGE_ADD_DEADLINE, taskDescription, endTime);
 				} else if(num_dates == 2){
 						this.manager.addTask(new TimedTask(taskDescription, dateTimes));
-						System.out.printf(Constants.MESSAGE_ADD_TIMED, taskDescription);						
+						String startTime = dateTimes.get(0).toString("EEE dd MMMM hh:mm a");
+						String endTime = dateTimes.get(1).toString("EEE dd MMMM hh:mm a");
+						System.out.printf(Constants.MESSAGE_ADD_TIMED, taskDescription, startTime, endTime);						
 				} else {
 						System.out.print(Constants.MESSAGE_INVALID_NUMBER_OF_DATES);
 				}
@@ -100,6 +103,8 @@ public class LogicHandler {
 					int id = scanner.nextInt();
 					this.manager.delete(id);
 				}
+				return;
+			case PASS:
 				return;
 			case EDIT:
 			    System.out.printf(Constants.MESSAGE_EDIT, targetId);
@@ -129,10 +134,5 @@ public class LogicHandler {
 			System.out.printf(e.getMessage());
 		}
 	}	
-	
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
-	}
 
 }

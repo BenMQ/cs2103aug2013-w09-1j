@@ -452,7 +452,9 @@ public class TaskManager {
 	public void delete(int taskId) throws IOException {
 		int index = taskId - 1;
 		checkValidityIndex(index);
-
+		
+		System.out.printf(Constants.MESSAGE_DELETE, tasks.get(index).description);
+		
 		tasks.remove(index);
 		sortAndUpdateIds();
 		saveToHistory();

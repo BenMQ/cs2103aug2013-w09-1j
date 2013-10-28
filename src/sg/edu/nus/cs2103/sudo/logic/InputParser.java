@@ -63,7 +63,9 @@ public class InputParser {
 		String commandWord = ParserUtils.getCommandWord(userInput);
 		COMMAND_TYPE commandType = ParserUtils.getCommandType(commandWord);
 		int numOfWords = ParserUtils.countWords(userInput);
-		if (numOfWords < ParserUtils.getNumOfWordsNeeded(commandType)) {
+		if(numOfWords == 0){
+			return COMMAND_TYPE.PASS;
+		}else if (numOfWords < ParserUtils.getNumOfWordsNeeded(commandType)) {
 			return COMMAND_TYPE.INCOMPLETE;
 		} else {
 			return commandType;

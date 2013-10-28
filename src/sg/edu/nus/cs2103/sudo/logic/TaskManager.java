@@ -375,7 +375,7 @@ public class TaskManager {
             if (interval.toDurationMillis() >= Constants.FREE_SLOT_MINIMUM_DURATION) {
                 if (noSlotsFound) {
                     System.out.println(Constants.MESSAGE_FREE_SLOTS_PREFIX
-                            + timeRange.get(0).toString("dd MMMM hh:mm a") + " to " + timeRange.get(0).toString("dd MMMM hh:mm a"));
+                            + timeRange.get(0).toString("dd MMMM hh:mm a") + " to " + timeRange.get(1).toString("dd MMMM hh:mm a"));
                     noSlotsFound = false;
                 }
                 String output = interval.getStart().toString("dd MMMM hh:mm a") + " to " + interval.getEnd().toString("dd MMMM hh:mm a");

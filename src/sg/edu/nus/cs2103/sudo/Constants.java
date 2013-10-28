@@ -1,17 +1,18 @@
 package sg.edu.nus.cs2103.sudo;
 
-import java.lang.reflect.Method;
 import java.util.HashMap;
 
-import sg.edu.nus.cs2103.sudo.logic.LogicHandler;
 
 public class Constants {
 
 	public static final String MESSAGE_WELCOME_TO_SUDO_FIRST = "Welcome to the world of Sudo!\nTo get help, simply type: help\nTo learn more about a command: help [command]\n";
 	public static final String MESSAGE_WELCOME_TO_SUDO_RELOAD = "Welcome back, dear user.\nYour past records have been loaded successfully.\nTo learn more, simply type: help\nTo learn more about a command: help [command]\n";
 
-	public static final String MESSAGE_WELCOME_HELP_PAGE = "Here is how to get started with sudo:\n";
+	public static final String MESSAGE_WELCOME_HELP_PAGE = "Type help '<command>' for help on that command. \nHere is how to get started with sudo:\n";
+	public static final String HELP_NOT_FOUND = "We couldn't find anything on '%s'. Try help 'list' for a list of help topics.\n";
+	public static final String HELP_LIST = "Listing all help topics. WIP\n";
 	
+	public static final String HELP_HELP = "Type help '<command>' for help on that command. \n";
 	public static final String HELP_DISPLAY = "To display incomplete tasks:\ndisplay\nTo display both completed and incomplete tasks:\nall\nYou could also type in the following instead of “display”: “show”.\n\n";
 	public static final String HELP_ADD = "To add a task, specify your command in any of the following formats:\nadd ‘[description]’ from [start date/time] to [end date/time]\nadd ‘[description]’ by [end date/time]\nadd ‘[description]’\nYou could also type in the following instead of “add”: “do”, “sudo”.\n\n";
 	public static final String HELP_EDIT = "To edit the details of a task, specify your command in any of the following formats:\nTo update the description of a task only:\nedit [task index] ‘[new_task_description]’\nTo update the start and end date/time for a timed task:\nedit [task index] from [start date/time] to [end date/time]\nTo update the end date/time for a deadline task:\nedit [task index] by [end date/time]\nYou could also type in the following instead of “edit”: “change”, “modify”.\n\n";
@@ -67,9 +68,6 @@ public class Constants {
 
 	public static final int KEYBOARD_SPACE = 32;
 	public static final int KEYBOARD_TAB = 9;
-	
-	public static final HashMap<COMMAND_TYPE, String> helpCommands = new HashMap<COMMAND_TYPE, String>() {
-	}; 
 
 	public static final HashMap<String, COMMAND_TYPE> aliases = new HashMap<String, COMMAND_TYPE>() {
 		{
@@ -108,5 +106,41 @@ public class Constants {
 		}
 	};
 
+	public static final HashMap<String, String> helpTopics = new HashMap<String, String>() {
+		{
+			put("HELP", HELP_HELP);
+			put("LIST", HELP_LIST);
+			
+			put("ADD", HELP_ADD);
+			put("SUDO", HELP_ADD);
+			put("DO", HELP_ADD);
+			
+			put("DISPLAY", HELP_DISPLAY);
+			put("SHOW", HELP_DISPLAY);
+			
+			put("EDIT", HELP_EDIT);
+			put("CHANGE", HELP_EDIT);
+			put("MODIFY", HELP_EDIT);
+			
+			put("DELETE", HELP_DELETE);
+			put("DEL", HELP_DELETE);
+			put("REMOVE", HELP_DELETE);
+			
+			put("FINISH", HELP_FINISH);
+			put("COMPLETE", HELP_FINISH);
+			put("DONE", HELP_FINISH);
+			
+			put("UNDO", HELP_UNDO);
+			put("REDO", HELP_UNDO);
+			
+			put("SEARCH", HELP_SEARCH);
+			put("FIND", HELP_SEARCH);
+			
+			put("FREE", HELP_FREE);
+			put("SCHEDULE", HELP_SCHEDULE);
+		}
+	};
+
+	
 	
 }

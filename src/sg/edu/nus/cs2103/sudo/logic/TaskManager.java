@@ -681,8 +681,8 @@ public class TaskManager {
 	 * Help method shows help message when called
 	 * 
 	 */
-	public void getHelp() {
-
+	public void getHelp(String topic) {
+		
 	}
 
 	public ArrayList<Task> getTasks() {

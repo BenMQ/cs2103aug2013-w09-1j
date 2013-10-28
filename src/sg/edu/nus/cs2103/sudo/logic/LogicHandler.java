@@ -125,7 +125,7 @@ public class LogicHandler {
 				return;
 			case HELP:
 				System.out.println(Constants.MESSAGE_WELCOME_HELP_PAGE);
-				this.help();
+				this.help(taskDescription);
 				return;
 			case UNDO:
 				this.manager.undo();
@@ -154,24 +154,26 @@ public class LogicHandler {
 	/**
 	 * Helps the user get started with using sudo
 	 */
-	private void help() {
-		helpDisplay();
-		helpAdd();
-		helpEdit();
-		helpDelete();
-		helpFinish();
-		helpUndoRedo();
-		helpSearch();
-		helpFree();
-		helpSchedule();
+	private void help(String topic) {
+		if (topic == null){
+			helpDisplay();
+			helpAdd();
+			helpEdit();
+			helpDelete();
+			helpFinish();
+			helpUndoRedo();
+			helpSearch();
+			helpFree();
+			helpSchedule();
+		}
 	}
 
-	private void helpSchedule() {
+	public static void helpSchedule() {
 		System.out.print(Constants.HELP_SCHEDULE);
 		System.out.println();
 	}
 
-	private void helpFree() {
+	public static void helpFree() {
 		System.out.print(Constants.HELP_FREE);
 		System.out.println();
 	}

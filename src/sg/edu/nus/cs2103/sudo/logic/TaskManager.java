@@ -115,23 +115,6 @@ public class TaskManager {
 		saveToHistory();
 		return tasks;
 
-		/*
-		 * Task oldTask = tasks.remove(index); if (taskDescription != null) {
-		 * oldTask.setDescription(taskDescription); } if (dates.size() == 1) {
-		 * if (!(oldTask instanceof DeadlineTask)) { oldTask = new
-		 * DeadlineTask(oldTask.getId(), oldTask.getDescription(),
-		 * oldTask.isComplete(), dates.get(0)); } else {
-		 * oldTask.setEndTime(dates.get(0)); } } else if (dates.size() == 2) {
-		 * checkValidityTimes(dates.get(0), dates.get(1)); if (!(oldTask
-		 * instanceof TimedTask)) { oldTask = new TimedTask(oldTask.getId(),
-		 * oldTask.getDescription(), oldTask.isComplete(), dates.get(0),
-		 * dates.get(1)); } else { oldTask.setStartTime(dates.get(0));
-		 * oldTask.setEndTime(dates.get(1)); } }
-		 * 
-		 * 
-		 * tasks.add(oldTask);
-		 */
-
 	}
 
 	/**
@@ -158,22 +141,22 @@ public class TaskManager {
 	private Task editDateTime(ArrayList<DateTime> dates, Task task) {
 		if (dates.size() == 1) {
 			if (!(task instanceof DeadlineTask)) {
-					task = new DeadlineTask(task.getId(),
-						task.getDescription(), task.isComplete(),
-						dates.get(0));
-					} else {
-					task.setEndTime(dates.get(0));
+				task = new DeadlineTask(task.getId(), task.getDescription(),
+						task.isComplete(), dates.get(0));
+			} else {
+				task.setEndTime(dates.get(0));
 			}
 		} else if (dates.size() == 2) {
 			checkValidityTimes(dates.get(0), dates.get(1));
 			if (!(task instanceof TimedTask)) {
-				task = new TimedTask(task.getId(), task.getDescription(), task.isComplete(), dates.get(0), dates.get(1));
+				task = new TimedTask(task.getId(), task.getDescription(),
+						task.isComplete(), dates.get(0), dates.get(1));
 			} else {
 				task.setStartTime(dates.get(0));
 				task.setEndTime(dates.get(1));
 			}
 		}
-		
+
 		return task;
 	}
 

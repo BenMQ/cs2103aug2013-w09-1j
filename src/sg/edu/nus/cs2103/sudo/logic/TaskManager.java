@@ -2,7 +2,6 @@ package sg.edu.nus.cs2103.sudo.logic;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Collections;
 

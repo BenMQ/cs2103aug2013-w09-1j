@@ -106,7 +106,7 @@ public class LogicHandler {
 			    this.manager.editTask(targetId, taskDescription, dateTimes);
 			    return;
 			case HELP:
-				 this.manager.undo();
+				 //
 			    return;
 			case UNDO:
 				 this.manager.undo();

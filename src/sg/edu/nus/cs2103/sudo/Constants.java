@@ -70,6 +70,10 @@ public class Constants {
 	public static final int KEYBOARD_TAB = 9;
 
 	public static final HashMap<String, COMMAND_TYPE> aliases = new HashMap<String, COMMAND_TYPE>() {
+		/**
+		 *  This key-value table maps aliases to their corresponding COMMAND_TYPE.
+		 */
+		private static final long serialVersionUID = 1L;
 		{
 			put("ADD", COMMAND_TYPE.ADD);
 			put("DO", COMMAND_TYPE.ADD);
@@ -107,6 +111,11 @@ public class Constants {
 	};
 
 	public static final HashMap<String, String> helpTopics = new HashMap<String, String>() {
+		/**
+		 * 	This key-value table maps keywords to help messages.
+		 */
+		private static final long serialVersionUID = 1L;
+
 		{
 			put("HELP", HELP_HELP);
 			put("LIST", HELP_LIST);

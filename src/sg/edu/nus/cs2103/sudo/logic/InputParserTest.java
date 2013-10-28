@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.util.logging.Level;
 
 import sg.edu.nus.cs2103.sudo.Constants;
 import sg.edu.nus.cs2103.sudo.logic.InputParser;
@@ -127,14 +126,16 @@ public class InputParserTest {
 	
 	@Test
 	public void testParseAddMissingDescription() throws IOException{
-		testCommand("add nothing", Constants.MESSAGE_MISSING_DESCRIPTION);
+		String userInput = "add nothing";
+		testCommand(userInput, Constants.MESSAGE_MISSING_DESCRIPTION);
 		assertEquals(0, manager.getTasks().size());
 	}	
 
 	@Test
 	//Test boundary conditions
 	public void testParseAddInvalidNumberOfDates() throws IOException{
-		testCommand("add 'time travel' from 19 October 2013 to 22 October 2014 to 24 November 2016", Constants.MESSAGE_INVALID_NUMBER_OF_DATES);
+		String userInput = "add 'time travel' from 19 October 2013 to 22 October 2014 to 24 November 2016";
+		testCommand(userInput, Constants.MESSAGE_INVALID_NUMBER_OF_DATES);
 		assertEquals(0, manager.getTasks().size());
 	}		
 	

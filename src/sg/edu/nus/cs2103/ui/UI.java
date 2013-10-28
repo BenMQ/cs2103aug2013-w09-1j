@@ -2,9 +2,6 @@ package sg.edu.nus.cs2103.ui;
 
 import java.util.Scanner;
 
-import javax.xml.ws.handler.LogicalHandler;
-
-import sg.edu.nus.cs2103.sudo.Constants;
 import sg.edu.nus.cs2103.sudo.logic.InputParser;
 import sg.edu.nus.cs2103.sudo.logic.LogicHandler;
 import sg.edu.nus.cs2103.sudo.logic.TaskManager;

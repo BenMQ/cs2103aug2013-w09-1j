@@ -3,7 +3,6 @@ package sg.edu.nus.cs2103.sudo.logic;
 import static org.junit.Assert.*;
 
 import org.joda.time.DateTime;
-import org.joda.time.Interval;
 import org.joda.time.MutableInterval;
 import org.junit.After;
 import org.junit.Before;

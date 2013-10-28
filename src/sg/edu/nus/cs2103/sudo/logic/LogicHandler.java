@@ -12,44 +12,46 @@ public class LogicHandler {
 
 	private static Scanner scanner;
 	private static LogicHandler logicHandler;
-	private TaskManager manager; 
-	
+	private TaskManager manager;
+
 	private LogicHandler(TaskManager m, Scanner s) {
-		if (m == null){
+		if (m == null) {
 			throw new NullPointerException("TaskManager cannot be null!");
 		}
 		manager = m;
 		scanner = s;
 	}
-	
-	public static LogicHandler getLogicHandler(TaskManager m, Scanner s){
-		if(logicHandler == null){
-			logicHandler = new LogicHandler(m,s );
+
+	public static LogicHandler getLogicHandler(TaskManager m, Scanner s) {
+		if (logicHandler == null) {
+			logicHandler = new LogicHandler(m, s);
 		}
 		return logicHandler;
 	}
-	
+
 	/**
-	 * Parses and executes the appropriate manager method based on the user's input.
-	 * Via this method, LogicHandler becomes a facade class between
-	 * UI and Logic.
+	 * Parses and executes the appropriate manager method based on the user's
+	 * input. Via this method, LogicHandler becomes a facade class between UI
+	 * and Logic.
 	 * 
-	 * @param userInput 	string of the user's input
+	 * @param userInput
+	 *            string of the user's input
 	 * @return executes the appropriate high level command
 	 */
-	public void executeCommand(String userInput){
+	public void executeCommand(String userInput) {
 		COMMAND_TYPE userCommand = InputParser.parseCommandType(userInput);
-		assert(userCommand != null);
-		
+		assert (userCommand != null);
+
 		String taskDescription = InputParser.parseDescription(userInput);
 		int targetId = InputParser.parseId(userInput);
 		ArrayList<DateTime> dateTimes = InputParser.parseDateTime(userInput);
-		
+
 		try {
-			switch(userCommand){ //we can refactor this using the Command pattern
+			switch (userCommand) { // we can refactor this using the Command
+									// pattern
 			case INVALID:
 				System.out.print(Constants.MESSAGE_INVALID_COMMAND);
-				return;		
+				return;
 			case INCOMPLETE:
 				System.out.print(Constants.MESSAGE_INCOMPLETE_COMMAND);
 				return;
@@ -60,13 +62,13 @@ public class LogicHandler {
 			case ALL:
 				System.out.print(Constants.MESSAGE_DISPLAY_ALL);
 				this.manager.displayAllTasks(true);
-				return;				
+				return;
 			case FINISH:
 				this.manager.markAsComplete(targetId);
 				return;
 			case UNFINISH:
 				this.manager.markAsIncomplete(targetId);
-				return;					
+				return;
 			case ADD:
 				int numOfDates = dateTimes.size();
 				if(numOfDates == 0){ //need to refactor this later
@@ -81,9 +83,9 @@ public class LogicHandler {
 						System.out.printf(Constants.MESSAGE_ADD_DEADLINE, taskDescription);
 				} else if(numOfDates == 2){
 						this.manager.addTask(new TimedTask(taskDescription, dateTimes));
-						System.out.printf(Constants.MESSAGE_ADD_TIMED, taskDescription);						
+						System.out.printf(Constants.MESSAGE_ADD_TIMED, taskDescription);
 				} else {
-						System.out.print(Constants.MESSAGE_INVALID_NUMBER_OF_DATES);
+					System.out.print(Constants.MESSAGE_INVALID_NUMBER_OF_DATES);
 				}
 				return;
 			case SEARCH:
@@ -98,45 +100,47 @@ public class LogicHandler {
 			    }
 			    return;
 			case DELETE:
-				int numResults = this.manager.delete(taskDescription); //need to refactor this
-				if (numResults > 1 ) {
+				int numResults = this.manager.delete(taskDescription); // need
+																		// to
+																		// refactor
+																		// this
+				if (numResults > 1) {
 					System.out.println(Constants.MESSAGE_ENTER_TASK_ID);
 					int id = scanner.nextInt();
 					this.manager.delete(id);
 				}
 				return;
+			case PASS:
+				return;
 			case EDIT:
-			    System.out.printf(Constants.MESSAGE_EDIT, targetId);
-			    this.manager.editTask(targetId, taskDescription, dateTimes);
-			    return;
+				System.out.printf(Constants.MESSAGE_EDIT, targetId);
+				this.manager.editTask(targetId, taskDescription, dateTimes);
+				return;
 			case HELP:
-				 this.manager.undo();
-			    return;
+				this.manager.help(taskDescription);
+				return;
 			case UNDO:
-				 this.manager.undo();
-				 this.manager.displayAllTasks(true);
-			    return; 
+				this.manager.undo();
+				this.manager.displayAllTasks(true);
+				return;
 			case REDO:
-				 this.manager.redo();
-				 this.manager.displayAllTasks(true);
-			    return;
+				this.manager.redo();
+				this.manager.displayAllTasks(true);
+				return;
 			case EXIT:
 				this.manager.saveTasks();
 				System.exit(0);
-			    return; 
-			    
+				return;
+
 			default:
-				assert false; //Unreachable code. Invalid commands must be caught.
+				assert false; // Unreachable code. Invalid commands must be
+								// caught.
 				return;
 			}
 		} catch (Exception e) {
 			System.out.printf(e.getMessage());
+			// System.out.printf("Fatal error occured!");
 		}
-	}	
-	
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
 	}
-
+	
 }

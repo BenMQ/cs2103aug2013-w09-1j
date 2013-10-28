@@ -55,7 +55,7 @@ public class GUI extends javax.swing.JFrame implements NativeKeyListener {
 		// To implement unimplemented method
 	}
     
-	 /**
+	 /**.
      * Implemented methods for NativeHook.
      * nativeKeyPressed: detect which key is pressed. Here when Space and Tab are detected the visibility
      * of the window will be changed.
@@ -112,9 +112,12 @@ public class GUI extends javax.swing.JFrame implements NativeKeyListener {
         mainTextFrameScrollPane = new javax.swing.JScrollPane();
         mainTextFrame = new javax.swing.JTextArea();
         inputText = new javax.swing.JTextField();
+        inputText.setForeground(new java.awt.Color(255, 50, 30));
         sudooleButton = new javax.swing.JButton();
         floatingTaskScrollPane = new javax.swing.JScrollPane();
         floatingList = new javax.swing.JList();
+        floatingList.setForeground(new java.awt.Color(0, 100, 245));
+        floatingList.setBackground(new java.awt.Color(150, 245, 100));
         labelFloatingTasks = new javax.swing.JLabel();
         progressBar = new javax.swing.JProgressBar();
         complecationRate = new javax.swing.JLabel();
@@ -124,8 +127,9 @@ public class GUI extends javax.swing.JFrame implements NativeKeyListener {
 
         //Initialization of properties
         mainTextFrame.setEditable(false);
-        mainTextFrame.setFont(new java.awt.Font("Monaco", 0, 13));
-        mainTextFrame.setForeground(new java.awt.Color(92, 100, 245));
+        mainTextFrame.setFont(new java.awt.Font("Monaco", 0, 17));
+        mainTextFrame.setForeground(new java.awt.Color(225, 230, 255));
+        mainTextFrame.setBackground(new java.awt.Color(0, 0, 0));
         mainTextFrame.setColumns(20);
         mainTextFrame.setRows(5);
         mainTextFrameScrollPane.setViewportView(mainTextFrame);
@@ -213,7 +217,7 @@ public class GUI extends javax.swing.JFrame implements NativeKeyListener {
                             .add(labelFloatingTasks)
                             .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                             .add(floatingTaskScrollPane))
-                        .add(mainTextFrameScrollPane, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 193, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                        .add(mainTextFrameScrollPane, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 393, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                     .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                     .add(foundationPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                         .add(progressBar, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)

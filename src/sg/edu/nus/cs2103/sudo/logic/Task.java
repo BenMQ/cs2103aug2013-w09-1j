@@ -82,7 +82,6 @@ public abstract class Task {
 	public abstract String toStringForFile();
 	
 	protected void checkValidityTimes(DateTime startTime, DateTime endTime) {
-		// checkTimesWithCurrentTime(startTime, endTime); 
 		checkStartAndEndTime(startTime, endTime);
 	}
 	
@@ -107,29 +106,4 @@ public abstract class Task {
 			}
 		}
 	}
-	
-	/* TO BE REMOVED
-	private void checkTimesWithCurrentTime(DateTime startTime,
-			DateTime endTime) {
-		
-		DateTimeComparator dtComp = DateTimeComparator.getInstance();
-		DateTime currTime = new DateTime();
-
-		int checkStartWithCurrent = dtComp.compare(startTime, currTime);
-		
-		// if startTime is before currTime
-		boolean invalidStartTime = checkStartWithCurrent == INVALID;
-		if (invalidStartTime) {
-			throw new IllegalArgumentException(
-					Constants.MESSAGE_INVALID_START_TIME);
-		}
-		
-		int checkEndWithCurrent = dtComp.compare(endTime, currTime);
-		boolean invalidEndTime = checkEndWithCurrent == INVALID;
-		if (invalidEndTime) {
-			throw new IllegalArgumentException(
-					Constants.MESSAGE_INVALID_END_TIME);
-		}
-	}
-	*/
 }

@@ -154,7 +154,7 @@ public class TaskManager {
 			Task task = tasks.get(i);
 			String completed = "";
 			if(task.isComplete()){
-				completed = "✓";
+				completed = "Done!";
 			}
 			if (showAll || !task.isComplete) {
 				System.out.println(task.toString() + " " + completed);

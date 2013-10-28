@@ -4,8 +4,7 @@ import java.util.HashMap;
 
 public class Constants {
 	
-	public static final String MESSAGE_WELCOME_TO_SUDO_FIRST = "Welcome to the world of Sudo!\nTake some time to get yourself familiar with\n"
-																							+ "the most advancd personal todo-list app ever.";
+	public static final String MESSAGE_WELCOME_TO_SUDO_FIRST = "Welcome to the world of Sudo!\nTake some time to get yourself familiar with the most advancd personal todo-list app ever.";
 	public static final String MESSAGE_WELCOME_TO_SUDO_RELOAD = "Welcome back, dear user.\nYour past records have been loaded successfully.";
 	
 
@@ -50,7 +49,7 @@ public class Constants {
 	public static final String HISTORY_NAME_TEST = "test.his";
 	
 	private static final String MESSAGE_HISTORY_LOAD_ERROR = "Loading history file error: file can not be found.";
-	private static final String MESSAGE_LAST_HISTORY = "No more histories. Can not undo.";
+	private static final String MESSAGE_LAST_HISTORY = "No more histories. Cannot undo.";
 	
 	public static final int KEYBOARD_SPACE = 32;
 	public static final int KEYBOARD_TAB = 9;

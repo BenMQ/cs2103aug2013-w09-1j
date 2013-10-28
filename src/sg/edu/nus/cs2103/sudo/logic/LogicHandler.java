@@ -111,7 +111,7 @@ public class LogicHandler {
 			    this.manager.editTask(targetId, taskDescription, dateTimes);
 			    return;
 			case HELP:
-				 this.manager.undo();
+				 //
 			    return;
 			case UNDO:
 				 this.manager.undo();
@@ -131,7 +131,8 @@ public class LogicHandler {
 				return;
 			}
 		} catch (Exception e) {
-			System.out.printf(e.getMessage());
+			//System.out.printf(e.getMessage());
+			System.out.printf("Fatal error occured!");
 		}
 	}	
 

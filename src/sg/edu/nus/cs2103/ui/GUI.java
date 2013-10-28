@@ -118,7 +118,7 @@ public class GUI extends javax.swing.JFrame implements NativeKeyListener {
         sudooleButton = new javax.swing.JButton();
         floatingTaskScrollPane = new javax.swing.JScrollPane();
         floatingTextFrame = new javax.swing.JTextArea();
-        floatingTextFrame.setFont(new java.awt.Font("Courier New", 0, 12));
+        floatingTextFrame.setFont(new java.awt.Font("Monaco", 0, 12));
         DefaultCaret caret = (DefaultCaret)floatingTextFrame.getCaret();
         caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
 //        floatingList = new javax.swing.JList();

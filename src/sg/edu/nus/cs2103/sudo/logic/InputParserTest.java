@@ -88,20 +88,38 @@ public class InputParserTest {
 
 	@Test
 	public void testParseAddFloatingTask() throws IOException{
-		testCommand("add 'make waffles for breakfast'", "Add floating task: make waffles for breakfast\n");
+		String userInput = "add 'make waffles for breakfast'";
+		String taskDescription = InputParser.parseDescription(userInput);
+		String expectedOutput = String.format(Constants.MESSAGE_ADD_FLOATING, taskDescription);
+		testCommand(userInput, expectedOutput);
 		assertEquals(1, manager.getTasks().size());
 	}
 
 	@Test
 	public void testParseAddDeadlineTask() throws IOException{
-		testCommand("add 'make waffles for breakfast' by Monday 14 October 2pm", "Add deadline task: make waffles for breakfast\n");
+		String userInput = "add 'make waffles for breakfast' by Monday 14 October 2pm";
+		String taskDescription = InputParser.parseDescription(userInput);
+		ArrayList<DateTime> dateTimes = InputParser.parseDateTime(userInput);
+		String endTime = dateTimes.get(0).toString(
+				"EEE dd MMMM hh:mm a");
+		String expectedOutput = String.format(Constants.MESSAGE_ADD_DEADLINE, taskDescription, endTime);
+		testCommand(userInput, expectedOutput);
 		assertEquals("Mon Oct 14 14:00:00 SGT 2013", manager.getTasks().get(0).endTime.toDate().toString());
 		assertEquals(1, manager.getTasks().size());
 	}
 
 	@Test
 	public void testParseAddTimedTask() throws IOException{
-		testCommand("add 'make waffles for breakfast' from 13 October to 14 October 2pm", "Add timed task: make waffles for breakfast\n");
+		String userInput = "add 'make waffles for breakfast' from 13 October to 14 October 2pm";
+		String taskDescription = InputParser.parseDescription(userInput);
+		ArrayList<DateTime> dateTimes = InputParser.parseDateTime(userInput);
+		String startTime = dateTimes.get(0).toString(
+				"EEE dd MMMM hh:mm a");
+		String endTime = dateTimes.get(1).toString(
+				"EEE dd MMMM hh:mm a");
+		String expectedOutput = String.format(Constants.MESSAGE_ADD_TIMED, taskDescription, startTime, endTime);
+		testCommand(userInput, expectedOutput);
+		
 		assertEquals("Sun Oct 13 14:00:00 SGT 2013", manager.getTasks().get(0).startTime.toDate().toString());
 		assertEquals("Mon Oct 14 14:00:00 SGT 2013", manager.getTasks().get(0).endTime.toDate().toString());
 		assertEquals(1, manager.getTasks().size());

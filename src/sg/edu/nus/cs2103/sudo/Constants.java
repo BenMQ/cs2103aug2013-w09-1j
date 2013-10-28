@@ -12,30 +12,15 @@ public class Constants {
 
 	public static final String MESSAGE_WELCOME_HELP_PAGE = "Here is how to get started with sudo:\n";
 	
-	public static final String HELP_DISPLAY = "To display incomplete tasks:\ndisplay\nTo display both completed and incomplete tasks:\nall\n";
-	public static final String HELP_DISPLAY_ALIASES = "You could also type in the following instead of “display”: “show”.\n"; 
-	
-	public static final String HELP_ADD = "To add a task, specify your command in any of the following formats:\nadd ‘[description]’ from [start date/time] to [end date/time]\nadd ‘[description]’ by [end date/time]\nadd ‘[description]’\n";
-	public static final String HELP_ADD_ALIASES = "You could also type in the following instead of “add”: “do”, “sudo”.\n"; 
-
-	
-	public static final String HELP_EDIT = "To edit the details of a task, specify your command in any of the following formats:\nTo update the description of a task only:\nedit [task index] ‘[new_task_description]’\nTo update the start and end date/time for a timed task:\nedit [task index] from [start date/time] to [end date/time]\nTo update the end date/time for a deadline task:\nedit [task index] by [end date/time]\n";
-	public static final String HELP_EDIT_ALIASES = "You could also type in the following instead of “edit”: “change”, “modify”.\n"; 
-
-	public static final String HELP_DELETE = "To delete any task:\ndelete [task index]\nAlternatively, to delete a task by searching for a search term in its description:\ndelete ‘[search term]’\nIf there is only one search result, it will be deleted. If there are multiple search results, you will then be prompted to indicate the task index of the task you would like to delete.\n";
-	public static final String HELP_DELETE_ALIASES = "You could also type in the following instead of “delete”: “del”, “remove”.\n";
-
-	public static final String HELP_FINISH = "To mark a task as completed:\nfinish [task index]\nTo mark a task as incomplete:\nunfinish [task index]\n";
-	public static final String HELP_FINISH_ALIASES = "You could also type in the following instead of “finish”: “complete”, “done”.\n";
-
-	public static final String HELP_UNDO = "To undo the last action, simply type: undo\n";
-	public static final String HELP_REDO = "To redo the last action, simply type: redo\n";
-
-	public static final String HELP_SEARCH = "To search for any incomplete task:\nsearch ‘[search term]’\nTo search for any incomplete or completed task:\nsearch -all ‘[search term]’\nTo search for tasks on a particular day or time:\nsearch [date/time]\nsearch [date/time] to [date/time]\n";
-	public static final String HELP_SEARCH_ALIASES = "You could also type in the following instead of “search”: “find”.\n";
-	
-	public static final String HELP_FREE = "To find free time slots for today:\nfree today\n";
-	public static final String HELP_SCHEDULE = "To add a task and automatically schedule it into a free period today, use:\nschedule ‘[description]’ [duration]\ne.g. schedule ‘do yoga’ 1h\n";
+	public static final String HELP_DISPLAY = "To display incomplete tasks:\ndisplay\nTo display both completed and incomplete tasks:\nall\nYou could also type in the following instead of “display”: “show”.\n\n";
+	public static final String HELP_ADD = "To add a task, specify your command in any of the following formats:\nadd ‘[description]’ from [start date/time] to [end date/time]\nadd ‘[description]’ by [end date/time]\nadd ‘[description]’\nYou could also type in the following instead of “add”: “do”, “sudo”.\n\n";
+	public static final String HELP_EDIT = "To edit the details of a task, specify your command in any of the following formats:\nTo update the description of a task only:\nedit [task index] ‘[new_task_description]’\nTo update the start and end date/time for a timed task:\nedit [task index] from [start date/time] to [end date/time]\nTo update the end date/time for a deadline task:\nedit [task index] by [end date/time]\nYou could also type in the following instead of “edit”: “change”, “modify”.\n\n";
+	public static final String HELP_DELETE = "To delete any task:\ndelete [task index]\nAlternatively, to delete a task by searching for a search term in its description:\ndelete ‘[search term]’\nIf there is only one search result, it will be deleted. If there are multiple search results, you will then be prompted to indicate the task index of the task you would like to delete.\nYou could also type in the following instead of “delete”: “del”, “remove”.\n\n";
+	public static final String HELP_FINISH = "To mark a task as completed:\nfinish [task index]\nTo mark a task as incomplete:\nunfinish [task index]\nYou could also type in the following instead of “finish”: “complete”, “done”.\n\n";
+	public static final String HELP_UNDO = "To undo the last action, simply type: undo\nTo redo the last action, simply type: redo\n\n";
+	public static final String HELP_SEARCH = "To search for any incomplete task:\nsearch ‘[search term]’\nTo search for any incomplete or completed task:\nsearch -all ‘[search term]’\nTo search for tasks on a particular day or time:\nsearch [date/time]\nsearch [date/time] to [date/time]\nYou could also type in the following instead of “search”: “find”.\n\n";
+	public static final String HELP_FREE = "To find free time slots for today:\nfree today\n\n";
+	public static final String HELP_SCHEDULE = "To add a task and automatically schedule it into a free period today, use:\nschedule ‘[description]’ [duration]\ne.g. schedule ‘do yoga’ 1h\n\n";
 	
 	public static final String MESSAGE_INVALID_COMMAND = "Invalid command\n";
 	public static final String MESSAGE_INVALID_TASK_INDEX = "Invalid task index\n";
@@ -82,6 +67,9 @@ public class Constants {
 
 	public static final int KEYBOARD_SPACE = 32;
 	public static final int KEYBOARD_TAB = 9;
+	
+	public static final HashMap<COMMAND_TYPE, String> helpCommands = new HashMap<COMMAND_TYPE, String>() {
+	}; 
 
 	public static final HashMap<String, COMMAND_TYPE> aliases = new HashMap<String, COMMAND_TYPE>() {
 		{

@@ -170,24 +170,18 @@ public class LogicHandler {
 
 	public static void helpSchedule() {
 		System.out.print(Constants.HELP_SCHEDULE);
-		System.out.println();
 	}
 
 	public static void helpFree() {
 		System.out.print(Constants.HELP_FREE);
-		System.out.println();
 	}
 
 	private void helpSearch() {
 		System.out.print(Constants.HELP_SEARCH);
-		System.out.print(Constants.HELP_SEARCH_ALIASES);
-		System.out.println();
 	}
 
 	private void helpUndoRedo() {
 		System.out.print(Constants.HELP_UNDO);
-		System.out.print(Constants.HELP_REDO);
-		System.out.println();
 	}
 
 	/**
@@ -195,8 +189,6 @@ public class LogicHandler {
 	 */
 	private void helpFinish() {
 		System.out.print(Constants.HELP_FINISH);
-		System.out.print(Constants.HELP_FINISH_ALIASES);
-		System.out.println();
 	}
 
 	/**
@@ -204,8 +196,6 @@ public class LogicHandler {
 	 */
 	private void helpDelete() {
 		System.out.print(Constants.HELP_DELETE);
-		System.out.print(Constants.HELP_DELETE_ALIASES);
-		System.out.println();
 	}
 
 	/**
@@ -213,8 +203,6 @@ public class LogicHandler {
 	 */
 	private void helpEdit() {
 		System.out.print(Constants.HELP_EDIT);
-		System.out.print(Constants.HELP_EDIT_ALIASES);
-		System.out.println();
 	}
 
 	/**
@@ -222,8 +210,6 @@ public class LogicHandler {
 	 */
 	private void helpDisplay() {
 		System.out.print(Constants.HELP_DISPLAY);
-		System.out.print(Constants.HELP_DISPLAY_ALIASES);
-		System.out.println();
 	}
 
 	/**
@@ -231,8 +217,6 @@ public class LogicHandler {
 	 */
 	private void helpAdd() {
 		System.out.print(Constants.HELP_ADD);
-		System.out.print(Constants.HELP_ADD_ALIASES);
-		System.out.println();
 	}
 
 }

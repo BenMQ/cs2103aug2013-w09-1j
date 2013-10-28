@@ -13,7 +13,6 @@ import org.joda.time.MutableInterval;
 import sg.edu.nus.cs2103.sudo.Constants;
 import sg.edu.nus.cs2103.sudo.exceptions.NoHistoryException;
 import sg.edu.nus.cs2103.sudo.storage.StorageHandler;
-import sg.edu.nus.cs2103.ui.UI;
 
 /**
  * 
@@ -36,8 +35,8 @@ public class TaskManager {
 
 	// The storage handler
 	private StorageHandler storage;
-	
-	//is this the first time sudo is run?
+
+	// is this the first time sudo is run?
 	private boolean isReloaded = false;
 
 	private TaskManager() throws Exception {
@@ -91,9 +90,9 @@ public class TaskManager {
 	}
 
 	/**
-	 * Replaces the task indicated by the displayId with the newTask
+	 * Replaces the task indicated by the displayId with the newTask Changes
+	 * from one type of task to another if necessary.
 	 * 
-	 * TODO: REFACTOR!
 	 * 
 	 * @param displayId
 	 * @param newTask
@@ -110,35 +109,71 @@ public class TaskManager {
 		int index = taskId - 1;
 		checkValidityIndex(index);
 
-		Task oldTask = tasks.remove(index);
-		if (taskDescription != null) {
-			oldTask.setDescription(taskDescription);
-		}
-		if (dates.size() == 1) {
-			if (!(oldTask instanceof DeadlineTask)) {
-				oldTask = new DeadlineTask(oldTask.getId(),
-						oldTask.getDescription(), oldTask.isComplete(),
-						dates.get(0));
-			} else {
-				oldTask.setEndTime(dates.get(0));
-			}
-		} else if (dates.size() == 2) {
-			checkValidityTimes(dates.get(0), dates.get(1));
-			if (!(oldTask instanceof TimedTask)) {
-				oldTask = new TimedTask(oldTask.getId(),
-						oldTask.getDescription(), oldTask.isComplete(),
-						dates.get(0), dates.get(1));
-			} else {
-				oldTask.setStartTime(dates.get(0));
-				oldTask.setEndTime(dates.get(1));
-			}
-		}
-		
-		tasks.add(oldTask);
+		editTaskWithIndex(taskDescription, dates, index);
 
 		sortAndUpdateIds();
 		saveToHistory();
 		return tasks;
+
+	}
+
+	/**
+	 * Helper method to edit the description in a given task
+	 * 
+	 * @param taskDescription
+	 * @param task
+	 * @return
+	 */
+	private Task editDescription(String taskDescription, Task task) {
+		if (taskDescription != null) {
+			task.setDescription(taskDescription);
+		}
+		return task;
+	}
+
+	/**
+	 * Helper method to edit the date and time in a given task
+	 * 
+	 * @param dates
+	 * @param task
+	 * @return
+	 */
+	private Task editDateTime(ArrayList<DateTime> dates, Task task) {
+		if (dates.size() == 1) {
+			if (!(task instanceof DeadlineTask)) {
+				task = new DeadlineTask(task.getId(), task.getDescription(),
+						task.isComplete(), dates.get(0));
+			} else {
+				task.setEndTime(dates.get(0));
+			}
+		} else if (dates.size() == 2) {
+			checkValidityTimes(dates.get(0), dates.get(1));
+			if (!(task instanceof TimedTask)) {
+				task = new TimedTask(task.getId(), task.getDescription(),
+						task.isComplete(), dates.get(0), dates.get(1));
+			} else {
+				task.setStartTime(dates.get(0));
+				task.setEndTime(dates.get(1));
+			}
+		}
+
+		return task;
+	}
+
+	/**
+	 * Helper method to editTask given the index in the ArrayList<Task>
+	 * 
+	 * @param taskDescription
+	 * @param dates
+	 * @param index
+	 */
+	private void editTaskWithIndex(String taskDescription,
+			ArrayList<DateTime> dates, int index) {
+
+		Task oldTask = tasks.remove(index);
+		Task newTask = editDescription(taskDescription, oldTask);
+		newTask = editDateTime(dates, newTask);
+		tasks.add(newTask);
 	}
 
 	/**
@@ -151,16 +186,16 @@ public class TaskManager {
 	public void displayAllTasks(boolean showAll) throws IllegalStateException {
 		checkEmptyList();
 		for (int i = 0; i < tasks.size(); i++) {
-			
+
 			Task task = tasks.get(i);
 			String completed = "";
-			if(task.isComplete()){
+			if (task.isComplete()) {
 				completed = "Done!";
 			}
 			if (showAll || !task.isComplete) {
 				System.out.println(task.toString() + " " + completed);
 			}
-			
+
 		}
 	}
 
@@ -245,8 +280,8 @@ public class TaskManager {
 	 * 
 	 * Prints out the list of searched Task objects.
 	 */
-	public ArrayList<Task> searchAndDisplay(String searchStr) throws NullPointerException,
-			IllegalStateException {
+	public ArrayList<Task> searchAndDisplay(String searchStr)
+			throws NullPointerException, IllegalStateException {
 
 		ArrayList<Task> searchResults = search(searchStr, false);
 		displaySearchResults(searchResults);
@@ -315,7 +350,7 @@ public class TaskManager {
 			System.out.println(searchResults.get(i).toString());
 		}
 	}
-	
+
 	/**
 	 * Search and prints out intervals that are free during the current day.
 	 * Intervals shorter than 10 minutes are ignored.
@@ -451,8 +486,7 @@ public class TaskManager {
         
         return free;
 	}
-	
-	
+
 	/**
 	 * Removes the task by first searching for the search string in the task
 	 * description. If there is exactly one match, just delete it. If there are
@@ -476,7 +510,6 @@ public class TaskManager {
 			throw new IllegalStateException(Constants.MESSAGE_NO_SEARCH_RESULTS);
 		} else if (numResults == 1) {
 			delete(searchResults.get(0).getId());
-			System.out.printf(Constants.MESSAGE_DELETE, searchResults.get(0).description);
 		} else {
 			displaySearchResults(searchResults);
 		}
@@ -492,6 +525,9 @@ public class TaskManager {
 	public void delete(int taskId) throws IOException {
 		int index = taskId - 1;
 		checkValidityIndex(index);
+
+		System.out.printf(Constants.MESSAGE_DELETE,
+				tasks.get(index).description);
 
 		tasks.remove(index);
 		sortAndUpdateIds();
@@ -511,7 +547,8 @@ public class TaskManager {
 			System.out.println("Undo...");
 		} catch (FileNotFoundException e) {
 			storage.rebuildHistory();
-			System.out.println("History file missing, New history file was built.");
+			System.out
+					.println("History file missing, New history file was built.");
 			// TODO Auto-generated catch block
 			// e.printStackTrace();
 		} catch (NoHistoryException e) {
@@ -546,7 +583,8 @@ public class TaskManager {
 			System.out.println("Redo...");
 		} catch (FileNotFoundException e) {
 			storage.rebuildHistory();
-			System.out.println("History file missing, New history file was built.");
+			System.out
+					.println("History file missing, New history file was built.");
 			// TODO Auto-generated catch block
 			// e.printStackTrace();
 		} catch (NoHistoryException e) {
@@ -661,53 +699,67 @@ public class TaskManager {
 			}
 		}
 	}
+
 	/**
-	 * Help method shows help message when called
-	 * 
+	 * Helps the user get started with using sudo
 	 */
-	public void getHelp() {
-		
+	public void help(String topic) {
+		if (topic == null){
+			System.out.println(Constants.MESSAGE_WELCOME_HELP_PAGE);
+		} else if(topic.toUpperCase().equals("LIST")){
+			System.out.println(Constants.HELP_LIST);
+		} else {
+			String helpMessage = Constants.helpTopics.get(topic.toUpperCase());
+			if(helpMessage == null){
+				System.out.printf(Constants.HELP_NOT_FOUND, topic);
+			} else {
+				System.out.println(helpMessage);
+			}
+		}
 	}
-	
+
+
 	public ArrayList<Task> getTasks() {
 		return this.tasks;
 	}
 
-	public ArrayList<FloatingTask> getFloatingTask(){
+	public ArrayList<FloatingTask> getFloatingTask() {
 		ArrayList<FloatingTask> toReturn = new ArrayList<FloatingTask>();
-		for(Task tsk:this.tasks){
-			if((tsk instanceof FloatingTask)){
+		for (Task tsk : this.tasks) {
+			if ((tsk instanceof FloatingTask)) {
 				toReturn.add((FloatingTask) tsk);
 			}
 		}
 		return toReturn;
 	}
-	
+
 	public void clearTasks() {
 		this.tasks.clear();
 	}
-	
-	public boolean isReloaded(){
+
+	public boolean isReloaded() {
 		return isReloaded;
 	}
-	
+
 	public int getTaskNumber() {
 		return this.tasks.size();
 	}
+
 	public int getCompletedPercentage() {
 		int completed = 0;
-		for(Task t:tasks){
-			if(t.isComplete){
+		for (Task t : tasks) {
+			if (t.isComplete) {
 				completed++;
 			}
 		}
-		if(this.tasks.size()==0){
+		if (this.tasks.size() == 0) {
 			return 0;
 		}
-		int toReturn = 100*completed/this.tasks.size();
-		if(toReturn==100){
-			//System.out.println("You have finished all tasks!");
-			};
+		int toReturn = 100 * completed / this.tasks.size();
+		if (toReturn == 100) {
+			// System.out.println("You have finished all tasks!");
+		}
+		;
 		return toReturn;
 	}
 }

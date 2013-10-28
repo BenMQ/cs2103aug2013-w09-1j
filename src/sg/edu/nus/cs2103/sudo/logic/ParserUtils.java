@@ -92,6 +92,7 @@ public class ParserUtils {
 		switch (commandType) {
 		case ADD:
 		case DELETE:
+		case FINISH:
 		case EDIT:
 		case SEARCH:
 			return 2;

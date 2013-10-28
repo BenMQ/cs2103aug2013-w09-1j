@@ -124,8 +124,7 @@ public class LogicHandler {
 				this.manager.editTask(targetId, taskDescription, dateTimes);
 				return;
 			case HELP:
-				System.out.println(Constants.MESSAGE_WELCOME_HELP_PAGE);
-				this.help(taskDescription);
+				this.manager.help(taskDescription);
 				return;
 			case UNDO:
 				this.manager.undo();
@@ -150,73 +149,5 @@ public class LogicHandler {
 			// System.out.printf("Fatal error occured!");
 		}
 	}
-
-	/**
-	 * Helps the user get started with using sudo
-	 */
-	private void help(String topic) {
-		if (topic == null){
-			helpDisplay();
-			helpAdd();
-			helpEdit();
-			helpDelete();
-			helpFinish();
-			helpUndoRedo();
-			helpSearch();
-			helpFree();
-			helpSchedule();
-		}
-	}
-
-	public static void helpSchedule() {
-		System.out.print(Constants.HELP_SCHEDULE);
-	}
-
-	public static void helpFree() {
-		System.out.print(Constants.HELP_FREE);
-	}
-
-	private void helpSearch() {
-		System.out.print(Constants.HELP_SEARCH);
-	}
-
-	private void helpUndoRedo() {
-		System.out.print(Constants.HELP_UNDO);
-	}
-
-	/**
-	 * Helps the user get started with using the finish command
-	 */
-	private void helpFinish() {
-		System.out.print(Constants.HELP_FINISH);
-	}
-
-	/**
-	 * Helps the user get started with using the delete command
-	 */
-	private void helpDelete() {
-		System.out.print(Constants.HELP_DELETE);
-	}
-
-	/**
-	 * Helps the user get started with using the edit command
-	 */
-	private void helpEdit() {
-		System.out.print(Constants.HELP_EDIT);
-	}
-
-	/**
-	 * Helps the user get started with using the display command
-	 */
-	private void helpDisplay() {
-		System.out.print(Constants.HELP_DISPLAY);
-	}
-
-	/**
-	 * Helps the user get started with using the add command
-	 */
-	private void helpAdd() {
-		System.out.print(Constants.HELP_ADD);
-	}
-
+	
 }

@@ -678,12 +678,23 @@ public class TaskManager {
 	}
 
 	/**
-	 * Help method shows help message when called
-	 * 
+	 * Helps the user get started with using sudo
 	 */
-	public void getHelp(String topic) {
-		
+	public void help(String topic) {
+		if (topic == null){
+			System.out.println(Constants.MESSAGE_WELCOME_HELP_PAGE);
+		} else if(topic.toUpperCase().equals("LIST")){
+			System.out.println(Constants.HELP_LIST);
+		} else {
+			String helpMessage = Constants.helpTopics.get(topic.toUpperCase());
+			if(helpMessage == null){
+				System.out.printf(Constants.HELP_NOT_FOUND, topic);
+			} else {
+				System.out.println(helpMessage);
+			}
+		}
 	}
+
 
 	public ArrayList<Task> getTasks() {
 		return this.tasks;

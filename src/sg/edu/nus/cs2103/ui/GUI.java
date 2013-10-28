@@ -128,7 +128,7 @@ public class GUI extends javax.swing.JFrame implements NativeKeyListener {
         //Initialization of properties
         mainTextFrame.setEditable(false);
         mainTextFrame.setFont(new java.awt.Font("Monaco", 0, 17));
-        mainTextFrame.setForeground(new java.awt.Color(255, 200, 0));
+        mainTextFrame.setForeground(new java.awt.Color(225, 230, 255));
         mainTextFrame.setBackground(new java.awt.Color(0, 0, 0));
         mainTextFrame.setColumns(20);
         mainTextFrame.setRows(5);
@@ -217,7 +217,7 @@ public class GUI extends javax.swing.JFrame implements NativeKeyListener {
                             .add(labelFloatingTasks)
                             .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                             .add(floatingTaskScrollPane))
-                        .add(mainTextFrameScrollPane, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 193, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                        .add(mainTextFrameScrollPane, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 393, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                     .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                     .add(foundationPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                         .add(progressBar, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)

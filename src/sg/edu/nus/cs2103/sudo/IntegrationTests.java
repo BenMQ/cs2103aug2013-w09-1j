@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.logging.Level;
 
+import org.joda.time.DateTime;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -76,34 +77,48 @@ public class IntegrationTests {
 	@Test
 	public void testAddDeadlineTask() throws IOException {
 		String userInput = "add 'make waffles for breakfast' by Monday 14 October 2pm";
+		ArrayList<DateTime> dateTimes = InputParser.parseDateTime(userInput);
+		String endTime = dateTimes.get(0).toString(
+				"EEE dd MMMM hh:mm a");
 		String taskDescription = InputParser.parseDescription(userInput);
 		String expectedOutput = String.format(Constants.MESSAGE_ADD_DEADLINE,
-				taskDescription);
+				taskDescription, endTime);
 
 		testCommand(userInput, expectedOutput);
 		testStorageContent();
 	}
 
 	@Test
-	public void testValidAliases() throws IOException {
-		String userInput = "do 'make waffles for breakfast' by Monday 14 October 2pm";
+	public void testTimedTask() throws IOException {
+		String userInput = "add 'make waffles for breakfast' from Monday 14 October 2pm to Wednesday 16 October";
+		ArrayList<DateTime> dateTimes = InputParser.parseDateTime(userInput);
+		String startTime = dateTimes.get(0).toString(
+				"EEE dd MMMM hh:mm a");
+		String endTime = dateTimes.get(1).toString(
+				"EEE dd MMMM hh:mm a");
 		String taskDescription = InputParser.parseDescription(userInput);
-		
-		String expectedOutput = String.format(Constants.MESSAGE_ADD_DEADLINE,
-				taskDescription);
+		String expectedOutput = String.format(Constants.MESSAGE_ADD_TIMED,
+				taskDescription, startTime, endTime);
+
 		testCommand(userInput, expectedOutput);
-		
-		expectedOutput = String.format(Constants.MESSAGE_DELETE, taskDescription);
-		testCommand("remove 'waffle'", expectedOutput);		
-		
 		testStorageContent();
 	}	
 	
 	@Test
+	public void testValidAliases() throws IOException {
+		String userInput = "do 'make waffles for breakfast' by Monday 14 October 2pm";
+		String taskDescription = InputParser.parseDescription(userInput);
+		runCommand(userInput);
+		
+		String expectedOutput = String.format(Constants.MESSAGE_DELETE, taskDescription);
+		testCommand("remove 'waffle'", expectedOutput);		
+		
+		testStorageContent();
+	}
+	
+	@Test
 	public void testInvalidAliases() throws IOException {
 		String userInput = "bamboozle 'make waffles for breakfast' by Monday 14 October 2pm";
-		String taskDescription = InputParser.parseDescription(userInput);
-		
 		testCommand(userInput, Constants.MESSAGE_INVALID_COMMAND);
 	}	
 	
@@ -111,8 +126,8 @@ public class IntegrationTests {
 	public void testDelete() throws IOException {
 		String userInput = "add 'make waffles for breakfast' by Monday 14 October 2pm";
 		String taskDescription = InputParser.parseDescription(userInput);
-		testCommand(userInput,
-				String.format(Constants.MESSAGE_ADD_DEADLINE, taskDescription));
+		runCommand(userInput);
+		
 		String expectedOutput = String.format(Constants.MESSAGE_DELETE, taskDescription);
 
 		testCommand("delete 'waffle'", expectedOutput);
@@ -127,14 +142,10 @@ public class IntegrationTests {
 	@Test
 	public void testSearch() throws IOException {
 		String userInput = "add 'submit proposal to tutor at NUS' by 26 October 6pm";
-		String taskDescription = InputParser.parseDescription(userInput);
-		testCommand(userInput,
-				String.format(Constants.MESSAGE_ADD_DEADLINE, taskDescription));
+		runCommand(userInput);
 
 		userInput = "add 'have coffee with mentor in Nus' from 27 Oct 9am to 27 Oct 10am";
-		taskDescription = InputParser.parseDescription(userInput);
-		testCommand(userInput,
-				String.format(Constants.MESSAGE_ADD_TIMED, taskDescription));
+		runCommand(userInput);
 
 		userInput = "search 'nus'";
 		String searchTerm = InputParser.parseDescription(userInput);
@@ -166,6 +177,11 @@ public class IntegrationTests {
 		testCommand(userInput, Constants.MESSAGE_DISPLAY+Constants.MESSAGE_EMPTY_LIST);
 	}
 	
+	// Helper test method for operations not directly being tested
+	public void runCommand(String userInput) {
+		logicHandler.executeCommand(userInput);
+		outContent.reset();
+	}		
 	
 	// Helper test method to also test console output
 	private void testCommand(String userInput, String expectedOutput)

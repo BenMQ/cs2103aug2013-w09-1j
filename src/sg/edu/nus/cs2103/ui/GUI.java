@@ -55,7 +55,7 @@ public class GUI extends javax.swing.JFrame implements NativeKeyListener {
 		// To implement unimplemented method
 	}
     
-	 /**
+	 /**.
      * Implemented methods for NativeHook.
      * nativeKeyPressed: detect which key is pressed. Here when Space and Tab are detected the visibility
      * of the window will be changed.

@@ -2,6 +2,7 @@ package sg.edu.nus.cs2103.sudo.logic;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -318,25 +319,63 @@ public class TaskManager {
 	/**
 	 * Search and prints out intervals that are free during the current day.
 	 * Intervals shorter than 10 minutes are ignored.
+	 * 
+	 * @param dateTimes 0 to 2 DateTimes. If only one is specified, the date range will be that day.
+	 * if none is specified, the date range will be the current day.
+	 * 
 	 * @author chenminqi
 	 */
-    public void searchForFreeIntervals() {
-        ArrayList<MutableInterval> free = getFreeIntervals();
+    public void searchForFreeIntervals(ArrayList<DateTime> dateTimes) {
+        assert(dateTimes.size() >= 0 && dateTimes.size() <= 2);
+        ArrayList<DateTime> timeRange = getFlexibleTimeRange(dateTimes);
+        ArrayList<MutableInterval> free = getFreeIntervals(timeRange);
         boolean noSlotsFound = true;
         
         for (int i = 0; i < free.size(); i++) {
             MutableInterval interval = free.get(i);
             if (interval.toDurationMillis() >= Constants.FREE_SLOT_MINIMUM_DURATION) {
                 if (noSlotsFound) {
-                    System.out.println(Constants.MESSAGE_FREE_SLOTS_PREFIX);
+                    System.out.println(Constants.MESSAGE_FREE_SLOTS_PREFIX
+                            + timeRange.get(0).toString("dd MMMM hh:mm a") + " to " + timeRange.get(0).toString("dd MMMM hh:mm a"));
                     noSlotsFound = false;
                 }
-                String output = interval.getStart().toString("hh:mm a") + " to " + interval.getEnd().toString("hh:mm a");
+                String output = interval.getStart().toString("dd MMMM hh:mm a") + " to " + interval.getEnd().toString("dd MMMM hh:mm a");
                 System.out.println(output);
             }
         }
         if (noSlotsFound) {
             System.out.println(Constants.MESSAGE_NO_FREE_SLOTS);
+        }
+    }
+    
+    /**
+     * Produces a start DateTime and an end DateTime based on the argument given.
+     * If the input is an empty array, the range will be the current day.
+     * If the input has one DateTime, the range will be that particular day.
+     * If the input has two DateTimes, the range will be that.
+     * @param dateTimes
+     * @return range calculated
+     */
+    private ArrayList<DateTime> getFlexibleTimeRange(ArrayList<DateTime> dateTimes) {
+        assert(dateTimes.size() >= 0 && dateTimes.size() <= 2);
+        if (dateTimes.size() == 2) {
+            if (dateTimes.get(0).isAfter(dateTimes.get(1))) {
+                Collections.reverse(dateTimes);
+            }
+            return dateTimes;
+        } else {
+            DateTime day;
+            if (dateTimes.size() == 1) {
+                day = dateTimes.get(0);
+            } else {
+                day = DateTime.now();
+            }
+            DateTime startOfDay = new DateTime(day.getYear(), day.getMonthOfYear(), day.getDayOfMonth(), 0, 0, 0);
+            DateTime endOfDay = new DateTime(day.getYear(), day.getMonthOfYear(), day.getDayOfMonth(), 23, 59, 59);
+            ArrayList<DateTime> range = new ArrayList<DateTime>(2);
+            range.add(startOfDay);
+            range.add(endOfDay);
+            return range;
         }
     }
     
@@ -346,16 +385,16 @@ public class TaskManager {
 	 * @return intervals that are occupied today, the last item is guaranteed to end at 2359hrs, and hence
 	 *         guaranteed to have at least 1 item returned.
 	 * @author chenminqi
+	 * @param timeRange 
 	 */
-	public ArrayList<MutableInterval> getOccupiedIntervals() {
+	public ArrayList<MutableInterval> getOccupiedIntervals(ArrayList<DateTime> timeRange) {
 	    sortTasks();
 	    
-	    DateTime now = new DateTime();
-	    DateTime startOfToday = new DateTime(now.getYear(), now.getMonthOfYear(), now.getDayOfMonth(), 0, 0, 0);
-	    DateTime endOfToday = new DateTime(now.getYear(), now.getMonthOfYear(), now.getDayOfMonth(), 23, 59, 59);
+	    DateTime start = timeRange.get(0);
+	    DateTime end = timeRange.get(1);
 	    
 	    ArrayList<MutableInterval> occupied = new ArrayList<MutableInterval>();
-	    MutableInterval last = new MutableInterval(endOfToday, endOfToday);
+	    MutableInterval last = new MutableInterval(end, end);
 	    occupied.add(last);
 	    
 	    for (int i = tasks.size() - 1; i >= 0 ; i--) {
@@ -364,7 +403,7 @@ public class TaskManager {
             if (task.isComplete() || ! (task instanceof TimedTask)) {
                 // we are only concerned with incomplete TimedTask
                 continue;
-            } else if (! task.endTime.isAfter(startOfToday)) {
+            } else if (! task.endTime.isAfter(start)) {
 	            // all unprocessed items ends before today, no more items needs processing
 	            break;
 	        } else if (! task.startTime.isBefore(last.getStart())) {
@@ -377,9 +416,9 @@ public class TaskManager {
 	            // there is a gap
 	            last = new MutableInterval(task.startTime, task.endTime);
 	            occupied.add(last);
-	            if (! task.startTime.isAfter(startOfToday)) {
+	            if (! task.startTime.isAfter(start)) {
 	                // reached the start of the day, no more processing needed.
-	                last.setStart(startOfToday);
+	                last.setStart(start);
 	                break;
 	            }
 	        }
@@ -390,19 +429,20 @@ public class TaskManager {
 	}
 	
 	/**
-     * Searches for all free time slots of today
+     * Searches for all free time slots of a specified time range
+     * @param dateTimes 0 to 2 DateTimes. If only one is specified, the date range will be that day.
+     * if none is specified, the date range will be the current day.
      * @return intervals that are free today
      * @author chenminqi
      */
-	public ArrayList<MutableInterval> getFreeIntervals() {
-	    DateTime now = new DateTime();
-        DateTime startOfToday = new DateTime(now.getYear(), now.getMonthOfYear(), now.getDayOfMonth(), 0, 0, 0);
+	public ArrayList<MutableInterval> getFreeIntervals(ArrayList<DateTime> dateTimes) {
+        DateTime start = dateTimes.get(0);
         ArrayList<MutableInterval> free = new ArrayList<MutableInterval>();
         
-        ArrayList<MutableInterval> occupied = getOccupiedIntervals();
+        ArrayList<MutableInterval> occupied = getOccupiedIntervals(dateTimes);
 
-        if (occupied.get(0).getStart().isAfter(startOfToday)) {
-            free.add(new MutableInterval(startOfToday, occupied.get(0).getStart()));
+        if (occupied.get(0).getStart().isAfter(start)) {
+            free.add(new MutableInterval(start, occupied.get(0).getStart()));
         }
         
         for (int i = 0; i < occupied.size() - 1; i ++) {

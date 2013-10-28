@@ -91,7 +91,11 @@ public class LogicHandler {
 				this.manager.searchAndDisplay(taskDescription);
 				return;
 			case FREE:
-			    this.manager.searchForFreeIntervals();
+			    if (dateTimes.size() > 2) {
+			        System.out.print(Constants.MESSAGE_INVALID_NUMBER_OF_DATES);
+			    } else {
+	                this.manager.searchForFreeIntervals(dateTimes);   
+			    }
 			    return;
 			case DELETE:
 				int numResults = this.manager.delete(taskDescription); //need to refactor this

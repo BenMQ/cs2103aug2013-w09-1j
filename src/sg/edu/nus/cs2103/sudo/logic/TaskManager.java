@@ -12,7 +12,6 @@ import org.joda.time.MutableInterval;
 import sg.edu.nus.cs2103.sudo.Constants;
 import sg.edu.nus.cs2103.sudo.exceptions.NoHistoryException;
 import sg.edu.nus.cs2103.sudo.storage.StorageHandler;
-import sg.edu.nus.cs2103.ui.UI;
 
 /**
  * 

@@ -68,18 +68,18 @@ public class LogicHandler {
 				this.manager.markAsIncomplete(targetId);
 				return;					
 			case ADD:
-				int num_dates = dateTimes.size();
-				if(num_dates == 0){ //need to refactor this later
+				int numOfDates = dateTimes.size();
+				if(numOfDates == 0){ //need to refactor this later
 						if(taskDescription == null){
 							System.out.print(Constants.MESSAGE_MISSING_DESCRIPTION);
 							return;
 						}
 						this.manager.addTask(new FloatingTask(taskDescription));
 						System.out.printf(Constants.MESSAGE_ADD_FLOATING, taskDescription);
-				} else if(num_dates == 1){
+				} else if(numOfDates == 1){
 						this.manager.addTask(new DeadlineTask(taskDescription, dateTimes));
 						System.out.printf(Constants.MESSAGE_ADD_DEADLINE, taskDescription);
-				} else if(num_dates == 2){
+				} else if(numOfDates == 2){
 						this.manager.addTask(new TimedTask(taskDescription, dateTimes));
 						System.out.printf(Constants.MESSAGE_ADD_TIMED, taskDescription);						
 				} else {

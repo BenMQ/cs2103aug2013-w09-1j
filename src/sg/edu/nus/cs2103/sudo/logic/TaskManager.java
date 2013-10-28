@@ -208,22 +208,24 @@ public class TaskManager {
 	/**
 	 * Displays the floating tasks only. To be shown in the side bar in the GUI
 	 */
-	public void displayFloatingTasks() throws IllegalStateException {
+	public String AllFloatingTasks() throws IllegalStateException {
 		checkEmptyList();
-
+		String toReturn = "";
 		int count = 0;
 		for (int i = 0; i < tasks.size(); i++) {
 			Task task = tasks.get(i);
 
-			if (task instanceof FloatingTask) {
+			if (task instanceof FloatingTask && (!task.isComplete())) {
 				count++;
-				System.out.println(task.toString() + " " + task.isComplete());
+				toReturn+=(task.toString() + "\n");
+				//System.out.println(task.toString() + " " + task.isComplete());
 			}
 		}
 
 		if (count == 0) {
-			System.out.println(Constants.MESSAGE_NO_FLOATING_TASKS);
+			return (Constants.MESSAGE_NO_FLOATING_TASKS);
 		}
+		return toReturn;
 	}
 
 	/**

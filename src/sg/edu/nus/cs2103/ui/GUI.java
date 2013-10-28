@@ -147,7 +147,7 @@ public class GUI extends javax.swing.JFrame implements NativeKeyListener {
         try{
         floatingTextFrame.setText(manager.AllFloatingTasks());
         } catch (IllegalStateException e){
-        	System.out.println(Constants.MESSAGE_EMPTY_LIST);
+        	floatingTextFrame.setText(Constants.MESSAGE_EMPTY_LIST);
         }
         inputText.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

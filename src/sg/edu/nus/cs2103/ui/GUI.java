@@ -112,16 +112,12 @@ public class GUI extends javax.swing.JFrame implements NativeKeyListener {
         mainTextFrameScrollPane = new javax.swing.JScrollPane();
         mainTextFrame = new javax.swing.JTextArea();
         inputText = new javax.swing.JTextField();
+        inputText.setForeground(new java.awt.Color(255, 50, 30));
         sudooleButton = new javax.swing.JButton();
         floatingTaskScrollPane = new javax.swing.JScrollPane();
         floatingList = new javax.swing.JList();
-        
         floatingList.setForeground(new java.awt.Color(0, 100, 245));
         floatingList.setBackground(new java.awt.Color(150, 245, 100));
-        
-        
-        
-        
         labelFloatingTasks = new javax.swing.JLabel();
         progressBar = new javax.swing.JProgressBar();
         complecationRate = new javax.swing.JLabel();
@@ -132,8 +128,8 @@ public class GUI extends javax.swing.JFrame implements NativeKeyListener {
         //Initialization of properties
         mainTextFrame.setEditable(false);
         mainTextFrame.setFont(new java.awt.Font("Monaco", 0, 17));
-        mainTextFrame.setForeground(new java.awt.Color(92, 100, 245));
-        mainTextFrame.setBackground(new java.awt.Color(200, 245, 100));
+        mainTextFrame.setForeground(new java.awt.Color(255, 200, 0));
+        mainTextFrame.setBackground(new java.awt.Color(0, 0, 0));
         mainTextFrame.setColumns(20);
         mainTextFrame.setRows(5);
         mainTextFrameScrollPane.setViewportView(mainTextFrame);

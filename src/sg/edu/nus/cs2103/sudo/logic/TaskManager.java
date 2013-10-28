@@ -523,17 +523,21 @@ public class TaskManager {
 	public void undo() {
 		try {
 			tasks = (ArrayList<Task>) storage.undo().clone();
-			System.out.println("Undo...");
+			System.out.println(Constants.MESSAGE_UNDO);
+			saveTasks();
 		} catch (FileNotFoundException e) {
 			storage.rebuildHistory();
 			System.out
-					.println("History file missing, New history file was built.");
+					.println(Constants.MESSAGE_HISTORY_LOAD_ERROR);
 			// TODO Auto-generated catch block
 			// e.printStackTrace();
 		} catch (NoHistoryException e) {
-			System.out.println("No more undo steps recorded.");
+			System.out.println(Constants.MESSAGE_LAST_HISTORY);
 			// TODO Auto-generated catch block
 			// e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		updateAllIds();
 		// return tasks;
@@ -559,17 +563,21 @@ public class TaskManager {
 	public void redo() {
 		try {
 			tasks = (ArrayList<Task>) storage.redo().clone();
-			System.out.println("Redo...");
+			System.out.println(Constants.MESSAGE_REDO);
+			saveTasks();
 		} catch (FileNotFoundException e) {
 			storage.rebuildHistory();
 			System.out
-					.println("History file missing, New history file was built.");
+					.println(Constants.MESSAGE_HISTORY_LOAD_ERROR);
 			// TODO Auto-generated catch block
 			// e.printStackTrace();
 		} catch (NoHistoryException e) {
-			System.out.println("No more redo steps recorded.");
+			System.out.println(Constants.MESSAGE_LAST_HISTORY);
 			// TODO Auto-generated catch block
 			// e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		updateAllIds();
 		// return tasks;

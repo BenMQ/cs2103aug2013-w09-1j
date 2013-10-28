@@ -23,6 +23,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
+import javax.swing.text.DefaultCaret;
+
 import org.jnativehook.GlobalScreen;
 import org.jnativehook.NativeHookException;
 import org.jnativehook.keyboard.NativeKeyEvent;
@@ -51,7 +53,7 @@ public class GUI extends javax.swing.JFrame implements NativeKeyListener {
     }
 
 	public void nativeKeyTyped(NativeKeyEvent arg0) {
-		// TODO Auto-generated method stub
+		// .TODO Auto-generated method stub
 		// To implement unimplemented method
 	}
     
@@ -115,9 +117,13 @@ public class GUI extends javax.swing.JFrame implements NativeKeyListener {
         inputText.setForeground(new java.awt.Color(255, 50, 30));
         sudooleButton = new javax.swing.JButton();
         floatingTaskScrollPane = new javax.swing.JScrollPane();
-        floatingList = new javax.swing.JList();
-        floatingList.setForeground(new java.awt.Color(0, 100, 245));
-        floatingList.setBackground(new java.awt.Color(150, 245, 100));
+        floatingTextFrame = new javax.swing.JTextArea();
+        floatingTextFrame.setFont(new java.awt.Font("Monaco", 0, 12));
+        DefaultCaret caret = (DefaultCaret)floatingTextFrame.getCaret();
+        caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
+//        floatingList = new javax.swing.JList();
+//        floatingList.setForeground(new java.awt.Color(0, 100, 245));
+//        floatingList.setBackground(new java.awt.Color(150, 245, 100));
         labelFloatingTasks = new javax.swing.JLabel();
         progressBar = new javax.swing.JProgressBar();
         complecationRate = new javax.swing.JLabel();
@@ -138,7 +144,11 @@ public class GUI extends javax.swing.JFrame implements NativeKeyListener {
         }else{
         	mainTextFrame.setText(Constants.MESSAGE_WELCOME_TO_SUDO_FIRST);
         }
-        
+        try{
+        floatingTextFrame.setText(manager.AllFloatingTasks());
+        } catch (IllegalStateException e){
+        	floatingTextFrame.setText(Constants.MESSAGE_EMPTY_LIST);
+        }
         inputText.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 inputTextActionPerformed(evt);
@@ -151,6 +161,21 @@ public class GUI extends javax.swing.JFrame implements NativeKeyListener {
                     if(e.getKeyCode() == KeyEvent.VK_ENTER){
                     	//mainTextFrame.setText("Search result for \"homework\":\n1. CS2101 homework by tomorrow 4pm.\n2. CS1101s JFDI homework by Sep 25th.");
                         //inputText.setText("");
+                    	if(inputText.getText().equals("demo")){
+                    		if(isDemo){
+                    			mainTextFrame.setFont(new java.awt.Font("Monaco", 0, 17));
+                            	floatingTextFrame.setFont(new java.awt.Font("Monaco", 0, 12));
+                            	mainTextFrame.setText("Font:Demo mode off");
+                            	inputText.setText("");
+                            	isDemo = false;
+                            }else{
+                            	mainTextFrame.setFont(new java.awt.Font("Monaco", 0, 25));
+                                floatingTextFrame.setFont(new java.awt.Font("Monaco", 0, 16));
+                                mainTextFrame.setText("Font:Demo mode on");
+                                inputText.setText("");
+                                isDemo = true;
+                            }
+                    	}else{
                     	String userInput =  inputText.getText();
                     	logicHandler.executeCommand(userInput);
             			inputText.setText("");
@@ -158,7 +183,12 @@ public class GUI extends javax.swing.JFrame implements NativeKeyListener {
             			outContent.reset();
             			progressBar.setValue(manager.getCompletedPercentage());
     //        			String[] floatings = updateFloating(manager.getFloatingTask());
-            			
+            			try{
+            				 floatingTextFrame.setText(manager.AllFloatingTasks());
+            	    } catch (IllegalStateException w){
+            	    	floatingTextFrame.setText(Constants.MESSAGE_EMPTY_LIST);
+            	    }
+                    	}
                     }
                 }
             });
@@ -171,16 +201,15 @@ public class GUI extends javax.swing.JFrame implements NativeKeyListener {
                 }
             });
 
-            floatingList.setModel(new javax.swing.AbstractListModel() {
-                String[] strings = {"Learning Java", "Buy the milk", "Buy Surface 2", "Book flight ticket"};
-                public int getSize() { return strings.length; }
-                public Object getElementAt(int i) { return strings[i]; }
-            });
-            floatingTaskScrollPane.setViewportView(floatingList);
 
             labelFloatingTasks.setText("Floating Tasks");
 
             complecationRate.setText("Completion rate");
+            floatingTextFrame.setEditable(false);
+            floatingTextFrame.setColumns(10);
+            floatingTextFrame.setRows(5);
+            floatingTaskScrollPane.setViewportView(floatingTextFrame);
+
           //Initialization of the window frame. DO NOT MODIFY ANYTHING HERE.
             org.jdesktop.layout.GroupLayout foundationPanelLayout = new org.jdesktop.layout.GroupLayout(foundationPanel);
             foundationPanel.setLayout(foundationPanelLayout);
@@ -189,7 +218,7 @@ public class GUI extends javax.swing.JFrame implements NativeKeyListener {
                 .add(foundationPanelLayout.createSequentialGroup()
                     .add(foundationPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                         .add(foundationPanelLayout.createSequentialGroup()
-                            .add(inputText, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 918, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                            .add(inputText, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 799, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                             .add(sudooleButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .add(foundationPanelLayout.createSequentialGroup()
@@ -199,7 +228,7 @@ public class GUI extends javax.swing.JFrame implements NativeKeyListener {
                                     .add(6, 6, 6)
                                     .add(complecationRate)
                                     .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .add(progressBar, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 921, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                                    .add(progressBar, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 791, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                                 .add(foundationPanelLayout.createSequentialGroup()
                                     .add(mainTextFrameScrollPane)
                                     .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
@@ -217,7 +246,7 @@ public class GUI extends javax.swing.JFrame implements NativeKeyListener {
                             .add(labelFloatingTasks)
                             .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                             .add(floatingTaskScrollPane))
-                        .add(mainTextFrameScrollPane, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 393, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                        .add(mainTextFrameScrollPane, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 293, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                     .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                     .add(foundationPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                         .add(progressBar, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
@@ -254,6 +283,11 @@ public class GUI extends javax.swing.JFrame implements NativeKeyListener {
 			inputText.setText("");
 			mainTextFrame.setText(outContent.toString());
 			progressBar.setValue(manager.getCompletedPercentage());
+			try{
+			 floatingTextFrame.setText(manager.AllFloatingTasks());
+    } catch (IllegalStateException e){
+    	floatingTextFrame.setText(Constants.MESSAGE_EMPTY_LIST);
+    }
     }
 
    //Set visibility
@@ -320,16 +354,17 @@ public class GUI extends javax.swing.JFrame implements NativeKeyListener {
 	private Boolean keyOne = false;
 	private Boolean keyTwo = false;
 	private Boolean isShown = true;
+	private Boolean isDemo = false;
     private ByteArrayOutputStream outContent;
     private javax.swing.JButton sudooleButton;
     private javax.swing.JLabel labelFloatingTasks;
     private javax.swing.JLabel complecationRate;
-    private javax.swing.JList floatingList;
     private javax.swing.JPanel foundationPanel;
     private javax.swing.JProgressBar progressBar;
     private javax.swing.JScrollPane floatingTaskScrollPane;
     private javax.swing.JScrollPane mainTextFrameScrollPane;
     private javax.swing.JTextArea mainTextFrame;
+    private javax.swing.JTextArea floatingTextFrame;
     private javax.swing.JTextField inputText;
     private TaskManager manager;
     private LogicHandler logicHandler; 

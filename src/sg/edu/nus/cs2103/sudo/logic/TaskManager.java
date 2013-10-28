@@ -208,22 +208,27 @@ public class TaskManager {
 	/**
 	 * Displays the floating tasks only. To be shown in the side bar in the GUI
 	 */
-	public void displayFloatingTasks() throws IllegalStateException {
+	public String AllFloatingTasks(){
+		
 		checkEmptyList();
-
+		String toReturn = "";
 		int count = 0;
 		for (int i = 0; i < tasks.size(); i++) {
 			Task task = tasks.get(i);
 
-			if (task instanceof FloatingTask) {
+			if (task instanceof FloatingTask && (!task.isComplete())) {
 				count++;
-				System.out.println(task.toString() + " " + task.isComplete());
+				toReturn+=(task.toString() + "\n");
+				//System.out.println(task.toString() + " " + task.isComplete());
 			}
 		}
 
 		if (count == 0) {
-			System.out.println(Constants.MESSAGE_NO_FLOATING_TASKS);
+			return (Constants.MESSAGE_NO_FLOATING_TASKS);
 		}
+		return toReturn;
+		
+		
 	}
 
 	/**
@@ -543,17 +548,21 @@ public class TaskManager {
 	public void undo() {
 		try {
 			tasks = (ArrayList<Task>) storage.undo().clone();
-			System.out.println("Undo...");
+			System.out.println(Constants.MESSAGE_UNDO);
+			saveTasks();
 		} catch (FileNotFoundException e) {
 			storage.rebuildHistory();
 			System.out
-					.println("History file missing, New history file was built.");
+					.println(Constants.MESSAGE_HISTORY_LOAD_ERROR);
 			// TODO Auto-generated catch block
 			// e.printStackTrace();
 		} catch (NoHistoryException e) {
-			System.out.println("No more undo steps recorded.");
+			System.out.println(Constants.MESSAGE_LAST_HISTORY);
 			// TODO Auto-generated catch block
 			// e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		updateAllIds();
 		// return tasks;
@@ -579,17 +588,21 @@ public class TaskManager {
 	public void redo() {
 		try {
 			tasks = (ArrayList<Task>) storage.redo().clone();
-			System.out.println("Redo...");
+			System.out.println(Constants.MESSAGE_REDO);
+			saveTasks();
 		} catch (FileNotFoundException e) {
 			storage.rebuildHistory();
 			System.out
-					.println("History file missing, New history file was built.");
+					.println(Constants.MESSAGE_HISTORY_LOAD_ERROR);
 			// TODO Auto-generated catch block
 			// e.printStackTrace();
 		} catch (NoHistoryException e) {
-			System.out.println("No more redo steps recorded.");
+			System.out.println(Constants.MESSAGE_LAST_HISTORY);
 			// TODO Auto-generated catch block
 			// e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		updateAllIds();
 		// return tasks;
@@ -598,7 +611,7 @@ public class TaskManager {
 	/**
 	 * To check if the task list is empty. If yes, throw exception.
 	 */
-	private void checkEmptyList() {
+	private void checkEmptyList() throws IllegalStateException {
 		if (tasks.isEmpty()) {
 			throw new IllegalStateException(Constants.MESSAGE_EMPTY_LIST);
 		}

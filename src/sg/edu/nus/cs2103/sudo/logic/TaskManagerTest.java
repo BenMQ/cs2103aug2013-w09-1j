@@ -158,34 +158,72 @@ public class TaskManagerTest {
 	}
 	
 	@Test
-    public void testSearchForFreeIntervals() throws Exception {
+    public void testSearchForFreeIntervalsNoTask() throws Exception {
 	    DateTime now = new DateTime();
         DateTime dt0000 = new DateTime(now.getYear(), now.getMonthOfYear(), now.getDayOfMonth(), 0, 0, 0);
         DateTime dt2359 = new DateTime(now.getYear(), now.getMonthOfYear(), now.getDayOfMonth(), 23, 59, 59);
-        
+        ArrayList<DateTime> range = new ArrayList<DateTime>();
+        range.add(dt0000);
+        range.add(dt2359);
         // No task
-        manager.searchForFreeIntervals();
-        assertEquals(Constants.MESSAGE_FREE_SLOTS_PREFIX + "\n12:00 AM to 11:59 PM\n", outContent.toString());
+        manager.searchForFreeIntervals(range);
+        assertEquals(Constants.MESSAGE_FREE_SLOTS_PREFIX
+                + range.get(0).toString("dd MMMM hh:mm a") + " to " + range.get(0).toString("dd MMMM hh:mm a") 
+                + "\n" + dt0000.toString("dd MMMM hh:mm a") + " to " + dt2359.toString("dd MMMM hh:mm a")  +"\n", outContent.toString());
         outContent.reset();
-        
+	}
+	
+	@Test
+	public void testSearchForFreeIntervalsSomeTasks() throws Exception {
+        DateTime now = new DateTime();
+        DateTime dt0000 = new DateTime(now.getYear(), now.getMonthOfYear(), now.getDayOfMonth(), 0, 0, 0);
+        DateTime dt2359 = new DateTime(now.getYear(), now.getMonthOfYear(), now.getDayOfMonth(), 23, 59, 59);
+        ArrayList<DateTime> range = new ArrayList<DateTime>();
+        range.add(dt0000);
+        range.add(dt2359);
         // some slots
         manager.addTask(new TimedTask(0, "timed", false, today(11, 0), today(12, 0)));
         manager.addTask(new TimedTask(0, "timed", false, today(17, 0), today(18, 0)));
-        manager.searchForFreeIntervals();
-        assertEquals(Constants.MESSAGE_FREE_SLOTS_PREFIX + "\n"
-                + "12:00 AM to 11:00 AM\n12:00 PM to 05:00 PM\n06:00 PM to 11:59 PM\n", outContent.toString());
+        manager.searchForFreeIntervals(range);
+        assertEquals(Constants.MESSAGE_FREE_SLOTS_PREFIX 
+                + range.get(0).toString("dd MMMM hh:mm a") + " to " + range.get(0).toString("dd MMMM hh:mm a") 
+                + "\n"
+                + today(0, 0).toString("dd MMMM hh:mm a") + " to " + today(11, 0).toString("dd MMMM hh:mm a")
+                + "\n"
+                + today(12, 0).toString("dd MMMM hh:mm a") + " to " + today(17, 0).toString("dd MMMM hh:mm a")
+                + "\n"
+                + today(18, 0).toString("dd MMMM hh:mm a") + " to " + today(23, 59).toString("dd MMMM hh:mm a")
+                + "\n",
+                outContent.toString());
         outContent.reset();
-        
+	}
+	@Test
+	public void testSearchForFreeIntervalsSmallIntervalOnly() throws Exception {
+        DateTime now = new DateTime();
+        DateTime dt0000 = new DateTime(now.getYear(), now.getMonthOfYear(), now.getDayOfMonth(), 0, 0, 0);
+        DateTime dt2359 = new DateTime(now.getYear(), now.getMonthOfYear(), now.getDayOfMonth(), 23, 59, 59);
+        ArrayList<DateTime> range = new ArrayList<DateTime>();
+        range.add(dt0000);
+        range.add(dt2359);
         // almost whole day
         manager.addTask(new TimedTask(0, "timed", false, today(0, 0), today(12, 0)));
         manager.addTask(new TimedTask(0, "timed", false, today(12, 1), dt2359));
-        manager.searchForFreeIntervals();
+        manager.searchForFreeIntervals(range);
         assertEquals(Constants.MESSAGE_NO_FREE_SLOTS+"\n", outContent.toString());
         outContent.reset();
         
+	}
+	@Test
+	public void testSearchForFreeIntervalsWholeDay() throws Exception {
+        DateTime now = new DateTime();
+        DateTime dt0000 = new DateTime(now.getYear(), now.getMonthOfYear(), now.getDayOfMonth(), 0, 0, 0);
+        DateTime dt2359 = new DateTime(now.getYear(), now.getMonthOfYear(), now.getDayOfMonth(), 23, 59, 59);
+        ArrayList<DateTime> range = new ArrayList<DateTime>();
+        range.add(dt0000);
+        range.add(dt2359);
         // whole day
         manager.addTask(new TimedTask(0, "timed", false, dt0000, dt2359));
-        manager.searchForFreeIntervals();
+        manager.searchForFreeIntervals(range);
         assertEquals(Constants.MESSAGE_NO_FREE_SLOTS+"\n", outContent.toString());
         outContent.reset();
         

@@ -131,8 +131,8 @@ public class LogicHandler {
 				return;
 			}
 		} catch (Exception e) {
-			//System.out.printf(e.getMessage());
-			System.out.printf("Fatal error occured!");
+			System.out.printf(e.getMessage());
+			// System.out.printf("Fatal error occured!");
 		}
 	}	
 

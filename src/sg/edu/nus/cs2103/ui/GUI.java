@@ -168,7 +168,7 @@ public class GUI extends javax.swing.JFrame implements NativeKeyListener {
             });
 
             floatingList.setModel(new javax.swing.AbstractListModel() {
-                String[] strings = {"Floating task", "manager", "coming", "soon"};
+                String[] strings = {"Learning Java", "Buy the milk", "Buy Surface 2", "Book flight ticket"};
                 public int getSize() { return strings.length; }
                 public Object getElementAt(int i) { return strings[i]; }
             });
@@ -185,7 +185,7 @@ public class GUI extends javax.swing.JFrame implements NativeKeyListener {
                 .add(foundationPanelLayout.createSequentialGroup()
                     .add(foundationPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                         .add(foundationPanelLayout.createSequentialGroup()
-                            .add(inputText, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 518, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                            .add(inputText, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 918, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                             .add(sudooleButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .add(foundationPanelLayout.createSequentialGroup()
@@ -195,7 +195,7 @@ public class GUI extends javax.swing.JFrame implements NativeKeyListener {
                                     .add(6, 6, 6)
                                     .add(complecationRate)
                                     .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .add(progressBar, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 521, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                                    .add(progressBar, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 921, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                                 .add(foundationPanelLayout.createSequentialGroup()
                                     .add(mainTextFrameScrollPane)
                                     .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)

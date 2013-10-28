@@ -490,7 +490,59 @@ public class TaskManager {
         
         return free;
 	}
-
+	
+	/**
+	 * Schedules a task
+	 * @param description
+	 * @param timeRange
+	 * @throws Exception 
+	 */
+	public void scheduleTask(String description, ArrayList<DateTime> dateTimes) throws Exception {
+	    ArrayList<DateTime> timeRange = getFlexibleTimeRange(dateTimes);
+	    ArrayList<MutableInterval> free = getFreeIntervals(timeRange);
+	    for (int i = 0; i < free.size(); i++) {
+	        MutableInterval candidate = free.get(i);
+	        DateTime start;
+            DateTime startDay0800;
+            DateTime startDay2300;
+            DateTime nextDay0800;
+            
+            while (candidate.toDurationMillis() >= 2 * 60 * 60 * 1000) {
+                start = candidate.getStart();
+                startDay0800 = new DateTime(start.getYear(), start.getMonthOfYear(), start.getDayOfMonth(), 8, 0, 0);
+                startDay2300 = new DateTime(start.getYear(), start.getMonthOfYear(), start.getDayOfMonth(), 23, 0, 0);
+                nextDay0800 = startDay0800.plusDays(1);
+                try {
+                    if (start.isBefore(startDay0800)) {
+                        candidate.setStart(startDay0800);
+                        continue;
+                    } else if (start.isAfter(startDay2300)) {
+                        candidate.setEnd(nextDay0800);
+                        continue;
+                    }
+                } catch (IllegalArgumentException e) {
+                    // duration is too short for consideration, moving on
+                    break;
+                }
+                
+                if (!start.plusHours(2).isAfter(startDay2300)) {
+                    ArrayList<DateTime> range = new ArrayList<DateTime>(2);
+                    range.add(start);
+                    range.add(start.plusHours(2));
+                    TimedTask task = new TimedTask(description, range);
+                    addTask(task);
+                    System.out.printf(Constants.MESSAGE_ADD_TIMED, task.description,
+                            task.startTime.toString("dd MMMM hh:mm a"), task.endTime.toString("dd MMMM hh:mm a"));
+                    saveToHistory();
+                    return;
+                } else {
+                    break;
+                }
+            }
+	        
+	    }
+	    System.out.println(Constants.MESSAGE_NO_FREE_SLOTS);
+	}
 	/**
 	 * Removes the task by first searching for the search string in the task
 	 * description. If there is exactly one match, just delete it. If there are

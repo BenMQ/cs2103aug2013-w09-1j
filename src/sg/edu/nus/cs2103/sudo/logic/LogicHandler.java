@@ -100,6 +100,13 @@ public class LogicHandler {
 	                this.manager.searchForFreeIntervals(dateTimes);   
 			    }
 			    return;
+			case SCHEDULE:
+			    if (dateTimes.size() > 2) {
+                    System.out.print(Constants.MESSAGE_INVALID_NUMBER_OF_DATES);
+                } else {
+                    this.manager.scheduleTask(taskDescription, dateTimes);   
+                }
+                return;
 			case DELETE:
 				int numResults = this.manager.delete(taskDescription); // need
 																		// to

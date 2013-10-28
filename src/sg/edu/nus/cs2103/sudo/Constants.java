@@ -105,6 +105,7 @@ public class Constants {
 			put("UNDO", COMMAND_TYPE.UNDO);
 			put("REDO", COMMAND_TYPE.REDO);
 			put("FREE", COMMAND_TYPE.FREE);
+			put("SCHEDULE", COMMAND_TYPE.SCHEDULE);
 			put("SORT", COMMAND_TYPE.SORT);
 			put("HELP", COMMAND_TYPE.HELP);
 			put("ALL", COMMAND_TYPE.ALL);

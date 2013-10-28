@@ -167,7 +167,7 @@ public class TaskManagerTest {
         // No task
         manager.searchForFreeIntervals(range);
         assertEquals(Constants.MESSAGE_FREE_SLOTS_PREFIX
-                + range.get(0).toString("dd MMMM hh:mm a") + " to " + range.get(0).toString("dd MMMM hh:mm a") 
+                + range.get(0).toString("dd MMMM hh:mm a") + " to " + range.get(1).toString("dd MMMM hh:mm a") 
                 + "\n" + dt0000.toString("dd MMMM hh:mm a") + " to " + dt2359.toString("dd MMMM hh:mm a")  +"\n", outContent.toString());
         outContent.reset();
 	}
@@ -185,7 +185,7 @@ public class TaskManagerTest {
         manager.addTask(new TimedTask(0, "timed", false, today(17, 0), today(18, 0)));
         manager.searchForFreeIntervals(range);
         assertEquals(Constants.MESSAGE_FREE_SLOTS_PREFIX 
-                + range.get(0).toString("dd MMMM hh:mm a") + " to " + range.get(0).toString("dd MMMM hh:mm a") 
+                + range.get(0).toString("dd MMMM hh:mm a") + " to " + range.get(1).toString("dd MMMM hh:mm a") 
                 + "\n"
                 + today(0, 0).toString("dd MMMM hh:mm a") + " to " + today(11, 0).toString("dd MMMM hh:mm a")
                 + "\n"

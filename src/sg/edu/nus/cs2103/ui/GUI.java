@@ -154,16 +154,20 @@ public class GUI extends javax.swing.JFrame implements NativeKeyListener {
                     if(e.getKeyCode() == KeyEvent.VK_ENTER){
                     	//mainTextFrame.setText("Search result for \"homework\":\n1. CS2101 homework by tomorrow 4pm.\n2. CS1101s JFDI homework by Sep 25th.");
                         //inputText.setText("");
-                    	if(inputText.getText().equals("demo on") || inputText.getText().equals("demo")){
-                            mainTextFrame.setFont(new java.awt.Font("Monaco", 0, 25));
-                            floatingTextFrame.setFont(new java.awt.Font("Courier New", 0, 16));
-                            mainTextFrame.setText("Font:Demo mode on");
-                            inputText.setText("");
-                    	}else if(inputText.getText().equals("demo off")){
-                            mainTextFrame.setFont(new java.awt.Font("Monaco", 0, 17));
-                            floatingTextFrame.setFont(new java.awt.Font("Courier New", 0, 12));
-                            mainTextFrame.setText("Font:Demo mode off");
-                            inputText.setText("");
+                    	if(inputText.getText().equals("demo")){
+                    		if(isDemo){
+                    			mainTextFrame.setFont(new java.awt.Font("Monaco", 0, 17));
+                            	floatingTextFrame.setFont(new java.awt.Font("Monaco", 0, 12));
+                            	mainTextFrame.setText("Font:Demo mode off");
+                            	inputText.setText("");
+                            	isDemo = false;
+                            }else{
+                            	mainTextFrame.setFont(new java.awt.Font("Monaco", 0, 25));
+                                floatingTextFrame.setFont(new java.awt.Font("Monaco", 0, 16));
+                                mainTextFrame.setText("Font:Demo mode on");
+                                inputText.setText("");
+                                isDemo = true;
+                            }
                     	}else{
                     	String userInput =  inputText.getText();
                     	logicHandler.executeCommand(userInput);
@@ -335,6 +339,7 @@ public class GUI extends javax.swing.JFrame implements NativeKeyListener {
 	private Boolean keyOne = false;
 	private Boolean keyTwo = false;
 	private Boolean isShown = true;
+	private Boolean isDemo = false;
     private ByteArrayOutputStream outContent;
     private javax.swing.JButton sudooleButton;
     private javax.swing.JLabel labelFloatingTasks;

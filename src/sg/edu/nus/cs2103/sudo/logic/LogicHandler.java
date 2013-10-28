@@ -80,10 +80,11 @@ public class LogicHandler {
 						System.out.printf(Constants.MESSAGE_ADD_FLOATING, taskDescription);
 				} else if(numOfDates == 1){
 						this.manager.addTask(new DeadlineTask(taskDescription, dateTimes));
-						System.out.printf(Constants.MESSAGE_ADD_DEADLINE, taskDescription);
+						System.out.printf(Constants.MESSAGE_ADD_DEADLINE, taskDescription, dateTimes.get(0).toString("dd MMMM hh:mm a"));
 				} else if(numOfDates == 2){
 						this.manager.addTask(new TimedTask(taskDescription, dateTimes));
-						System.out.printf(Constants.MESSAGE_ADD_TIMED, taskDescription);
+						System.out.printf(Constants.MESSAGE_ADD_TIMED, taskDescription,
+						        dateTimes.get(0).toString("dd MMMM hh:mm a"), dateTimes.get(1).toString("dd MMMM hh:mm a"));
 				} else {
 					System.out.print(Constants.MESSAGE_INVALID_NUMBER_OF_DATES);
 				}

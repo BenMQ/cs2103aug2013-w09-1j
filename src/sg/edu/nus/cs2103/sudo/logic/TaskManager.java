@@ -208,7 +208,8 @@ public class TaskManager {
 	/**
 	 * Displays the floating tasks only. To be shown in the side bar in the GUI
 	 */
-	public String AllFloatingTasks() throws IllegalStateException {
+	public String AllFloatingTasks(){
+		
 		checkEmptyList();
 		String toReturn = "";
 		int count = 0;
@@ -226,6 +227,8 @@ public class TaskManager {
 			return (Constants.MESSAGE_NO_FLOATING_TASKS);
 		}
 		return toReturn;
+		
+		
 	}
 
 	/**
@@ -575,7 +578,7 @@ public class TaskManager {
 	/**
 	 * To check if the task list is empty. If yes, throw exception.
 	 */
-	private void checkEmptyList() {
+	private void checkEmptyList() throws IllegalStateException {
 		if (tasks.isEmpty()) {
 			throw new IllegalStateException(Constants.MESSAGE_EMPTY_LIST);
 		}

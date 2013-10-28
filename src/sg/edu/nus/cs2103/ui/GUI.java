@@ -23,6 +23,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
+import javax.swing.text.DefaultCaret;
+
 import org.jnativehook.GlobalScreen;
 import org.jnativehook.NativeHookException;
 import org.jnativehook.keyboard.NativeKeyEvent;
@@ -117,6 +119,8 @@ public class GUI extends javax.swing.JFrame implements NativeKeyListener {
         floatingTaskScrollPane = new javax.swing.JScrollPane();
         floatingTextFrame = new javax.swing.JTextArea();
         floatingTextFrame.setFont(new java.awt.Font("Courier New", 0, 12));
+        DefaultCaret caret = (DefaultCaret)floatingTextFrame.getCaret();
+        caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
 //        floatingList = new javax.swing.JList();
 //        floatingList.setForeground(new java.awt.Color(0, 100, 245));
 //        floatingList.setBackground(new java.awt.Color(150, 245, 100));
@@ -140,8 +144,11 @@ public class GUI extends javax.swing.JFrame implements NativeKeyListener {
         }else{
         	mainTextFrame.setText(Constants.MESSAGE_WELCOME_TO_SUDO_FIRST);
         }
+        try{
         floatingTextFrame.setText(manager.AllFloatingTasks());
-        
+        } catch (IllegalStateException e){
+        	System.out.println(Constants.MESSAGE_EMPTY_LIST);
+        }
         inputText.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 inputTextActionPerformed(evt);
@@ -176,7 +183,11 @@ public class GUI extends javax.swing.JFrame implements NativeKeyListener {
             			outContent.reset();
             			progressBar.setValue(manager.getCompletedPercentage());
     //        			String[] floatings = updateFloating(manager.getFloatingTask());
-            			floatingTextFrame.setText(manager.AllFloatingTasks());
+            			try{
+            				 floatingTextFrame.setText(manager.AllFloatingTasks());
+            	    } catch (IllegalStateException w){
+            	    	floatingTextFrame.setText(Constants.MESSAGE_EMPTY_LIST);
+            	    }
                     	}
                     }
                 }
@@ -272,7 +283,11 @@ public class GUI extends javax.swing.JFrame implements NativeKeyListener {
 			inputText.setText("");
 			mainTextFrame.setText(outContent.toString());
 			progressBar.setValue(manager.getCompletedPercentage());
-			floatingTextFrame.setText(manager.AllFloatingTasks());
+			try{
+			 floatingTextFrame.setText(manager.AllFloatingTasks());
+    } catch (IllegalStateException e){
+    	floatingTextFrame.setText(Constants.MESSAGE_EMPTY_LIST);
+    }
     }
 
    //Set visibility

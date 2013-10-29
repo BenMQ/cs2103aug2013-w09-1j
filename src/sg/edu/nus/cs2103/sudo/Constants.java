@@ -8,7 +8,7 @@ public class Constants {
 	public static final String MESSAGE_WELCOME_TO_SUDO_FIRST = "Welcome to the world of Sudo!\nTo get help, simply type: help\nTo learn more about a command: help [command]\n";
 	public static final String MESSAGE_WELCOME_TO_SUDO_RELOAD = "Welcome back, dear user.\nYour past records have been loaded successfully.\nTo learn more, simply type: help\nTo learn more about a command: help [command]\n";
 
-	public static final String MESSAGE_WELCOME_HELP_PAGE = "Type help '<command>' for help on that command. \nHere is how to get started with sudo:\n";
+	public static final String MESSAGE_WELCOME_HELP_PAGE = "Type help '<command>' for help on that command. \nHere are the list of commands:\nadd\nedit\ndisplay\ndelete\nfinish\nsearch\nundo\nredo\nfree\nschedule\n";
 	public static final String HELP_NOT_FOUND = "We couldn't find anything on '%s'. Try help 'list' for a list of help topics.\n";
 	public static final String HELP_LIST = "Listing all help topics. WIP\n";
 	

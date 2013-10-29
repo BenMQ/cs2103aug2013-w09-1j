@@ -113,6 +113,8 @@ public class Constants {
 
 			put("EXIT", COMMAND_TYPE.EXIT);
 			put("QUIT", COMMAND_TYPE.EXIT);
+			
+			put("DESTROY", COMMAND_TYPE.DESTROY);
 		}
 	};
 

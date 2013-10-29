@@ -124,7 +124,7 @@ public class TaskManager {
 	 * @return
 	 */
 	private Task editDescription(String taskDescription, Task task) {
-		if (taskDescription != null) {
+		if (taskDescription != "") {
 			task.setDescription(taskDescription);
 		}
 		return task;
@@ -316,10 +316,10 @@ public class TaskManager {
 	public ArrayList<Task> search(String searchStr, boolean searchAll)
 			throws NullPointerException, IllegalStateException {
 
-		if (searchStr == null) {
+		if (searchStr == null || searchStr == "") {
 			throw new NullPointerException(Constants.MESSAGE_INVALID_SEARCH);
 		}
-
+		
 		if (tasks.isEmpty()) {
 			throw new IllegalStateException(Constants.MESSAGE_EMPTY_LIST);
 		}
@@ -555,7 +555,7 @@ public class TaskManager {
 	 */
 	public int delete(String searchStr) throws IOException {
 
-		if (searchStr == null) {
+		if (searchStr == null || searchStr == "") {
 			throw new NullPointerException(Constants.MESSAGE_INVALID_DELETE);
 		}
 

@@ -26,8 +26,6 @@ public class DeadlineTask extends Task {
 		this.description = taskDescription;
 		DateTime endTime = dateTimes.get(0);
 
-		// checkValidityTimes(endTime);
-
 		this.endTime = endTime;
 	}
 	

@@ -139,7 +139,7 @@ public class TaskManager {
 	 * @return
 	 */
 	private Task editDescription(String taskDescription, Task task) {
-		if (taskDescription != "") {
+		if (taskDescription != "" && taskDescription != null) {
 			task.setDescription(taskDescription);
 		}
 		return task;

@@ -202,7 +202,6 @@ public class TaskManager {
 	 */
 	public void displayAllTasks(boolean showAll) throws IllegalStateException {
 		checkEmptyList();
-		DateTimeFormatter datemonthformat = DateTimeFormat.forPattern("d MMM");
 		int previousDay = 0;
 		DateTime previousDate = null;
 		boolean floatingStarted = false;
@@ -226,7 +225,7 @@ public class TaskManager {
 						String prefix = addPrefix(previousDay); //adds 'Today: ', 'Overdue: ', etc
 						
 						//Todo: need this method to generate separators of constant size regardless of middle content
-						printDaySeparator(datemonthformat, previousDate, prefix);
+						printDaySeparator(previousDate, prefix);
 					}
 				} else {
 					if(!floatingStarted && isFloatingTask(task)){
@@ -893,7 +892,13 @@ public class TaskManager {
 	 * @param Task
 	 */
 	public static String prettyPrint(Task task){
+		//Reference: http://joda-time.sourceforge.net/apidocs/org/joda/time/format/DateTimeFormat.html
 		DateTimeFormatter onlytimeformat = DateTimeFormat.forPattern("ha");
+		if(task.endTime.getMinuteOfHour() > 0){
+			onlytimeformat = DateTimeFormat.forPattern("h:mma");
+		} 
+		
+		
 		if(task.getStartTime() == null && task.getEndTime() == null){
 			return task.getDescription();
 		} else if (task.getStartTime() == null){
@@ -924,8 +929,8 @@ public class TaskManager {
 	}	
 	
 	// Prints day-level separators
-	public void printDaySeparator(DateTimeFormatter datemonthformat,
-			DateTime previousDate, String prefix) {
+	public void printDaySeparator(DateTime previousDate, String prefix) {
+		DateTimeFormatter datemonthformat = DateTimeFormat.forPattern("d MMM");
 		System.out.println("\n["+ prefix + previousDate.toString(datemonthformat) + "]====================");
 	}	
 }

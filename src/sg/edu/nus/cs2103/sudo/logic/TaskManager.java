@@ -223,30 +223,20 @@ public class TaskManager {
 					if(previousDay == 0 || task.getEndTime().getDayOfYear() != previousDay){
 						previousDay = task.getEndTime().getDayOfYear();
 						previousDate = task.getEndTime();
+						String prefix = addPrefix(previousDay); //adds 'Today: ', 'Overdue: ', etc
 						
-						String prefix = "";
-						if (previousDay < DateTime.now().getDayOfYear()){
-							prefix = "Overdue: ";
-						} else if (previousDay == DateTime.now().getDayOfYear()){
-							prefix = "Today: ";
-						} else if (previousDay == (DateTime.now().getDayOfYear()+1)){
-							prefix = "Tomorrow: ";
-						} 
-						
-						//need a method that generates separators of constant size regardless of middle content
-						System.out.println("\n["+ prefix + previousDate.toString(datemonthformat) + "]====================");
-						
+						//Todo: need this method to generate separators of constant size regardless of middle content
+						printDaySeparator(datemonthformat, previousDate, prefix);
 					}
 				} else {
 					if(!floatingStarted && isFloatingTask(task)){
 						floatingStarted = true;
 						System.out.println(Constants.FLOATING_TASK_SEPARATOR);
 					}
-					
 					if(!finishedStarted && task.isComplete()){
 						finishedStarted = true;
 						System.out.println(Constants.FINISHED_TASK_SEPARATOR);
-					}	
+					}
 				}
 				//End of Day-level separators
 				
@@ -916,5 +906,26 @@ public class TaskManager {
 		}
 	}	
 	
+	/**
+	 * Adds contextual prefixes to day separators such as Today:, Overdue:, etc
+	 * based on current day
+	 * @param int
+	 */	
+	public String addPrefix(int previousDay) {
+		String prefix = "";
+		if (previousDay < DateTime.now().getDayOfYear()){
+			prefix = "Overdue: ";
+		} else if (previousDay == DateTime.now().getDayOfYear()){
+			prefix = "Today: ";
+		} else if (previousDay == (DateTime.now().getDayOfYear()+1)){
+			prefix = "Tomorrow: ";
+		}
+		return prefix;
+	}	
 	
+	// Prints day-level separators
+	public void printDaySeparator(DateTimeFormatter datemonthformat,
+			DateTime previousDate, String prefix) {
+		System.out.println("\n["+ prefix + previousDate.toString(datemonthformat) + "]====================");
+	}	
 }

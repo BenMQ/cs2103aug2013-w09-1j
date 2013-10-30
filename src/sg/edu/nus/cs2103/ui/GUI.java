@@ -39,6 +39,7 @@ import org.jnativehook.keyboard.NativeKeyListener;
  * This is the GUI class.
  * @author Liu Dake
  */
+
 public class GUI extends javax.swing.JFrame implements NativeKeyListener {
 
     /**
@@ -133,7 +134,7 @@ public class GUI extends javax.swing.JFrame implements NativeKeyListener {
 
         //Initialization of properties
         mainTextFrame.setEditable(false);
-        mainTextFrame.setFont(new java.awt.Font("Courier", 0, 17));
+        mainTextFrame.setFont(new java.awt.Font("OCR A Std", 0, 17));
         mainTextFrame.setForeground(new java.awt.Color(56, 220, 40));
         mainTextFrame.setBackground(new java.awt.Color(0, 0, 0));
         mainTextFrame.setColumns(20);
@@ -163,7 +164,7 @@ public class GUI extends javax.swing.JFrame implements NativeKeyListener {
                         //inputText.setText("");
                     	if(inputText.getText().equals("demo")){
                     		if(isDemo){
-                    			mainTextFrame.setFont(new java.awt.Font("Courier", 0, 17));
+                    			mainTextFrame.setFont(new java.awt.Font("OCR A Std", 0, 17));
                             	floatingTextFrame.setFont(new java.awt.Font("Monaco", 0, 12));
                             	//mainTextFrame.setText("Font:Demo mode off");
                             	inputText.setText("");

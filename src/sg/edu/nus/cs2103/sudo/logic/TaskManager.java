@@ -6,8 +6,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import org.joda.time.DateTime;
+import org.joda.time.DateTime.Property;
 import org.joda.time.DateTimeComparator;
 import org.joda.time.MutableInterval;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 import sg.edu.nus.cs2103.sudo.Constants;
 import sg.edu.nus.cs2103.sudo.exceptions.NoHistoryException;
@@ -189,7 +192,7 @@ public class TaskManager {
 		newTask = editDateTime(dates, newTask);
 		tasks.add(newTask);
 	}
-
+	
 	/**
 	 * Prints tasks to stdout. Incomplete tasks are always printed by default.
 	 * If showAll is set to true, completed tasks are printed as well.
@@ -199,15 +202,46 @@ public class TaskManager {
 	 */
 	public void displayAllTasks(boolean showAll) throws IllegalStateException {
 		checkEmptyList();
+		DateTimeFormatter datemonthformat = DateTimeFormat.forPattern("d MMM");
+		int previousDay = 0;
+		DateTime previousDate = null;
+		boolean floatingStarted = false;
+		boolean finishedStarted = false;
+		
 		for (int i = 0; i < tasks.size(); i++) {
 
 			Task task = tasks.get(i);
+			
 			String completed = "";
 			if (task.isComplete()) {
 				completed = "Done!";
 			}
-			if (showAll || !task.isComplete) {
-				System.out.println(task.toString() + " " + completed);
+			if (showAll || !task.isComplete) {	
+				
+				//Start of Day-level separators
+				if(!task.isComplete() && (isTimedTask(task) || isDeadlineTask(task))){
+					if(previousDay == 0 || task.getEndTime().getDayOfYear() != previousDay){
+						previousDay = task.getEndTime().getDayOfYear();
+						previousDate = task.getEndTime();
+						
+						//need a method that generates separators of constant size regardless of middle content
+						System.out.println("----------- " + previousDate.toString(datemonthformat) + " -----------");
+					}
+				} else {
+					if(!floatingStarted && isFloatingTask(task)){
+						floatingStarted = true;
+						System.out.println(Constants.FLOATING_TASK_SEPARATOR);
+					}
+					
+					if(!finishedStarted && task.isComplete()){
+						finishedStarted = true;
+						System.out.println(Constants.FINISHED_TASK_SEPARATOR);
+					}	
+				}
+				//End of Day-level separators
+				
+//				System.out.println(task.toString() + " " + completed);
+				System.out.println(TaskManager.prettyPrint(task) + " " + completed);
 			}
 
 		}
@@ -841,4 +875,36 @@ public class TaskManager {
 		;
 		return toReturn;
 	}
+
+	public static boolean isFloatingTask(Task task) {
+		return task.startTime == null && task.endTime == null;
+	}
+
+	public static boolean isDeadlineTask(Task task) {
+		return task.getEndTime() != null;
+	}
+
+	public static boolean isTimedTask(Task task) {
+		return task.getStartTime() != null && isDeadlineTask(task);
+	}
+	
+	/**
+	 * Returns a pretty string representation of a task.
+	 * @param Task
+	 */
+	public static String prettyPrint(Task task){
+		DateTimeFormatter onlytimeformat = DateTimeFormat.forPattern("ha");
+		if(task.getStartTime() == null && task.getEndTime() == null){
+			return task.getDescription();
+		} else if (task.getStartTime() == null){
+			return "[by "+task.getEndTime().toString(onlytimeformat)+"] "+ task.getDescription();
+		} else {
+			if(task.getStartTime().getDayOfYear() == task.getEndTime().getDayOfYear()){
+				return "["+task.getStartTime().toString(onlytimeformat)+" - "+task.getEndTime().toString(onlytimeformat)+"] "+ task.getDescription();
+			}
+			return "["+task.getStartTime().toString(onlytimeformat)+" - "+task.getEndTime().toString(onlytimeformat)+"] "+ task.getDescription();
+		}
+	}	
+	
+	
 }

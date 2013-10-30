@@ -1,5 +1,6 @@
 package sg.edu.nus.cs2103.sudo.logic;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -148,9 +149,18 @@ public class LogicHandler {
 								// caught.
 				return;
 			}
-		} catch (Exception e) {
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalStateException e) {
+			// TODO Auto-generated catch block
 			System.out.printf(e.getMessage());
-			// System.out.printf("Fatal error occured!");
+		} catch (IndexOutOfBoundsException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 	

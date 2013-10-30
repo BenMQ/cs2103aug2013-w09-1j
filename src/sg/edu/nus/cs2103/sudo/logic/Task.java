@@ -38,6 +38,14 @@ public abstract class Task {
 		return description;
 	}
 
+	public DateTime getStartTime() {
+		return startTime;
+	}
+	
+	public DateTime getEndTime() {
+		return endTime;
+	}	
+	
 	public boolean isComplete() {
 		return isComplete;
 	}

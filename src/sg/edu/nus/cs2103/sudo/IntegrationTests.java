@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -77,7 +79,7 @@ public class IntegrationTests {
 		String userInput = "add 'make waffles for breakfast' by Monday 14 October 2pm";
 		ArrayList<DateTime> dateTimes = InputParser.parseDateTime(userInput);
 		String endTime = dateTimes.get(0).toString(
-				"EEE dd MMMM hh:mm a");
+				"dd MMMM hh:mm a");
 		String taskDescription = InputParser.parseDescription(userInput);
 		String expectedOutput = String.format(Constants.MESSAGE_ADD_DEADLINE,
 				taskDescription, endTime);
@@ -91,9 +93,9 @@ public class IntegrationTests {
 		String userInput = "add 'make waffles for breakfast' from Monday 14 October 2pm to Wednesday 16 October";
 		ArrayList<DateTime> dateTimes = InputParser.parseDateTime(userInput);
 		String startTime = dateTimes.get(0).toString(
-				"EEE dd MMMM hh:mm a");
+				"dd MMMM hh:mm a");
 		String endTime = dateTimes.get(1).toString(
-				"EEE dd MMMM hh:mm a");
+				"dd MMMM hh:mm a");
 		String taskDescription = InputParser.parseDescription(userInput);
 		String expectedOutput = String.format(Constants.MESSAGE_ADD_TIMED,
 				taskDescription, startTime, endTime);
@@ -131,7 +133,23 @@ public class IntegrationTests {
 		testCommand("delete 'waffle'", expectedOutput);
 		testStorageContent();
 	}
+	
+	@Test
+	public void testPrettyPrint() throws IOException {
+		String userInput = "add 'make waffles for lunch' from 14 October 10am to 14 October 2pm";
+		runCommand(userInput);
 
+		userInput = "add 'make cake for breakfast' by 14 October 9am";
+		runCommand(userInput);		
+		
+		Task deadlineTask = this.manager.getTasks().get(0);
+		Task timedTask = this.manager.getTasks().get(1);
+		
+		assertEquals("[by 9AM] make cake for breakfast", TaskManager.prettyPrint(deadlineTask));
+		assertEquals("[10AM - 2PM] make waffles for lunch", TaskManager.prettyPrint(timedTask));
+	}
+	
+	
 	@Test
 	public void testEdit() {
 		assert true;

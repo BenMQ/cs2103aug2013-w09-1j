@@ -930,7 +930,7 @@ public class TaskManager {
 	
 	// Prints day-level separators
 	public void printDaySeparator(DateTime previousDate, String prefix) {
-		DateTimeFormatter datemonthformat = DateTimeFormat.forPattern("d MMM");
+		DateTimeFormatter datemonthformat = DateTimeFormat.forPattern("EEE d MMM");
 		System.out.println("\n["+ prefix + previousDate.toString(datemonthformat) + "]====================");
 	}	
 }

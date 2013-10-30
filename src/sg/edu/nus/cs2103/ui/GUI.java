@@ -163,7 +163,7 @@ public class GUI extends javax.swing.JFrame implements NativeKeyListener {
                         //inputText.setText("");
                     	if(inputText.getText().equals("demo")){
                     		if(isDemo){
-                    			mainTextFrame.setFont(new java.awt.Font("Monaco", 0, 17));
+                    			mainTextFrame.setFont(new java.awt.Font("Courier", 0, 17));
                             	floatingTextFrame.setFont(new java.awt.Font("Monaco", 0, 12));
                             	//mainTextFrame.setText("Font:Demo mode off");
                             	inputText.setText("");

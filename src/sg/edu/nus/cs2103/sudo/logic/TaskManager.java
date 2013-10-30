@@ -30,6 +30,8 @@ import sg.edu.nus.cs2103.sudo.storage.StorageHandler;
  */
 
 public class TaskManager {
+	private static final int MAX_CHARACTER_LENGTH = 17;
+
 	private static TaskManager taskManager;
 
 	// A list of timed, deadline and floating tasks
@@ -262,27 +264,30 @@ public class TaskManager {
 		
 		checkEmptyList();
 		String toReturn = "";
-		int count = 0;
-		for (int i = 0; i < tasks.size(); i++) {
-			Task task = tasks.get(i);
-
-			if (task instanceof FloatingTask && !task.isComplete()) {
-				count++;
+		ArrayList<FloatingTask> floatingTasks = this.getFloatingTasks();
+		
+		if (floatingTasks.size() == 0) {
+			return (Constants.MESSAGE_NO_FLOATING_TASKS);
+		}
+		
+		for (FloatingTask task: floatingTasks) {
+			if (!task.isComplete()) {
 				String str = task.toString();
 				
 				assert (!str.isEmpty());
-				if (str.length() > 17) { // refactor
+				if (str.length() > MAX_CHARACTER_LENGTH) { 
 					String[] tokens = str.split(" ");
-					int currLength = 3;
+					int currLength = 0;
 					
-					for (String token: tokens) {
+					for (int j=0; j<tokens.length; j++) {
+						String token = tokens[j];
 						currLength += token.length();
-						if (currLength > 17) {
-							currLength = 3; 
+						if (currLength > 17 && j > 1) {
+							currLength = 3;
+							currLength += token.length();
 							toReturn += "\n   ";
 						}
 						toReturn += token + " ";
-						currLength += token.length();
 					}
 				} else {
 					toReturn += str;
@@ -290,10 +295,7 @@ public class TaskManager {
 				toReturn += "\n";				
 			}
 		}
-
-		if (count == 0) {
-			return (Constants.MESSAGE_NO_FLOATING_TASKS);
-		}
+		
 		return toReturn;
 		
 		
@@ -855,11 +857,11 @@ public class TaskManager {
 		return this.tasks;
 	}
 
-	public ArrayList<FloatingTask> getFloatingTask() {
+	public ArrayList<FloatingTask> getFloatingTasks() {
 		ArrayList<FloatingTask> toReturn = new ArrayList<FloatingTask>();
-		for (Task tsk : this.tasks) {
-			if ((tsk instanceof FloatingTask)) {
-				toReturn.add((FloatingTask) tsk);
+		for (Task task : this.tasks) {
+			if ((task instanceof FloatingTask)) {
+				toReturn.add((FloatingTask) task);
 			}
 		}
 		return toReturn;

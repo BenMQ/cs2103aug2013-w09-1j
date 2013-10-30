@@ -3,11 +3,7 @@ package sg.edu.nus.cs2103.ui;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
-import java.util.ArrayList;
-import java.util.Scanner;
 
-import sg.edu.nus.cs2103.sudo.logic.FloatingTask;
-import sg.edu.nus.cs2103.sudo.logic.InputParser;
 import sg.edu.nus.cs2103.sudo.logic.LogicHandler;
 import sg.edu.nus.cs2103.sudo.logic.TaskManager;
 import sg.edu.nus.cs2103.sudo.Constants;
@@ -134,7 +130,7 @@ public class GUI extends javax.swing.JFrame implements NativeKeyListener {
 
         //Initialization of properties
         mainTextFrame.setEditable(false);
-        mainTextFrame.setFont(new java.awt.Font("OCR A Std", 0, 17));
+        mainTextFrame.setFont(new java.awt.Font("Monaco", 0, 17));
         mainTextFrame.setForeground(new java.awt.Color(56, 220, 40));
         mainTextFrame.setBackground(new java.awt.Color(0, 0, 0));
         mainTextFrame.setColumns(20);
@@ -164,7 +160,7 @@ public class GUI extends javax.swing.JFrame implements NativeKeyListener {
                         //inputText.setText("");
                     	if(inputText.getText().equals("demo")){
                     		if(isDemo){
-                    			mainTextFrame.setFont(new java.awt.Font("OCR A Std", 0, 17));
+                    			mainTextFrame.setFont(new java.awt.Font("Monaco", 0, 17));
                             	floatingTextFrame.setFont(new java.awt.Font("Monaco", 0, 12));
                             	//mainTextFrame.setText("Font:Demo mode off");
                             	inputText.setText("");

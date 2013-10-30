@@ -224,8 +224,18 @@ public class TaskManager {
 						previousDay = task.getEndTime().getDayOfYear();
 						previousDate = task.getEndTime();
 						
+						String prefix = "";
+						if (previousDay < DateTime.now().getDayOfYear()){
+							prefix = "Overdue: ";
+						} else if (previousDay == DateTime.now().getDayOfYear()){
+							prefix = "Today: ";
+						} else if (previousDay == (DateTime.now().getDayOfYear()+1)){
+							prefix = "Tomorrow: ";
+						} 
+						
 						//need a method that generates separators of constant size regardless of middle content
-						System.out.println("----------- " + previousDate.toString(datemonthformat) + " -----------");
+						System.out.println("\n["+ prefix + previousDate.toString(datemonthformat) + "]====================");
+						
 					}
 				} else {
 					if(!floatingStarted && isFloatingTask(task)){

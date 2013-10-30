@@ -32,9 +32,9 @@ public class Constants {
 	public static final String MESSAGE_DISPLAY = "Displaying incomplete tasks\n";
 	public static final String MESSAGE_DISPLAY_ALL = "Displaying all tasks\n";
 	public static final String MESSAGE_INVALID_NUMBER_OF_DATES = "Invalid number of dates.\n";
-	public static final String MESSAGE_ADD_TIMED = "Add timed task: %s from %s to %s\n";
-	public static final String MESSAGE_ADD_DEADLINE = "Add deadline task: %s by %s\n";
-	public static final String MESSAGE_ADD_FLOATING = "Add floating task: %s\n";
+	public static final String MESSAGE_ADD_TIMED = "Add: %s from %s to %s\n";
+	public static final String MESSAGE_ADD_DEADLINE = "Add: %s by %s\n";
+	public static final String MESSAGE_ADD_FLOATING = "Add: %s\n";
 	public static final String MESSAGE_SEARCH = "Searching: %s\n";
 	public static final String MESSAGE_EDIT = "Editing: %s\n";
 	public static final String MESSAGE_DELETE = "Deleted: %s\n";

@@ -254,7 +254,9 @@ public class TaskManager {
 	}
 
 	/**
+	 * TODO: REFACTOR
 	 * Displays the floating tasks only. To be shown in the side bar in the GUI
+	 * Formatted to be 17 characters per line. 
 	 */
 	public String AllFloatingTasks(){
 		
@@ -264,10 +266,28 @@ public class TaskManager {
 		for (int i = 0; i < tasks.size(); i++) {
 			Task task = tasks.get(i);
 
-			if (task instanceof FloatingTask && (!task.isComplete())) {
+			if (task instanceof FloatingTask && !task.isComplete()) {
 				count++;
-				toReturn+=(task.toString() + "\n");
-				//System.out.println(task.toString() + " " + task.isComplete());
+				String str = task.toString();
+				
+				assert (!str.isEmpty());
+				if (str.length() > 17) { // refactor
+					String[] tokens = str.split(" ");
+					int currLength = 3;
+					
+					for (String token: tokens) {
+						currLength += token.length();
+						if (currLength > 17) {
+							currLength = 3; 
+							toReturn += "\n   ";
+						}
+						toReturn += token + " ";
+						currLength += token.length();
+					}
+				} else {
+					toReturn += str;
+				}
+				toReturn += "\n";				
 			}
 		}
 

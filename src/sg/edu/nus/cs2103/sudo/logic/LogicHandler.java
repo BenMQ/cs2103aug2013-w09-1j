@@ -135,6 +135,9 @@ public class LogicHandler {
 				this.manager.redo();
 				this.manager.displayAllTasks(true);
 				return;
+			case DESTROY:
+				this.manager.relaunch();
+				return;
 			case EXIT:
 				this.manager.saveTasks();
 				System.exit(0);

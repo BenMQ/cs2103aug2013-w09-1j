@@ -114,7 +114,7 @@ public class GUI extends javax.swing.JFrame implements NativeKeyListener {
         mainTextFrameScrollPane = new javax.swing.JScrollPane();
         mainTextFrame = new javax.swing.JTextArea();
         inputText = new javax.swing.JTextField();
-        inputText.setForeground(new java.awt.Color(255, 50, 30));
+        inputText.setForeground(new java.awt.Color(40,40,205));
         sudooleButton = new javax.swing.JButton();
         floatingTaskScrollPane = new javax.swing.JScrollPane();
         floatingTextFrame = new javax.swing.JTextArea();
@@ -133,8 +133,8 @@ public class GUI extends javax.swing.JFrame implements NativeKeyListener {
 
         //Initialization of properties
         mainTextFrame.setEditable(false);
-        mainTextFrame.setFont(new java.awt.Font("Monaco", 0, 17));
-        mainTextFrame.setForeground(new java.awt.Color(225, 230, 255));
+        mainTextFrame.setFont(new java.awt.Font("Courier", 0, 17));
+        mainTextFrame.setForeground(new java.awt.Color(56, 220, 40));
         mainTextFrame.setBackground(new java.awt.Color(0, 0, 0));
         mainTextFrame.setColumns(20);
         mainTextFrame.setRows(5);
@@ -165,13 +165,13 @@ public class GUI extends javax.swing.JFrame implements NativeKeyListener {
                     		if(isDemo){
                     			mainTextFrame.setFont(new java.awt.Font("Monaco", 0, 17));
                             	floatingTextFrame.setFont(new java.awt.Font("Monaco", 0, 12));
-                            	mainTextFrame.setText("Font:Demo mode off");
+                            	//mainTextFrame.setText("Font:Demo mode off");
                             	inputText.setText("");
                             	isDemo = false;
                             }else{
                             	mainTextFrame.setFont(new java.awt.Font("Monaco", 0, 25));
                                 floatingTextFrame.setFont(new java.awt.Font("Monaco", 0, 16));
-                                mainTextFrame.setText("Font:Demo mode on");
+                                //mainTextFrame.setText("Font:Demo mode on");
                                 inputText.setText("");
                                 isDemo = true;
                             }

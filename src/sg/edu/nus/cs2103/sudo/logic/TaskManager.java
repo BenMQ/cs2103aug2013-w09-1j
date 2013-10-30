@@ -69,6 +69,21 @@ public class TaskManager {
 		this.tasks = tasks;
 	}
 
+	public void relaunch() {
+		StorageHandler.resetAll(Constants.FILE_NAME);
+		tasks = new ArrayList<Task>();
+		storage = StorageHandler.getStorageHandler(Constants.FILE_NAME);
+		isReloaded = storage.prepareFile(tasks);
+		updateAllIds();
+		try {
+			taskManager = new TaskManager();
+			System.out.println("Files rebuilt.");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			System.out.println("Files rebuiling failed.");
+			e.printStackTrace();
+		}
+	}
 	/**
 	 * Adds a new task into the list. Maintains a sorted list of items after
 	 * each add.
@@ -601,7 +616,7 @@ public class TaskManager {
 		try {
 			tasks = (ArrayList<Task>) storage.undo().clone();
 			System.out.println(Constants.MESSAGE_UNDO);
-			saveTasks();
+			//saveTasks();
 		} catch (FileNotFoundException e) {
 			storage.rebuildHistory();
 			System.out
@@ -641,7 +656,7 @@ public class TaskManager {
 		try {
 			tasks = (ArrayList<Task>) storage.redo().clone();
 			System.out.println(Constants.MESSAGE_REDO);
-			saveTasks();
+			//saveTasks();
 		} catch (FileNotFoundException e) {
 			storage.rebuildHistory();
 			System.out

@@ -3,6 +3,9 @@ package sg.edu.nus.cs2103.sudo.logic;
 import java.util.ArrayList;
 
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeComparator;
+
+import sg.edu.nus.cs2103.sudo.Constants;
 
 /**
  * @author Ipsita Mohapatra A0101286N
@@ -25,7 +28,7 @@ public class TimedTask extends Task {
 		DateTime startTime = dateTimes.get(0);
 		DateTime endTime = dateTimes.get(1);
 
-		super.checkValidityTimes(startTime, endTime);
+		checkValidityTimes(startTime, endTime);
 
 		this.startTime = startTime;
 		this.endTime = endTime;
@@ -51,5 +54,32 @@ public class TimedTask extends Task {
 		return "TIMED" + "#" + description + "#" + returnedStartTime + " to "
 				+ returnedEndTime + "#" + isComplete;
 	}
+	
+	private void checkValidityTimes(DateTime startTime, DateTime endTime) {
+		checkStartAndEndTime(startTime, endTime);
+	}
+	
+	private void checkStartAndEndTime(DateTime startTime, DateTime endTime) {
+		DateTimeComparator dtComp = DateTimeComparator.getInstance();
 
+		int check = dtComp.compare(endTime, startTime);
+
+		// check == 0 if the startTime and endTime are the same (Invalid
+		// TimedTask)
+		// check == -1 if endTime occurs before startTime (Invalid TimedTask)
+		// check == 1 if endTime occurs after startTime (Valid TimedTask)
+		boolean sameStartAndEnd = check == 0;
+		if (sameStartAndEnd) {
+			throw new IllegalArgumentException(
+					Constants.MESSAGE_SAME_START_END_TIME);
+		} else {
+			boolean invalidStartAndEnd = check == -1;
+			if (invalidStartAndEnd) {
+				throw new IllegalArgumentException(
+						Constants.MESSAGE_END_BEFORE_START_TIME);
+			}
+		}
+	}
 }
+
+

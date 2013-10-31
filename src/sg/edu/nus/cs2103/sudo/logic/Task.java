@@ -89,29 +89,6 @@ public abstract class Task {
 	
 	public abstract String toStringForFile();
 	
-	protected void checkValidityTimes(DateTime startTime, DateTime endTime) {
-		checkStartAndEndTime(startTime, endTime);
-	}
 	
-	protected void checkStartAndEndTime(DateTime startTime, DateTime endTime) {
-		DateTimeComparator dtComp = DateTimeComparator.getInstance();
-
-		int check = dtComp.compare(endTime, startTime);
-
-		// check == 0 if the startTime and endTime are the same (Invalid
-		// TimedTask)
-		// check == -1 if endTime occurs before startTime (Invalid TimedTask)
-		// check == 1 if endTime occurs after startTime (Valid TimedTask)
-		boolean sameStartAndEnd = check == 0;
-		if (sameStartAndEnd) {
-			throw new IllegalArgumentException(
-					Constants.MESSAGE_SAME_START_END_TIME);
-		} else {
-			boolean invalidStartAndEnd = check == -1;
-			if (invalidStartAndEnd) {
-				throw new IllegalArgumentException(
-						Constants.MESSAGE_END_BEFORE_START_TIME);
-			}
-		}
-	}
+	
 }

@@ -916,20 +916,20 @@ public class TaskManager {
 	public static String prettyPrint(Task task){
 		//Reference: http://joda-time.sourceforge.net/apidocs/org/joda/time/format/DateTimeFormat.html
 		DateTimeFormatter onlytimeformat = DateTimeFormat.forPattern("ha");
-		if(task.endTime.getMinuteOfHour() > 0){
+		if(task.endTime !=null && task.endTime.getMinuteOfHour() > 0){
 			onlytimeformat = DateTimeFormat.forPattern("h:mma");
 		} 
 		
 		
 		if(task.getStartTime() == null && task.getEndTime() == null){
-			return task.getDescription();
+			return task.getId() + ". " + task.getDescription();
 		} else if (task.getStartTime() == null){
-			return "[by "+task.getEndTime().toString(onlytimeformat)+"] "+ task.getDescription();
+			return task.getId() + ". [by "+task.getEndTime().toString(onlytimeformat)+"] "+ task.getDescription();
 		} else {
 			if(task.getStartTime().getDayOfYear() == task.getEndTime().getDayOfYear()){
-				return "["+task.getStartTime().toString(onlytimeformat)+" - "+task.getEndTime().toString(onlytimeformat)+"] "+ task.getDescription();
+				return task.getId() + ". ["+task.getStartTime().toString(onlytimeformat)+" - "+task.getEndTime().toString(onlytimeformat)+"] "+ task.getDescription();
 			}
-			return "["+task.getStartTime().toString(onlytimeformat)+" - "+task.getEndTime().toString(onlytimeformat)+"] "+ task.getDescription();
+			return task.getId() + ". ["+task.getStartTime().toString(onlytimeformat)+" - "+task.getEndTime().toString(onlytimeformat)+"] "+ task.getDescription();
 		}
 	}	
 	

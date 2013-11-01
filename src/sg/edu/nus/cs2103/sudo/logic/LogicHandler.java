@@ -117,27 +117,27 @@ public class LogicHandler {
 				this.manager.saveTasks();
 				System.exit(0);
 				return;
-
 			default:
-				assert false; // Unreachable code. Invalid commands must be
-								// caught.
+				assert false; // Unreachable code. Invalid commands are caught.
 				return;
 			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IllegalStateException e) {
-			// TODO Auto-generated catch block
 			System.out.printf(e.getMessage());
 		} catch (IndexOutOfBoundsException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
+	/**
+	 * This method delegates delete commands to the right
+	 * TaskManager delete APIs based on the number of 
+	 * search results.
+	 * @param taskDescription
+	 */	
 	public void delegateDelete(String taskDescription) throws IOException {
 		int numResults = this.manager.delete(taskDescription); 
 		if (numResults > 1) {
@@ -149,14 +149,20 @@ public class LogicHandler {
 		}
 	}
 
+	/**
+	 * This method delegates add commands to the right
+	 * TaskManager add API based on the number of date arguments.
+	 * @param taskDescription, ArrayList<DateTime>
+	 */	
 	public void delegateAddTasks(String taskDescription,
 			ArrayList<DateTime> dateTimes) throws Exception {
+		if(taskDescription == null){
+			System.out.print(Constants.MESSAGE_MISSING_DESCRIPTION);
+			return;
+		}		
+		
 		int numOfDates = dateTimes.size();
 		if(numOfDates == 0){
-				if(taskDescription == null){
-					System.out.print(Constants.MESSAGE_MISSING_DESCRIPTION);
-					return;
-				}
 				this.manager.addTask(new FloatingTask(taskDescription));
 				System.out.printf(Constants.MESSAGE_ADD_FLOATING, taskDescription);
 		} else if(numOfDates == 1){

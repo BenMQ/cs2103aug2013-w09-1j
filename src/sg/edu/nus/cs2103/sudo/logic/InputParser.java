@@ -64,9 +64,10 @@ public class InputParser {
 	public static COMMAND_TYPE parseCommandType(String userInput){
 		String commandWord = ParserUtils.getCommandWord(userInput);
 		COMMAND_TYPE commandType = ParserUtils.getCommandType(commandWord);
+		assert commandType != null;
 		int numOfWords = ParserUtils.countWords(userInput);
 		if (numOfWords == 0) {
-			return COMMAND_TYPE.PASS;
+			return COMMAND_TYPE.PASS; //Required for delete id input
 		} else if (numOfWords < ParserUtils.getNumOfWordsNeeded(commandType)) { 
 			return COMMAND_TYPE.INCOMPLETE;
 		} else {

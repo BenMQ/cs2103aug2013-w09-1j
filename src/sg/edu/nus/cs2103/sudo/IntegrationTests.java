@@ -146,8 +146,8 @@ public class IntegrationTests {
 		Task deadlineTask = IntegrationTests.manager.getTasks().get(0);
 		Task timedTask = IntegrationTests.manager.getTasks().get(1);
 		
-		assertEquals("[by 9AM] make cake for breakfast", UI.prettyPrint(deadlineTask));
-		assertEquals("[10AM - 2PM] make waffles for lunch", UI.prettyPrint(timedTask));
+		assertEquals("1. [by 9AM] make cake for breakfast", UI.prettyPrint(deadlineTask));
+		assertEquals("2. [10AM - 2PM] make waffles for lunch", UI.prettyPrint(timedTask));
 	}
 	
 	

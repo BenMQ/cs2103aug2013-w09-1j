@@ -10,6 +10,12 @@ import sg.edu.nus.cs2103.sudo.COMMAND_TYPE;
 import sg.edu.nus.cs2103.sudo.Constants;
 import sg.edu.nus.cs2103.ui.UI;
 
+/**
+ * LogicHandler is a facade class responsible for providing
+ * a simple API for handling most of the operations of sudo. 
+ * 
+ * @author Yos Riady 
+ */
 public final class LogicHandler {
 
 	private static LogicHandler logicHandler;
@@ -155,6 +161,7 @@ public final class LogicHandler {
 	 * TaskManager delete APIs based on the number of
 	 * search results.
 	 * @param taskDescription
+	 * @throws IOException
 	 */
 	public void delegateDelete(String taskDescription) throws IOException {
 		int numResults = this.manager.delete(taskDescription);
@@ -168,8 +175,8 @@ public final class LogicHandler {
 	/**
 	 * This method delegates add commands to the right
 	 * TaskManager add API based on the number of date arguments.
-	 * @param taskDescription
-	 * @param dateTimes
+	 * @param taskDescription	The task description
+	 * @param dateTimes			A list of DateTimes
 	 * @throws Exception
 	 */
 	public void delegateAddTasks(String taskDescription,

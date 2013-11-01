@@ -14,39 +14,41 @@ import org.joda.time.DateTime;
 import com.joestelmach.natty.DateGroup;
 import com.joestelmach.natty.Parser;
 
+/**
+ * This InputParser class is responsible for extracting commands
+ * and description/time parameters from user string inputs.
+ * 
+ * @author Yos Riady 
+ */
 public class InputParser {
+	/** Special flag used when a Task of specified is not found. */
+    private static final int NOT_FOUND = -1;
 
 	/**
-	 * This InputParser class is responsible for extracting commands
-	 * and description/time parameters from user string inputs.
-	 * 
-	 * @author Yos Riady 
-	 */
-
-
-	/**
-	 * Parses dates from the user's input string
+	 * Parses dates from the user's input string.
 	 * @param userInput 			string of the user's input
 	 * @return ArrayList<DateTime>	A list of DateTime objects
 	 */	
-	public static ArrayList<DateTime> parseDateTime(String userInput){
+	public static ArrayList<DateTime> parseDateTime(String userInput) {
 		Parser dtparser = new Parser();
 
 		//remove Description
 		String desc = parseDescription(userInput);
-		if(desc != null){
+		if (desc != null) {
 			userInput = userInput.replace(desc, "");
 		}
 		
-		List<DateGroup> dateGroups = dtparser.parse(userInput); //Each DateGroup contains a list of Date
+		//Each DateGroup contains a list of Date
+		List<DateGroup> dateGroups = dtparser.parse(userInput);
 		ArrayList<List<Date>> dateLists = ParserUtils.getDateLists(dateGroups);	
-		ArrayList<DateTime> dateTimes = ParserUtils.convertToDateTimes(dateLists);
+		ArrayList<DateTime> dateTimes = ParserUtils.
+				convertToDateTimes(dateLists);
 		
 		return dateTimes;
 	}
 
 	/**
-	 * Reads the user input for command
+	 * Reads the user input for command.
 	 * @return String 	the user's input command 
 	 */
 	public static String readCommand(Scanner user){
@@ -55,17 +57,17 @@ public class InputParser {
 	}	
 	
 	/**
-	 * Validates the user input for a specific COMMAND_TYPE
-	 * @param String	the user's input
+	 * Validates the user input for a specific COMMAND_TYPE.
+	 * @param userInput		the user's input
 	 * @return COMMAND_TYPE 
 	 */	
 	public static COMMAND_TYPE parseCommandType(String userInput){
 		String commandWord = ParserUtils.getCommandWord(userInput);
 		COMMAND_TYPE commandType = ParserUtils.getCommandType(commandWord);
 		int numOfWords = ParserUtils.countWords(userInput);
-		if(numOfWords == 0){
+		if (numOfWords == 0) {
 			return COMMAND_TYPE.PASS;
-		}else if (numOfWords < ParserUtils.getNumOfWordsNeeded(commandType)) {
+		} else if (numOfWords < ParserUtils.getNumOfWordsNeeded(commandType)) { 
 			return COMMAND_TYPE.INCOMPLETE;
 		} else {
 			return commandType;
@@ -73,15 +75,16 @@ public class InputParser {
 	}
 
 	/**
-	 * Parses the user input for task descriptions
-	 * @param String 	the user's input
-	 * @return String	task description 
+	 * Parses the user input for task descriptions.
+	 * @param userInput		the user's input
+	 * @return String 
 	 */	
 	public static String parseDescription(String userInput){
-		Pattern p = Pattern.compile("(?:^|)'([^']*?)'(?:$|)", Pattern.MULTILINE);
+		Pattern p = Pattern.compile("(?:^|)'([^']*?)'(?:$|)", 
+				Pattern.MULTILINE);
         Matcher m = p.matcher(userInput);
         if (m.find()) {
-            return m.group().substring(1,m.group().length()-1);
+            return m.group().substring(1, m.group().length() - 1);
         } else {
             return null;
         }
@@ -89,17 +92,18 @@ public class InputParser {
 	
 	/**
 	 * Attempts to get the content between first and second space, 
-	 * and parse as integer. -1 for unsuccessful parsing. 
+	 * and parse as integer. -1 for unsuccessful parsing.
+	 * @param userInput 
+	 * @return int
 	 */	
 	public static int parseId(String userInput) {
-	    final int NOT_FOUND = -1;
 	    String[] spaceDelimitedInput = userInput.split("\\s+");
 	    if (spaceDelimitedInput.length < 2) {
 	        return NOT_FOUND;
 	    }
 	    String firstArgument = spaceDelimitedInput[1];
 	    try {
-	        int id = Integer.parseInt(firstArgument, 10);
+	        int id = Integer.parseInt(firstArgument);
 	        return id;
 	    } catch (NumberFormatException e) {
 	        return NOT_FOUND;

@@ -10,57 +10,72 @@ import sg.edu.nus.cs2103.sudo.COMMAND_TYPE;
 import sg.edu.nus.cs2103.sudo.Constants;
 import sg.edu.nus.cs2103.ui.UI;
 
-public class LogicHandler {
+public final class LogicHandler {
 
-	private static Scanner scanner;
 	private static LogicHandler logicHandler;
+	private Scanner scanner;
 	private TaskManager manager;
 
-	private LogicHandler(TaskManager m, Scanner s) {
-		if (m == null) {
-			throw new NullPointerException("TaskManager cannot be null!");
+	/** logicHandler Constructor to initialize the logicHandler Object.
+	 * @param manager
+	 *            : a TaskManager object to delegate operations to
+	 * @param scanner
+	 *            : a Scanner object that listens for user input
+	 */
+	private LogicHandler(TaskManager manager, Scanner scanner) {
+		if (manager == null) {
+			throw new NullPointerException(
+					"TaskManager cannot be null!");
 		}
-		manager = m;
-		scanner = s;
+		this.manager = manager;
+		this.scanner = scanner;
 	}
 
 	/**
 	 * Returns a singleton instance of a logicHandler object.
-	 * Uses dependency injection to take in a TaskManager and Scanner object.
-	 * 
-	 * @param TaskManager, Scanner
+	 * Uses dependency injection to take in a TaskManager 
+	 * and Scanner object.
+	 * @param manager
+	 *            : a TaskManager object to delegate operations to
+	 * @param scanner
+	 *            : a Scanner object that listens for user input
 	 * @return logicHandler
+	 * 			  : a logicHandler object
 	 */
-	public static LogicHandler getLogicHandler(TaskManager m, Scanner s) {
+	public static LogicHandler getLogicHandler(TaskManager manager, Scanner scanner) {
 		if (logicHandler == null) {
-			logicHandler = new LogicHandler(m, s);
+			logicHandler = new LogicHandler(manager, scanner);
 		}
 		return logicHandler;
 	}
 
 	/**
-	 * Parses and executes the appropriate manager method based on the user's
-	 * input. LogicHandler becomes a facade class between UI and Logic components.
-	 * 
+	 * Parses and executes the appropriate manager method based 
+	 * on the user's input. LogicHandler becomes a 
+	 * facade class between UI and Logic components.
 	 * @param userInput
-	 *            string of the user's input
-	 * @return executes the appropriate high level command
+	 *           : string of the user's input
 	 */
-	public void executeCommand(String userInput) {
-		COMMAND_TYPE userCommand = InputParser.parseCommandType(userInput);
+	public void executeCommand(final String userInput) {
+		COMMAND_TYPE userCommand = InputParser.
+				parseCommandType(userInput);
 		assert (userCommand != null);
 
-		String taskDescription = InputParser.parseDescription(userInput);
+		String taskDescription = InputParser.
+				parseDescription(userInput);
 		int targetId = InputParser.parseId(userInput);
-		ArrayList<DateTime> dateTimes = InputParser.parseDateTime(userInput);
+		ArrayList<DateTime> dateTimes = InputParser.
+				parseDateTime(userInput);
 
 		try {
 			switch (userCommand) {
 			case INVALID:
-				System.out.print(Constants.MESSAGE_INVALID_COMMAND);
+				System.out.print(
+						Constants.MESSAGE_INVALID_COMMAND);
 				return;
 			case INCOMPLETE:
-				System.out.print(Constants.MESSAGE_INCOMPLETE_COMMAND);
+				System.out.print(
+						Constants.MESSAGE_INCOMPLETE_COMMAND);
 				return;
 			case DISPLAY:
 				this.manager.displayAllTasks();
@@ -85,17 +100,20 @@ public class LogicHandler {
 				this.manager.displayAllTasks();
 				return;
 			case EDIT:
-				this.manager.editTask(targetId, taskDescription, dateTimes);
+				this.manager.editTask(targetId, 
+						taskDescription, dateTimes);
 				this.manager.displayAllTasks();
 				return;
 			case SEARCH:
 				this.manager.searchAndDisplay(taskDescription);
 				return;
 			case FREE:
-	            this.manager.searchForFreeIntervals(dateTimes);   
+	            this.manager.searchForFreeIntervals(
+	            		dateTimes);   
 			    return;
 			case SCHEDULE:
-                this.manager.scheduleTask(taskDescription, dateTimes);   
+                this.manager.scheduleTask(
+                		taskDescription, dateTimes);   
                 return;				
 			case UNDO:
 				this.manager.undo();
@@ -107,18 +125,18 @@ public class LogicHandler {
 				return;
 			case HELP:
 				this.manager.help(taskDescription);
-				return;				
+				return;
 			case DESTROY:
 				this.manager.relaunch();
 				return;
 			case PASS:
-				return;				
+				return;
 			case EXIT:
 				this.manager.saveTasks();
 				System.exit(0);
 				return;
 			default:
-				assert false; // Unreachable code. Invalid commands are caught.
+				assert false; //Invalid commands are caught.
 				return;
 			}
 		} catch (IOException e) {
@@ -134,16 +152,14 @@ public class LogicHandler {
 
 	/**
 	 * This method delegates delete commands to the right
-	 * TaskManager delete APIs based on the number of 
+	 * TaskManager delete APIs based on the number of
 	 * search results.
 	 * @param taskDescription
-	 */	
+	 */
 	public void delegateDelete(String taskDescription) throws IOException {
-		int numResults = this.manager.delete(taskDescription); 
+		int numResults = this.manager.delete(taskDescription);
 		if (numResults > 1) {
 			System.out.println(Constants.MESSAGE_ENTER_TASK_ID);
-			System.out.println(scanner);
-			
 			int id = scanner.nextInt();
 			this.manager.delete(id);
 		}
@@ -152,26 +168,34 @@ public class LogicHandler {
 	/**
 	 * This method delegates add commands to the right
 	 * TaskManager add API based on the number of date arguments.
-	 * @param taskDescription, dateTimes
-	 */	
+	 * @param taskDescription
+	 * @param dateTimes
+	 * @throws Exception
+	 */
 	public void delegateAddTasks(String taskDescription,
-			ArrayList<DateTime> dateTimes) throws Exception {
-		if(taskDescription == null){
+		ArrayList<DateTime> dateTimes) throws Exception {
+		
+		if (taskDescription == null) {
 			System.out.print(Constants.MESSAGE_MISSING_DESCRIPTION);
 			return;
 		}		
 		
 		int numOfDates = dateTimes.size();
-		if(numOfDates == 0){
+		if (numOfDates == 0) {
 				this.manager.addTask(new FloatingTask(taskDescription));
-				System.out.printf(Constants.MESSAGE_ADD_FLOATING, taskDescription);
-		} else if(numOfDates == 1){
-				this.manager.addTask(new DeadlineTask(taskDescription, dateTimes));
-				System.out.printf(Constants.MESSAGE_ADD_DEADLINE, taskDescription, UI.formatDate(dateTimes.get(0)));
-		} else if(numOfDates == 2){
+				System.out.printf(Constants.MESSAGE_ADD_FLOATING, 
+						taskDescription);
+		} else if(numOfDates == 1) {
+				this.manager.addTask(
+						new DeadlineTask(taskDescription, dateTimes));
+				System.out.printf(
+						Constants.MESSAGE_ADD_DEADLINE, taskDescription, 
+								  UI.formatDate(dateTimes.get(0)));
+		} else if (numOfDates == 2) {
 				this.manager.addTask(new TimedTask(taskDescription, dateTimes));
 				System.out.printf(Constants.MESSAGE_ADD_TIMED, taskDescription,
-						UI.formatDate(dateTimes.get(0)), UI.formatDate(dateTimes.get(1)));
+						UI.formatDate(dateTimes.get(0)), 
+						UI.formatDate(dateTimes.get(1)));
 		} else {
 			System.out.print(Constants.MESSAGE_INVALID_NUMBER_OF_DATES);
 		}

@@ -102,6 +102,7 @@ public class ParserUtils {
 	 * @return number of words
 	 */
 	public static int getNumOfWordsNeeded(COMMAND_TYPE commandType) {
+		assert commandType != null;
 		switch (commandType) {
 		case ADD:
 		case DELETE:

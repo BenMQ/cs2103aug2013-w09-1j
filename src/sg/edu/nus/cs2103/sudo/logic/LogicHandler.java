@@ -187,12 +187,13 @@ public final class LogicHandler {
 			return;
 		}		
 		
+		assert taskDescription != null;
 		int numOfDates = dateTimes.size();
 		if (numOfDates == 0) {
 				this.manager.addTask(new FloatingTask(taskDescription));
 				System.out.printf(Constants.MESSAGE_ADD_FLOATING, 
 						taskDescription);
-		} else if(numOfDates == 1) {
+		} else if (numOfDates == 1) {
 				this.manager.addTask(
 						new DeadlineTask(taskDescription, dateTimes));
 				System.out.printf(

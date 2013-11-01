@@ -24,6 +24,7 @@ import sg.edu.nus.cs2103.sudo.logic.LogicHandler;
 import sg.edu.nus.cs2103.sudo.logic.Task;
 import sg.edu.nus.cs2103.sudo.logic.TaskManager;
 import sg.edu.nus.cs2103.sudo.storage.StorageHandler;
+import sg.edu.nus.cs2103.ui.UI;
 
 public class IntegrationTests {
 
@@ -142,11 +143,11 @@ public class IntegrationTests {
 		userInput = "add 'make cake for breakfast' by 14 October 9am";
 		runCommand(userInput);		
 		
-		Task deadlineTask = this.manager.getTasks().get(0);
-		Task timedTask = this.manager.getTasks().get(1);
+		Task deadlineTask = IntegrationTests.manager.getTasks().get(0);
+		Task timedTask = IntegrationTests.manager.getTasks().get(1);
 		
-		assertEquals("[by 9AM] make cake for breakfast", TaskManager.prettyPrint(deadlineTask));
-		assertEquals("[10AM - 2PM] make waffles for lunch", TaskManager.prettyPrint(timedTask));
+		assertEquals("[by 9AM] make cake for breakfast", UI.prettyPrint(deadlineTask));
+		assertEquals("[10AM - 2PM] make waffles for lunch", UI.prettyPrint(timedTask));
 	}
 	
 	

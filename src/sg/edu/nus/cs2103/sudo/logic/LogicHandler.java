@@ -8,6 +8,7 @@ import org.joda.time.DateTime;
 
 import sg.edu.nus.cs2103.sudo.COMMAND_TYPE;
 import sg.edu.nus.cs2103.sudo.Constants;
+import sg.edu.nus.cs2103.ui.UI;
 
 public class LogicHandler {
 
@@ -23,6 +24,13 @@ public class LogicHandler {
 		scanner = s;
 	}
 
+	/**
+	 * Returns a singleton instance of a logicHandler object.
+	 * Uses dependency injection to take in a TaskManager and Scanner object.
+	 * 
+	 * @param TaskManager, Scanner
+	 * @return logicHandler
+	 */
 	public static LogicHandler getLogicHandler(TaskManager m, Scanner s) {
 		if (logicHandler == null) {
 			logicHandler = new LogicHandler(m, s);
@@ -32,8 +40,7 @@ public class LogicHandler {
 
 	/**
 	 * Parses and executes the appropriate manager method based on the user's
-	 * input. Via this method, LogicHandler becomes a facade class between UI
-	 * and Logic.
+	 * input. LogicHandler becomes a facade class between UI and Logic components.
 	 * 
 	 * @param userInput
 	 *            string of the user's input
@@ -48,8 +55,7 @@ public class LogicHandler {
 		ArrayList<DateTime> dateTimes = InputParser.parseDateTime(userInput);
 
 		try {
-			switch (userCommand) { // we can refactor this using the Command
-									// pattern
+			switch (userCommand) {
 			case INVALID:
 				System.out.print(Constants.MESSAGE_INVALID_COMMAND);
 				return;
@@ -57,88 +63,56 @@ public class LogicHandler {
 				System.out.print(Constants.MESSAGE_INCOMPLETE_COMMAND);
 				return;
 			case DISPLAY:
-				System.out.print(Constants.MESSAGE_DISPLAY);
 				this.manager.displayAllTasks();
 				return;
 			case ALL:
-				System.out.print(Constants.MESSAGE_DISPLAY_ALL);
 				this.manager.displayAllTasks(true);
 				return;
 			case FINISH:
 				this.manager.markAsComplete(targetId);
+				this.manager.displayAllTasks();
 				return;
 			case UNFINISH:
 				this.manager.markAsIncomplete(targetId);
+				this.manager.displayAllTasks();
 				return;
 			case ADD:
-				int numOfDates = dateTimes.size();
-				if(numOfDates == 0){ //need to refactor this later
-						if(taskDescription == null){
-							System.out.print(Constants.MESSAGE_MISSING_DESCRIPTION);
-							return;
-						}
-						this.manager.addTask(new FloatingTask(taskDescription));
-						System.out.printf(Constants.MESSAGE_ADD_FLOATING, taskDescription);
-				} else if(numOfDates == 1){
-						this.manager.addTask(new DeadlineTask(taskDescription, dateTimes));
-						System.out.printf(Constants.MESSAGE_ADD_DEADLINE, taskDescription, dateTimes.get(0).toString("dd MMMM hh:mm a"));
-				} else if(numOfDates == 2){
-						this.manager.addTask(new TimedTask(taskDescription, dateTimes));
-						System.out.printf(Constants.MESSAGE_ADD_TIMED, taskDescription,
-						        dateTimes.get(0).toString("dd MMMM hh:mm a"), dateTimes.get(1).toString("dd MMMM hh:mm a"));
-				} else {
-					System.out.print(Constants.MESSAGE_INVALID_NUMBER_OF_DATES);
-				}
+				delegateAddTasks(taskDescription, dateTimes);
+				this.manager.displayAllTasks();
+				return;
+			case DELETE:
+				delegateDelete(taskDescription);
+				this.manager.displayAllTasks();
+				return;
+			case EDIT:
+				this.manager.editTask(targetId, taskDescription, dateTimes);
+				this.manager.displayAllTasks();
 				return;
 			case SEARCH:
-				System.out.printf(Constants.MESSAGE_SEARCH, taskDescription);
 				this.manager.searchAndDisplay(taskDescription);
 				return;
 			case FREE:
-			    if (dateTimes.size() > 2) {
-			        System.out.print(Constants.MESSAGE_INVALID_NUMBER_OF_DATES);
-			    } else {
-	                this.manager.searchForFreeIntervals(dateTimes);   
-			    }
+	            this.manager.searchForFreeIntervals(dateTimes);   
 			    return;
 			case SCHEDULE:
-			    if (dateTimes.size() > 2) {
-                    System.out.print(Constants.MESSAGE_INVALID_NUMBER_OF_DATES);
-                } else {
-                    this.manager.scheduleTask(taskDescription, dateTimes);   
-                }
-                return;
-			case DELETE:
-				int numResults = this.manager.delete(taskDescription); // need
-																		// to
-																		// refactor
-																		// this
-				if (numResults > 1) {
-					System.out.println(Constants.MESSAGE_ENTER_TASK_ID);
-					int id = scanner.nextInt();
-					this.manager.delete(id);
-				}
-				return;
-			case PASS:
-				return;
-			case EDIT:
-				System.out.printf(Constants.MESSAGE_EDIT, targetId);
-				this.manager.editTask(targetId, taskDescription, dateTimes);
-				return;
-			case HELP:
-				this.manager.help(taskDescription);
-				return;
+                this.manager.scheduleTask(taskDescription, dateTimes);   
+                return;				
 			case UNDO:
 				this.manager.undo();
-				this.manager.displayAllTasks(true);
+				this.manager.displayAllTasks();
 				return;
 			case REDO:
 				this.manager.redo();
-				this.manager.displayAllTasks(true);
+				this.manager.displayAllTasks();
 				return;
+			case HELP:
+				this.manager.help(taskDescription);
+				return;				
 			case DESTROY:
 				this.manager.relaunch();
 				return;
+			case PASS:
+				return;				
 			case EXIT:
 				this.manager.saveTasks();
 				System.exit(0);
@@ -161,6 +135,39 @@ public class LogicHandler {
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+	}
+
+	public void delegateDelete(String taskDescription) throws IOException {
+		int numResults = this.manager.delete(taskDescription); 
+		if (numResults > 1) {
+			System.out.println(Constants.MESSAGE_ENTER_TASK_ID);
+			System.out.println(scanner); //scanner is null? why?
+			
+			int id = scanner.nextInt();
+			this.manager.delete(id);
+		}
+	}
+
+	public void delegateAddTasks(String taskDescription,
+			ArrayList<DateTime> dateTimes) throws Exception {
+		int numOfDates = dateTimes.size();
+		if(numOfDates == 0){
+				if(taskDescription == null){
+					System.out.print(Constants.MESSAGE_MISSING_DESCRIPTION);
+					return;
+				}
+				this.manager.addTask(new FloatingTask(taskDescription));
+				System.out.printf(Constants.MESSAGE_ADD_FLOATING, taskDescription);
+		} else if(numOfDates == 1){
+				this.manager.addTask(new DeadlineTask(taskDescription, dateTimes));
+				System.out.printf(Constants.MESSAGE_ADD_DEADLINE, taskDescription, UI.formatDate(dateTimes.get(0)));
+		} else if(numOfDates == 2){
+				this.manager.addTask(new TimedTask(taskDescription, dateTimes));
+				System.out.printf(Constants.MESSAGE_ADD_TIMED, taskDescription,
+						UI.formatDate(dateTimes.get(0)), UI.formatDate(dateTimes.get(1)));
+		} else {
+			System.out.print(Constants.MESSAGE_INVALID_NUMBER_OF_DATES);
 		}
 	}
 	

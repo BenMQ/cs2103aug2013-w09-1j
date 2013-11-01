@@ -15,6 +15,7 @@ import org.joda.time.format.DateTimeFormatter;
 import sg.edu.nus.cs2103.sudo.Constants;
 import sg.edu.nus.cs2103.sudo.exceptions.NoHistoryException;
 import sg.edu.nus.cs2103.sudo.storage.StorageHandler;
+import sg.edu.nus.cs2103.ui.UI;
 
 /**
  * 
@@ -122,12 +123,13 @@ public class TaskManager {
 			ArrayList<DateTime> dates) throws IllegalStateException,
 			IndexOutOfBoundsException, Exception {
 		assert (dates.size() <= 2);
-
+		
 		checkEmptyList();
 
 		int index = taskId - 1;
 		checkValidityIndex(index);
-
+		
+		System.out.printf(Constants.MESSAGE_EDIT, taskId);
 		editTaskWithIndex(taskDescription, dates, index);
 
 		sortAndUpdateIds();
@@ -209,6 +211,12 @@ public class TaskManager {
 		boolean floatingStarted = false;
 		boolean finishedStarted = false;
 		
+		if(showAll){
+			System.out.print(Constants.MESSAGE_DISPLAY_ALL);
+		} else {
+			System.out.print(Constants.MESSAGE_DISPLAY);
+		}
+		
 		for (int i = 0; i < tasks.size(); i++) {
 
 			Task task = tasks.get(i);
@@ -224,10 +232,9 @@ public class TaskManager {
 					if(previousDay == 0 || task.getEndTime().getDayOfYear() != previousDay){
 						previousDay = task.getEndTime().getDayOfYear();
 						previousDate = task.getEndTime();
-						String prefix = addPrefix(previousDay); //adds 'Today: ', 'Overdue: ', etc
 						
 						//Todo: need this method to generate separators of constant size regardless of middle content
-						printDaySeparator(previousDate, prefix);
+						UI.printDaySeparator(previousDate);
 					}
 				} else {
 					if(!floatingStarted && isFloatingTask(task)){
@@ -242,7 +249,7 @@ public class TaskManager {
 				//End of Day-level separators
 				
 //				System.out.println(task.toString() + " " + completed);
-				System.out.println(TaskManager.prettyPrint(task) + " " + completed);
+				System.out.println(UI.prettyPrint(task) + " " + completed);
 			}
 
 		}
@@ -319,7 +326,7 @@ public class TaskManager {
 		}
 
 		currTask.setComplete(true);
-		System.out.print(Constants.MESSAGE_FINISH);
+		System.out.printf(Constants.MESSAGE_FINISH, currTask.description);
 		sortAndUpdateIds();
 		saveToHistory();
 		return tasks;
@@ -342,7 +349,7 @@ public class TaskManager {
 		}
 
 		currTask.setComplete(false);
-		System.out.print(Constants.MESSAGE_UNFINISH);
+		System.out.printf(Constants.MESSAGE_UNFINISH, currTask.description);
 		sortAndUpdateIds();
 		saveToHistory();
 		return tasks;
@@ -356,7 +363,7 @@ public class TaskManager {
 	 */
 	public ArrayList<Task> searchAndDisplay(String searchStr)
 			throws NullPointerException, IllegalStateException {
-
+		System.out.printf(Constants.MESSAGE_SEARCH, searchStr);
 		ArrayList<Task> searchResults = search(searchStr, false);
 		displaySearchResults(searchResults);
 		return searchResults;
@@ -435,6 +442,11 @@ public class TaskManager {
 	 * @author chenminqi
 	 */
     public void searchForFreeIntervals(ArrayList<DateTime> dateTimes) {
+    	if (dateTimes.size() > 2) {
+            System.out.print(Constants.MESSAGE_INVALID_NUMBER_OF_DATES);
+            return;
+        }
+    	
         assert(dateTimes.size() >= 0 && dateTimes.size() <= 2);
         ArrayList<DateTime> timeRange = getFlexibleTimeRange(dateTimes);
         ArrayList<MutableInterval> free = getFreeIntervals(timeRange);
@@ -568,6 +580,11 @@ public class TaskManager {
 	 * @throws Exception 
 	 */
 	public void scheduleTask(String description, ArrayList<DateTime> dateTimes) throws Exception {
+    	if (dateTimes.size() > 2) {
+            System.out.print(Constants.MESSAGE_INVALID_NUMBER_OF_DATES);
+            return;
+        }
+		
 	    ArrayList<DateTime> timeRange = getFlexibleTimeRange(dateTimes);
 	    ArrayList<MutableInterval> free = getFreeIntervals(timeRange);
 	    for (int i = 0; i < free.size(); i++) {
@@ -650,6 +667,7 @@ public class TaskManager {
 	 */
 	public void delete(int taskId) throws IOException {
 		int index = taskId - 1;
+		
 		checkValidityIndex(index);
 
 		System.out.printf(Constants.MESSAGE_DELETE,
@@ -909,50 +927,4 @@ public class TaskManager {
 		return task.getStartTime() != null && isDeadlineTask(task);
 	}
 	
-	/**
-	 * Returns a pretty string representation of a task.
-	 * @param Task
-	 */
-	public static String prettyPrint(Task task){
-		//Reference: http://joda-time.sourceforge.net/apidocs/org/joda/time/format/DateTimeFormat.html
-		DateTimeFormatter onlytimeformat = DateTimeFormat.forPattern("ha");
-		if(task.endTime !=null && task.endTime.getMinuteOfHour() > 0){
-			onlytimeformat = DateTimeFormat.forPattern("h:mma");
-		} 
-		
-		
-		if(task.getStartTime() == null && task.getEndTime() == null){
-			return task.getId() + ". " + task.getDescription();
-		} else if (task.getStartTime() == null){
-			return task.getId() + ". [by "+task.getEndTime().toString(onlytimeformat)+"] "+ task.getDescription();
-		} else {
-			if(task.getStartTime().getDayOfYear() == task.getEndTime().getDayOfYear()){
-				return task.getId() + ". ["+task.getStartTime().toString(onlytimeformat)+" - "+task.getEndTime().toString(onlytimeformat)+"] "+ task.getDescription();
-			}
-			return task.getId() + ". ["+task.getStartTime().toString(onlytimeformat)+" - "+task.getEndTime().toString(onlytimeformat)+"] "+ task.getDescription();
-		}
-	}	
-	
-	/**
-	 * Adds contextual prefixes to day separators such as Today:, Overdue:, etc
-	 * based on current day
-	 * @param int
-	 */	
-	public String addPrefix(int previousDay) {
-		String prefix = "";
-		if (previousDay < DateTime.now().getDayOfYear()){
-			prefix = "Overdue: ";
-		} else if (previousDay == DateTime.now().getDayOfYear()){
-			prefix = "Today: ";
-		} else if (previousDay == (DateTime.now().getDayOfYear()+1)){
-			prefix = "Tomorrow: ";
-		}
-		return prefix;
-	}	
-	
-	// Prints day-level separators
-	public void printDaySeparator(DateTime previousDate, String prefix) {
-		DateTimeFormatter datemonthformat = DateTimeFormat.forPattern("EEE d MMM");
-		System.out.println("\n["+ prefix + previousDate.toString(datemonthformat) + "]====================");
-	}	
 }

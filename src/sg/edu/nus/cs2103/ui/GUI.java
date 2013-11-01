@@ -3,6 +3,7 @@ package sg.edu.nus.cs2103.ui;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.util.Scanner;
 
 import sg.edu.nus.cs2103.sudo.logic.LogicHandler;
 import sg.edu.nus.cs2103.sudo.logic.TaskManager;
@@ -43,7 +44,6 @@ public class GUI extends javax.swing.JFrame implements NativeKeyListener {
      */
     public GUI() {
     	manager = TaskManager.getTaskManager();
-		//parser = InputParser.getInputParser(manager);
 		logicHandler = LogicHandler.getLogicHandler(manager, null);
         initComponents();
         this.setVisible(true);

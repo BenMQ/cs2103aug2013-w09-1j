@@ -99,7 +99,6 @@ public final class LogicHandler {
 				return;
 			case ADD:
 				delegateAddTasks(taskDescription, dateTimes);
-				this.manager.displayAllTasks();
 				return;
 			case DELETE:
 				delegateDelete(taskDescription);
@@ -207,6 +206,7 @@ public final class LogicHandler {
 		} else {
 			System.out.print(Constants.MESSAGE_INVALID_NUMBER_OF_DATES);
 		}
+		this.manager.displayAllTasks();
 	}
 	
 }

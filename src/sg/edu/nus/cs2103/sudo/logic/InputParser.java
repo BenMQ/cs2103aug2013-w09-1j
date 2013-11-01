@@ -81,9 +81,7 @@ public class InputParser {
 		Pattern p = Pattern.compile("(?:^|)'([^']*?)'(?:$|)", Pattern.MULTILINE);
         Matcher m = p.matcher(userInput);
         if (m.find()) {
-//                System.out.print(m.group());
-//                while (m.find()) System.out.print(", "+m.group());
-            return m.group().substring(1,m.group().length()-1); //refactor regex to do this pruning
+            return m.group().substring(1,m.group().length()-1);
         } else {
             return null;
         }

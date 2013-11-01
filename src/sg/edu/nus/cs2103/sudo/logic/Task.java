@@ -60,7 +60,7 @@ public abstract class Task {
 
 	public boolean isTimedTask() {
 		return this.getStartTime() != null && this.isDeadlineTask();
-	}	
+	}
 	
 	/**
 	 * Converts the task object into a string with the following format:

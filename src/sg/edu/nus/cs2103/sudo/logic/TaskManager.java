@@ -210,11 +210,7 @@ public class TaskManager {
 		boolean floatingStarted = false;
 		boolean finishedStarted = false;
 		
-		if(showAll){
-			System.out.print(Constants.MESSAGE_DISPLAY_ALL);
-		} else {
-			System.out.print(Constants.MESSAGE_DISPLAY);
-		}
+		showDisplayMessage(showAll);
 		
 		for (int i = 0; i < tasks.size(); i++) {
 
@@ -230,8 +226,6 @@ public class TaskManager {
 				if(!task.isComplete() && !task.isFloatingTask()){
 					if(previousDate == null || task.getEndTime().getDayOfYear() != previousDate.getDayOfYear()){
 						previousDate = task.getEndTime();
-						
-						//Todo: need this method to generate separators of constant size regardless of middle content
 						UI.printDaySeparator(previousDate);
 					}
 				} else {
@@ -734,6 +728,25 @@ public class TaskManager {
 	}
 
 	/**
+	 * Helps the user get started with using sudo
+	 * @param topic
+	 */
+	public void help(String topic) {
+		if (topic == null){
+			System.out.println(Constants.MESSAGE_WELCOME_HELP_PAGE);
+		} else if(topic.toUpperCase().equals("LIST")){
+			System.out.println(Constants.HELP_LIST);
+		} else {
+			String helpMessage = Constants.helpTopics.get(topic.toUpperCase());
+			if(helpMessage == null){
+				System.out.printf(Constants.HELP_NOT_FOUND, topic);
+			} else {
+				System.out.println(helpMessage);
+			}
+		}
+	}	
+	
+	/**
 	 * To check if the task list is empty. If yes, throw exception.
 	 */
 	private void checkEmptyList() throws IllegalStateException {
@@ -837,25 +850,6 @@ public class TaskManager {
 		}
 	}
 
-	/**
-	 * Helps the user get started with using sudo
-	 */
-	public void help(String topic) {
-		if (topic == null){
-			System.out.println(Constants.MESSAGE_WELCOME_HELP_PAGE);
-		} else if(topic.toUpperCase().equals("LIST")){
-			System.out.println(Constants.HELP_LIST);
-		} else {
-			String helpMessage = Constants.helpTopics.get(topic.toUpperCase());
-			if(helpMessage == null){
-				System.out.printf(Constants.HELP_NOT_FOUND, topic);
-			} else {
-				System.out.println(helpMessage);
-			}
-		}
-	}
-
-
 	public ArrayList<Task> getTasks() {
 		return this.tasks;
 	}
@@ -899,4 +893,16 @@ public class TaskManager {
 		;
 		return toReturn;
 	}	
+	
+	/**
+	 * Shows the correct display message depending on showAll
+	 */
+	public void showDisplayMessage(boolean showAll) {
+		if(showAll){
+			System.out.print(Constants.MESSAGE_DISPLAY_ALL);
+		} else {
+			System.out.print(Constants.MESSAGE_DISPLAY);
+		}
+	}
+	
 }

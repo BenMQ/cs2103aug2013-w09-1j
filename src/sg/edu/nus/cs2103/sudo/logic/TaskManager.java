@@ -619,7 +619,7 @@ public class TaskManager {
                     TimedTask task = new TimedTask(description, range);
                     addTask(task);
                     System.out.printf(Constants.MESSAGE_ADD_TIMED, task.description,
-                            task.startTime.toString("dd MMMM hh:mm a"), task.endTime.toString("dd MMMM hh:mm a"));
+                            UI.formatDate(task.startTime), UI.formatDate(task.endTime));
                     saveToHistory();
                     return;
                 } else {
@@ -692,16 +692,10 @@ public class TaskManager {
 			//saveTasks();
 		} catch (FileNotFoundException e) {
 			storage.rebuildHistory();
-			System.out
-					.println(Constants.MESSAGE_HISTORY_LOAD_ERROR);
-			// TODO Auto-generated catch block
-			// e.printStackTrace();
+			System.out.println(Constants.MESSAGE_HISTORY_LOAD_ERROR);
 		} catch (NoHistoryException e) {
 			System.out.println(Constants.MESSAGE_LAST_HISTORY);
-			// TODO Auto-generated catch block
-			// e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		updateAllIds();
@@ -732,16 +726,10 @@ public class TaskManager {
 			//saveTasks();
 		} catch (FileNotFoundException e) {
 			storage.rebuildHistory();
-			System.out
-					.println(Constants.MESSAGE_HISTORY_LOAD_ERROR);
-			// TODO Auto-generated catch block
-			// e.printStackTrace();
+			System.out.println(Constants.MESSAGE_HISTORY_LOAD_ERROR);
 		} catch (NoHistoryException e) {
 			System.out.println(Constants.MESSAGE_LAST_HISTORY);
-			// TODO Auto-generated catch block
-			// e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		updateAllIds();

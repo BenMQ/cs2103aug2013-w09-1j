@@ -142,7 +142,7 @@ public class LogicHandler {
 		int numResults = this.manager.delete(taskDescription); 
 		if (numResults > 1) {
 			System.out.println(Constants.MESSAGE_ENTER_TASK_ID);
-			System.out.println(scanner); //scanner is null? why?
+			System.out.println(scanner);
 			
 			int id = scanner.nextInt();
 			this.manager.delete(id);
@@ -152,7 +152,7 @@ public class LogicHandler {
 	/**
 	 * This method delegates add commands to the right
 	 * TaskManager add API based on the number of date arguments.
-	 * @param taskDescription, ArrayList<DateTime>
+	 * @param taskDescription, dateTimes
 	 */	
 	public void delegateAddTasks(String taskDescription,
 			ArrayList<DateTime> dateTimes) throws Exception {

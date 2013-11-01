@@ -206,7 +206,6 @@ public class TaskManager {
 	 */
 	public void displayAllTasks(boolean showAll) throws IllegalStateException {
 		checkEmptyList();
-		int previousDay = 0;
 		DateTime previousDate = null;
 		boolean floatingStarted = false;
 		boolean finishedStarted = false;
@@ -228,16 +227,15 @@ public class TaskManager {
 			if (showAll || !task.isComplete) {	
 				
 				//Start of Day-level separators
-				if(!task.isComplete() && (isTimedTask(task) || isDeadlineTask(task))){
-					if(previousDay == 0 || task.getEndTime().getDayOfYear() != previousDay){
-						previousDay = task.getEndTime().getDayOfYear();
+				if(!task.isComplete() && !task.isFloatingTask()){
+					if(previousDate == null || task.getEndTime().getDayOfYear() != previousDate.getDayOfYear()){
 						previousDate = task.getEndTime();
 						
 						//Todo: need this method to generate separators of constant size regardless of middle content
 						UI.printDaySeparator(previousDate);
 					}
 				} else {
-					if(!floatingStarted && isFloatingTask(task)){
+					if(!floatingStarted && task.isFloatingTask()){
 						floatingStarted = true;
 						System.out.println(Constants.FLOATING_TASK_SEPARATOR);
 					}
@@ -248,7 +246,6 @@ public class TaskManager {
 				}
 				//End of Day-level separators
 				
-//				System.out.println(task.toString() + " " + completed);
 				System.out.println(UI.prettyPrint(task) + " " + completed);
 			}
 
@@ -901,18 +898,5 @@ public class TaskManager {
 		}
 		;
 		return toReturn;
-	}
-
-	public static boolean isFloatingTask(Task task) {
-		return task.startTime == null && task.endTime == null;
-	}
-
-	public static boolean isDeadlineTask(Task task) {
-		return task.getEndTime() != null;
-	}
-
-	public static boolean isTimedTask(Task task) {
-		return task.getStartTime() != null && isDeadlineTask(task);
-	}
-	
+	}	
 }

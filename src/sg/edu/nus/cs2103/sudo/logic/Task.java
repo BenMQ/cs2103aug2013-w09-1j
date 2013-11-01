@@ -50,6 +50,18 @@ public abstract class Task {
 		return isComplete;
 	}
 	
+	public boolean isFloatingTask() {
+		return this.startTime == null && this.endTime == null;
+	}
+
+	public boolean isDeadlineTask() {
+		return this.getEndTime() != null;
+	}
+
+	public boolean isTimedTask() {
+		return this.getStartTime() != null && this.isDeadlineTask();
+	}	
+	
 	/**
 	 * Converts the task object into a string with the following format:
 	 * 1) Timed task: desc from x to y

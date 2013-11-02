@@ -96,7 +96,7 @@ public class TaskManager {
 	 * @return floatingTasks with new additions
 	 * @throws Exception
 	 */
-	public ArrayList<Task> addTask(final Task newTask) throws Exception {
+	public ArrayList<Task> addTask(Task newTask) throws Exception {
 		assert (newTask != null);
 
 		newTask.setId(tasks.size() + 1);
@@ -119,9 +119,9 @@ public class TaskManager {
 	 * @throws IndexOutOfBoundsException
 	 * @throws Exception
 	 */
-	public ArrayList<Task> editTask(final int taskId,
-			final String taskDescription, final ArrayList<DateTime> dates)
-			throws IllegalStateException, IndexOutOfBoundsException, Exception {
+	public ArrayList<Task> editTask(int taskId, String taskDescription,
+			ArrayList<DateTime> dates) throws IllegalStateException,
+			IndexOutOfBoundsException, Exception {
 		assert (dates.size() <= 2);
 
 		checkEmptyList();
@@ -144,7 +144,7 @@ public class TaskManager {
 	 * @param task
 	 * @return
 	 */
-	private Task editDescription(final String taskDescription, final Task task) {
+	private Task editDescription(String taskDescription, Task task) {
 		if (taskDescription != "" && taskDescription != null) {
 			task.setDescription(taskDescription);
 		}
@@ -158,7 +158,7 @@ public class TaskManager {
 	 * @param task
 	 * @return
 	 */
-	private Task editDateTime(final ArrayList<DateTime> dates, Task task) {
+	private Task editDateTime(ArrayList<DateTime> dates, Task task) {
 		if (dates.size() == 1) {
 			if (!(task instanceof DeadlineTask)) {
 				task = new DeadlineTask(task.getId(), task.getDescription(),
@@ -187,8 +187,8 @@ public class TaskManager {
 	 * @param dates
 	 * @param index
 	 */
-	private void editTaskWithIndex(final String taskDescription,
-			final ArrayList<DateTime> dates, final int index) {
+	private void editTaskWithIndex(String taskDescription,
+			ArrayList<DateTime> dates, int index) {
 
 		Task oldTask = tasks.remove(index);
 		Task newTask = editDescription(taskDescription, oldTask);
@@ -203,8 +203,7 @@ public class TaskManager {
 	 * @param showAll
 	 *            set to true to include completed tasks
 	 */
-	public void displayAllTasks(final boolean showAll)
-			throws IllegalStateException {
+	public void displayAllTasks(boolean showAll) throws IllegalStateException {
 		checkEmptyList();
 		DateTime previousDate = null;
 		boolean floatingStarted = false;
@@ -305,7 +304,7 @@ public class TaskManager {
 	 * @param taskId
 	 * @throws Exception
 	 */
-	public ArrayList<Task> markAsComplete(final int taskId) throws Exception {
+	public ArrayList<Task> markAsComplete(int taskId) throws Exception {
 
 		int index = taskId - 1;
 		checkValidityIndex(index);
@@ -329,7 +328,7 @@ public class TaskManager {
 	 * @param taskId
 	 * @throws Exception
 	 */
-	public ArrayList<Task> markAsIncomplete(final int taskId) throws Exception {
+	public ArrayList<Task> markAsIncomplete(int taskId) throws Exception {
 		int index = taskId - 1;
 		checkValidityIndex(index);
 
@@ -356,7 +355,7 @@ public class TaskManager {
 	 * @throws NullPointerException
 	 * @throws IllegalStateException
 	 */
-	public ArrayList<Task> searchAndDisplay(final String searchStr)
+	public ArrayList<Task> searchAndDisplay(String searchStr)
 			throws NullPointerException, IllegalStateException {
 		System.out.printf(Constants.MESSAGE_SEARCH, searchStr);
 		ArrayList<Task> searchResults = search(searchStr, false);
@@ -370,7 +369,7 @@ public class TaskManager {
 	 * 
 	 * Prints out the list of searched Task objects.
 	 */
-	public ArrayList<Task> searchAllAndDisplay(final String searchStr)
+	public ArrayList<Task> searchAllAndDisplay(String searchStr)
 			throws NullPointerException, IllegalStateException {
 
 		ArrayList<Task> searchResults = search(searchStr, true);
@@ -385,9 +384,8 @@ public class TaskManager {
 	 * @param searchStr
 	 * @return ArrayList of Task objects
 	 */
-	public ArrayList<Task> search(final String searchStr,
-			final boolean searchAll) throws NullPointerException,
-			IllegalStateException {
+	public ArrayList<Task> search(String searchStr, boolean searchAll)
+			throws NullPointerException, IllegalStateException {
 
 		if (searchStr == null || searchStr == "") {
 			throw new NullPointerException(Constants.MESSAGE_INVALID_SEARCH);
@@ -415,7 +413,7 @@ public class TaskManager {
 	/**
 	 * Prints out the list of search results containing Task objects.
 	 */
-	public void displaySearchResults(final ArrayList<Task> searchResults)
+	public void displaySearchResults(ArrayList<Task> searchResults)
 			throws IllegalStateException {
 		if (searchResults.isEmpty()) {
 			throw new IllegalStateException(Constants.MESSAGE_NO_SEARCH_RESULTS);
@@ -439,7 +437,7 @@ public class TaskManager {
 	 * 
 	 * @author chenminqi
 	 */
-	public void searchForFreeIntervals(final ArrayList<DateTime> dateTimes) {
+	public void searchForFreeIntervals(ArrayList<DateTime> dateTimes) {
 		if (dateTimes.size() > 2) {
 			System.out.print(Constants.MESSAGE_INVALID_NUMBER_OF_DATES);
 			return;
@@ -481,7 +479,7 @@ public class TaskManager {
 	 * @return range calculated
 	 */
 	private ArrayList<DateTime> getFlexibleTimeRange(
-			final ArrayList<DateTime> dateTimes) {
+			ArrayList<DateTime> dateTimes) {
 		assert (dateTimes.size() >= 0 && dateTimes.size() <= 2);
 		if (dateTimes.size() == 2) {
 			if (dateTimes.get(0).isAfter(dateTimes.get(1))) {
@@ -518,7 +516,7 @@ public class TaskManager {
 	 * @param timeRange
 	 */
 	public ArrayList<MutableInterval> getOccupiedIntervals(
-			final ArrayList<DateTime> timeRange) {
+			ArrayList<DateTime> timeRange) {
 		sortTasks();
 
 		DateTime start = timeRange.get(0);
@@ -573,7 +571,7 @@ public class TaskManager {
 	 * @author chenminqi
 	 */
 	public ArrayList<MutableInterval> getFreeIntervals(
-			final ArrayList<DateTime> dateTimes) {
+			ArrayList<DateTime> dateTimes) {
 		DateTime start = dateTimes.get(0);
 		ArrayList<MutableInterval> free = new ArrayList<MutableInterval>();
 
@@ -598,8 +596,8 @@ public class TaskManager {
 	 * @param timeRange
 	 * @throws Exception
 	 */
-	public void scheduleTask(final String description,
-			final ArrayList<DateTime> dateTimes) throws Exception {
+	public void scheduleTask(String description, ArrayList<DateTime> dateTimes)
+			throws Exception {
 		if (dateTimes.size() > 2) {
 			System.out.print(Constants.MESSAGE_INVALID_NUMBER_OF_DATES);
 			return;
@@ -664,7 +662,7 @@ public class TaskManager {
 	 * @throws IOException
 	 * @throws Exception
 	 */
-	public int delete(final String searchStr) throws IOException {
+	public int delete(String searchStr) throws IOException {
 
 		if (searchStr == null || searchStr == "") {
 			throw new NullPointerException(Constants.MESSAGE_INVALID_DELETE);
@@ -689,7 +687,7 @@ public class TaskManager {
 	 * 
 	 * @throws IOException
 	 */
-	public void delete(final int taskId) throws IOException {
+	public void delete(int taskId) throws IOException {
 		int index = taskId - 1;
 
 		checkValidityIndex(index);
@@ -765,7 +763,7 @@ public class TaskManager {
 	 * 
 	 * @param topic
 	 */
-	public void help(final String topic) {
+	public void help(String topic) {
 		if (topic == null) {
 			System.out.println(HelpConstants.MESSAGE_WELCOME_HELP_PAGE);
 		} else if (topic.toUpperCase().equals("LIST")) {
@@ -838,8 +836,7 @@ public class TaskManager {
 	 * @param index
 	 * @throws IndexOutOfBoundsException
 	 */
-	private void checkValidityIndex(final int index)
-			throws IndexOutOfBoundsException {
+	private void checkValidityIndex(int index) throws IndexOutOfBoundsException {
 		if (index < 0 || index >= tasks.size()) {
 			throw new IndexOutOfBoundsException(
 					Constants.MESSAGE_INVALID_TASK_INDEX);
@@ -854,8 +851,7 @@ public class TaskManager {
 	 * @param startTime
 	 * @param endTime
 	 */
-	private void checkValidityTimes(final DateTime startTime,
-			final DateTime endTime) {
+	private void checkValidityTimes(DateTime startTime, DateTime endTime) {
 		checkStartAndEndTime(startTime, endTime);
 	}
 
@@ -865,15 +861,15 @@ public class TaskManager {
 	 * @param startTime
 	 * @param endTime
 	 */
-	private void checkStartAndEndTime(final DateTime startTime, DateTime endTime) {
+	private void checkStartAndEndTime(DateTime startTime, DateTime endTime) {
 		DateTimeComparator dtComp = DateTimeComparator.getInstance();
 
 		int check = dtComp.compare(endTime, startTime);
 
-		// check == 0 if the startTime and endTime are the same (Invalid
+		// check = 0 if the startTime and endTime are the same (Invalid
 		// TimedTask)
-		// check == -1 if endTime occurs before startTime (Invalid TimedTask)
-		// check == 1 if endTime occurs after startTime (Valid TimedTask)
+		// check = -1 if endTime occurs before startTime (Invalid TimedTask)
+		// check = 1 if endTime occurs after startTime (Valid TimedTask)
 		boolean sameStartAndEnd = check == 0;
 		if (sameStartAndEnd) {
 			throw new IllegalArgumentException(

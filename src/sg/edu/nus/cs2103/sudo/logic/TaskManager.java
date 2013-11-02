@@ -6,11 +6,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import org.joda.time.DateTime;
-import org.joda.time.DateTime.Property;
 import org.joda.time.DateTimeComparator;
 import org.joda.time.MutableInterval;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 
 import sg.edu.nus.cs2103.sudo.Constants;
 import sg.edu.nus.cs2103.sudo.HelpConstants;
@@ -19,7 +16,6 @@ import sg.edu.nus.cs2103.sudo.storage.StorageHandler;
 import sg.edu.nus.cs2103.ui.UI;
 
 /**
- * 
  * @author chenminqi
  * @author Ipsita Mohapatra A0101286N
  * @author Yos Riady
@@ -29,10 +25,10 @@ import sg.edu.nus.cs2103.ui.UI;
  *         user commands such as adding, editing, searching and deleting Task
  *         objects. It is also responsible for throwing exceptions when
  *         necessary.
- * 
  */
 
 public class TaskManager {
+	private static final int NUM_PRECEDING_CHARACTERS = 3;
 	private static final int MAX_CHARACTER_LENGTH = 17;
 
 	private static TaskManager taskManager;
@@ -54,13 +50,12 @@ public class TaskManager {
 	}
 
 	public static TaskManager getTaskManager() {
-		try {
-			if (taskManager == null) {
+		if (taskManager == null) {
+			try {
 				taskManager = new TaskManager();
-			}
-			return taskManager;
-		} catch (Exception e) {
+			} catch (Exception e) {
 
+			}
 		}
 		return taskManager;
 	}
@@ -73,7 +68,7 @@ public class TaskManager {
 	 * @param tasks
 	 *            ArrayList of tasks that is provided by the storage unit
 	 */
-	public void preloadTasks(ArrayList<Task> tasks) {
+	public void preloadTasks(final ArrayList<Task> tasks) {
 		this.tasks = tasks;
 	}
 
@@ -92,6 +87,7 @@ public class TaskManager {
 			e.printStackTrace();
 		}
 	}
+
 	/**
 	 * Adds a new task into the list. Maintains a sorted list of items after
 	 * each add.
@@ -100,7 +96,7 @@ public class TaskManager {
 	 * @return floatingTasks with new additions
 	 * @throws Exception
 	 */
-	public ArrayList<Task> addTask(Task newTask) throws Exception {
+	public ArrayList<Task> addTask(final Task newTask) throws Exception {
 		assert (newTask != null);
 
 		newTask.setId(tasks.size() + 1);
@@ -115,22 +111,24 @@ public class TaskManager {
 	 * Replaces the task indicated by the displayId with the newTask Changes
 	 * from one type of task to another if necessary.
 	 * 
-	 * 
-	 * @param displayId
-	 * @param newTask
-	 * @return floatingTasks after editing
+	 * @param taskId
+	 * @param taskDescription
+	 * @param dates
+	 * @return
+	 * @throws IllegalStateException
+	 * @throws IndexOutOfBoundsException
 	 * @throws Exception
 	 */
-	public ArrayList<Task> editTask(int taskId, String taskDescription,
-			ArrayList<DateTime> dates) throws IllegalStateException,
-			IndexOutOfBoundsException, Exception {
+	public ArrayList<Task> editTask(final int taskId,
+			final String taskDescription, final ArrayList<DateTime> dates)
+			throws IllegalStateException, IndexOutOfBoundsException, Exception {
 		assert (dates.size() <= 2);
-		
+
 		checkEmptyList();
 
 		int index = taskId - 1;
 		checkValidityIndex(index);
-		
+
 		System.out.printf(Constants.MESSAGE_EDIT, taskId);
 		editTaskWithIndex(taskDescription, dates, index);
 
@@ -146,7 +144,7 @@ public class TaskManager {
 	 * @param task
 	 * @return
 	 */
-	private Task editDescription(String taskDescription, Task task) {
+	private Task editDescription(final String taskDescription, final Task task) {
 		if (taskDescription != "" && taskDescription != null) {
 			task.setDescription(taskDescription);
 		}
@@ -160,7 +158,7 @@ public class TaskManager {
 	 * @param task
 	 * @return
 	 */
-	private Task editDateTime(ArrayList<DateTime> dates, Task task) {
+	private Task editDateTime(final ArrayList<DateTime> dates, Task task) {
 		if (dates.size() == 1) {
 			if (!(task instanceof DeadlineTask)) {
 				task = new DeadlineTask(task.getId(), task.getDescription(),
@@ -189,15 +187,15 @@ public class TaskManager {
 	 * @param dates
 	 * @param index
 	 */
-	private void editTaskWithIndex(String taskDescription,
-			ArrayList<DateTime> dates, int index) {
+	private void editTaskWithIndex(final String taskDescription,
+			final ArrayList<DateTime> dates, final int index) {
 
 		Task oldTask = tasks.remove(index);
 		Task newTask = editDescription(taskDescription, oldTask);
 		newTask = editDateTime(dates, newTask);
 		tasks.add(newTask);
 	}
-	
+
 	/**
 	 * Prints tasks to stdout. Incomplete tasks are always printed by default.
 	 * If showAll is set to true, completed tasks are printed as well.
@@ -205,42 +203,45 @@ public class TaskManager {
 	 * @param showAll
 	 *            set to true to include completed tasks
 	 */
-	public void displayAllTasks(boolean showAll) throws IllegalStateException {
+	public void displayAllTasks(final boolean showAll)
+			throws IllegalStateException {
 		checkEmptyList();
 		DateTime previousDate = null;
 		boolean floatingStarted = false;
 		boolean finishedStarted = false;
-		
+
 		showDisplayMessage(showAll);
-		
+
 		for (int i = 0; i < tasks.size(); i++) {
 
 			Task task = tasks.get(i);
-			
+
 			String completed = "";
 			if (task.isComplete()) {
 				completed = "Done!";
 			}
-			if (showAll || !task.isComplete) {	
-				
-				//Start of Day-level separators
-				if(!task.isComplete() && !task.isFloatingTask()){
-					if(previousDate == null || task.getEndTime().getDayOfYear() != previousDate.getDayOfYear()){
+			if (showAll || !task.isComplete) {
+
+				// Start of Day-level separators
+				if (!task.isComplete() && !task.isFloatingTask()) {
+					if (previousDate == null
+							|| task.getEndTime().getDayOfYear() != previousDate
+									.getDayOfYear()) {
 						previousDate = task.getEndTime();
 						UI.printDaySeparator(previousDate);
 					}
 				} else {
-					if(!floatingStarted && task.isFloatingTask()){
+					if (!floatingStarted && task.isFloatingTask()) {
 						floatingStarted = true;
 						System.out.println(Constants.FLOATING_TASK_SEPARATOR);
 					}
-					if(!finishedStarted && task.isComplete()){
+					if (!finishedStarted && task.isComplete()) {
 						finishedStarted = true;
 						System.out.println(Constants.FINISHED_TASK_SEPARATOR);
 					}
 				}
-				//End of Day-level separators
-				
+				// End of Day-level separators
+
 				System.out.println(UI.prettyPrint(task) + " " + completed);
 			}
 
@@ -255,34 +256,33 @@ public class TaskManager {
 	}
 
 	/**
-	 * TODO: REFACTOR
-	 * Displays the floating tasks only. To be shown in the side bar in the GUI
-	 * Formatted to be 17 characters per line. 
+	 * TODO: REFACTOR Displays the floating tasks only. To be shown in the side
+	 * bar in the GUI Formatted to be 17 characters per line.
 	 */
-	public String AllFloatingTasks(){
-		
+	public String AllFloatingTasks() {
+
 		checkEmptyList();
 		String toReturn = "";
 		ArrayList<FloatingTask> floatingTasks = this.getFloatingTasks();
-		
+
 		if (floatingTasks.size() == 0) {
 			return (Constants.MESSAGE_NO_FLOATING_TASKS);
 		}
-		
-		for (FloatingTask task: floatingTasks) {
+
+		for (FloatingTask task : floatingTasks) {
 			if (!task.isComplete()) {
 				String str = task.toString();
-				
+
 				assert (!str.isEmpty());
-				if (str.length() > MAX_CHARACTER_LENGTH) { 
+				if (str.length() > MAX_CHARACTER_LENGTH) {
 					String[] tokens = str.split(" ");
 					int currLength = 0;
-					
-					for (int j=0; j<tokens.length; j++) {
+
+					for (int j = 0; j < tokens.length; j++) {
 						String token = tokens[j];
 						currLength += token.length();
-						if (currLength > 17 && j > 1) {
-							currLength = 3;
+						if (currLength > MAX_CHARACTER_LENGTH && j > 1) {
+							currLength = NUM_PRECEDING_CHARACTERS;
 							currLength += token.length();
 							toReturn += "\n   ";
 						}
@@ -291,13 +291,12 @@ public class TaskManager {
 				} else {
 					toReturn += str;
 				}
-				toReturn += "\n";				
+				toReturn += "\n";
 			}
 		}
-		
+
 		return toReturn;
-		
-		
+
 	}
 
 	/**
@@ -306,7 +305,7 @@ public class TaskManager {
 	 * @param taskId
 	 * @throws Exception
 	 */
-	public ArrayList<Task> markAsComplete(int taskId) throws Exception {
+	public ArrayList<Task> markAsComplete(final int taskId) throws Exception {
 
 		int index = taskId - 1;
 		checkValidityIndex(index);
@@ -330,7 +329,7 @@ public class TaskManager {
 	 * @param taskId
 	 * @throws Exception
 	 */
-	public ArrayList<Task> markAsIncomplete(int taskId) throws Exception {
+	public ArrayList<Task> markAsIncomplete(final int taskId) throws Exception {
 		int index = taskId - 1;
 		checkValidityIndex(index);
 
@@ -349,11 +348,15 @@ public class TaskManager {
 
 	/**
 	 * Search for Task objects matching the input search string. By default,
-	 * only incomplete tasks will be searched.
+	 * only incomplete tasks will be searched. Prints out the list of searched
+	 * Task objects.
 	 * 
-	 * Prints out the list of searched Task objects.
+	 * @param searchStr
+	 * @return
+	 * @throws NullPointerException
+	 * @throws IllegalStateException
 	 */
-	public ArrayList<Task> searchAndDisplay(String searchStr)
+	public ArrayList<Task> searchAndDisplay(final String searchStr)
 			throws NullPointerException, IllegalStateException {
 		System.out.printf(Constants.MESSAGE_SEARCH, searchStr);
 		ArrayList<Task> searchResults = search(searchStr, false);
@@ -367,7 +370,7 @@ public class TaskManager {
 	 * 
 	 * Prints out the list of searched Task objects.
 	 */
-	public ArrayList<Task> searchAllAndDisplay(String searchStr)
+	public ArrayList<Task> searchAllAndDisplay(final String searchStr)
 			throws NullPointerException, IllegalStateException {
 
 		ArrayList<Task> searchResults = search(searchStr, true);
@@ -382,13 +385,14 @@ public class TaskManager {
 	 * @param searchStr
 	 * @return ArrayList of Task objects
 	 */
-	public ArrayList<Task> search(String searchStr, boolean searchAll)
-			throws NullPointerException, IllegalStateException {
+	public ArrayList<Task> search(final String searchStr,
+			final boolean searchAll) throws NullPointerException,
+			IllegalStateException {
 
 		if (searchStr == null || searchStr == "") {
 			throw new NullPointerException(Constants.MESSAGE_INVALID_SEARCH);
 		}
-		
+
 		if (tasks.isEmpty()) {
 			throw new IllegalStateException(Constants.MESSAGE_EMPTY_LIST);
 		}
@@ -411,7 +415,7 @@ public class TaskManager {
 	/**
 	 * Prints out the list of search results containing Task objects.
 	 */
-	public void displaySearchResults(ArrayList<Task> searchResults)
+	public void displaySearchResults(final ArrayList<Task> searchResults)
 			throws IllegalStateException {
 		if (searchResults.isEmpty()) {
 			throw new IllegalStateException(Constants.MESSAGE_NO_SEARCH_RESULTS);
@@ -428,200 +432,228 @@ public class TaskManager {
 	 * Search and prints out intervals that are free during the current day.
 	 * Intervals shorter than 10 minutes are ignored.
 	 * 
-	 * @param dateTimes 0 to 2 DateTimes. If only one is specified, the date range will be that day.
-	 * if none is specified, the date range will be the current day.
+	 * @param dateTimes
+	 *            0 to 2 DateTimes. If only one is specified, the date range
+	 *            will be that day. if none is specified, the date range will be
+	 *            the current day.
 	 * 
 	 * @author chenminqi
 	 */
-    public void searchForFreeIntervals(ArrayList<DateTime> dateTimes) {
-    	if (dateTimes.size() > 2) {
-            System.out.print(Constants.MESSAGE_INVALID_NUMBER_OF_DATES);
-            return;
-        }
-    	
-        assert(dateTimes.size() >= 0 && dateTimes.size() <= 2);
-        ArrayList<DateTime> timeRange = getFlexibleTimeRange(dateTimes);
-        ArrayList<MutableInterval> free = getFreeIntervals(timeRange);
-        boolean noSlotsFound = true;
-        
-        for (int i = 0; i < free.size(); i++) {
-            MutableInterval interval = free.get(i);
-            if (interval.toDurationMillis() >= Constants.FREE_SLOT_MINIMUM_DURATION) {
-                if (noSlotsFound) {
-                    System.out.println(Constants.MESSAGE_FREE_SLOTS_PREFIX
-                            + timeRange.get(0).toString("dd MMMM hh:mm a") + " to " + timeRange.get(1).toString("dd MMMM hh:mm a"));
-                    noSlotsFound = false;
-                }
-                String output = interval.getStart().toString("dd MMMM hh:mm a") + " to " + interval.getEnd().toString("dd MMMM hh:mm a");
-                System.out.println(output);
-            }
-        }
-        if (noSlotsFound) {
-            System.out.println(Constants.MESSAGE_NO_FREE_SLOTS);
-        }
-    }
-    
-    /**
-     * Produces a start DateTime and an end DateTime based on the argument given.
-     * If the input is an empty array, the range will be the current day.
-     * If the input has one DateTime, the range will be that particular day.
-     * If the input has two DateTimes, the range will be that.
-     * @param dateTimes
-     * @return range calculated
-     */
-    private ArrayList<DateTime> getFlexibleTimeRange(ArrayList<DateTime> dateTimes) {
-        assert(dateTimes.size() >= 0 && dateTimes.size() <= 2);
-        if (dateTimes.size() == 2) {
-            if (dateTimes.get(0).isAfter(dateTimes.get(1))) {
-                Collections.reverse(dateTimes);
-            }
-            return dateTimes;
-        } else {
-            DateTime day;
-            if (dateTimes.size() == 1) {
-                day = dateTimes.get(0);
-            } else {
-                day = DateTime.now();
-            }
-            DateTime startOfDay = new DateTime(day.getYear(), day.getMonthOfYear(), day.getDayOfMonth(), 0, 0, 0);
-            DateTime endOfDay = new DateTime(day.getYear(), day.getMonthOfYear(), day.getDayOfMonth(), 23, 59, 59);
-            ArrayList<DateTime> range = new ArrayList<DateTime>(2);
-            range.add(startOfDay);
-            range.add(endOfDay);
-            return range;
-        }
-    }
-    
+	public void searchForFreeIntervals(final ArrayList<DateTime> dateTimes) {
+		if (dateTimes.size() > 2) {
+			System.out.print(Constants.MESSAGE_INVALID_NUMBER_OF_DATES);
+			return;
+		}
+
+		assert (dateTimes.size() >= 0 && dateTimes.size() <= 2);
+		ArrayList<DateTime> timeRange = getFlexibleTimeRange(dateTimes);
+		ArrayList<MutableInterval> free = getFreeIntervals(timeRange);
+		boolean noSlotsFound = true;
+
+		for (int i = 0; i < free.size(); i++) {
+			MutableInterval interval = free.get(i);
+			if (interval.toDurationMillis() >= Constants.FREE_SLOT_MINIMUM_DURATION) {
+				if (noSlotsFound) {
+					System.out.println(Constants.MESSAGE_FREE_SLOTS_PREFIX
+							+ timeRange.get(0).toString("dd MMMM hh:mm a")
+							+ " to "
+							+ timeRange.get(1).toString("dd MMMM hh:mm a"));
+					noSlotsFound = false;
+				}
+				String output = interval.getStart().toString("dd MMMM hh:mm a")
+						+ " to "
+						+ interval.getEnd().toString("dd MMMM hh:mm a");
+				System.out.println(output);
+			}
+		}
+		if (noSlotsFound) {
+			System.out.println(Constants.MESSAGE_NO_FREE_SLOTS);
+		}
+	}
+
 	/**
-	 * Searches for all occupied time slots of today. If the actual slot of the day ends before 2359hrs,
-	 * an interval [2359hrs, 2359hrs] which lasts for 0 seconds will be inserted at the end.
-	 * @return intervals that are occupied today, the last item is guaranteed to end at 2359hrs, and hence
-	 *         guaranteed to have at least 1 item returned.
-	 * @author chenminqi
-	 * @param timeRange 
+	 * Produces a start DateTime and an end DateTime based on the argument
+	 * given. If the input is an empty array, the range will be the current day.
+	 * If the input has one DateTime, the range will be that particular day. If
+	 * the input has two DateTimes, the range will be that.
+	 * 
+	 * @param dateTimes
+	 * @return range calculated
 	 */
-	public ArrayList<MutableInterval> getOccupiedIntervals(ArrayList<DateTime> timeRange) {
-	    sortTasks();
-	    
-	    DateTime start = timeRange.get(0);
-	    DateTime end = timeRange.get(1);
-	    
-	    ArrayList<MutableInterval> occupied = new ArrayList<MutableInterval>();
-	    MutableInterval last = new MutableInterval(end, end);
-	    occupied.add(last);
-	    
-	    for (int i = tasks.size() - 1; i >= 0 ; i--) {
-	        Task task = tasks.get(i);
-
-            if (task.isComplete() || ! (task instanceof TimedTask)) {
-                // we are only concerned with incomplete TimedTask
-                continue;
-            } else if (! task.endTime.isAfter(start)) {
-	            // all unprocessed items ends before today, no more items needs processing
-	            break;
-	        } else if (! task.startTime.isBefore(last.getStart())) {
-	            // we are only concerned with tasks that starts before the last occupied slot
-	            continue;
-	        } else if (! task.endTime.isBefore(last.getStart())) {
-	            // overlap between task's end time and the last occupied slot's start time
-	            last.setStart(task.startTime);
-	        } else {
-	            // there is a gap
-	            last = new MutableInterval(task.startTime, task.endTime);
-	            occupied.add(last);
-	            if (! task.startTime.isAfter(start)) {
-	                // reached the start of the day, no more processing needed.
-	                last.setStart(start);
-	                break;
-	            }
-	        }
-	        
-	    }
-	    Collections.reverse(occupied);
-	    return occupied;
+	private ArrayList<DateTime> getFlexibleTimeRange(
+			final ArrayList<DateTime> dateTimes) {
+		assert (dateTimes.size() >= 0 && dateTimes.size() <= 2);
+		if (dateTimes.size() == 2) {
+			if (dateTimes.get(0).isAfter(dateTimes.get(1))) {
+				Collections.reverse(dateTimes);
+			}
+			return dateTimes;
+		} else {
+			DateTime day;
+			if (dateTimes.size() == 1) {
+				day = dateTimes.get(0);
+			} else {
+				day = DateTime.now();
+			}
+			DateTime startOfDay = new DateTime(day.getYear(),
+					day.getMonthOfYear(), day.getDayOfMonth(), 0, 0, 0);
+			DateTime endOfDay = new DateTime(day.getYear(),
+					day.getMonthOfYear(), day.getDayOfMonth(), 23, 59, 59);
+			ArrayList<DateTime> range = new ArrayList<DateTime>(2);
+			range.add(startOfDay);
+			range.add(endOfDay);
+			return range;
+		}
 	}
-	
+
 	/**
-     * Searches for all free time slots of a specified time range
-     * @param dateTimes 0 to 2 DateTimes. If only one is specified, the date range will be that day.
-     * if none is specified, the date range will be the current day.
-     * @return intervals that are free today
-     * @author chenminqi
-     */
-	public ArrayList<MutableInterval> getFreeIntervals(ArrayList<DateTime> dateTimes) {
-        DateTime start = dateTimes.get(0);
-        ArrayList<MutableInterval> free = new ArrayList<MutableInterval>();
-        
-        ArrayList<MutableInterval> occupied = getOccupiedIntervals(dateTimes);
+	 * Searches for all occupied time slots of today. If the actual slot of the
+	 * day ends before 2359hrs, an interval [2359hrs, 2359hrs] which lasts for 0
+	 * seconds will be inserted at the end.
+	 * 
+	 * @return intervals that are occupied today, the last item is guaranteed to
+	 *         end at 2359hrs, and hence guaranteed to have at least 1 item
+	 *         returned.
+	 * @author chenminqi
+	 * @param timeRange
+	 */
+	public ArrayList<MutableInterval> getOccupiedIntervals(
+			final ArrayList<DateTime> timeRange) {
+		sortTasks();
 
-        if (occupied.get(0).getStart().isAfter(start)) {
-            free.add(new MutableInterval(start, occupied.get(0).getStart()));
-        }
-        
-        for (int i = 0; i < occupied.size() - 1; i ++) {
-            free.add(new MutableInterval(occupied.get(i).getEnd(), occupied.get(i + 1).getStart()));
-        }
-        
-        return free;
+		DateTime start = timeRange.get(0);
+		DateTime end = timeRange.get(1);
+
+		ArrayList<MutableInterval> occupied = new ArrayList<MutableInterval>();
+		MutableInterval last = new MutableInterval(end, end);
+		occupied.add(last);
+
+		for (int i = tasks.size() - 1; i >= 0; i--) {
+			Task task = tasks.get(i);
+
+			if (task.isComplete() || !(task instanceof TimedTask)) {
+				// we are only concerned with incomplete TimedTask
+				continue;
+			} else if (!task.endTime.isAfter(start)) {
+				// all unprocessed items ends before today, no more items needs
+				// processing
+				break;
+			} else if (!task.startTime.isBefore(last.getStart())) {
+				// we are only concerned with tasks that starts before the last
+				// occupied slot
+				continue;
+			} else if (!task.endTime.isBefore(last.getStart())) {
+				// overlap between task's end time and the last occupied slot's
+				// start time
+				last.setStart(task.startTime);
+			} else {
+				// there is a gap
+				last = new MutableInterval(task.startTime, task.endTime);
+				occupied.add(last);
+				if (!task.startTime.isAfter(start)) {
+					// reached the start of the day, no more processing needed.
+					last.setStart(start);
+					break;
+				}
+			}
+
+		}
+		Collections.reverse(occupied);
+		return occupied;
 	}
-	
+
+	/**
+	 * Searches for all free time slots of a specified time range
+	 * 
+	 * @param dateTimes
+	 *            0 to 2 DateTimes. If only one is specified, the date range
+	 *            will be that day. if none is specified, the date range will be
+	 *            the current day.
+	 * @return intervals that are free today
+	 * @author chenminqi
+	 */
+	public ArrayList<MutableInterval> getFreeIntervals(
+			final ArrayList<DateTime> dateTimes) {
+		DateTime start = dateTimes.get(0);
+		ArrayList<MutableInterval> free = new ArrayList<MutableInterval>();
+
+		ArrayList<MutableInterval> occupied = getOccupiedIntervals(dateTimes);
+
+		if (occupied.get(0).getStart().isAfter(start)) {
+			free.add(new MutableInterval(start, occupied.get(0).getStart()));
+		}
+
+		for (int i = 0; i < occupied.size() - 1; i++) {
+			free.add(new MutableInterval(occupied.get(i).getEnd(), occupied
+					.get(i + 1).getStart()));
+		}
+
+		return free;
+	}
+
 	/**
 	 * Schedules a task
+	 * 
 	 * @param description
 	 * @param timeRange
-	 * @throws Exception 
+	 * @throws Exception
 	 */
-	public void scheduleTask(String description, ArrayList<DateTime> dateTimes) throws Exception {
-    	if (dateTimes.size() > 2) {
-            System.out.print(Constants.MESSAGE_INVALID_NUMBER_OF_DATES);
-            return;
-        }
-		
-	    ArrayList<DateTime> timeRange = getFlexibleTimeRange(dateTimes);
-	    ArrayList<MutableInterval> free = getFreeIntervals(timeRange);
-	    for (int i = 0; i < free.size(); i++) {
-	        MutableInterval candidate = free.get(i);
-	        DateTime start;
-            DateTime startDay0800;
-            DateTime startDay2300;
-            DateTime nextDay0800;
-            
-            while (candidate.toDurationMillis() >= 2 * 60 * 60 * 1000) {
-                start = candidate.getStart();
-                startDay0800 = new DateTime(start.getYear(), start.getMonthOfYear(), start.getDayOfMonth(), 8, 0, 0);
-                startDay2300 = new DateTime(start.getYear(), start.getMonthOfYear(), start.getDayOfMonth(), 23, 0, 0);
-                nextDay0800 = startDay0800.plusDays(1);
-                try {
-                    if (start.isBefore(startDay0800)) {
-                        candidate.setStart(startDay0800);
-                        continue;
-                    } else if (start.isAfter(startDay2300)) {
-                        candidate.setEnd(nextDay0800);
-                        continue;
-                    }
-                } catch (IllegalArgumentException e) {
-                    // duration is too short for consideration, moving on
-                    break;
-                }
-                
-                if (!start.plusHours(2).isAfter(startDay2300)) {
-                    ArrayList<DateTime> range = new ArrayList<DateTime>(2);
-                    range.add(start);
-                    range.add(start.plusHours(2));
-                    TimedTask task = new TimedTask(description, range);
-                    addTask(task);
-                    System.out.printf(Constants.MESSAGE_ADD_TIMED, task.description,
-                            UI.formatDate(task.startTime), UI.formatDate(task.endTime));
-                    saveToHistory();
-                    return;
-                } else {
-                    break;
-                }
-            }
-	        
-	    }
-	    System.out.println(Constants.MESSAGE_NO_FREE_SLOTS);
+	public void scheduleTask(final String description,
+			final ArrayList<DateTime> dateTimes) throws Exception {
+		if (dateTimes.size() > 2) {
+			System.out.print(Constants.MESSAGE_INVALID_NUMBER_OF_DATES);
+			return;
+		}
+
+		ArrayList<DateTime> timeRange = getFlexibleTimeRange(dateTimes);
+		ArrayList<MutableInterval> free = getFreeIntervals(timeRange);
+		for (int i = 0; i < free.size(); i++) {
+			MutableInterval candidate = free.get(i);
+			DateTime start;
+			DateTime startDay0800;
+			DateTime startDay2300;
+			DateTime nextDay0800;
+
+			while (candidate.toDurationMillis() >= 2 * 60 * 60 * 1000) {
+				start = candidate.getStart();
+				startDay0800 = new DateTime(start.getYear(),
+						start.getMonthOfYear(), start.getDayOfMonth(), 8, 0, 0);
+				startDay2300 = new DateTime(start.getYear(),
+						start.getMonthOfYear(), start.getDayOfMonth(), 23, 0, 0);
+				nextDay0800 = startDay0800.plusDays(1);
+				try {
+					if (start.isBefore(startDay0800)) {
+						candidate.setStart(startDay0800);
+						continue;
+					} else if (start.isAfter(startDay2300)) {
+						candidate.setEnd(nextDay0800);
+						continue;
+					}
+				} catch (IllegalArgumentException e) {
+					// duration is too short for consideration, moving on
+					break;
+				}
+
+				if (!start.plusHours(2).isAfter(startDay2300)) {
+					ArrayList<DateTime> range = new ArrayList<DateTime>(2);
+					range.add(start);
+					range.add(start.plusHours(2));
+					TimedTask task = new TimedTask(description, range);
+					addTask(task);
+					System.out.printf(Constants.MESSAGE_ADD_TIMED,
+							task.description, UI.formatDate(task.startTime),
+							UI.formatDate(task.endTime));
+					saveToHistory();
+					return;
+				} else {
+					break;
+				}
+			}
+
+		}
+		System.out.println(Constants.MESSAGE_NO_FREE_SLOTS);
 	}
+
 	/**
 	 * Removes the task by first searching for the search string in the task
 	 * description. If there is exactly one match, just delete it. If there are
@@ -632,7 +664,7 @@ public class TaskManager {
 	 * @throws IOException
 	 * @throws Exception
 	 */
-	public int delete(String searchStr) throws IOException {
+	public int delete(final String searchStr) throws IOException {
 
 		if (searchStr == null || searchStr == "") {
 			throw new NullPointerException(Constants.MESSAGE_INVALID_DELETE);
@@ -657,9 +689,9 @@ public class TaskManager {
 	 * 
 	 * @throws IOException
 	 */
-	public void delete(int taskId) throws IOException {
+	public void delete(final int taskId) throws IOException {
 		int index = taskId - 1;
-		
+
 		checkValidityIndex(index);
 
 		System.out.printf(Constants.MESSAGE_DELETE,
@@ -681,7 +713,7 @@ public class TaskManager {
 		try {
 			tasks = (ArrayList<Task>) storage.undo().clone();
 			System.out.println(Constants.MESSAGE_UNDO);
-			//saveTasks();
+			// saveTasks();
 		} catch (FileNotFoundException e) {
 			storage.rebuildHistory();
 			System.out.println(Constants.MESSAGE_HISTORY_LOAD_ERROR);
@@ -715,7 +747,7 @@ public class TaskManager {
 		try {
 			tasks = (ArrayList<Task>) storage.redo().clone();
 			System.out.println(Constants.MESSAGE_REDO);
-			//saveTasks();
+			// saveTasks();
 		} catch (FileNotFoundException e) {
 			storage.rebuildHistory();
 			System.out.println(Constants.MESSAGE_HISTORY_LOAD_ERROR);
@@ -730,23 +762,25 @@ public class TaskManager {
 
 	/**
 	 * Helps the user get started with using sudo
+	 * 
 	 * @param topic
 	 */
-	public void help(String topic) {
-		if (topic == null){
+	public void help(final String topic) {
+		if (topic == null) {
 			System.out.println(HelpConstants.MESSAGE_WELCOME_HELP_PAGE);
-		} else if(topic.toUpperCase().equals("LIST")){
+		} else if (topic.toUpperCase().equals("LIST")) {
 			System.out.println(HelpConstants.HELP_LIST);
 		} else {
-			String helpMessage = HelpConstants.helpTopics.get(topic.toUpperCase());
-			if(helpMessage == null){
+			String helpMessage = HelpConstants.helpTopics.get(topic
+					.toUpperCase());
+			if (helpMessage == null) {
 				System.out.printf(HelpConstants.HELP_NOT_FOUND, topic);
 			} else {
 				System.out.println(helpMessage);
 			}
 		}
-	}	
-	
+	}
+
 	/**
 	 * To check if the task list is empty. If yes, throw exception.
 	 */
@@ -804,7 +838,8 @@ public class TaskManager {
 	 * @param index
 	 * @throws IndexOutOfBoundsException
 	 */
-	private void checkValidityIndex(int index) throws IndexOutOfBoundsException {
+	private void checkValidityIndex(final int index)
+			throws IndexOutOfBoundsException {
 		if (index < 0 || index >= tasks.size()) {
 			throw new IndexOutOfBoundsException(
 					Constants.MESSAGE_INVALID_TASK_INDEX);
@@ -819,17 +854,18 @@ public class TaskManager {
 	 * @param startTime
 	 * @param endTime
 	 */
-	private void checkValidityTimes(DateTime startTime, DateTime endTime) {
+	private void checkValidityTimes(final DateTime startTime,
+			final DateTime endTime) {
 		checkStartAndEndTime(startTime, endTime);
 	}
 
 	/**
-	 * Helper method
+	 * Helper method.
 	 * 
 	 * @param startTime
 	 * @param endTime
 	 */
-	private void checkStartAndEndTime(DateTime startTime, DateTime endTime) {
+	private void checkStartAndEndTime(final DateTime startTime, DateTime endTime) {
 		DateTimeComparator dtComp = DateTimeComparator.getInstance();
 
 		int check = dtComp.compare(endTime, startTime);
@@ -891,19 +927,18 @@ public class TaskManager {
 		if (toReturn == 100) {
 			// System.out.println("You have finished all tasks!");
 		}
-		;
 		return toReturn;
-	}	
-	
+	}
+
 	/**
-	 * Shows the correct display message depending on showAll
+	 * Shows the correct display message depending on showAll.
 	 */
 	public void showDisplayMessage(boolean showAll) {
-		if(showAll){
+		if (showAll) {
 			System.out.print(Constants.MESSAGE_DISPLAY_ALL);
 		} else {
 			System.out.print(Constants.MESSAGE_DISPLAY);
 		}
 	}
-	
+
 }

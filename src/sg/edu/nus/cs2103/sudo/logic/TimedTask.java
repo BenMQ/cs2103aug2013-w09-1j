@@ -35,6 +35,8 @@ public class TimedTask extends Task {
 	}
 	
 	public TimedTask(int id, String taskDescription, boolean isComplete, DateTime startTime, DateTime endTime) {
+		checkValidityTimes(startTime, endTime);
+		
 		this.id = id;
 		this.description = taskDescription;
 		this.isComplete = isComplete;

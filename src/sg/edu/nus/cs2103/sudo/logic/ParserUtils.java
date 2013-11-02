@@ -53,7 +53,6 @@ public class ParserUtils {
 			DateTime dt = new DateTime(date);
 			dateTimes.add(dt);
 		}
-		
 		return dateTimes;
 	}	
 	
@@ -110,7 +109,6 @@ public class ParserUtils {
 		case EDIT:
 		case SEARCH:
 			return 2;
-
 		default:
 			return 1;
 		}

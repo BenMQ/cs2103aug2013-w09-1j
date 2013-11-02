@@ -136,7 +136,6 @@ public class TaskManager {
 		sortAndUpdateIds();
 		saveToHistory();
 		return tasks;
-
 	}
 
 	/**

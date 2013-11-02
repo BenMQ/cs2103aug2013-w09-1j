@@ -19,6 +19,7 @@ import sg.edu.nus.cs2103.ui.UI;
 public final class LogicHandler {
 
 	private static LogicHandler logicHandler;
+	
 	private Scanner scanner;
 	private TaskManager manager;
 
@@ -36,7 +37,7 @@ public final class LogicHandler {
 		this.manager = manager;
 		this.scanner = scanner;
 	}
-
+	
 	/**
 	 * Returns a singleton instance of a logicHandler object.
 	 * Uses dependency injection to take in a TaskManager 
@@ -54,6 +55,14 @@ public final class LogicHandler {
 		}
 		return logicHandler;
 	}
+	
+	public TaskManager getManager(){
+		return this.manager;
+	}
+	
+	public Scanner getScanner(){
+		return this.scanner;
+	}	
 
 	/**
 	 * Parses and executes the appropriate manager method based 

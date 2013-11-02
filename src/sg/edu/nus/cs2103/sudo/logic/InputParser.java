@@ -21,7 +21,7 @@ import com.joestelmach.natty.Parser;
  * @author Yos Riady 
  */
 public class InputParser {
-	/** Special flag used when a Task of specified is not found. */
+	/** Flag used when a Task of specified is not found. */
     private static final int NOT_FOUND = -1;
 
 	/**
@@ -49,11 +49,12 @@ public class InputParser {
 
 	/**
 	 * Reads the user input for command.
+	 * @param scanner		A scanner object
 	 * @return String 	the user's input command 
 	 */
-	public static String readCommand(Scanner user){
+	public static String readCommand(Scanner scanner) {
 		System.out.print("command:");
-		return user.nextLine();
+		return scanner.nextLine();
 	}	
 	
 	/**
@@ -61,7 +62,7 @@ public class InputParser {
 	 * @param userInput		the user's input
 	 * @return COMMAND_TYPE 
 	 */	
-	public static COMMAND_TYPE parseCommandType(String userInput){
+	public static COMMAND_TYPE parseCommandType(String userInput) {
 		String commandWord = ParserUtils.getCommandWord(userInput);
 		COMMAND_TYPE commandType = ParserUtils.getCommandType(commandWord);
 		assert commandType != null;
@@ -80,7 +81,7 @@ public class InputParser {
 	 * @param userInput		the user's input
 	 * @return String 
 	 */	
-	public static String parseDescription(String userInput){
+	public static String parseDescription(String userInput) {
 		Pattern p = Pattern.compile("(?:^|)'([^']*?)'(?:$|)", 
 				Pattern.MULTILINE);
         Matcher m = p.matcher(userInput);

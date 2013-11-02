@@ -12,7 +12,7 @@ import sg.edu.nus.cs2103.ui.UI;
 
 /**
  * LogicHandler is a facade class responsible for providing
- * a simple API for handling most of the operations of sudo. 
+ * a simple API to handle most of the Task operations of sudo. 
  * 
  * @author Yos Riady 
  */
@@ -23,7 +23,9 @@ public final class LogicHandler {
 	private Scanner scanner;
 	private TaskManager manager;
 
-	/** logicHandler Constructor to initialize the logicHandler Object.
+	/** 
+	 * Constructor to initialize the logicHandler Object.
+	 * 
 	 * @param manager
 	 *            : a TaskManager object to delegate operations to
 	 * @param scanner
@@ -39,9 +41,10 @@ public final class LogicHandler {
 	}
 	
 	/**
-	 * Returns a singleton instance of a logicHandler object.
+	 * Returns a singleton instance of logicHandler.
 	 * Uses dependency injection to take in a TaskManager 
 	 * and Scanner object.
+	 * 
 	 * @param manager
 	 *            : a TaskManager object to delegate operations to
 	 * @param scanner
@@ -65,9 +68,9 @@ public final class LogicHandler {
 	}	
 
 	/**
-	 * Parses and executes the appropriate manager method based 
-	 * on the user's input. LogicHandler becomes a 
-	 * facade class between UI and Logic components.
+	 * Executes a TaskManager method based 
+	 * on the user's input. 
+	 * 
 	 * @param userInput
 	 *           : string of the user's input
 	 */
@@ -165,9 +168,10 @@ public final class LogicHandler {
 	}
 
 	/**
-	 * This method delegates delete commands to the right
-	 * TaskManager delete APIs based on the number of
+	 * Delegates delete commands to the
+	 * TaskManager delete API based on the number of
 	 * search results.
+	 * 
 	 * @param taskDescription
 	 * @throws IOException
 	 */
@@ -181,8 +185,9 @@ public final class LogicHandler {
 	}
 
 	/**
-	 * This method delegates add commands to the right
-	 * TaskManager add API based on the number of date arguments.
+	 * Delegates to the TaskManager add API 
+	 * based on the number of date arguments.
+	 * 
 	 * @param taskDescription	The task description
 	 * @param dateTimes			A list of DateTimes
 	 * @throws Exception

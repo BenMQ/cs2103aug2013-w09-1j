@@ -21,11 +21,13 @@ import com.joestelmach.natty.Parser;
  * @author Yos Riady 
  */
 public class InputParser {
+	
 	/** Flag used when a Task of specified is not found. */
     private static final int NOT_FOUND = -1;
 
 	/**
 	 * Parses dates from the user's input string.
+	 * 
 	 * @param userInput 			string of the user's input
 	 * @return ArrayList<DateTime>	A list of DateTime objects
 	 */	
@@ -49,6 +51,7 @@ public class InputParser {
 
 	/**
 	 * Reads the user input for command.
+	 * 
 	 * @param scanner		A scanner object
 	 * @return String 	the user's input command 
 	 */
@@ -59,6 +62,7 @@ public class InputParser {
 	
 	/**
 	 * Validates the user input for a specific COMMAND_TYPE.
+	 * 
 	 * @param userInput		the user's input
 	 * @return COMMAND_TYPE 
 	 */	
@@ -78,6 +82,7 @@ public class InputParser {
 
 	/**
 	 * Parses the user input for task descriptions.
+	 * 
 	 * @param userInput		the user's input
 	 * @return String 
 	 */	
@@ -95,6 +100,7 @@ public class InputParser {
 	/**
 	 * Attempts to get the content between first and second space, 
 	 * and parse as integer. -1 for unsuccessful parsing.
+	 * 
 	 * @param userInput 
 	 * @return int
 	 */	

@@ -13,6 +13,7 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import sg.edu.nus.cs2103.sudo.Constants;
+import sg.edu.nus.cs2103.sudo.HelpConstants;
 import sg.edu.nus.cs2103.sudo.exceptions.NoHistoryException;
 import sg.edu.nus.cs2103.sudo.storage.StorageHandler;
 import sg.edu.nus.cs2103.ui.UI;
@@ -733,13 +734,13 @@ public class TaskManager {
 	 */
 	public void help(String topic) {
 		if (topic == null){
-			System.out.println(Constants.MESSAGE_WELCOME_HELP_PAGE);
+			System.out.println(HelpConstants.MESSAGE_WELCOME_HELP_PAGE);
 		} else if(topic.toUpperCase().equals("LIST")){
-			System.out.println(Constants.HELP_LIST);
+			System.out.println(HelpConstants.HELP_LIST);
 		} else {
-			String helpMessage = Constants.helpTopics.get(topic.toUpperCase());
+			String helpMessage = HelpConstants.helpTopics.get(topic.toUpperCase());
 			if(helpMessage == null){
-				System.out.printf(Constants.HELP_NOT_FOUND, topic);
+				System.out.printf(HelpConstants.HELP_NOT_FOUND, topic);
 			} else {
 				System.out.println(helpMessage);
 			}

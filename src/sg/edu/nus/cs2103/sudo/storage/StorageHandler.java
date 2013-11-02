@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import org.joda.time.DateTime;
 
 import sg.edu.nus.cs2103.sudo.Constants;
+import sg.edu.nus.cs2103.sudo.StorageConstants;
 import sg.edu.nus.cs2103.sudo.exceptions.MissingFileException;
 import sg.edu.nus.cs2103.sudo.exceptions.NoHistoryException;
 import sg.edu.nus.cs2103.sudo.logic.DeadlineTask;
@@ -62,7 +63,7 @@ public class StorageHandler {
 	
 	public static void resetAll(String fileName) {
 		File file = new File(fileName);
-		File historyFile = new File(Constants.HISTORY_NAME);
+		File historyFile = new File(StorageConstants.HISTORY_NAME);
 		if (file.exists()) {
 			file.delete();
 			historyFile.delete();
@@ -85,7 +86,7 @@ public class StorageHandler {
 	}
 	
 	private void readHistory() throws FileNotFoundException{
-		history = XMLSerializer.read(Constants.HISTORY_NAME);
+		history = XMLSerializer.read(StorageConstants.HISTORY_NAME);
 	}
 	
 	public boolean prepareFile(ArrayList<Task> taskIn) {
@@ -201,7 +202,7 @@ public class StorageHandler {
 	//Save the history
 	private void saveHistory(){
 			try {
-				XMLSerializer.write(history, Constants.HISTORY_NAME);
+				XMLSerializer.write(history, StorageConstants.HISTORY_NAME);
 			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

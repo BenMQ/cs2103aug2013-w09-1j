@@ -5,18 +5,12 @@ import static org.junit.Assert.*;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.io.IOException;
-import java.io.PrintStream;
 import java.util.ArrayList;
-import java.util.Scanner;
-import java.util.logging.Level;
-
-import sg.edu.nus.cs2103.sudo.Constants;
+import sg.edu.nus.cs2103.sudo.StorageConstants;
 import sg.edu.nus.cs2103.sudo.logic.DeadlineTask;
 import sg.edu.nus.cs2103.sudo.logic.FloatingTask;
 import sg.edu.nus.cs2103.sudo.logic.InputParser;
 import sg.edu.nus.cs2103.sudo.logic.Task;
-import sg.edu.nus.cs2103.sudo.logic.TaskManager;
 import sg.edu.nus.cs2103.sudo.logic.TimedTask;
 
 import org.joda.time.DateTime;
@@ -46,7 +40,7 @@ public class StorageHandlerTest {
 	@Before
 	public void setUp() {
 		file = new File(TEST_NAME);
-		historyFile = new File(Constants.HISTORY_NAME);
+		historyFile = new File(StorageConstants.HISTORY_NAME);
     }
 	
 	@After

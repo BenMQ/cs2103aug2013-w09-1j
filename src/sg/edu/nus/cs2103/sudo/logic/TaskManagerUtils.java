@@ -252,4 +252,35 @@ public class TaskManagerUtils {
 		}
 		return searchResults;
 	}
+	
+	/**
+	 * Prints out the list of search results containing Task objects.
+	 * 
+	 * @param searchResults
+	 * @throws IllegalStateException
+	 */
+	public static void displaySearchResults(ArrayList<Task> searchResults)
+			throws IllegalStateException {
+
+		if (searchResults.isEmpty()) {
+			throw new IllegalStateException(Constants.MESSAGE_NO_SEARCH_RESULTS);
+		}
+
+		System.out.println();
+		System.out.println("Search Results");
+		for (int i = 0; i < searchResults.size(); i++) {
+			System.out.println(searchResults.get(i).toString());
+		}
+	}
+	
+	/**
+	 * Shows the correct display message depending on showAll.
+	 */
+	public static void showDisplayMessage(boolean showAll) {
+		if (showAll) {
+			System.out.print(Constants.MESSAGE_DISPLAY_ALL);
+		} else {
+			System.out.print(Constants.MESSAGE_DISPLAY);
+		}
+	}
 }

@@ -5,15 +5,13 @@ import java.util.HashMap;
 
 public class Constants {
 
-	public static final String MESSAGE_WELCOME_TO_SUDO_FIRST = "Welcome to the world of sudo!\nFor first time users, to learn about the full list of commands, type: help\nTo learn more about a command, type: help [command]\n";
-	public static final String MESSAGE_WELCOME_TO_SUDO_RELOAD = "Welcome back, dear user.\nYour past records have been loaded successfully.\nTo get a full list of commands, type: help\nTo learn more about a command: help [command]\n";
-	
 	public static final String MESSAGE_INVALID_COMMAND = "Invalid command\n";
 	public static final String MESSAGE_INVALID_TASK_INDEX = "Invalid task index\n";
 	public static final String MESSAGE_INCOMPLETE_COMMAND = "Incomplete command\n";
 	public static final String MESSAGE_INVALID_SEARCH = "Search is invalid.\n";
 	public static final String MESSAGE_INVALID_DELETE = "Search term for delete is invalid.\n";
-
+	public static final String MESSAGE_SEARCH_RESULTS = "Search Results";
+	
 	public static final String MESSAGE_DISPLAY = "Displaying incomplete tasks\n";
 	public static final String MESSAGE_DISPLAY_ALL = "Displaying all tasks\n";
 	public static final String MESSAGE_INVALID_NUMBER_OF_DATES = "Invalid number of dates.\n";
@@ -59,9 +57,7 @@ public class Constants {
 	public static final String FINISHED_TASK_SEPARATOR = "\n[Finished tasks]=======================";
 	public static final String FLOATING_TASK_SEPARATOR = "\n[Floating tasks]=======================";	
 	
-	public static final int KEYBOARD_SPACE = 32;
-	public static final int KEYBOARD_TAB = 9;
-
+	
 	public static final HashMap<String, COMMAND_TYPE> aliases = new HashMap<String, COMMAND_TYPE>() {
 		/**
 		 *  This key-value table maps aliases to their corresponding COMMAND_TYPE.

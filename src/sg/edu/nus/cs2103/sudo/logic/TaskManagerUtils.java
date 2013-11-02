@@ -267,7 +267,7 @@ public class TaskManagerUtils {
 		}
 
 		System.out.println();
-		System.out.println("Search Results");
+		System.out.println(Constants.MESSAGE_SEARCH_RESULTS);
 		for (int i = 0; i < searchResults.size(); i++) {
 			System.out.println(searchResults.get(i).toString());
 		}

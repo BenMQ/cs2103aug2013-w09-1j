@@ -12,6 +12,7 @@ public class Constants {
 	public static final String MESSAGE_INVALID_DELETE = "Search term for delete is invalid.\n";
 	public static final String MESSAGE_SEARCH_RESULTS = "Search Results";
 	
+	public static final String NOTHING_TO_DISPLAY = "Nothing to display.\n";
 	public static final String MESSAGE_DISPLAY = "Displaying incomplete tasks\n";
 	public static final String MESSAGE_DISPLAY_ALL = "Displaying all tasks\n";
 	public static final String MESSAGE_INVALID_NUMBER_OF_DATES = "Invalid number of dates.\n";

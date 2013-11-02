@@ -50,31 +50,57 @@ public class TaskManagerTest {
 	}
 
 	/**
-	 * Tests adding floating tasks and displaying of all uncompleted floating
-	 * tasks. TODO: Test displaying of completed floating tasks
+	 * Tests adding floating tasks, timed tasks and deadline tasks and
+	 * displaying of all uncompleted floating tasks.
 	 * 
 	 * @throws Exception
 	 */
 	@Test
 	public void testAddTasks() throws Exception {
+		// adding valid floating task
 		manager.addTask(new FloatingTask("learn how to fish"));
-		assertEquals("1. learn how to fish\n", displayTasks(manager.getTasks()));
+		assertEquals("1. learn how to fish false\n",
+				displayTasks(manager.getTasks()));
 
 		ArrayList<DateTime> dateTimes = new ArrayList<DateTime>();
 		dateTimes.add(new DateTime());
 		dateTimes.add(new DateTime(2006, 3, 26, 12, 0, 0, 0));
 
-		manager.addTask(new DeadlineTask(0, "Submit proposal at Nus", false,
-				new DateTime(2013, 10, 21, 0, 0, 0, 0)));
-		assertEquals(
-				"1. Submit proposal at Nus by Mon 21 October 12:00 AM\n2. learn how to fish\n",
-				displayTasks(manager.getTasks()));
+		// boundary case: add task with invalid time interval
+		try {
+			manager.addTask(new TimedTask("Trying an invalid time interval",
+					dateTimes));
+		} catch (Exception e) {
+			assertEquals(Constants.MESSAGE_END_BEFORE_START_TIME,
+					e.getMessage());
+		}
 
+		// boundary case: add task with same start and end time
+		dateTimes.clear();
+		dateTimes.add(new DateTime());
+		dateTimes.add(new DateTime());
+		
+		/*
+			manager.addTask(new TimedTask("Trying same start and end time",
+					dateTimes));
+		} catch (Exception e) {
+			assertEquals(Constants.MESSAGE_SAME_START_END_TIME, e.getMessage());
+		}
+		*/
+
+		// adding valid timed tasks
 		manager.addTask(new TimedTask(0, "Have dinner with family in NUS",
 				false, new DateTime(2013, 10, 23, 19, 0, 0, 0), new DateTime(
 						2013, 10, 23, 21, 0, 0, 0)));
 		assertEquals(
-				"1. Submit proposal at Nus by Mon 21 October 12:00 AM\n2. Have dinner with family in NUS from Wed 23 October 07:00 PM to Wed 23 October 09:00 PM\n3. learn how to fish\n",
+				"1. Have dinner with family in NUS from Wed 23 October 07:00 PM to Wed 23 October 09:00 PM false\n2. learn how to fish false\n",
+				displayTasks(manager.getTasks()));
+
+		// adding valid deadline task
+		manager.addTask(new DeadlineTask(0, "Submit proposal at Nus", false,
+				new DateTime(2013, 10, 21, 0, 0, 0, 0)));
+		assertEquals(
+				"1. Submit proposal at Nus by Mon 21 October 12:00 AM false\n2. Have dinner with family in NUS from Wed 23 October 07:00 PM to Wed 23 October 09:00 PM false\n3. learn how to fish false\n",
 				displayTasks(manager.getTasks()));
 	}
 
@@ -86,31 +112,33 @@ public class TaskManagerTest {
 		testAddTasks();
 
 		// Equivalence partitioning
+		// boundary case: invalid task id
 		try {
 			manager.markAsComplete(-1);
 		} catch (Exception e) {
-			assertEquals("Invalid task index\n", e.getMessage());
+			assertEquals(Constants.MESSAGE_INVALID_TASK_INDEX, e.getMessage());
 		}
 
 		// Equivalence partitioning & boundary value analysis
-		// boundary case for taskId
+		// boundary case: invalid task id
 		try {
 			manager.markAsComplete(0);
 		} catch (Exception e) {
-			assertEquals("Invalid task index\n", e.getMessage());
+			assertEquals(Constants.MESSAGE_INVALID_TASK_INDEX, e.getMessage());
 		}
 
 		// Equivalence partitioning & boundary value analysis
-		// boundary case for taskId
+		// boundary case: invalid task id
 		try {
 			manager.markAsComplete(manager.getTasks().size() + 1);
 		} catch (Exception e) {
-			assertEquals("Invalid task index\n", e.getMessage());
+			assertEquals(Constants.MESSAGE_INVALID_TASK_INDEX, e.getMessage());
 		}
 
+		// valid task id
 		manager.markAsComplete(2);
 		assertEquals(
-				"1. Submit proposal at Nus by Mon 21 October 12:00 AM\n2. learn how to fish\n3. Have dinner with family in NUS from Wed 23 October 07:00 PM to Wed 23 October 09:00 PM\n",
+				"1. Submit proposal at Nus by Mon 21 October 12:00 AM false\n2. learn how to fish false\n3. Have dinner with family in NUS from Wed 23 October 07:00 PM to Wed 23 October 09:00 PM true\n",
 				displayTasks(manager.getTasks()));
 	}
 
@@ -118,7 +146,7 @@ public class TaskManagerTest {
 	public void testEditTasks() throws Exception {
 		testAddTasks();
 		assertEquals(
-				"1. Submit proposal at Nus by Mon 21 October 12:00 AM\n2. Have dinner with family in NUS from Wed 23 October 07:00 PM to Wed 23 October 09:00 PM\n3. learn how to fish\n",
+				"1. Submit proposal at Nus by Mon 21 October 12:00 AM false\n2. Have dinner with family in NUS from Wed 23 October 07:00 PM to Wed 23 October 09:00 PM false\n3. learn how to fish false\n",
 				displayTasks(manager.getTasks()));
 
 		// boundary case where number of dateTimes taken in by method is 0
@@ -127,7 +155,7 @@ public class TaskManagerTest {
 		manager.editTask(3, "learn how to fish with dad",
 				new ArrayList<DateTime>());
 		assertEquals(
-				"1. Submit proposal at Nus by Mon 21 October 12:00 AM\n2. Have dinner with family in NUS from Wed 23 October 07:00 PM to Wed 23 October 09:00 PM\n3. learn how to fish with dad\n",
+				"1. Submit proposal at Nus by Mon 21 October 12:00 AM false\n2. Have dinner with family in NUS from Wed 23 October 07:00 PM to Wed 23 October 09:00 PM false\n3. learn how to fish with dad false\n",
 				displayTasks(manager.getTasks()));
 
 		// boundary case for taskId; invalid task id
@@ -137,24 +165,20 @@ public class TaskManagerTest {
 		} catch (Exception e) {
 			assertEquals("Invalid task index\n", e.getMessage());
 		}
-		assertEquals(
-				"1. Submit proposal at Nus by Mon 21 October 12:00 AM\n2. Have dinner with family in NUS from Wed 23 October 07:00 PM to Wed 23 October 09:00 PM\n3. learn how to fish with dad\n",
-				displayTasks(manager.getTasks()));
 
-		// boundary case where string input is empty
+		// boundary case: string input is empty
 		ArrayList<DateTime> dateTimes = new ArrayList<DateTime>();
 		dateTimes.add(new DateTime(2013, 10, 22, 9, 0, 0, 0));
 		manager.editTask(1, "", dateTimes);
 		assertEquals(
-				"1. Submit proposal at Nus by Tue 22 October 09:00 AM\n2. Have dinner with family in NUS from Wed 23 October 07:00 PM to Wed 23 October 09:00 PM\n3. learn how to fish with dad\n",
+				"1. Submit proposal at Nus by Tue 22 October 09:00 AM false\n2. Have dinner with family in NUS from Wed 23 October 07:00 PM to Wed 23 October 09:00 PM false\n3. learn how to fish with dad false\n",
 				displayTasks(manager.getTasks()));
 
-		// boundary case where the number of dateTimes taken in by the method is
-		// 2 (timed task)
+		// boundary case: number of dateTimes is 2 (timed task)
 		dateTimes.add(new DateTime(2013, 10, 22, 17, 0, 0, 0));
 		manager.editTask(1, "", dateTimes);
 		assertEquals(
-				"1. Submit proposal at Nus from Tue 22 October 09:00 AM to Tue 22 October 05:00 PM\n2. Have dinner with family in NUS from Wed 23 October 07:00 PM to Wed 23 October 09:00 PM\n3. learn how to fish with dad\n",
+				"1. Submit proposal at Nus from Tue 22 October 09:00 AM to Tue 22 October 05:00 PM false\n2. Have dinner with family in NUS from Wed 23 October 07:00 PM to Wed 23 October 09:00 PM false\n3. learn how to fish with dad false\n",
 				displayTasks(manager.getTasks()));
 
 	}
@@ -170,44 +194,58 @@ public class TaskManagerTest {
 		testAddTasks();
 
 		assertEquals(
-				"2. Have dinner with family in NUS from Wed 23 October 07:00 PM to Wed 23 October 09:00 PM\n",
+				"2. Have dinner with family in NUS from Wed 23 October 07:00 PM to Wed 23 October 09:00 PM false\n",
 				displayTasks(manager.search("family", true)));
 		assertEquals(
-				"1. Submit proposal at Nus by Mon 21 October 12:00 AM\n2. Have dinner with family in NUS from Wed 23 October 07:00 PM to Wed 23 October 09:00 PM\n",
+				"1. Submit proposal at Nus by Mon 21 October 12:00 AM false\n2. Have dinner with family in NUS from Wed 23 October 07:00 PM to Wed 23 October 09:00 PM false\n",
 				displayTasks(manager.search("nus", false)));
 		assertEquals("Nothing to display.\n",
 				displayTasks(manager.search("fishes", true)));
-		
-		
-		// boundary case where the search string is empty
-		try{
-			assertEquals("Nothing to display.\n",
-				displayTasks(manager.search("", true)));
+
+		// boundary case: search string is empty
+		try {
+			assertEquals(Constants.NOTHING_TO_DISPLAY,
+					displayTasks(manager.search("", true)));
 		} catch (Exception e) {
-			assertEquals("Search is invalid.\n", e.getMessage());
+			assertEquals(Constants.MESSAGE_INVALID_SEARCH, e.getMessage());
 		}
 
 	}
-	
+
 	/**
-	 * Tests delete with task id as well as delete with search string  
-	 * @throws Exception 
+	 * Tests delete with task id as well as delete with search string
+	 * 
+	 * @throws Exception
 	 */
 	@Test
 	public void testDelete() throws Exception {
 		testAddTasks();
-		
-		// delete by task id boundary case when task id is 0
+		assertEquals(
+				"1. Submit proposal at Nus by Mon 21 October 12:00 AM false\n2. Have dinner with family in NUS from Wed 23 October 07:00 PM to Wed 23 October 09:00 PM false\n3. learn how to fish false\n",
+				displayTasks(manager.getTasks()));
+	
+		// boundary case: task id is 0
 		try {
 			manager.delete(0);
 		} catch (Exception e) {
-			assertEquals("Invalid task index\n", e.getMessage());
+			assertEquals(Constants.MESSAGE_INVALID_TASK_INDEX, e.getMessage());
 		}
-
 		
+		// equivalence partitioning: when search results of delete is 1 
+		manager.delete("fish");
+		assertEquals("Deleted: learn how to fish\n", outContent.toString());
+		outContent.reset();
+		
+		// equivalence partitioning: when search results of delete > 1
+		// manager.delete("nus");
+		// assertEquals("Search Results\n1. Submit proposal at Nus by Mon 21 October 12:00 AM\n2. Have dinner with family in NUS from Wed 23 October 07:00 PM to Wed 23 October 09:00 PM\n", outContent.toString());
+		
+		assertEquals(
+				"1. Submit proposal at Nus by Mon 21 October 12:00 AM false\n2. Have dinner with family in NUS from Wed 23 October 07:00 PM to Wed 23 October 09:00 PM false\n",
+				displayTasks(manager.getTasks()));
+		
+	
 	}
-	
-	
 
 	@Test
 	public void testSearchForFreeIntervalsNoTask() throws Exception {
@@ -306,12 +344,13 @@ public class TaskManagerTest {
 		String str = "";
 
 		if (tasks.isEmpty()) {
-			str += "Nothing to display.\n";
+			str += Constants.NOTHING_TO_DISPLAY;
 			return str;
 		}
 
 		for (int i = 0; i < tasks.size(); i++) {
-			str += tasks.get(i) + "\n";
+			Task task = tasks.get(i);
+			str += task.toString() + " " + task.isComplete() + "\n";
 		}
 
 		return str;

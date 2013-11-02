@@ -583,7 +583,7 @@ public class TaskManager {
 	 * @throws Exception
 	 */
 	public int delete(String searchStr) throws IOException {
-
+		
 		boolean isInvalidString = (searchStr == null || searchStr == "");
 		if (isInvalidString) {
 			throw new NullPointerException(Constants.MESSAGE_INVALID_DELETE);

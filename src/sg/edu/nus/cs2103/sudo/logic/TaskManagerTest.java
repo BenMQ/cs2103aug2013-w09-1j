@@ -33,6 +33,9 @@ public class TaskManagerTest {
 	Scanner user = new Scanner(System.in);
 	private static TaskManager manager;
 	private File savefile;
+	
+	private final static String floatingTaskDescription = "learn how to fish";
+	private final static String timedTaskDescription = "Trying an invalid time interval";
 
 	@Before
 	public void setUp() throws FileNotFoundException {
@@ -58,7 +61,7 @@ public class TaskManagerTest {
 	@Test
 	public void testAddTasks() throws Exception {
 		// adding valid floating task
-		manager.addTask(new FloatingTask("learn how to fish"));
+		manager.addTask(new FloatingTask(floatingTaskDescription));
 		assertEquals("1. learn how to fish false\n",
 				displayTasks(manager.getTasks()));
 
@@ -68,7 +71,7 @@ public class TaskManagerTest {
 
 		// boundary case: add task with invalid time interval
 		try {
-			manager.addTask(new TimedTask("Trying an invalid time interval",
+			manager.addTask(new TimedTask(timedTaskDescription,
 					dateTimes));
 		} catch (Exception e) {
 			assertEquals(Constants.MESSAGE_END_BEFORE_START_TIME,
@@ -88,7 +91,6 @@ public class TaskManagerTest {
 		}
 		*/
 
-		// adding valid timed tasks
 		manager.addTask(new TimedTask(0, "Have dinner with family in NUS",
 				false, new DateTime(2013, 10, 23, 19, 0, 0, 0), new DateTime(
 						2013, 10, 23, 21, 0, 0, 0)));

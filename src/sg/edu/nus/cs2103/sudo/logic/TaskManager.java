@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import org.joda.time.DateTime;
-import org.joda.time.DateTimeComparator;
 import org.joda.time.MutableInterval;
 
 import sg.edu.nus.cs2103.sudo.Constants;

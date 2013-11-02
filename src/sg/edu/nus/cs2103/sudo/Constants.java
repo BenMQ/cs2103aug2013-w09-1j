@@ -43,8 +43,7 @@ public class Constants {
 	public static final int FREE_SLOT_MINIMUM_DURATION = FREE_SLOT_MINIMUM_DURATION_IN_MINUTES * 60 * 1000; // milliseconds
 
 	public static final String FILE_NAME = "sudo.sav";
-	public static final String HISTORY_NAME = "sudo.his";
-
+	
 	public static final String HISTORY_NAME_TEST = "test.his";
 
 	public static final String MESSAGE_HISTORY_LOAD_ERROR = "Loading history file error: file can not be found.";

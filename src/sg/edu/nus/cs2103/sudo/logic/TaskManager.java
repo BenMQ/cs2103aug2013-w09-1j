@@ -28,8 +28,6 @@ import sg.edu.nus.cs2103.ui.UI;
  */
 
 public class TaskManager {
-	private static final int NUM_PRECEDING_CHARACTERS = 3;
-	private static final int MAX_CHARACTER_LENGTH = 17;
 
 	private static TaskManager taskManager;
 
@@ -68,7 +66,7 @@ public class TaskManager {
 	 * @param tasks
 	 *            ArrayList of tasks that is provided by the storage unit
 	 */
-	public void preloadTasks(final ArrayList<Task> tasks) {
+	public void preloadTasks(ArrayList<Task> tasks) {
 		this.tasks = tasks;
 	}
 
@@ -82,7 +80,6 @@ public class TaskManager {
 			taskManager = new TaskManager();
 			System.out.println("Files rebuilt.");
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			System.out.println("Files rebuiling failed.");
 			e.printStackTrace();
 		}
@@ -93,7 +90,8 @@ public class TaskManager {
 	 * each add.
 	 * 
 	 * @param newTask
-	 * @return floatingTasks with new additions
+	 *            Task to be added into task list
+	 * @return modified task list
 	 * @throws Exception
 	 */
 	public ArrayList<Task> addTask(Task newTask) throws Exception {
@@ -112,9 +110,12 @@ public class TaskManager {
 	 * from one type of task to another if necessary.
 	 * 
 	 * @param taskId
+	 *            id of task to be edited
 	 * @param taskDescription
+	 *            new task description (if any)
 	 * @param dates
-	 * @return
+	 *            ArrayList of DateTimes containing new DateTimes (if any)
+	 * @return modified task list
 	 * @throws IllegalStateException
 	 * @throws IndexOutOfBoundsException
 	 * @throws Exception
@@ -130,33 +131,13 @@ public class TaskManager {
 		TaskManagerUtils.checkValidityIndex(index, tasks);
 
 		System.out.printf(Constants.MESSAGE_EDIT, taskId);
-		editTaskWithIndex(taskDescription, dates, index);
+		TaskManagerUtils.editTaskHelper(taskDescription, dates, index, tasks);
 
 		TaskManagerUtils.sortAndUpdateIds(tasks);
 		TaskManagerUtils.saveToHistory(storage);
 		return tasks;
 	}
 
-	
-	/**
-	 * Helper method to editTask given the index in the ArrayList<Task>
-	 * 
-	 * @param taskDescription
-	 * @param dates
-	 * @param index
-	 */
-	public void editTaskWithIndex(String taskDescription,
-			ArrayList<DateTime> dates, int index) {
-
-		Task oldTask = tasks.remove(index);
-		Task newTask = TaskManagerUtils.editDescription(taskDescription,
-				oldTask);
-		
-		newTask = TaskManagerUtils.editDateTime(dates, newTask);
-		tasks.add(newTask);
-	}
-
-	
 	/**
 	 * Prints tasks to stdout. Incomplete tasks are always printed by default.
 	 * If showAll is set to true, completed tasks are printed as well.
@@ -209,51 +190,30 @@ public class TaskManager {
 	}
 
 	/**
-	 * Prints all incomplete tasks only
+	 * Prints all incomplete tasks only.
+	 * 
+	 * @throws IllegalStateException
 	 */
 	public void displayAllTasks() throws IllegalStateException {
 		displayAllTasks(false);
 	}
 
 	/**
-	 * TODO: REFACTOR Displays the floating tasks only. To be shown in the side
-	 * bar in the GUI Formatted to be 17 characters per line.
+	 * Displays floating tasks only. To be shown in the side bar in the GUI
+	 * Formatted to be 17 characters per line.
+	 * 
+	 * @return String of floating tasks.
 	 */
-	public String AllFloatingTasks() {
+	public String allFloatingTasks() {
 
 		TaskManagerUtils.checkEmptyList(tasks);
-		String toReturn = "";
 		ArrayList<FloatingTask> floatingTasks = this.getFloatingTasks();
 
 		if (floatingTasks.size() == 0) {
 			return (Constants.MESSAGE_NO_FLOATING_TASKS);
 		}
 
-		for (FloatingTask task : floatingTasks) {
-			if (!task.isComplete()) {
-				String str = task.toString();
-
-				assert (!str.isEmpty());
-				if (str.length() > MAX_CHARACTER_LENGTH) {
-					String[] tokens = str.split(" ");
-					int currLength = 0;
-
-					for (int j = 0; j < tokens.length; j++) {
-						String token = tokens[j];
-						currLength += token.length();
-						if (currLength > MAX_CHARACTER_LENGTH && j > 1) {
-							currLength = NUM_PRECEDING_CHARACTERS;
-							currLength += token.length();
-							toReturn += "\n   ";
-						}
-						toReturn += token + " ";
-					}
-				} else {
-					toReturn += str;
-				}
-				toReturn += "\n";
-			}
-		}
+		String toReturn = TaskManagerUtils.formatFloatingTasks(floatingTasks);
 
 		return toReturn;
 
@@ -263,6 +223,8 @@ public class TaskManager {
 	 * Mark an incomplete task as completed.
 	 * 
 	 * @param taskId
+	 *            id of task to be marked as completed
+	 * @return modified task list
 	 * @throws Exception
 	 */
 	public ArrayList<Task> markAsComplete(int taskId) throws Exception {
@@ -278,8 +240,10 @@ public class TaskManager {
 
 		currTask.setComplete(true);
 		System.out.printf(Constants.MESSAGE_FINISH, currTask.description);
+
 		TaskManagerUtils.sortAndUpdateIds(tasks);
 		TaskManagerUtils.saveToHistory(storage);
+
 		return tasks;
 	}
 
@@ -287,10 +251,12 @@ public class TaskManager {
 	 * Mark a completed task as incomplete.
 	 * 
 	 * @param taskId
+	 *            id of task to be marked as incomplete
+	 * @return modified task list
 	 * @throws Exception
 	 */
 	public ArrayList<Task> markAsIncomplete(int taskId) throws Exception {
-		
+
 		int index = taskId - 1;
 		TaskManagerUtils.checkValidityIndex(index, tasks);
 
@@ -302,8 +268,10 @@ public class TaskManager {
 
 		currTask.setComplete(false);
 		System.out.printf(Constants.MESSAGE_UNFINISH, currTask.description);
+
 		TaskManagerUtils.sortAndUpdateIds(tasks);
 		TaskManagerUtils.saveToHistory(storage);
+
 		return tasks;
 	}
 
@@ -313,23 +281,30 @@ public class TaskManager {
 	 * Task objects.
 	 * 
 	 * @param searchStr
-	 * @return
+	 *            string to be searched for
+	 * @return ArrayList<Task> list of search results
 	 * @throws NullPointerException
 	 * @throws IllegalStateException
 	 */
 	public ArrayList<Task> searchAndDisplay(String searchStr)
 			throws NullPointerException, IllegalStateException {
+
 		System.out.printf(Constants.MESSAGE_SEARCH, searchStr);
 		ArrayList<Task> searchResults = search(searchStr, false);
 		displaySearchResults(searchResults);
+
 		return searchResults;
 	}
 
 	/**
 	 * Search for Task objects matching the input search string. Searches all
-	 * Task objects.
+	 * Task objects. Prints out the list of searched Task objects.
 	 * 
-	 * Prints out the list of searched Task objects.
+	 * @param searchStr
+	 *            string to be searched for
+	 * @return ArrayList<Task> list of search results
+	 * @throws NullPointerException
+	 * @throws IllegalStateException
 	 */
 	public ArrayList<Task> searchAllAndDisplay(String searchStr)
 			throws NullPointerException, IllegalStateException {
@@ -340,11 +315,16 @@ public class TaskManager {
 	}
 
 	/**
-	 * Searches the floatingTasks for matches with the searchStr By default,
-	 * only incomplete tasks will be searched
+	 * Searches for matches with the searchStr. By default, only incomplete
+	 * tasks will be searched.
 	 * 
 	 * @param searchStr
-	 * @return ArrayList of Task objects
+	 *            string to be search for
+	 * @param searchAll
+	 *            set to true if search for incomplete and completed tasks
+	 * @returns ArrayList<Task> list of search results
+	 * @throws NullPointerException
+	 * @throws IllegalStateException
 	 */
 	public ArrayList<Task> search(String searchStr, boolean searchAll)
 			throws NullPointerException, IllegalStateException {
@@ -353,30 +333,23 @@ public class TaskManager {
 			throw new NullPointerException(Constants.MESSAGE_INVALID_SEARCH);
 		}
 
-		if (tasks.isEmpty()) {
-			throw new IllegalStateException(Constants.MESSAGE_EMPTY_LIST);
-		}
+		TaskManagerUtils.checkEmptyList(tasks);
 
-		ArrayList<Task> searchResults = new ArrayList<Task>();
+		ArrayList<Task> searchResults = TaskManagerUtils.searchHelper(tasks,
+				searchStr, searchAll);
 
-		for (int i = 0; i < tasks.size(); i++) {
-			Task currTask = tasks.get(i);
-			String currTaskStr = currTask.toString();
-
-			if (currTaskStr.toLowerCase().contains(searchStr.toLowerCase())) {
-				if (searchAll || !currTask.isComplete) {
-					searchResults.add(currTask);
-				}
-			}
-		}
 		return searchResults;
 	}
 
 	/**
 	 * Prints out the list of search results containing Task objects.
+	 * 
+	 * @param searchResults
+	 * @throws IllegalStateException
 	 */
 	public void displaySearchResults(ArrayList<Task> searchResults)
 			throws IllegalStateException {
+
 		if (searchResults.isEmpty()) {
 			throw new IllegalStateException(Constants.MESSAGE_NO_SEARCH_RESULTS);
 		}
@@ -740,7 +713,7 @@ public class TaskManager {
 			}
 		}
 	}
-	
+
 	public ArrayList<Task> getTasks() {
 		return this.tasks;
 	}

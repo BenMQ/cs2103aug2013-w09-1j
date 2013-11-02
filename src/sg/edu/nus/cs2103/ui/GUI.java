@@ -142,7 +142,7 @@ public class GUI extends javax.swing.JFrame implements NativeKeyListener {
         	mainTextFrame.setText(Constants.MESSAGE_WELCOME_TO_SUDO_FIRST);
         }
         try{
-        floatingTextFrame.setText(manager.AllFloatingTasks());
+        floatingTextFrame.setText(manager.allFloatingTasks());
         } catch (IllegalStateException e){
         	floatingTextFrame.setText(Constants.MESSAGE_EMPTY_LIST);
         }
@@ -181,7 +181,7 @@ public class GUI extends javax.swing.JFrame implements NativeKeyListener {
             			progressBar.setValue(manager.getCompletedPercentage());
     //        			String[] floatings = updateFloating(manager.getFloatingTask());
             			try{
-            				 floatingTextFrame.setText(manager.AllFloatingTasks());
+            				 floatingTextFrame.setText(manager.allFloatingTasks());
             	    } catch (IllegalStateException w){
             	    	floatingTextFrame.setText(Constants.MESSAGE_EMPTY_LIST);
             	    }
@@ -281,7 +281,7 @@ public class GUI extends javax.swing.JFrame implements NativeKeyListener {
 			mainTextFrame.setText(outContent.toString());
 			progressBar.setValue(manager.getCompletedPercentage());
 			try{
-			 floatingTextFrame.setText(manager.AllFloatingTasks());
+			 floatingTextFrame.setText(manager.allFloatingTasks());
     } catch (IllegalStateException e){
     	floatingTextFrame.setText(Constants.MESSAGE_EMPTY_LIST);
     }

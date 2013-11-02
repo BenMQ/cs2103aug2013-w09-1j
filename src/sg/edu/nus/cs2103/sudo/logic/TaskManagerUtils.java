@@ -19,6 +19,27 @@ import sg.edu.nus.cs2103.sudo.storage.StorageHandler;
  */
 public class TaskManagerUtils {
 
+	private static final int NUM_PRECEDING_CHARACTERS = 3;
+	private static final int MAX_CHARACTER_LENGTH = 17;
+
+	/**
+	 * Helper method to editTask given the index in the ArrayList<Task>
+	 * 
+	 * @param taskDescription
+	 * @param dates
+	 * @param index
+	 */
+	public static void editTaskHelper(String taskDescription,
+			ArrayList<DateTime> dates, int index, ArrayList<Task> tasks) {
+
+		Task oldTask = tasks.remove(index);
+		Task newTask = TaskManagerUtils.editDescription(taskDescription,
+				oldTask);
+
+		newTask = TaskManagerUtils.editDateTime(dates, newTask);
+		tasks.add(newTask);
+	}
+
 	/**
 	 * Helper method to edit the description in a given task
 	 * 
@@ -170,4 +191,65 @@ public class TaskManagerUtils {
 		storage.save(true);
 	}
 
+	/**
+	 * Helper method to format the floating tasks nicely.
+	 * 
+	 * @param floatingTasks
+	 *            ArrayList<FloatingTask> that is to be formatted
+	 * @return String of formatted floating tasks
+	 */
+	public static String formatFloatingTasks(
+			ArrayList<FloatingTask> floatingTasks) {
+		String toReturn = "";
+		for (FloatingTask task : floatingTasks) {
+			if (!task.isComplete()) {
+				String str = task.toString();
+
+				assert (!str.isEmpty());
+				if (str.length() > MAX_CHARACTER_LENGTH) {
+					String[] tokens = str.split(" ");
+					int currLength = 0;
+
+					for (int j = 0; j < tokens.length; j++) {
+						String token = tokens[j];
+						currLength += token.length();
+						if (currLength > MAX_CHARACTER_LENGTH && j > 1) {
+							currLength = NUM_PRECEDING_CHARACTERS;
+							currLength += token.length();
+							toReturn += "\n   ";
+						}
+						toReturn += token + " ";
+					}
+				} else {
+					toReturn += str;
+				}
+				toReturn += "\n";
+			}
+		}
+		return toReturn;
+	}
+
+	/**
+	 * @param searchStr
+	 *            string to be searched for
+	 * @param searchAll
+	 *            set to true if search for incomplete and completed tasks
+	 * @return ArrayList<Task> list of search results
+	 */
+	public static ArrayList<Task> searchHelper(ArrayList<Task> tasks,
+			String searchStr, boolean searchAll) {
+		ArrayList<Task> searchResults = new ArrayList<Task>();
+
+		for (int i = 0; i < tasks.size(); i++) {
+			Task currTask = tasks.get(i);
+			String currTaskStr = currTask.toString();
+
+			if (currTaskStr.toLowerCase().contains(searchStr.toLowerCase())) {
+				if (searchAll || !currTask.isComplete) {
+					searchResults.add(currTask);
+				}
+			}
+		}
+		return searchResults;
+	}
 }

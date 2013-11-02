@@ -151,7 +151,7 @@ public class TaskManager {
 		boolean floatingStarted = false;
 		boolean finishedStarted = false;
 
-		showDisplayMessage(showAll);
+		TaskManagerUtils.showDisplayMessage(showAll);
 
 		for (int i = 0; i < tasks.size(); i++) {
 
@@ -290,8 +290,9 @@ public class TaskManager {
 			throws NullPointerException, IllegalStateException {
 
 		System.out.printf(Constants.MESSAGE_SEARCH, searchStr);
+
 		ArrayList<Task> searchResults = search(searchStr, false);
-		displaySearchResults(searchResults);
+		TaskManagerUtils.displaySearchResults(searchResults);
 
 		return searchResults;
 	}
@@ -310,7 +311,8 @@ public class TaskManager {
 			throws NullPointerException, IllegalStateException {
 
 		ArrayList<Task> searchResults = search(searchStr, true);
-		displaySearchResults(searchResults);
+		TaskManagerUtils.displaySearchResults(searchResults);
+
 		return searchResults;
 	}
 
@@ -329,7 +331,8 @@ public class TaskManager {
 	public ArrayList<Task> search(String searchStr, boolean searchAll)
 			throws NullPointerException, IllegalStateException {
 
-		if (searchStr == null || searchStr == "") {
+		boolean isInvalidString = searchStr == null || searchStr == "";
+		if (isInvalidString) {
 			throw new NullPointerException(Constants.MESSAGE_INVALID_SEARCH);
 		}
 
@@ -339,26 +342,6 @@ public class TaskManager {
 				searchStr, searchAll);
 
 		return searchResults;
-	}
-
-	/**
-	 * Prints out the list of search results containing Task objects.
-	 * 
-	 * @param searchResults
-	 * @throws IllegalStateException
-	 */
-	public void displaySearchResults(ArrayList<Task> searchResults)
-			throws IllegalStateException {
-
-		if (searchResults.isEmpty()) {
-			throw new IllegalStateException(Constants.MESSAGE_NO_SEARCH_RESULTS);
-		}
-
-		System.out.println();
-		System.out.println("Search Results");
-		for (int i = 0; i < searchResults.size(); i++) {
-			System.out.println(searchResults.get(i).toString());
-		}
 	}
 
 	/**
@@ -594,12 +577,15 @@ public class TaskManager {
 	 * searchResults searches through all tasks. Wait for user input to delete
 	 * again.
 	 * 
+	 * @param searchStr
+	 *            string to searched for
 	 * @throws IOException
 	 * @throws Exception
 	 */
 	public int delete(String searchStr) throws IOException {
 
-		if (searchStr == null || searchStr == "") {
+		boolean isInvalidString = (searchStr == null || searchStr == "");
+		if (isInvalidString) {
 			throw new NullPointerException(Constants.MESSAGE_INVALID_DELETE);
 		}
 
@@ -611,15 +597,17 @@ public class TaskManager {
 		} else if (numResults == 1) {
 			delete(searchResults.get(0).getId());
 		} else {
-			displaySearchResults(searchResults);
+			TaskManagerUtils.displaySearchResults(searchResults);
 		}
 
 		return numResults;
 	}
 
 	/**
-	 * Given the id of the task, the task is deleted from floatingTasks
+	 * The task with the specified id is deleted from the task list.
 	 * 
+	 * @param taskId
+	 *            id of task to be deleted
 	 * @throws IOException
 	 */
 	public void delete(int taskId) throws IOException {
@@ -720,7 +708,8 @@ public class TaskManager {
 
 	public ArrayList<FloatingTask> getFloatingTasks() {
 		ArrayList<FloatingTask> toReturn = new ArrayList<FloatingTask>();
-		for (Task task : this.tasks) {
+		
+		for (Task task : tasks) {
 			if ((task instanceof FloatingTask)) {
 				toReturn.add((FloatingTask) task);
 			}
@@ -755,17 +744,6 @@ public class TaskManager {
 			// System.out.println("You have finished all tasks!");
 		}
 		return toReturn;
-	}
-
-	/**
-	 * Shows the correct display message depending on showAll.
-	 */
-	public void showDisplayMessage(boolean showAll) {
-		if (showAll) {
-			System.out.print(Constants.MESSAGE_DISPLAY_ALL);
-		} else {
-			System.out.print(Constants.MESSAGE_DISPLAY);
-		}
 	}
 
 }

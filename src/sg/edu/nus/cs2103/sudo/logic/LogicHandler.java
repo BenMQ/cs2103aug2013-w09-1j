@@ -52,7 +52,8 @@ public final class LogicHandler {
 	 * @return logicHandler
 	 * 			  : a logicHandler object
 	 */
-	public static LogicHandler getLogicHandler(TaskManager manager, Scanner scanner) {
+	public static LogicHandler getLogicHandler(TaskManager manager, 
+			Scanner scanner) {
 		if (logicHandler == null) {
 			logicHandler = new LogicHandler(manager, scanner);
 		}
@@ -112,8 +113,8 @@ public final class LogicHandler {
 			case ADD:
 				delegateAddTasks(taskDescription, dateTimes);
 				return;
-			case DELETE:
-				delegateDelete(taskDescription);
+			case DELETE:;
+				delegateDelete(taskDescription, targetId);
 				this.manager.displayAllTasks();
 				return;
 			case EDIT:
@@ -175,12 +176,16 @@ public final class LogicHandler {
 	 * @param taskDescription
 	 * @throws IOException
 	 */
-	public void delegateDelete(String taskDescription) throws IOException {
-		int numResults = this.manager.delete(taskDescription);
-		if (numResults > 1) {
-			System.out.println(Constants.MESSAGE_ENTER_TASK_ID);
-			int id = scanner.nextInt();
-			this.manager.delete(id);
+	public void delegateDelete(String taskDescription, int targetId) throws IOException {
+		if(taskDescription == null){
+			this.manager.delete(targetId);
+		} else {
+			int numResults = this.manager.delete(taskDescription);
+			if (numResults > 1) {
+				System.out.println(Constants.MESSAGE_ENTER_TASK_ID);
+				int id = scanner.nextInt();
+				this.manager.delete(id);
+			}
 		}
 	}
 

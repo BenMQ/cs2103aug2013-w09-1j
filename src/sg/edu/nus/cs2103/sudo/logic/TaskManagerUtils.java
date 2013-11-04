@@ -242,7 +242,7 @@ public class TaskManagerUtils {
 
 		for (int i = 0; i < tasks.size(); i++) {
 			Task currTask = tasks.get(i);
-			String currTaskStr = currTask.getDescription(); // changed 
+			String currTaskStr = currTask.getDescription();
 
 			if (currTaskStr.toLowerCase().contains(searchStr.toLowerCase())) {
 				if (searchAll || !currTask.isComplete) {
@@ -283,4 +283,15 @@ public class TaskManagerUtils {
 			System.out.print(Constants.MESSAGE_DISPLAY);
 		}
 	}
+	
+	/**
+	 * Shows the correct display message for finished tasks.
+	 */
+	public static void showDisplayMessage() {
+		System.out.print(Constants.MESSAGE_DISPLAY_FINISHED);
+		System.out.println(Constants.FINISHED_TASK_SEPARATOR);
+	}
+	
+	
+	
 }

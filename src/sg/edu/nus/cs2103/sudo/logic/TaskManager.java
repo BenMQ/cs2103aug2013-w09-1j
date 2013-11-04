@@ -136,7 +136,25 @@ public class TaskManager {
 		TaskManagerUtils.saveToHistory(storage);
 		return tasks;
 	}
+	
+	
+	/**
+	 * Prints out finished tasks
+	 */
+	public void displayFinishedTasks() {
+		ArrayList<Task> tasks = getFinishedTasks();
+		
+		TaskManagerUtils.showDisplayMessage();
 
+		for (Task task: tasks) {
+			String completed = "";
+			if (task.isComplete()) {
+				completed = "Done!";
+			}
+			System.out.println(UI.prettyPrint(task) + " " + completed);
+		}
+	}
+	
 	/**
 	 * Prints tasks to stdout. Incomplete tasks are always printed by default.
 	 * If showAll is set to true, completed tasks are printed as well.
@@ -715,6 +733,18 @@ public class TaskManager {
 		}
 		return toReturn;
 	}
+	
+	public ArrayList<Task> getFinishedTasks() {
+		ArrayList<Task> toReturn = new ArrayList<Task>();
+		
+		for (Task task: tasks) {
+			if (task.isComplete()) {
+				toReturn.add(task);
+			}
+		}
+		return toReturn;
+	}
+	
 
 	public void clearTasks() {
 		this.tasks.clear();
@@ -744,5 +774,6 @@ public class TaskManager {
 		}
 		return toReturn;
 	}
-
+	
+	
 }

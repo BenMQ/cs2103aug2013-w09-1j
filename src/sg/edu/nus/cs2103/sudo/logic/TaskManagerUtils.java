@@ -242,7 +242,7 @@ public class TaskManagerUtils {
 
 		for (int i = 0; i < tasks.size(); i++) {
 			Task currTask = tasks.get(i);
-			String currTaskStr = currTask.toString();
+			String currTaskStr = currTask.getDescription(); // changed 
 
 			if (currTaskStr.toLowerCase().contains(searchStr.toLowerCase())) {
 				if (searchAll || !currTask.isComplete) {

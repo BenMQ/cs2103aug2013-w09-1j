@@ -162,7 +162,7 @@ public final class LogicHandler {
 		} catch (IllegalStateException e) {
 			System.out.printf(e.getMessage());
 		} catch (IndexOutOfBoundsException e) {
-			e.printStackTrace();
+			System.out.printf(e.getMessage());
 		} catch (UnsupportedOperationException e) {
 			System.out.printf(e.getMessage());
 		} catch (Exception e) {

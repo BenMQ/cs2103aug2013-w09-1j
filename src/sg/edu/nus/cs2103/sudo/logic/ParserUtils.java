@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.joda.time.DateTime;
 
+import sg.edu.nus.cs2103.sudo.AliasConstants;
 import sg.edu.nus.cs2103.sudo.COMMAND_TYPE;
 import sg.edu.nus.cs2103.sudo.Constants;
 
@@ -79,7 +80,7 @@ public class ParserUtils {
 	 * @return COMMAND_TYPE
 	 */
 	public static COMMAND_TYPE getCommandType(String userCommand) {
-		COMMAND_TYPE commandType = Constants.aliases.get(userCommand
+		COMMAND_TYPE commandType = AliasConstants.aliases.get(userCommand
 				.toUpperCase());
 		if (commandType == null) {
 			return COMMAND_TYPE.INVALID;

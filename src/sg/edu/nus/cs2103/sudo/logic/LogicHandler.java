@@ -163,6 +163,8 @@ public final class LogicHandler {
 			System.out.printf(e.getMessage());
 		} catch (IndexOutOfBoundsException e) {
 			e.printStackTrace();
+		} catch (UnsupportedOperationException e) {
+			System.out.printf(e.getMessage());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

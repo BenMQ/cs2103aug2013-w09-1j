@@ -240,9 +240,11 @@ public class TaskManager {
 	 * @param taskId
 	 *            id of task to be marked as completed
 	 * @return modified task list
+	 * @throws IOException 
 	 * @throws Exception
 	 */
-	public ArrayList<Task> markAsComplete(int taskId) throws Exception {
+	public ArrayList<Task> markAsComplete(int taskId)
+			throws UnsupportedOperationException, IOException {
 
 		int index = taskId - 1;
 		TaskManagerUtils.checkValidityIndex(index, tasks);

@@ -2,9 +2,9 @@ package sg.edu.nus.cs2103.sudo;
 
 public class Constants {
 
-	public static final String MESSAGE_INVALID_COMMAND = "Invalid command\n";
-	public static final String MESSAGE_INVALID_TASK_INDEX = "Invalid task index\n";
-	public static final String MESSAGE_INCOMPLETE_COMMAND = "Incomplete command\n";
+	public static final String MESSAGE_INVALID_COMMAND = "Invalid command.\n";
+	public static final String MESSAGE_INVALID_TASK_INDEX = "Invalid task index.\n";
+	public static final String MESSAGE_INCOMPLETE_COMMAND = "Incomplete command.\n";
 	public static final String MESSAGE_INVALID_SEARCH = "Search is invalid.\n";
 	public static final String MESSAGE_INVALID_DELETE = "Search term for delete is invalid.\n";
 	public static final String MESSAGE_SEARCH_RESULTS = "Search Results";
@@ -27,8 +27,8 @@ public class Constants {
 	public static final String MESSAGE_END_BEFORE_START_TIME = "End date of the task occurs before start date!\n";
 
 	public static final String MESSAGE_EMPTY_LIST = "Task List is empty!\n";
-	public static final String MESSAGE_ALREADY_COMPLETE = "The task is complete.\n";
-	public static final String MESSAGE_ALREADY_INCOMPLETE = "The task is incomplete.\n";
+	public static final String MESSAGE_ALREADY_COMPLETE = "The task is already complete.\n";
+	public static final String MESSAGE_ALREADY_INCOMPLETE = "The task is already incomplete.\n";
 	public static final String MESSAGE_NO_SEARCH_RESULTS = "No search results found.\n";
 	public static final String MESSAGE_NO_FLOATING_TASKS = "No floating tasks.\n";
 	public static final String MESSAGE_FINISH = "Finished task: %s\n";

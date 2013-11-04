@@ -1,5 +1,6 @@
 package sg.edu.nus.cs2103.ui;
 
+import java.util.Arrays;
 import java.util.Scanner;
 
 import org.joda.time.DateTime;
@@ -12,6 +13,8 @@ import sg.edu.nus.cs2103.sudo.logic.Task;
 import sg.edu.nus.cs2103.sudo.logic.TaskManager;
 
 public class UI {
+	private static final int SEPARATOR_LENGTH = 40;
+	private static final char SEPARATOR_CHAR = '=';
 	
 	public static void main(String[] args) throws Exception {	
 		Scanner user = new Scanner( System.in );
@@ -69,13 +72,35 @@ public class UI {
 	
 	/**
 	 * Adds day-level separators between groups of tasks.
+	 * TODO: need to have of length
 	 * @param DateTime
 	 */	
 	public static void printDaySeparator(DateTime previousDate) {
-		DateTimeFormatter datemonthformat = DateTimeFormat.forPattern("EEE d MMM");
+		DateTimeFormatter datemonthformat = DateTimeFormat.forPattern(
+				"EEE d MMM");
 		String prefix = UI.addPrefix(previousDate.getDayOfYear());
-		System.out.println("\n["+ prefix + previousDate.toString(datemonthformat) + "]====================");
+		String label = prefix + previousDate.toString(datemonthformat);
+		int separatorLength = SEPARATOR_LENGTH - label.length();
+		System.out.println("\n["+ label + "]" + fillString(
+				separatorLength, SEPARATOR_CHAR));
 	}	
+	
+	/**
+	 * Helper method to generate a string of characters
+	 * of specified length.
+	 * @param length
+	 * @param charToFill
+	 */	
+	protected static String fillString(int length, char charToFill) {
+		  if (length > 0) {
+		    char[] array = new char[length];
+		    Arrays.fill(array, charToFill);
+		    return new String(array);
+		  }
+		  return "";
+	}
+	
+
 	
 	public static String formatDate(DateTime datetime) {
 		return datetime.toString("dd MMMM hh:mm a");

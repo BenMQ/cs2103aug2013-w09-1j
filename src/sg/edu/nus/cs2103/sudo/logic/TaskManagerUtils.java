@@ -292,6 +292,29 @@ public class TaskManagerUtils {
 		System.out.println(Constants.FINISHED_TASK_SEPARATOR);
 	}
 	
+	public static void clearTasks(ArrayList<Task> tasks) {
+		tasks.clear();
+	}
 	
+	public static ArrayList<Task> getFinishedTasks(ArrayList<Task> tasks) {
+		ArrayList<Task> toReturn = new ArrayList<Task>();
+		
+		for (Task task: tasks) {
+			if (task.isComplete()) {
+				toReturn.add(task);
+			}
+		}
+		return toReturn;
+	}
 	
+	public static ArrayList<FloatingTask> getFloatingTasks(ArrayList<Task> tasks) {
+		ArrayList<FloatingTask> toReturn = new ArrayList<FloatingTask>();
+
+		for (Task task : tasks) {
+			if ((task instanceof FloatingTask)) {
+				toReturn.add((FloatingTask) task);
+			}
+		}
+		return toReturn;
+	}
 }

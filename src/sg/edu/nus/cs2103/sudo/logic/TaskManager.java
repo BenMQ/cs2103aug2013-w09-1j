@@ -136,17 +136,15 @@ public class TaskManager {
 		TaskManagerUtils.saveToHistory(storage);
 		return tasks;
 	}
-	
-	
+
 	/**
 	 * Prints out finished tasks
 	 */
 	public void displayFinishedTasks() {
-		ArrayList<Task> tasks = getFinishedTasks();
-		
+		ArrayList<Task> tasks = TaskManagerUtils.getFinishedTasks(this.tasks);
 		TaskManagerUtils.showDisplayMessage();
 
-		for (Task task: tasks) {
+		for (Task task : tasks) {
 			String completed = "";
 			if (task.isComplete()) {
 				completed = "Done!";
@@ -154,7 +152,7 @@ public class TaskManager {
 			System.out.println(UI.prettyPrint(task) + " " + completed);
 		}
 	}
-	
+
 	/**
 	 * Prints tasks to stdout. Incomplete tasks are always printed by default.
 	 * If showAll is set to true, completed tasks are printed as well.
@@ -221,10 +219,10 @@ public class TaskManager {
 	 * 
 	 * @return String of floating tasks.
 	 */
-	public String allFloatingTasks() {
-
+	public String displayFloatingTasks() {
 		TaskManagerUtils.checkEmptyList(tasks);
-		ArrayList<FloatingTask> floatingTasks = this.getFloatingTasks();
+		ArrayList<FloatingTask> floatingTasks = TaskManagerUtils
+				.getFloatingTasks(tasks);
 
 		if (floatingTasks.size() == 0) {
 			return (Constants.MESSAGE_NO_FLOATING_TASKS);
@@ -600,7 +598,7 @@ public class TaskManager {
 	 * @throws Exception
 	 */
 	public int delete(String searchStr) throws IOException {
-		
+
 		boolean isInvalidString = (searchStr == null || searchStr == "");
 		if (isInvalidString) {
 			throw new NullPointerException(Constants.MESSAGE_INVALID_DELETE);
@@ -723,31 +721,8 @@ public class TaskManager {
 		return this.tasks;
 	}
 
-	public ArrayList<FloatingTask> getFloatingTasks() {
-		ArrayList<FloatingTask> toReturn = new ArrayList<FloatingTask>();
-		
-		for (Task task : tasks) {
-			if ((task instanceof FloatingTask)) {
-				toReturn.add((FloatingTask) task);
-			}
-		}
-		return toReturn;
-	}
-	
-	public ArrayList<Task> getFinishedTasks() {
-		ArrayList<Task> toReturn = new ArrayList<Task>();
-		
-		for (Task task: tasks) {
-			if (task.isComplete()) {
-				toReturn.add(task);
-			}
-		}
-		return toReturn;
-	}
-	
-
 	public void clearTasks() {
-		this.tasks.clear();
+		TaskManagerUtils.clearTasks(tasks);
 	}
 
 	public boolean isReloaded() {
@@ -774,6 +749,5 @@ public class TaskManager {
 		}
 		return toReturn;
 	}
-	
-	
+
 }

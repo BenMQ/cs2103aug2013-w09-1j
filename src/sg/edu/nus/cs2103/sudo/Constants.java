@@ -51,7 +51,7 @@ public class Constants {
 
 	public static final String MESSAGE_REDO = "Redo...";
 
-	public static final String FINISHED_TASK_SEPARATOR = "\n[Finished tasks]=======================";
-	public static final String FLOATING_TASK_SEPARATOR = "\n[Floating tasks]=======================";	
+	public static final String FINISHED_TASK_SEPARATOR = "\n[Finished tasks]==========================";
+	public static final String FLOATING_TASK_SEPARATOR = "\n[Floating tasks]==========================";	
 		
 }

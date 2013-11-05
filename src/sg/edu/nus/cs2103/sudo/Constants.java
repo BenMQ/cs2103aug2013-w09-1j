@@ -4,8 +4,7 @@ import java.util.HashMap;
 
 
 public class Constants {
-    public static final int LINE_WIDTH = 40;
-    
+
 	public static final String MESSAGE_INVALID_COMMAND = "Invalid command\n";
 	public static final String MESSAGE_INVALID_TASK_INDEX = "Invalid task index\n";
 	public static final String MESSAGE_INCOMPLETE_COMMAND = "Incomplete command\n";

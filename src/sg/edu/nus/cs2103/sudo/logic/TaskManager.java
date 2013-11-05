@@ -173,23 +173,11 @@ public class TaskManager {
 				} else {
 					if (!floatingStarted && task.isFloatingTask()) {
 						floatingStarted = true;
-						System.out.print(Constants.FLOATING_TASK_SEPARATOR);
-						for (int j = Constants.FLOATING_TASK_SEPARATOR.length();
-						        j < Constants.LINE_WIDTH;
-						        j++) {
-						    System.out.print("=");
-						}
-						System.out.println();
+						System.out.println(Constants.FLOATING_TASK_SEPARATOR);
 					}
 					if (!finishedStarted && task.isComplete()) {
 						finishedStarted = true;
-						System.out.print(Constants.FINISHED_TASK_SEPARATOR);
-						for (int j = Constants.FINISHED_TASK_SEPARATOR.length();
-                                j < Constants.LINE_WIDTH;
-                                j++) {
-                            System.out.print("=");
-                        }
-						System.out.println();
+						System.out.println(Constants.FINISHED_TASK_SEPARATOR);
 					}
 				}
 				// End of Day-level separators

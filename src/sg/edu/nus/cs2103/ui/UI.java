@@ -6,7 +6,6 @@ import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
-import sg.edu.nus.cs2103.sudo.Constants;
 import sg.edu.nus.cs2103.sudo.logic.InputParser;
 import sg.edu.nus.cs2103.sudo.logic.LogicHandler;
 import sg.edu.nus.cs2103.sudo.logic.Task;
@@ -75,12 +74,7 @@ public class UI {
 	public static void printDaySeparator(DateTime previousDate) {
 		DateTimeFormatter datemonthformat = DateTimeFormat.forPattern("EEE d MMM");
 		String prefix = UI.addPrefix(previousDate.getDayOfYear());
-		String dateSection = "\n["+ prefix + previousDate.toString(datemonthformat) + "]";
-		System.out.print(dateSection);
-		for (int i = dateSection.length(); i < Constants.LINE_WIDTH; i++) {
-		    System.out.print("=");
-		}
-		System.out.println();
+		System.out.println("\n["+ prefix + previousDate.toString(datemonthformat) + "]====================");
 	}	
 	
 	public static String formatDate(DateTime datetime) {

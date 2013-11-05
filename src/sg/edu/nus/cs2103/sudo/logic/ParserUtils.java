@@ -118,9 +118,9 @@ public class ParserUtils {
 		case ADD:
 		case DELETE:
 		case SEARCH:
-		case FINISH:
 		case FREE:
 			return 2;
+		case FINISH:
 		default:
 			return 1;
 		}

@@ -12,7 +12,7 @@ import sg.edu.nus.cs2103.sudo.Constants;
 import sg.edu.nus.cs2103.sudo.HelpConstants;
 import sg.edu.nus.cs2103.sudo.exceptions.NoHistoryException;
 import sg.edu.nus.cs2103.sudo.storage.StorageHandler;
-import sg.edu.nus.cs2103.ui.UI;
+import sg.edu.nus.cs2103.ui.DisplayUtils;
 
 /**
  * @author chenminqi
@@ -149,7 +149,7 @@ public class TaskManager {
 			if (task.isComplete()) {
 				completed = "Done!";
 			}
-			System.out.println(UI.prettyPrint(task) + " " + completed);
+			System.out.println(DisplayUtils.prettyPrint(task) + " " + completed);
 		}
 	}
 
@@ -184,7 +184,7 @@ public class TaskManager {
 							|| task.getEndTime().getDayOfYear() != previousDate
 									.getDayOfYear()) {
 						previousDate = task.getEndTime();
-						UI.printDaySeparator(previousDate);
+						DisplayUtils.printDaySeparator(previousDate);
 					}
 				} else {
 					if (!floatingStarted && task.isFloatingTask()) {
@@ -198,7 +198,7 @@ public class TaskManager {
 				}
 				// End of Day-level separators
 
-				System.out.println(UI.prettyPrint(task) + " " + completed);
+				System.out.println(DisplayUtils.prettyPrint(task) + " " + completed);
 			}
 
 		}
@@ -574,8 +574,8 @@ public class TaskManager {
 					TimedTask task = new TimedTask(description, range);
 					addTask(task);
 					System.out.printf(Constants.MESSAGE_ADD_TIMED,
-							task.description, UI.formatDate(task.startTime),
-							UI.formatDate(task.endTime));
+							task.description, DisplayUtils.formatDate(task.startTime),
+							DisplayUtils.formatDate(task.endTime));
 					TaskManagerUtils.saveToHistory(storage);
 					return;
 				} else {

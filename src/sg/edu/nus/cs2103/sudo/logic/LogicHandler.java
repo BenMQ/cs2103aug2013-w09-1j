@@ -8,6 +8,7 @@ import org.joda.time.DateTime;
 
 import sg.edu.nus.cs2103.sudo.COMMAND_TYPE;
 import sg.edu.nus.cs2103.sudo.Constants;
+import sg.edu.nus.cs2103.ui.DisplayUtils;
 import sg.edu.nus.cs2103.ui.UI;
 
 /**
@@ -219,12 +220,12 @@ public final class LogicHandler {
 		} else if (numOfDates == 1) {
 			this.manager.addTask(new DeadlineTask(taskDescription, dateTimes));
 			System.out.printf(Constants.MESSAGE_ADD_DEADLINE, taskDescription,
-					UI.formatDate(dateTimes.get(0)));
+					DisplayUtils.formatDate(dateTimes.get(0)));
 		} else if (numOfDates == 2) {
 			this.manager.addTask(new TimedTask(taskDescription, dateTimes));
 			System.out.printf(Constants.MESSAGE_ADD_TIMED, taskDescription,
-					UI.formatDate(dateTimes.get(0)),
-					UI.formatDate(dateTimes.get(1)));
+					DisplayUtils.formatDate(dateTimes.get(0)),
+					DisplayUtils.formatDate(dateTimes.get(1)));
 		} else {
 			System.out.print(Constants.MESSAGE_INVALID_NUMBER_OF_DATES);
 		}

@@ -16,6 +16,7 @@ import sg.edu.nus.cs2103.sudo.storage.StorageHandlerTest;
  * testing is easy and code is beautiful.
  */
 
+//@author A0099317U
 @RunWith(Suite.class)
 @SuiteClasses({ InputParserTest.class, TaskManagerTest.class, StorageHandlerTest.class })
 public class UnitTestSuite {

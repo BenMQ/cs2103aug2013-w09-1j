@@ -15,6 +15,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+//@author A0099317U
 public class InputParserTest {
 	private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
 	Scanner user = new Scanner(System.in);

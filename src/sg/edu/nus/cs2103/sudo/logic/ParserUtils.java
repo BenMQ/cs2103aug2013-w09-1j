@@ -16,6 +16,7 @@ import sg.edu.nus.cs2103.sudo.Constants;
 
 import com.joestelmach.natty.DateGroup;
 
+//@author A0099317U
 /**
  * This class contains some static methods to parse task information such as ID,
  * description, and dates.
@@ -122,8 +123,8 @@ public class ParserUtils {
 		case ADD:
 		case DELETE:
 		case SEARCH:
-		case FINISH:
 			return 2;
+		case FINISH:
 		default:
 			return 1;
 		}

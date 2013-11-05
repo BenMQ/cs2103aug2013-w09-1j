@@ -17,7 +17,7 @@ import sg.edu.nus.cs2103.ui.DisplayUtils;
 /**
  * @author chenminqi
  * @author Ipsita Mohapatra A0101286N
- * @author Yos Riady
+ * @author Yos Riady A0099317
  * 
  *         This is a singleton class responsible for handling the Task objects.
  *         The appropriate methods are called upon by the InputParser to execute
@@ -147,7 +147,7 @@ public class TaskManager {
 		for (Task task : tasks) {
 			String completed = "";
 			if (task.isComplete()) {
-				completed = "Done!";
+				completed = Constants.TASK_COMPLETED_FLAG;
 			}
 			System.out.println(DisplayUtils.prettyPrint(task) + " " + completed);
 		}
@@ -174,7 +174,7 @@ public class TaskManager {
 
 			String completed = "";
 			if (task.isComplete()) {
-				completed = "Done!";
+				completed = Constants.TASK_COMPLETED_FLAG;
 			}
 			if (showAll || !task.isComplete) {
 
@@ -677,6 +677,7 @@ public class TaskManager {
 		// return tasks;
 	}
 
+	//@author A0099317U
 	/**
 	 * Helps the user get started with using sudo
 	 * 
@@ -685,8 +686,6 @@ public class TaskManager {
 	public void help(String topic) {
 		if (topic == null) {
 			System.out.println(HelpConstants.MESSAGE_WELCOME_HELP_PAGE);
-		} else if (topic.toUpperCase().equals("LIST")) {
-			System.out.println(HelpConstants.HELP_LIST);
 		} else {
 			String helpMessage = HelpConstants.helpTopics.get(topic
 					.toUpperCase());

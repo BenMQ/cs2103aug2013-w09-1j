@@ -18,7 +18,7 @@ public class Constants {
 	public static final String MESSAGE_ADD_DEADLINE = "Add: %s by %s\n";
 	public static final String MESSAGE_ADD_FLOATING = "Add: %s\n";
 	public static final String MESSAGE_SEARCH = "Searching: %s\n";
-	public static final String MESSAGE_EDIT = "Editing: %s\n";
+	public static final String MESSAGE_EDIT = "Edited: %s\n";
 	public static final String MESSAGE_DELETE = "Deleted: %s\n";
 	public static final String MESSAGE_ENTER_TASK_ID = "Please enter task id:";
 	public static final String MESSAGE_MISSING_DESCRIPTION = "Task description should be between single quotes.\n";
@@ -52,6 +52,7 @@ public class Constants {
 
 	public static final String MESSAGE_REDO = "Redo...";
 
+	public static final String TASK_COMPLETED_FLAG = "Done!";
 	public static final String FINISHED_TASK_SEPARATOR = "\n[Finished tasks]==========================";
 	public static final String FLOATING_TASK_SEPARATOR = "\n[Floating tasks]==========================";
 

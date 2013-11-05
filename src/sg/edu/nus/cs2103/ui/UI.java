@@ -6,6 +6,7 @@ import sg.edu.nus.cs2103.sudo.logic.InputParser;
 import sg.edu.nus.cs2103.sudo.logic.LogicHandler;
 import sg.edu.nus.cs2103.sudo.logic.TaskManager;
 
+//@author A0099317U
 public class UI {
 	
 	public static void main(String[] args) throws Exception {	

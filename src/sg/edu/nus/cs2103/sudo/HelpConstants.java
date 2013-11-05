@@ -2,6 +2,7 @@ package sg.edu.nus.cs2103.sudo;
 
 import java.util.HashMap;
 
+//@author A0099317U
 public class HelpConstants {
 
 	/**
@@ -10,8 +11,6 @@ public class HelpConstants {
 
 	public static final String MESSAGE_WELCOME_HELP_PAGE = "Welcome to the world of sudo!\nType help '<command>' for help on that command. \nHere are the list of commands:\nadd\nedit\ndisplay\ndelete\nfinish\nsearch\nundo\nredo\nfree\nschedule\n";
 	public static final String HELP_NOT_FOUND = "We couldn't find anything on '%s'. Try help 'list' for a list of help topics.\n";
-	public static final String HELP_LIST = "Listing all help topics. WIP\n";
-
 	public static final String HELP_HELP = "Type help '<command>' for help on that command. \n";
 	public static final String HELP_DISPLAY = "To display incomplete tasks:\ndisplay\nTo display both completed and incomplete tasks:\nall\nYou could also type in the following instead of 'display': 'show'.\n\n";
 	public static final String HELP_ADD = "To add a task, specify your command in any of the following formats:\nadd '[description]' from [start date/time] to [end date/time]\nadd '[description]' by [end date/time]\nadd '[description]'\nYou could also type in the following instead of 'add': 'do', 'sudo'.\n\n";
@@ -31,7 +30,6 @@ public class HelpConstants {
 
 		{
 			put("HELP", HELP_HELP);
-			put("LIST", HELP_LIST);
 
 			put("ADD", HELP_ADD);
 			put("SUDO", HELP_ADD);

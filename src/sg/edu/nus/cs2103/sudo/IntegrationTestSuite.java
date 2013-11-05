@@ -27,6 +27,7 @@ import sg.edu.nus.cs2103.sudo.storage.StorageHandler;
 import sg.edu.nus.cs2103.ui.DisplayUtils;
 import sg.edu.nus.cs2103.ui.UI;
 
+//@author A0099317U
 public class IntegrationTestSuite {
 
 	/**

@@ -417,6 +417,8 @@ public class GUI extends javax.swing.JFrame implements NativeKeyListener {
 	private Boolean isShown = true;
 	private Boolean isDemo = false;
 	private ByteArrayOutputStream outContent;
+	private TaskManager manager;
+	private LogicHandler logicHandler;
 	private javax.swing.JButton sudooleButton;
 	private javax.swing.JLabel labelFloatingTasks;
 	private javax.swing.JLabel complecationRate;
@@ -427,8 +429,6 @@ public class GUI extends javax.swing.JFrame implements NativeKeyListener {
 	private javax.swing.JTextArea mainTextFrame;
 	private javax.swing.JTextArea floatingTextFrame;
 	private javax.swing.JTextField inputText;
-	private TaskManager manager;
-	private LogicHandler logicHandler;
 	// ////////////////private InputParser parser;
 	// use InputParser only when testing
 	// End of variables declaration

@@ -145,15 +145,12 @@ public class NewGUI extends javax.swing.JFrame implements NativeKeyListener {
 		inputText.addKeyListener(new KeyAdapter() {
 			public void keyPressed(KeyEvent e) {
 				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-					// mainTextFrame.setText("Search result for \"homework\":\n1. CS2101 homework by tomorrow 4pm.\n2. CS1101s JFDI homework by Sep 25th.");
-					// inputText.setText("");
 					if (inputText.getText().equals("demo")) {
 						if (isDemo) {
 							mainTextFrame.setFont(new java.awt.Font("Monaco",
 									0, 17));
 							floatingTextFrame.setFont(new java.awt.Font(
 									"Monaco", 0, 12));
-							// mainTextFrame.setText("Font:Demo mode off");
 							inputText.setText("");
 							isDemo = false;
 						} else {
@@ -185,7 +182,7 @@ public class NewGUI extends javax.swing.JFrame implements NativeKeyListener {
 			}
 		});
 
-		sudooleButton.setText("Sudoole");
+		sudooleButton.setText("Sudo it");
 		sudooleButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				sudooleButtonActionPerformed(evt);
@@ -378,7 +375,6 @@ public class NewGUI extends javax.swing.JFrame implements NativeKeyListener {
 			System.err.println(ex.getMessage());
 			System.exit(1);
 		}
-		// </editor-fold>
 
 		/* Create and display the form, set up the key listener */
 
@@ -388,13 +384,6 @@ public class NewGUI extends javax.swing.JFrame implements NativeKeyListener {
 			}
 		});
 	}
-
-	/*
-	 * private String[] updateFloating(ArrayList<FloatingTask> ft){
-	 * ArrayList<String> FloatingTaskString = new ArrayList<String>();
-	 * for(FloatingTask flt:ft){ FloatingTaskString.add(flt.toString()); }
-	 * return (String[]) FloatingTaskString.toArray(); }
-	 */
 
 	// Variables declaration
 	private int currentKey;
@@ -413,7 +402,5 @@ public class NewGUI extends javax.swing.JFrame implements NativeKeyListener {
 	private javax.swing.JTextArea mainTextFrame;
 	private javax.swing.JTextArea floatingTextFrame;
 	private javax.swing.JTextField inputText;
-	// ////////////////private InputParser parser;
-	// use InputParser only when testing
 	// End of variables declaration
 }

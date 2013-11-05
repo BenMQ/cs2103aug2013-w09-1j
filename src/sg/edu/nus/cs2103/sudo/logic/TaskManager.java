@@ -100,7 +100,8 @@ public class TaskManager {
 		tasks.add(newTask);
 
 		TaskManagerUtils.sortAndUpdateIds(tasks);
-		TaskManagerUtils.saveToHistory(storage);
+		//TaskManagerUtils.saveToHistory(storage);
+		storage.save(true);
 		return tasks;
 	}
 
@@ -133,7 +134,8 @@ public class TaskManager {
 		TaskManagerUtils.editTaskHelper(taskDescription, dates, index, tasks);
 
 		TaskManagerUtils.sortAndUpdateIds(tasks);
-		TaskManagerUtils.saveToHistory(storage);
+		storage.save(true);
+		//TaskManagerUtils.saveToHistory(storage);
 		return tasks;
 	}
 
@@ -241,7 +243,8 @@ public class TaskManager {
 		System.out.printf(Constants.MESSAGE_FINISH, currTask.description);
 
 		TaskManagerUtils.sortAndUpdateIds(tasks);
-		TaskManagerUtils.saveToHistory(storage);
+		storage.save(true);
+		//TaskManagerUtils.saveToHistory(storage);
 
 		return tasks;
 	}
@@ -269,7 +272,8 @@ public class TaskManager {
 		System.out.printf(Constants.MESSAGE_UNFINISH, currTask.description);
 
 		TaskManagerUtils.sortAndUpdateIds(tasks);
-		TaskManagerUtils.saveToHistory(storage);
+		storage.save(true);
+		//TaskManagerUtils.saveToHistory(storage);
 
 		return tasks;
 	}
@@ -558,7 +562,8 @@ public class TaskManager {
 					System.out.printf(Constants.MESSAGE_ADD_TIMED,
 							task.description, UI.formatDate(task.startTime),
 							UI.formatDate(task.endTime));
-					TaskManagerUtils.saveToHistory(storage);
+					storage.save(true);
+					//TaskManagerUtils.saveToHistory(storage);
 					return;
 				} else {
 					break;
@@ -619,7 +624,8 @@ public class TaskManager {
 
 		tasks.remove(index);
 		TaskManagerUtils.sortAndUpdateIds(tasks);
-		TaskManagerUtils.saveToHistory(storage);
+		storage.save(true);
+		//TaskManagerUtils.saveToHistory(storage);
 	}
 
 	/**

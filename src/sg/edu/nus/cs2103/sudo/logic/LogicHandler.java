@@ -80,6 +80,8 @@ public final class LogicHandler {
 		String taskDescription = InputParser.
 				parseDescription(userInput);
 		int targetId = InputParser.parseId(userInput);
+		long duration = InputParser.parseDuration(userInput);
+		
 		ArrayList<DateTime> dateTimes = InputParser.
 				parseDateTime(userInput);
 
@@ -132,7 +134,8 @@ public final class LogicHandler {
 			    return;
 			case SCHEDULE:
                 this.manager.scheduleTask(
-                		taskDescription, dateTimes);   
+                		targetId, duration, dateTimes); 
+                this.manager.displayAllTasks();
                 return;				
 			case UNDO:
 				this.manager.undo();

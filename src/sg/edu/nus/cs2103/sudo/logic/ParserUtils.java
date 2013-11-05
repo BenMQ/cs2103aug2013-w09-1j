@@ -3,8 +3,12 @@ package sg.edu.nus.cs2103.sudo.logic;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import org.joda.time.DateTime;
+import org.joda.time.MutablePeriod;
+import org.joda.time.format.PeriodFormatterBuilder;
+import org.joda.time.format.PeriodParser;
 
 import sg.edu.nus.cs2103.sudo.AliasConstants;
 import sg.edu.nus.cs2103.sudo.COMMAND_TYPE;
@@ -125,4 +129,23 @@ public class ParserUtils {
 			return 1;
 		}
 	}
+	
+	/**
+	 * Parse a string of the form 2h3m into milliseconds
+	 * http://stackoverflow.com/posts/11021986/revisions
+	 * @param periodString
+	 * @return the input string in milliseconds
+	 */
+	public static long parseDurationToMillis(String periodString) {
+	    PeriodParser parser = new PeriodFormatterBuilder()
+	       .appendHours().appendSuffix("h")
+	       .appendMinutes().appendSuffix("m")
+	       .toParser();
+
+	    MutablePeriod period = new MutablePeriod();
+	    parser.parseInto(period, periodString, 0, Locale.getDefault());
+
+	    return period.toDurationFrom(new DateTime(0)).getMillis();
+	}
+	
 }

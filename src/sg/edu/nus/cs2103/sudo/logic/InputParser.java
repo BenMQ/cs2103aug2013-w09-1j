@@ -121,5 +121,26 @@ public class InputParser {
 	        return NOT_FOUND;
 	    }
 	}
+	
+	/**
+     * Attempts to get the content between second and third space, 
+     * and parse as milliseconds. -1 for unsuccessful parsing.
+     * 
+     * @param userInput 
+     * @return duration in milliseconds
+     */ 
+    public static long parseDuration(String userInput) {
+        String[] spaceDelimitedInput = userInput.split("\\s+");
+        if (spaceDelimitedInput.length < 3) {
+            return NOT_FOUND;
+        }
+        String secondArgument = spaceDelimitedInput[2];
+        long millis = ParserUtils.parseDurationToMillis(secondArgument);
+        if (millis < 0) {
+            return NOT_FOUND;
+        } else {
+            return millis;
+        }
+    }
 }
 

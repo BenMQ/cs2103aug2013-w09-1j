@@ -99,8 +99,12 @@ public final class LogicHandler {
 				this.manager.displayAllTasks(true);
 				return;
 			case FINISH:
-				this.manager.markAsComplete(targetId);
-				this.manager.displayAllTasks();
+				if(targetId == -1){
+					this.manager.displayFinishedTasks();
+				} else {
+					this.manager.markAsComplete(targetId);
+					this.manager.displayAllTasks();
+				}
 				return;
 			case UNFINISH:
 				this.manager.markAsIncomplete(targetId);

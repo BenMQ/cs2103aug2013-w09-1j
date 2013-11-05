@@ -499,13 +499,20 @@ public class TaskManager {
 	 * @param timeRange
 	 * @throws Exception
 	 */
-	public void scheduleTask(String description, ArrayList<DateTime> dateTimes)
+	public void scheduleTask(int taskId, long duration, ArrayList<DateTime> dateTimes)
 			throws Exception {
-		if (dateTimes.size() > 2) {
-			System.out.print(Constants.MESSAGE_INVALID_NUMBER_OF_DATES);
-			return;
-		}
-
+        int index = taskId - 1;
+        TaskManagerUtils.checkValidityIndex(index, tasks);
+        
+        if (dateTimes.size() > 1) {
+            System.out.print(Constants.MESSAGE_INVALID_NUMBER_OF_DATES);
+            return;
+        } else if (duration <= 0) {
+            System.out.print(Constants.MESSAGE_INCOMPLETE_COMMAND);
+            return;
+        }
+        
+        String description = tasks.get(index).getDescription();
 		ArrayList<DateTime> timeRange = TaskManagerUtils.getFlexibleTimeRange(dateTimes);
 		if (timeRange.get(0).isBefore(DateTime.now())) {
 		    timeRange.set(0, DateTime.now());
@@ -537,23 +544,26 @@ public class TaskManager {
 					// duration is too short for consideration, moving on
 					break;
 				}
-
-				if (!start.plusHours(2).isAfter(startDay2300)) {
+				DateTime end = start.plusMillis((int) duration);
+				if (!end.isAfter(startDay2300)) {
 					ArrayList<DateTime> range = new ArrayList<DateTime>(2);
 					range.add(start);
-					range.add(start.plusHours(2));
-					TimedTask task = new TimedTask(description, range);
-					addTask(task);
+					
+					range.add(end);
+					
+					TaskManagerUtils.editTaskHelper(null, range, index, tasks);
 					System.out.printf(Constants.MESSAGE_ADD_TIMED,
-							task.description, DisplayUtils.formatDate(task.startTime),
-							DisplayUtils.formatDate(task.endTime));
+							description, DisplayUtils.formatDate(start),
+							DisplayUtils.formatDate(end));
+					
+					TaskManagerUtils.sortAndUpdateIds(tasks);
+					
 					TaskManagerUtils.saveToHistory(storage);
 					return;
 				} else {
 					break;
 				}
 			}
-
 		}
 		System.out.println(Constants.MESSAGE_NO_FREE_SLOTS);
 	}

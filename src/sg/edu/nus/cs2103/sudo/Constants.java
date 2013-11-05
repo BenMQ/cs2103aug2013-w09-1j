@@ -35,7 +35,7 @@ public class Constants {
 	public static final String MESSAGE_UNFINISH = "Un-Finished task: %s\n";
 
 	public static final String MESSAGE_NO_FREE_SLOTS = "No free slots found. :(";
-	public static final String MESSAGE_FREE_SLOTS_PREFIX = "Here are your free time slots for ";
+	public static final String MESSAGE_FREE_SLOTS_PREFIX = "Here are your free time slots for %s:\n";
 
 	public static final int FREE_SLOT_MINIMUM_DURATION_IN_MINUTES = 10;
 	public static final int FREE_SLOT_MINIMUM_DURATION = FREE_SLOT_MINIMUM_DURATION_IN_MINUTES * 60 * 1000; // milliseconds

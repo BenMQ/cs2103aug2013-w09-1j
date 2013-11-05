@@ -373,7 +373,7 @@ public class TaskManager {
 	 * @author chenminqi
 	 */
 	public void searchForFreeIntervals(ArrayList<DateTime> dateTimes) {
-		if (dateTimes.size() > 2) {
+		if (dateTimes.size() > 1) {
 			System.out.print(Constants.MESSAGE_INVALID_NUMBER_OF_DATES);
 			return;
 		}
@@ -390,15 +390,13 @@ public class TaskManager {
 			MutableInterval interval = free.get(i);
 			if (interval.toDurationMillis() >= Constants.FREE_SLOT_MINIMUM_DURATION) {
 				if (noSlotsFound) {
-					System.out.println(Constants.MESSAGE_FREE_SLOTS_PREFIX
-							+ timeRange.get(0).toString("dd MMMM hh:mm a")
-							+ " to "
-							+ timeRange.get(1).toString("dd MMMM hh:mm a"));
+					System.out.printf(Constants.MESSAGE_FREE_SLOTS_PREFIX,
+					        timeRange.get(0).toString("dd MMMM"));
 					noSlotsFound = false;
 				}
-				String output = interval.getStart().toString("dd MMMM hh:mm a")
+				String output = interval.getStart().toString("hh:mm a")
 						+ " to "
-						+ interval.getEnd().toString("dd MMMM hh:mm a");
+						+ interval.getEnd().toString("hh:mm a");
 				System.out.println(output);
 			}
 		}

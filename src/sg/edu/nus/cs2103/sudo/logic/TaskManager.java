@@ -362,6 +362,9 @@ public class TaskManager {
 
 		assert (dateTimes.size() >= 0 && dateTimes.size() <= 2);
 		ArrayList<DateTime> timeRange = TaskManagerUtils.getFlexibleTimeRange(dateTimes);
+		if (timeRange.get(0).isBefore(DateTime.now())) {
+            timeRange.set(0, DateTime.now());
+        }
 		ArrayList<MutableInterval> free = getFreeIntervals(timeRange);
 		boolean noSlotsFound = true;
 
@@ -486,6 +489,9 @@ public class TaskManager {
 		}
 
 		ArrayList<DateTime> timeRange = TaskManagerUtils.getFlexibleTimeRange(dateTimes);
+		if (timeRange.get(0).isBefore(DateTime.now())) {
+		    timeRange.set(0, DateTime.now());
+		}
 		ArrayList<MutableInterval> free = getFreeIntervals(timeRange);
 		for (int i = 0; i < free.size(); i++) {
 			MutableInterval candidate = free.get(i);

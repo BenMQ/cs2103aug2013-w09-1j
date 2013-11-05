@@ -8,6 +8,7 @@ import org.joda.time.format.DateTimeFormatter;
 
 import sg.edu.nus.cs2103.sudo.logic.Task;
 
+//@author A0099317U
 public class DisplayUtils {
 	
 	private static final int SEPARATOR_LENGTH = 40;
@@ -82,8 +83,6 @@ public class DisplayUtils {
 		  }
 		  return "";
 	}
-	
-
 	
 	public static String formatDate(DateTime datetime) {
 		return datetime.toString("dd MMMM hh:mm a");

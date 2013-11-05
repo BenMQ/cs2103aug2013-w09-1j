@@ -117,13 +117,12 @@ public class ParserUtils {
 		assert commandType != null;
 		switch (commandType) {
 		case EDIT:
-		case SCHEDULE:
+        case SCHEDULE:
 			return 3;
 		case ADD:
 		case DELETE:
 		case SEARCH:
 		case FINISH:
-		case FREE:
 			return 2;
 		default:
 			return 1;

@@ -3,14 +3,20 @@ package sg.edu.nus.cs2103.sudo.logic;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import org.joda.time.DateTime;
+import org.joda.time.MutablePeriod;
+import org.joda.time.format.PeriodFormatterBuilder;
+import org.joda.time.format.PeriodParser;
 
+import sg.edu.nus.cs2103.sudo.AliasConstants;
 import sg.edu.nus.cs2103.sudo.COMMAND_TYPE;
 import sg.edu.nus.cs2103.sudo.Constants;
 
 import com.joestelmach.natty.DateGroup;
 
+//@author A0099317U
 /**
  * This class contains some static methods to parse task information such as ID,
  * description, and dates.
@@ -79,7 +85,7 @@ public class ParserUtils {
 	 * @return COMMAND_TYPE
 	 */
 	public static COMMAND_TYPE getCommandType(String userCommand) {
-		COMMAND_TYPE commandType = Constants.aliases.get(userCommand
+		COMMAND_TYPE commandType = AliasConstants.aliases.get(userCommand
 				.toUpperCase());
 		if (commandType == null) {
 			return COMMAND_TYPE.INVALID;
@@ -111,14 +117,35 @@ public class ParserUtils {
 	public static int getNumOfWordsNeeded(COMMAND_TYPE commandType) {
 		assert commandType != null;
 		switch (commandType) {
+		case EDIT:
+        case SCHEDULE:
+			return 3;
 		case ADD:
 		case DELETE:
-		case FINISH:
-		case EDIT:
 		case SEARCH:
 			return 2;
+		case FINISH:
 		default:
 			return 1;
 		}
 	}
+	
+	/**
+	 * Parse a string of the form 2h3m into milliseconds
+	 * http://stackoverflow.com/posts/11021986/revisions
+	 * @param periodString
+	 * @return the input string in milliseconds
+	 */
+	public static long parseDurationToMillis(String periodString) {
+	    PeriodParser parser = new PeriodFormatterBuilder()
+	       .appendHours().appendSuffix("h")
+	       .appendMinutes().appendSuffix("m")
+	       .toParser();
+
+	    MutablePeriod period = new MutablePeriod();
+	    parser.parseInto(period, periodString, 0, Locale.getDefault());
+
+	    return period.toDurationFrom(new DateTime(0)).getMillis();
+	}
+	
 }

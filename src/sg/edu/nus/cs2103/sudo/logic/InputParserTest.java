@@ -15,6 +15,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+//@author A0099317U
 public class InputParserTest {
 	private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
 	Scanner user = new Scanner(System.in);
@@ -89,8 +90,7 @@ public class InputParserTest {
 	public void testParseAddFloatingTask() throws IOException{
 		String userInput = "add 'make waffles for breakfast'";
 		String taskDescription = InputParser.parseDescription(userInput);
-		String expectedOutput = String.format(Constants.MESSAGE_ADD_FLOATING, taskDescription);
-		testCommand(userInput, expectedOutput);
+		runCommand(userInput);
 		assertEquals(1, manager.getTasks().size());
 	}
 
@@ -102,7 +102,7 @@ public class InputParserTest {
 		String endTime = dateTimes.get(0).toString(
 				"EEE dd MMMM hh:mm a");
 		String expectedOutput = String.format(Constants.MESSAGE_ADD_DEADLINE, taskDescription, endTime);
-		testCommand(userInput, expectedOutput);
+		runCommand(userInput);
 		assertEquals("Mon Oct 14 14:00:00 SGT 2013", manager.getTasks().get(0).endTime.toDate().toString());
 		assertEquals(1, manager.getTasks().size());
 	}
@@ -117,7 +117,7 @@ public class InputParserTest {
 		String endTime = dateTimes.get(1).toString(
 				"EEE dd MMMM hh:mm a");
 		String expectedOutput = String.format(Constants.MESSAGE_ADD_TIMED, taskDescription, startTime, endTime);
-		testCommand(userInput, expectedOutput);
+		runCommand(userInput);
 		
 		assertEquals("Sun Oct 13 14:00:00 SGT 2013", manager.getTasks().get(0).startTime.toDate().toString());
 		assertEquals("Mon Oct 14 14:00:00 SGT 2013", manager.getTasks().get(0).endTime.toDate().toString());
@@ -129,20 +129,32 @@ public class InputParserTest {
 		String userInput = "add nothing";
 		testCommand(userInput, Constants.MESSAGE_MISSING_DESCRIPTION);
 		assertEquals(0, manager.getTasks().size());
-	}	
-
+	}
+	
 	@Test
-	//Test boundary conditions
+	public void testEmptyStringDescription() throws IOException{
+		String userInput = "add '' from 19 October 2013 to 22 October 2014";
+		runCommand(userInput);
+		assertEquals(0, manager.getTasks().size());
+	}	
+	
+	@Test
 	public void testParseAddInvalidNumberOfDates() throws IOException{
 		String userInput = "add 'time travel' from 19 October 2013 to 22 October 2014 to 24 November 2016";
-		testCommand(userInput, Constants.MESSAGE_INVALID_NUMBER_OF_DATES);
+		runCommand(userInput);
 		assertEquals(0, manager.getTasks().size());
-	}		
+	}
+	
+	// Helper test method for operations not directly being tested
+	public void runCommand(String userInput) {
+		logicHandler.executeCommand(userInput);
+		outContent.reset();
+	}	
 	
 	// Helper test method to test console output
 	private void testCommand(String userInput, String expectedOutput) throws IOException{		
 		logicHandler.executeCommand(userInput); //this method calls all parser methods
-		assertEquals(outContent.toString(), expectedOutput);
+		assertEquals(expectedOutput,outContent.toString());
 		outContent.reset();
 	}
 	

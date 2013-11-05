@@ -14,6 +14,7 @@ import org.joda.time.DateTime;
 import com.joestelmach.natty.DateGroup;
 import com.joestelmach.natty.Parser;
 
+//@author A0099317U
 /**
  * This InputParser class is responsible for extracting commands
  * and description/time parameters from user string inputs.
@@ -91,7 +92,11 @@ public class InputParser {
 				Pattern.MULTILINE);
         Matcher m = p.matcher(userInput);
         if (m.find()) {
-            return m.group().substring(1, m.group().length() - 1);
+        	String description = m.group().substring(1, m.group().length() - 1);
+        	if(description.length() <= 0){
+        		return null;
+        	}
+            return description;
         } else {
             return null;
         }
@@ -117,5 +122,26 @@ public class InputParser {
 	        return NOT_FOUND;
 	    }
 	}
+	
+	/**
+     * Attempts to get the content between second and third space, 
+     * and parse as milliseconds. -1 for unsuccessful parsing.
+     * 
+     * @param userInput 
+     * @return duration in milliseconds
+     */ 
+    public static long parseDuration(String userInput) {
+        String[] spaceDelimitedInput = userInput.split("\\s+");
+        if (spaceDelimitedInput.length < 3) {
+            return NOT_FOUND;
+        }
+        String secondArgument = spaceDelimitedInput[2];
+        long millis = ParserUtils.parseDurationToMillis(secondArgument);
+        if (millis < 0) {
+            return NOT_FOUND;
+        } else {
+            return millis;
+        }
+    }
 }
 

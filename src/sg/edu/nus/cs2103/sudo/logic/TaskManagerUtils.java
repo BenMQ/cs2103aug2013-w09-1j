@@ -272,7 +272,41 @@ public class TaskManagerUtils {
 			System.out.println(searchResults.get(i).toString());
 		}
 	}
-	
+	/**
+     * Produces a start DateTime and an end DateTime based on the argument
+     * given. If the input is an empty array, the range will be the current day.
+     * If the input has one DateTime, the range will be that particular day. If
+     * the input has two DateTimes, the range will be that.
+     * 
+     * @param dateTimes
+     * @return range calculated
+     */
+    public static ArrayList<DateTime> getFlexibleTimeRange(
+            ArrayList<DateTime> dateTimes) {
+        assert (dateTimes.size() >= 0 && dateTimes.size() <= 2);
+        if (dateTimes.size() == 2) {
+            if (dateTimes.get(0).isAfter(dateTimes.get(1))) {
+                Collections.reverse(dateTimes);
+            }
+            return dateTimes;
+        } else {
+            DateTime day;
+            if (dateTimes.size() == 1) {
+                day = dateTimes.get(0);
+            } else {
+                day = DateTime.now();
+            }
+            DateTime startOfDay = new DateTime(day.getYear(),
+                    day.getMonthOfYear(), day.getDayOfMonth(), 0, 0, 0);
+            DateTime endOfDay = new DateTime(day.getYear(),
+                    day.getMonthOfYear(), day.getDayOfMonth(), 23, 59, 59);
+            ArrayList<DateTime> range = new ArrayList<DateTime>(2);
+            range.add(startOfDay);
+            range.add(endOfDay);
+            return range;
+        }
+    }
+    
 	/**
 	 * Shows the correct display message depending on showAll.
 	 */

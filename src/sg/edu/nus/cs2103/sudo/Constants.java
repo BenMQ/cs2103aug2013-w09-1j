@@ -1,20 +1,18 @@
 package sg.edu.nus.cs2103.sudo;
 
-import java.util.HashMap;
-
-
 public class Constants {
 
-	public static final String MESSAGE_INVALID_COMMAND = "Invalid command\n";
-	public static final String MESSAGE_INVALID_TASK_INDEX = "Invalid task index\n";
-	public static final String MESSAGE_INCOMPLETE_COMMAND = "Incomplete command\n";
+	public static final String MESSAGE_INVALID_COMMAND = "Invalid command.\n";
+	public static final String MESSAGE_INVALID_TASK_INDEX = "Invalid task index.\n";
+	public static final String MESSAGE_INCOMPLETE_COMMAND = "Incomplete command.\n";
 	public static final String MESSAGE_INVALID_SEARCH = "Search is invalid.\n";
 	public static final String MESSAGE_INVALID_DELETE = "Search term for delete is invalid.\n";
 	public static final String MESSAGE_SEARCH_RESULTS = "Search Results";
-	
+
 	public static final String NOTHING_TO_DISPLAY = "Nothing to display.\n";
 	public static final String MESSAGE_DISPLAY = "Displaying incomplete tasks\n";
 	public static final String MESSAGE_DISPLAY_ALL = "Displaying all tasks\n";
+	public static final String MESSAGE_DISPLAY_FINISHED = "Displaying finished tasks\n";
 	public static final String MESSAGE_INVALID_NUMBER_OF_DATES = "Invalid number of dates.\n";
 	public static final String MESSAGE_ADD_TIMED = "Add: %s from %s to %s\n";
 	public static final String MESSAGE_ADD_DEADLINE = "Add: %s by %s\n";
@@ -29,8 +27,8 @@ public class Constants {
 	public static final String MESSAGE_END_BEFORE_START_TIME = "End date of the task occurs before start date!\n";
 
 	public static final String MESSAGE_EMPTY_LIST = "Task List is empty!\n";
-	public static final String MESSAGE_ALREADY_COMPLETE = "The task is complete.\n";
-	public static final String MESSAGE_ALREADY_INCOMPLETE = "The task is incomplete.\n";
+	public static final String MESSAGE_ALREADY_COMPLETE = "The task is already complete.\n";
+	public static final String MESSAGE_ALREADY_INCOMPLETE = "The task is already incomplete.\n";
 	public static final String MESSAGE_NO_SEARCH_RESULTS = "No search results found.\n";
 	public static final String MESSAGE_NO_FLOATING_TASKS = "No floating tasks.\n";
 	public static final String MESSAGE_FINISH = "Finished task: %s\n";
@@ -43,7 +41,7 @@ public class Constants {
 	public static final int FREE_SLOT_MINIMUM_DURATION = FREE_SLOT_MINIMUM_DURATION_IN_MINUTES * 60 * 1000; // milliseconds
 
 	public static final String FILE_NAME = "sudo.sav";
-	
+
 	public static final String HISTORY_NAME_TEST = "test.his";
 
 	public static final String MESSAGE_HISTORY_LOAD_ERROR = "Loading history file error: file can not be found.";
@@ -54,51 +52,7 @@ public class Constants {
 
 	public static final String MESSAGE_REDO = "Redo...";
 
-	public static final String FINISHED_TASK_SEPARATOR = "\n[Finished tasks]=======================";
-	public static final String FLOATING_TASK_SEPARATOR = "\n[Floating tasks]=======================";	
-	
-	
-	public static final HashMap<String, COMMAND_TYPE> aliases = new HashMap<String, COMMAND_TYPE>() {
-		/**
-		 *  This key-value table maps aliases to their corresponding COMMAND_TYPE.
-		 */
-		private static final long serialVersionUID = 1L;
-		{
-			put("ADD", COMMAND_TYPE.ADD);
-			put("DO", COMMAND_TYPE.ADD);
-			put("SUDO", COMMAND_TYPE.ADD);
+	public static final String FINISHED_TASK_SEPARATOR = "\n[Finished tasks]==========================";
+	public static final String FLOATING_TASK_SEPARATOR = "\n[Floating tasks]==========================";
 
-			put("DELETE", COMMAND_TYPE.DELETE);
-			put("DEL", COMMAND_TYPE.DELETE);
-			put("REMOVE", COMMAND_TYPE.DELETE);
-
-			put("EDIT", COMMAND_TYPE.EDIT);
-			put("CHANGE", COMMAND_TYPE.EDIT);
-			put("MODIFY", COMMAND_TYPE.EDIT);
-
-			put("FINISH", COMMAND_TYPE.FINISH);
-			put("COMPLETE", COMMAND_TYPE.FINISH);
-			put("DONE", COMMAND_TYPE.FINISH);
-
-			put("SEARCH", COMMAND_TYPE.SEARCH);
-			put("FIND", COMMAND_TYPE.SEARCH);
-
-			put("DISPLAY", COMMAND_TYPE.DISPLAY);
-			put("SHOW", COMMAND_TYPE.DISPLAY);
-
-			put("UNDO", COMMAND_TYPE.UNDO);
-			put("REDO", COMMAND_TYPE.REDO);
-			put("FREE", COMMAND_TYPE.FREE);
-			put("SCHEDULE", COMMAND_TYPE.SCHEDULE);
-			put("SORT", COMMAND_TYPE.SORT);
-			put("HELP", COMMAND_TYPE.HELP);
-			put("ALL", COMMAND_TYPE.ALL);
-			put("UNFINISH", COMMAND_TYPE.UNFINISH);
-
-			put("EXIT", COMMAND_TYPE.EXIT);
-			put("QUIT", COMMAND_TYPE.EXIT);
-			
-			put("DESTROY", COMMAND_TYPE.DESTROY);
-		}
-	};	
 }

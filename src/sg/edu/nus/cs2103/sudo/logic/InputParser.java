@@ -91,7 +91,11 @@ public class InputParser {
 				Pattern.MULTILINE);
         Matcher m = p.matcher(userInput);
         if (m.find()) {
-            return m.group().substring(1, m.group().length() - 1);
+        	String description = m.group().substring(1, m.group().length() - 1);
+        	if(description.length() <= 0){
+        		return null;
+        	}
+            return description;
         } else {
             return null;
         }

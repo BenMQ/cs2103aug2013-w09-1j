@@ -12,7 +12,7 @@ import sg.edu.nus.cs2103.sudo.Constants;
 import sg.edu.nus.cs2103.sudo.HelpConstants;
 import sg.edu.nus.cs2103.sudo.exceptions.NoHistoryException;
 import sg.edu.nus.cs2103.sudo.storage.StorageHandler;
-import sg.edu.nus.cs2103.ui.UI;
+import sg.edu.nus.cs2103.ui.DisplayUtils;
 
 /**
  * @author chenminqi
@@ -138,6 +138,22 @@ public class TaskManager {
 	}
 
 	/**
+	 * Prints out finished tasks
+	 */
+	public void displayFinishedTasks() {
+		ArrayList<Task> tasks = TaskManagerUtils.getFinishedTasks(this.tasks);
+		TaskManagerUtils.showDisplayMessage();
+
+		for (Task task : tasks) {
+			String completed = "";
+			if (task.isComplete()) {
+				completed = "Done!";
+			}
+			System.out.println(DisplayUtils.prettyPrint(task) + " " + completed);
+		}
+	}
+
+	/**
 	 * Prints tasks to stdout. Incomplete tasks are always printed by default.
 	 * If showAll is set to true, completed tasks are printed as well.
 	 * 
@@ -168,7 +184,7 @@ public class TaskManager {
 							|| task.getEndTime().getDayOfYear() != previousDate
 									.getDayOfYear()) {
 						previousDate = task.getEndTime();
-						UI.printDaySeparator(previousDate);
+						DisplayUtils.printDaySeparator(previousDate);
 					}
 				} else {
 					if (!floatingStarted && task.isFloatingTask()) {
@@ -182,7 +198,7 @@ public class TaskManager {
 				}
 				// End of Day-level separators
 
-				System.out.println(UI.prettyPrint(task) + " " + completed);
+				System.out.println(DisplayUtils.prettyPrint(task) + " " + completed);
 			}
 
 		}
@@ -203,10 +219,10 @@ public class TaskManager {
 	 * 
 	 * @return String of floating tasks.
 	 */
-	public String allFloatingTasks() {
-
+	public String displayFloatingTasks() {
 		TaskManagerUtils.checkEmptyList(tasks);
-		ArrayList<FloatingTask> floatingTasks = this.getFloatingTasks();
+		ArrayList<FloatingTask> floatingTasks = TaskManagerUtils
+				.getFloatingTasks(tasks);
 
 		if (floatingTasks.size() == 0) {
 			return (Constants.MESSAGE_NO_FLOATING_TASKS);
@@ -224,9 +240,11 @@ public class TaskManager {
 	 * @param taskId
 	 *            id of task to be marked as completed
 	 * @return modified task list
+	 * @throws IOException 
 	 * @throws Exception
 	 */
-	public ArrayList<Task> markAsComplete(int taskId) throws Exception {
+	public ArrayList<Task> markAsComplete(int taskId)
+			throws UnsupportedOperationException, IOException {
 
 		int index = taskId - 1;
 		TaskManagerUtils.checkValidityIndex(index, tasks);
@@ -527,8 +545,8 @@ public class TaskManager {
 					TimedTask task = new TimedTask(description, range);
 					addTask(task);
 					System.out.printf(Constants.MESSAGE_ADD_TIMED,
-							task.description, UI.formatDate(task.startTime),
-							UI.formatDate(task.endTime));
+							task.description, DisplayUtils.formatDate(task.startTime),
+							DisplayUtils.formatDate(task.endTime));
 					TaskManagerUtils.saveToHistory(storage);
 					return;
 				} else {
@@ -553,7 +571,7 @@ public class TaskManager {
 	 * @throws Exception
 	 */
 	public int delete(String searchStr) throws IOException {
-		
+
 		boolean isInvalidString = (searchStr == null || searchStr == "");
 		if (isInvalidString) {
 			throw new NullPointerException(Constants.MESSAGE_INVALID_DELETE);
@@ -676,19 +694,8 @@ public class TaskManager {
 		return this.tasks;
 	}
 
-	public ArrayList<FloatingTask> getFloatingTasks() {
-		ArrayList<FloatingTask> toReturn = new ArrayList<FloatingTask>();
-		
-		for (Task task : tasks) {
-			if ((task instanceof FloatingTask)) {
-				toReturn.add((FloatingTask) task);
-			}
-		}
-		return toReturn;
-	}
-
 	public void clearTasks() {
-		this.tasks.clear();
+		TaskManagerUtils.clearTasks(tasks);
 	}
 
 	public boolean isReloaded() {

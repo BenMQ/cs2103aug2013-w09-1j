@@ -2,7 +2,7 @@ package sg.edu.nus.cs2103.sudo;
 
 import java.util.HashMap;
 
-
+//@author A0099317U
 public class AliasConstants {
 
 	/**

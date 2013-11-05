@@ -24,8 +24,10 @@ import sg.edu.nus.cs2103.sudo.logic.LogicHandler;
 import sg.edu.nus.cs2103.sudo.logic.Task;
 import sg.edu.nus.cs2103.sudo.logic.TaskManager;
 import sg.edu.nus.cs2103.sudo.storage.StorageHandler;
+import sg.edu.nus.cs2103.ui.DisplayUtils;
 import sg.edu.nus.cs2103.ui.UI;
 
+//@author A0099317U
 public class IntegrationTestSuite {
 
 	/**
@@ -146,8 +148,8 @@ public class IntegrationTestSuite {
 		Task deadlineTask = IntegrationTestSuite.manager.getTasks().get(0);
 		Task timedTask = IntegrationTestSuite.manager.getTasks().get(1);
 		
-		assertEquals("1. [by 9AM] make cake for breakfast", UI.prettyPrint(deadlineTask));
-		assertEquals("2. [10AM - 2PM] make waffles for lunch", UI.prettyPrint(timedTask));
+		assertEquals("1. [by 9AM] make cake for breakfast", DisplayUtils.prettyPrint(deadlineTask));
+		assertEquals("2. [10AM - 2PM] make waffles for lunch", DisplayUtils.prettyPrint(timedTask));
 	}
 	
 	

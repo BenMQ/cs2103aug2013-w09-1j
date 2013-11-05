@@ -242,7 +242,7 @@ public class TaskManagerUtils {
 
 		for (int i = 0; i < tasks.size(); i++) {
 			Task currTask = tasks.get(i);
-			String currTaskStr = currTask.toString();
+			String currTaskStr = currTask.getDescription();
 
 			if (currTaskStr.toLowerCase().contains(searchStr.toLowerCase())) {
 				if (searchAll || !currTask.isComplete) {
@@ -272,7 +272,41 @@ public class TaskManagerUtils {
 			System.out.println(searchResults.get(i).toString());
 		}
 	}
-	
+	/**
+     * Produces a start DateTime and an end DateTime based on the argument
+     * given. If the input is an empty array, the range will be the current day.
+     * If the input has one DateTime, the range will be that particular day. If
+     * the input has two DateTimes, the range will be that.
+     * 
+     * @param dateTimes
+     * @return range calculated
+     */
+    public static ArrayList<DateTime> getFlexibleTimeRange(
+            ArrayList<DateTime> dateTimes) {
+        assert (dateTimes.size() >= 0 && dateTimes.size() <= 2);
+        if (dateTimes.size() == 2) {
+            if (dateTimes.get(0).isAfter(dateTimes.get(1))) {
+                Collections.reverse(dateTimes);
+            }
+            return dateTimes;
+        } else {
+            DateTime day;
+            if (dateTimes.size() == 1) {
+                day = dateTimes.get(0);
+            } else {
+                day = DateTime.now();
+            }
+            DateTime startOfDay = new DateTime(day.getYear(),
+                    day.getMonthOfYear(), day.getDayOfMonth(), 0, 0, 0);
+            DateTime endOfDay = new DateTime(day.getYear(),
+                    day.getMonthOfYear(), day.getDayOfMonth(), 23, 59, 59);
+            ArrayList<DateTime> range = new ArrayList<DateTime>(2);
+            range.add(startOfDay);
+            range.add(endOfDay);
+            return range;
+        }
+    }
+    
 	/**
 	 * Shows the correct display message depending on showAll.
 	 */
@@ -282,5 +316,39 @@ public class TaskManagerUtils {
 		} else {
 			System.out.print(Constants.MESSAGE_DISPLAY);
 		}
+	}
+	
+	/**
+	 * Shows the correct display message for finished tasks.
+	 */
+	public static void showDisplayMessage() {
+		System.out.print(Constants.MESSAGE_DISPLAY_FINISHED);
+		System.out.println(Constants.FINISHED_TASK_SEPARATOR);
+	}
+	
+	public static void clearTasks(ArrayList<Task> tasks) {
+		tasks.clear();
+	}
+	
+	public static ArrayList<Task> getFinishedTasks(ArrayList<Task> tasks) {
+		ArrayList<Task> toReturn = new ArrayList<Task>();
+		
+		for (Task task: tasks) {
+			if (task.isComplete()) {
+				toReturn.add(task);
+			}
+		}
+		return toReturn;
+	}
+	
+	public static ArrayList<FloatingTask> getFloatingTasks(ArrayList<Task> tasks) {
+		ArrayList<FloatingTask> toReturn = new ArrayList<FloatingTask>();
+
+		for (Task task : tasks) {
+			if ((task instanceof FloatingTask)) {
+				toReturn.add((FloatingTask) task);
+			}
+		}
+		return toReturn;
 	}
 }

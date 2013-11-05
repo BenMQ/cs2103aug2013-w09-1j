@@ -112,10 +112,14 @@ public class ParserUtils {
 	public static int getNumOfWordsNeeded(COMMAND_TYPE commandType) {
 		assert commandType != null;
 		switch (commandType) {
+		case EDIT:
+		case SCHEDULE:
+			return 3;
 		case ADD:
 		case DELETE:
-		case EDIT:
 		case SEARCH:
+		case FINISH:
+		case FREE:
 			return 2;
 		default:
 			return 1;

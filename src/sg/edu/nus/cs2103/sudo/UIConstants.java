@@ -6,13 +6,12 @@ public class UIConstants {
 	public static final int KEYBOARD_TAB = 9;
 	
 	public static final String LOGO = 
-			"============================\n"+
-			"|                    __    |\n"+ 
-			"|    _____      ____/ /___ |\n"+
-			"|   / ___/ / / / __  / __ \\|\n"+
-			"|  (___ ) /_/ / /_/ / /_/ /|\n"+
-			"| /____/\\____/\\____/\\____/ |\n"+
-			"\"Make you a better life.\"";
+			"                     __    \n"+ 
+			"     _____      ____/ /___ \n"+
+			"    / ___/ / / / __  / __ \\\n"+
+			"   (___ ) /_/ / /_/ / /_/ /\n"+
+			"  /____/\\____/\\____/\\____/\n\n"+
+			"  \"Sudo you a better life.\"";
 	public static final String MESSAGE_WELCOME_TO_SUDO_FIRST = "Welcome to the world of sudo!\nFor first time users, to learn about the full list of commands, type: help\nTo learn more about a command, type: help [command]\n";
 	public static final String MESSAGE_WELCOME_TO_SUDO_RELOAD = "Welcome back, dear user.\nYour past records have been loaded successfully.\nTo get a full list of commands, type: help\nTo learn more about a command: help [command]\n";
 	

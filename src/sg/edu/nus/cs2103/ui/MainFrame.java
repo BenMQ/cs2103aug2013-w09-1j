@@ -102,11 +102,12 @@ public class MainFrame extends javax.swing.JFrame implements NativeKeyListener {
 		System.setOut(new PrintStream(outContent));
         jScrollPaneInput = new javax.swing.JScrollPane();
         jTextPaneInput = new javax.swing.JTextPane();
+        jTextArea1 = new javax.swing.JTextArea();
         jScrollPane1 = new javax.swing.JScrollPane();
         MainTextPane = new javax.swing.JTextPane();
         jScrollPane2 = new javax.swing.JScrollPane();
+        jScrollPane3 = new javax.swing.JScrollPane();
         FloatingTextArea = new javax.swing.JTextArea();
-        logo = new javax.swing.JLabel();
 		DefaultCaret caret = (DefaultCaret) FloatingTextArea.getCaret();
 		caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
 
@@ -184,7 +185,12 @@ public class MainFrame extends javax.swing.JFrame implements NativeKeyListener {
         FloatingTextArea.setFocusable(false);
         jScrollPane2.setViewportView(FloatingTextArea);
 
-        logo.setText(UIConstants.LOGO);
+        jTextArea1.setEditable(false);
+        jTextArea1.setBackground(new java.awt.Color(0, 0, 0));
+        jTextArea1.setColumns(20);
+        jTextArea1.setRows(5);
+        jTextArea1.setFocusable(false);
+        jScrollPane3.setViewportView(jTextArea1);
         
         if (manager.isReloaded()) {
 			MainTextPane.setText(UIConstants.MESSAGE_WELCOME_TO_SUDO_RELOAD);
@@ -196,8 +202,8 @@ public class MainFrame extends javax.swing.JFrame implements NativeKeyListener {
 		} catch (IllegalStateException e) {
 			FloatingTextArea.setText(UIConstants.MESSAGE_EMPTY_LIST);
 		}
-
-        org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
+		
+	    org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -207,9 +213,7 @@ public class MainFrame extends javax.swing.JFrame implements NativeKeyListener {
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(org.jdesktop.layout.GroupLayout.TRAILING, jScrollPane2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 250, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
-                        .add(logo, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 225, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())))
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, jScrollPane3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 250, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -217,8 +221,7 @@ public class MainFrame extends javax.swing.JFrame implements NativeKeyListener {
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(jScrollPane1)
                     .add(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .add(logo, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 115, Short.MAX_VALUE)
+                        .add(jScrollPane3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 121, Short.MAX_VALUE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(jScrollPane2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 579, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
@@ -279,8 +282,9 @@ public class MainFrame extends javax.swing.JFrame implements NativeKeyListener {
     private javax.swing.JTextPane MainTextPane;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPaneInput;
     private javax.swing.JTextPane jTextPaneInput;
-    private javax.swing.JLabel logo;
+    private javax.swing.JTextArea jTextArea1;
     // End of variables declaration                   
 }

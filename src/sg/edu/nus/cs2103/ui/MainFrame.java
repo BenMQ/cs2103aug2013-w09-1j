@@ -72,7 +72,7 @@ public class MainFrame extends javax.swing.JFrame implements NativeKeyListener {
 			insertDoc(styledDoc,ipt,"White");
 			break;
 		case 2:
-			insertDoc(styledDoc,ipt,"Yellow");
+			insertDoc(styledDoc,ipt,"Blue");
 			break;
 		case 3:
 			insertDoc(styledDoc,ipt,"Red");
@@ -99,9 +99,9 @@ public class MainFrame extends javax.swing.JFrame implements NativeKeyListener {
 		}
     	//MainTextPane.setBackground(Color.WHITE);
     	StyledDocument styledDoc = MainTextPane.getStyledDocument();
-		createStyle("GREEN",styledDoc,19,0,0,0,Color.GREEN,"Courier");
+		createStyle("Green",styledDoc,15,1,0,0,Color.GREEN,"Courier");
 		createStyle("White",styledDoc,15,1,0,0,Color.WHITE,"Courier");
-		createStyle("Yellow",styledDoc,15,0,1,0,Color.YELLOW,"Courier");
+		createStyle("Blue",styledDoc,15,1,1,0,new java.awt.Color(175, 242, 246),"Courier");
 		createStyle("Red",styledDoc,15,1,0,0,Color.RED,"Courier");
     }
     
@@ -269,18 +269,6 @@ public class MainFrame extends javax.swing.JFrame implements NativeKeyListener {
         MainTextPane.setDragEnabled(false);
         MainTextPane.setFocusable(false);
         jScrollPane1.setViewportView(MainTextPane);
-        
-        Color backgroundColor = Color.green;
-        SimpleAttributeSet background = new SimpleAttributeSet();
-
-        MainTextPane.getStyledDocument().setParagraphAttributes(0, 
-        		MainTextPane.getDocument().getLength(), background, false);
-     
-        // And remove default (white) margin
-        MainTextPane.setBorder(BorderFactory.createEmptyBorder());
-     
-        // Alternative: Leave a 2px border but draw it in the same color
-        MainTextPane.setBorder(BorderFactory.createLineBorder(backgroundColor, 5));
         
         FloatingTextArea.setEditable(false);
         FloatingTextArea.setColumns(20);

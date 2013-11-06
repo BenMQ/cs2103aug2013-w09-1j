@@ -127,7 +127,7 @@ public class MainFrame extends javax.swing.JFrame implements NativeKeyListener {
 									0, 17));
 							FloatingTextArea.setFont(new java.awt.Font(
 									"Monaco", 0, 12));
-							 jTextPaneInput.setText("");
+							 jTextPaneInput.setText(null);
 							isDemo = false;
 						} else {
 							MainTextPane.setFont(new java.awt.Font("Monaco",
@@ -135,27 +135,34 @@ public class MainFrame extends javax.swing.JFrame implements NativeKeyListener {
 							FloatingTextArea.setFont(new java.awt.Font(
 									"Monaco", 0, 16));
 							// mainTextFrame.setText("Font:Demo mode on");
-							 jTextPaneInput.setText("");
+							 jTextPaneInput.setText(null);
 							isDemo = true;
 						}
 					} else {
 						String userInput =  jTextPaneInput.getText();
-						jTextPaneInput.setText("");
+						jTextPaneInput.setText(null);
 						logicHandler.executeCommand(userInput);
 						MainTextPane.setText(outContent.toString());
 						outContent.reset();
 						// String[] floatings =
 						// updateFloating(manager.getFloatingTask());
 						try {
-							FloatingTextArea.setText(manager
-									.allFloatingTasks());
+							FloatingTextArea.setText(
+									
+									manager.displayFloatingTasks());
 						} catch (IllegalStateException w) {
 							FloatingTextArea
 									.setText(UIConstants.MESSAGE_EMPTY_LIST);
 						}
 					}
 				}
+				
+				//Add color change code here
+				
+				
+				
 			}
+			
 		});
 
         
@@ -177,8 +184,7 @@ public class MainFrame extends javax.swing.JFrame implements NativeKeyListener {
         FloatingTextArea.setFocusable(false);
         jScrollPane2.setViewportView(FloatingTextArea);
 
-        logo.setText("logo");
-
+        logo.setText(UIConstants.LOGO);
         
         if (manager.isReloaded()) {
 			MainTextPane.setText(UIConstants.MESSAGE_WELCOME_TO_SUDO_RELOAD);
@@ -186,7 +192,7 @@ public class MainFrame extends javax.swing.JFrame implements NativeKeyListener {
 			MainTextPane.setText(UIConstants.MESSAGE_WELCOME_TO_SUDO_FIRST);
 		}
 		try {
-			FloatingTextArea.setText(manager.allFloatingTasks());
+			FloatingTextArea.setText(manager.displayFloatingTasks());
 		} catch (IllegalStateException e) {
 			FloatingTextArea.setText(UIConstants.MESSAGE_EMPTY_LIST);
 		}

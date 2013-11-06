@@ -78,7 +78,7 @@ public class TaskManager {
 		TaskManagerUtils.updateAllIds(tasks);
 		try {
 			taskManager = new TaskManager();
-			MainFrame.print_add("Files rebuilt.",1);
+			MainFrame.print_add("Files rebuilt.",2);
 		} catch (Exception e) {
 			MainFrame.print_add("Files rebuiling failed.",3);
 			e.printStackTrace();
@@ -192,11 +192,11 @@ public class TaskManager {
 				} else {
 					if (!floatingStarted && task.isFloatingTask()) {
 						floatingStarted = true;
-						MainFrame.print_add(Constants.FLOATING_TASK_SEPARATOR,2);
+						MainFrame.print_add(Constants.FLOATING_TASK_SEPARATOR,1);
 					}
 					if (!finishedStarted && task.isComplete()) {
 						finishedStarted = true;
-						MainFrame.print_add(Constants.FINISHED_TASK_SEPARATOR,2);
+						MainFrame.print_add(Constants.FINISHED_TASK_SEPARATOR,1);
 					}
 				}
 				// End of Day-level separators
@@ -311,7 +311,7 @@ public class TaskManager {
 	public ArrayList<Task> searchAndDisplay(String searchStr)
 			throws NullPointerException, IllegalStateException {
 
-		MainFrame.print_add(String.format(Constants.MESSAGE_SEARCH, searchStr),1);
+		MainFrame.print_add(String.format(Constants.MESSAGE_SEARCH, searchStr),2);
 
 		ArrayList<Task> searchResults = search(searchStr, false);
 		TaskManagerUtils.displaySearchResults(searchResults);
@@ -379,7 +379,7 @@ public class TaskManager {
 	 */
 	public void searchForFreeIntervals(ArrayList<DateTime> dateTimes) {
 		if (dateTimes.size() > 1) {
-			MainFrame.print_add(Constants.MESSAGE_INVALID_NUMBER_OF_DATES, 2);
+			MainFrame.print_add(Constants.MESSAGE_INVALID_NUMBER_OF_DATES, 3);
 			return;
 		}
 
@@ -402,7 +402,7 @@ public class TaskManager {
 				String output = interval.getStart().toString("hh:mm a")
 						+ " to "
 						+ interval.getEnd().toString("hh:mm a");
-				MainFrame.print_add(output,2);
+				MainFrame.print_add(output,1);
 			}
 		}
 		if (noSlotsFound) {
@@ -619,7 +619,7 @@ public class TaskManager {
 		TaskManagerUtils.checkValidityIndex(index, tasks);
 
 		MainFrame.print_add(String.format(Constants.MESSAGE_DELETE,
-				tasks.get(index).description),1);
+				tasks.get(index).description),3);
 
 		tasks.remove(index);
 		TaskManagerUtils.sortAndUpdateIds(tasks);
@@ -700,7 +700,7 @@ public class TaskManager {
 			if (helpMessage == null) {
 				MainFrame.print_add(String.format(HelpConstants.HELP_NOT_FOUND, topic),3);
 			} else {
-				MainFrame.print_add(helpMessage,2);
+				MainFrame.print_add(helpMessage,1);
 			}
 		}
 	}

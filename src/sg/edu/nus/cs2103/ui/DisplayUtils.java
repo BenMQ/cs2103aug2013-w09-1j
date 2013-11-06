@@ -60,13 +60,17 @@ public class DisplayUtils {
 	 * @param DateTime
 	 */	
 	public static void printDaySeparator(DateTime previousDate) {
+		int index = 1;
 		DateTimeFormatter datemonthformat = DateTimeFormat.forPattern(
 				"EEE d MMM");
 		String prefix = addPrefix(previousDate.getDayOfYear());
 		String label = prefix + previousDate.toString(datemonthformat);
 		int separatorLength = SEPARATOR_LENGTH - label.length();
+		if(label.contains("verdue")){
+			index+=2;
+		}
 		MainFrame.print_add("\n["+ label + "]" + fillString(
-				separatorLength, SEPARATOR_CHAR), 3);
+				separatorLength, SEPARATOR_CHAR), index);
 	}	
 	
 	/**

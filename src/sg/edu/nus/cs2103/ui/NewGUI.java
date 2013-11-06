@@ -5,6 +5,7 @@ import java.io.PrintStream;
 
 import sg.edu.nus.cs2103.sudo.logic.LogicHandler;
 import sg.edu.nus.cs2103.sudo.logic.TaskManager;
+import sg.edu.nus.cs2103.sudo.logic.TaskManagerUtils;
 import sg.edu.nus.cs2103.sudo.UIConstants;
 
 import java.awt.event.KeyAdapter;
@@ -133,7 +134,7 @@ public class NewGUI extends javax.swing.JFrame implements NativeKeyListener {
 			mainTextFrame.setText(UIConstants.MESSAGE_WELCOME_TO_SUDO_FIRST);
 		}
 		try {
-			floatingTextFrame.setText(manager.allFloatingTasks());
+			floatingTextFrame.setText(manager.displayFloatingTasks());
 		} catch (IllegalStateException e) {
 			floatingTextFrame.setText(UIConstants.MESSAGE_EMPTY_LIST);
 		}
@@ -172,7 +173,7 @@ public class NewGUI extends javax.swing.JFrame implements NativeKeyListener {
 						// updateFloating(manager.getFloatingTask());
 						try {
 							floatingTextFrame.setText(manager
-									.allFloatingTasks());
+									.displayFloatingTasks());
 						} catch (IllegalStateException w) {
 							floatingTextFrame
 									.setText(UIConstants.MESSAGE_EMPTY_LIST);
@@ -319,7 +320,7 @@ public class NewGUI extends javax.swing.JFrame implements NativeKeyListener {
 		mainTextFrame.setText(outContent.toString());
 		
 		try {
-			floatingTextFrame.setText(manager.allFloatingTasks());
+			floatingTextFrame.setText(manager.displayFloatingTasks());
 		} catch (IllegalStateException e) {
 			floatingTextFrame.setText(UIConstants.MESSAGE_EMPTY_LIST);
 		}

@@ -120,9 +120,7 @@ public class MainFrame extends javax.swing.JFrame implements NativeKeyListener {
         FloatingTextArea = new javax.swing.JTextArea();
 		DefaultCaret caret = (DefaultCaret) FloatingTextArea.getCaret();
 		caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
-
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
+       //setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         jTextPaneInput.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 jTextPaneInputKeyPressed(evt);

@@ -27,6 +27,7 @@ import java.awt.event.KeyEvent;
 
 
 
+
 import javax.swing.*;
 import javax.swing.plaf.ColorUIResource;
 import javax.swing.text.*;
@@ -99,10 +100,10 @@ public class MainFrame extends javax.swing.JFrame implements NativeKeyListener {
 		}
     	//MainTextPane.setBackground(Color.WHITE);
     	StyledDocument styledDoc = MainTextPane.getStyledDocument();
-		createStyle("Green",styledDoc,15,1,0,0,Color.GREEN,"Courier");
-		createStyle("White",styledDoc,15,1,0,0,Color.WHITE,"Courier");
-		createStyle("Blue",styledDoc,15,1,1,0,new java.awt.Color(175, 242, 246),"Courier");
-		createStyle("Red",styledDoc,15,1,0,0,Color.RED,"Courier");
+		createStyle("Green",styledDoc,18,1,0,0,Color.GREEN,"Courier");
+		createStyle("White",styledDoc,18,1,0,0,Color.WHITE,"Courier");
+		createStyle("Blue",styledDoc,18,1,1,0,new java.awt.Color(175, 242, 246),"Courier");
+		createStyle("Red",styledDoc,18,1,0,0,Color.RED,"Courier");
     }
     
 	public void nativeKeyTyped(NativeKeyEvent arg0) {
@@ -268,6 +269,9 @@ public class MainFrame extends javax.swing.JFrame implements NativeKeyListener {
         MainTextPane.setAutoscrolls(false);
         MainTextPane.setDragEnabled(false);
         MainTextPane.setFocusable(false);
+        
+        ((DefaultCaret) MainTextPane.getCaret()).setUpdatePolicy(DefaultCaret.NEVER_UPDATE);
+        
         jScrollPane1.setViewportView(MainTextPane);
         
         FloatingTextArea.setEditable(false);
@@ -297,9 +301,9 @@ public class MainFrame extends javax.swing.JFrame implements NativeKeyListener {
         
         
         if (manager.isReloaded()) {
-		//	MainTextPane.setText(UIConstants.MESSAGE_WELCOME_TO_SUDO_RELOAD);
+			MainFrame.print_add((UIConstants.MESSAGE_WELCOME_TO_SUDO_RELOAD),1);
 		} else {
-		//	MainTextPane.setText(UIConstants.MESSAGE_WELCOME_TO_SUDO_FIRST);
+			MainFrame.print_add((UIConstants.MESSAGE_WELCOME_TO_SUDO_FIRST),1);
 		}
 		try {
 			FloatingTextArea.setText(manager.displayFloatingTasks());

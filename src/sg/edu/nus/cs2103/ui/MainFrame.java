@@ -8,6 +8,9 @@ import sg.edu.nus.cs2103.sudo.logic.TaskManager;
 import sg.edu.nus.cs2103.sudo.UIConstants;
 
 import java.awt.Color;
+import java.awt.GradientPaint;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
@@ -15,6 +18,9 @@ import java.awt.event.KeyEvent;
  *
  * @author Liu Dake
  */
+
+
+
 
 
 
@@ -40,8 +46,22 @@ public class MainFrame extends javax.swing.JFrame implements NativeKeyListener {
     /**
      * Creates new form MainFrame
      */
-	
-	static public javax.swing.JTextPane MainTextPane = new javax.swing.JTextPane();
+	static public javax.swing.JTextPane MainTextPane = new javax.swing.JTextPane(){
+		
+		@Override
+        protected void paintComponent(Graphics g) {
+            // set background green - but can draw image here too
+            g.setColor(Color.GREEN);
+            g.fillRect(0, 0, getWidth(), getHeight());
+
+            // uncomment the following to draw an image
+            // Image img = ...;
+            // g.drawImage(img, 0, 0, this);
+
+            super.paintComponent(g);
+        }
+		
+	};
 	static public StyledDocument styledDoc = MainTextPane.getStyledDocument();
 	static public void print_add(String ipt, int colorCode){
 		switch (colorCode){
@@ -62,24 +82,6 @@ public class MainFrame extends javax.swing.JFrame implements NativeKeyListener {
 		}
 	}
 	
-	static public void print_addf(String ipt, int colorCode){
-		switch (colorCode){
-		case 0:
-			insertDoc(styledDoc,ipt,"Green");
-			break;
-		case 1:
-			insertDoc(styledDoc,ipt,"White");
-			break;
-		case 2:
-			insertDoc(styledDoc,ipt,"Yellow");
-			break;
-		case 3:
-			insertDoc(styledDoc,ipt,"Red");
-			break;
-		default:
-			insertDoc(styledDoc,ipt,"Green");
-		}
-	}
     public MainFrame() {
 		manager = TaskManager.getTaskManager();
 		logicHandler = LogicHandler.getLogicHandler(manager, null);
@@ -95,11 +97,11 @@ public class MainFrame extends javax.swing.JFrame implements NativeKeyListener {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-    	MainTextPane.setBackground(Color.WHITE);
+    	//MainTextPane.setBackground(Color.WHITE);
     	StyledDocument styledDoc = MainTextPane.getStyledDocument();
-		createStyle("GREEN",styledDoc,19,0,0,0,Color.DARK_GRAY,"Courier");
-		createStyle("White",styledDoc,15,1,0,0,Color.MAGENTA,"Courier");
-		createStyle("Yellow",styledDoc,15,0,1,0,Color.BLUE,"Courier");
+		createStyle("GREEN",styledDoc,19,0,0,0,Color.GREEN,"Courier");
+		createStyle("White",styledDoc,15,1,0,0,Color.WHITE,"Courier");
+		createStyle("Yellow",styledDoc,15,0,1,0,Color.YELLOW,"Courier");
 		createStyle("Red",styledDoc,15,1,0,0,Color.RED,"Courier");
     }
     
@@ -161,7 +163,7 @@ public class MainFrame extends javax.swing.JFrame implements NativeKeyListener {
 	  StyleConstants.setUnderline(s,(underline==1)?true:false); // downline
 	  StyleConstants.setForeground(s,color); // color
 	  StyleConstants.setFontFamily(s,fontName);  // font
-	  StyleConstants.setBackground(s, Color.WHITE);
+	  StyleConstants.setBackground(s, Color.BLACK);
 	 }
 	
 	 public static void insertDoc(StyledDocument styledDoc, String content,String currentStyle)
@@ -285,6 +287,10 @@ public class MainFrame extends javax.swing.JFrame implements NativeKeyListener {
         FloatingTextArea.setRows(5);
         FloatingTextArea.setDragEnabled(false);
         FloatingTextArea.setFocusable(false);
+        FloatingTextArea.setFont(new java.awt.Font(
+				"Courier", 0, 14));
+        FloatingTextArea.setBackground(Color.BLACK);
+        FloatingTextArea.setForeground(Color.GREEN);
         jScrollPane2.setViewportView(FloatingTextArea);
 
         jTextArea1.setEditable(false);

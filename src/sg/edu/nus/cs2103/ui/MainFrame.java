@@ -179,7 +179,7 @@ public class MainFrame extends javax.swing.JFrame implements NativeKeyListener {
         FloatingTextArea = new javax.swing.JTextArea();
 		DefaultCaret caret = (DefaultCaret) FloatingTextArea.getCaret();
 		caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
-       //setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         jTextPaneInput.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 jTextPaneInputKeyPressed(evt);
@@ -359,8 +359,6 @@ public class MainFrame extends javax.swing.JFrame implements NativeKeyListener {
 	System.err.println(ex.getMessage());
 	System.exit(1);
 }
-        //</editor-fold>
-
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {

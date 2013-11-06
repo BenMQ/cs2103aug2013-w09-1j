@@ -65,8 +65,8 @@ public class DisplayUtils {
 		String prefix = addPrefix(previousDate.getDayOfYear());
 		String label = prefix + previousDate.toString(datemonthformat);
 		int separatorLength = SEPARATOR_LENGTH - label.length();
-		System.out.println("\n["+ label + "]" + fillString(
-				separatorLength, SEPARATOR_CHAR));
+		MainFrame.print_add("\n["+ label + "]" + fillString(
+				separatorLength, SEPARATOR_CHAR), 3);
 	}	
 	
 	/**

@@ -201,7 +201,7 @@ public class TaskManager {
 				}
 				// End of Day-level separators
 
-				MainFrame.print_add(DisplayUtils.prettyPrint(task) + " " + completed, 0);
+				MainFrame.print_add("\n"+DisplayUtils.prettyPrint(task) + " " + completed, 0);
 			}
 
 		}
@@ -379,7 +379,7 @@ public class TaskManager {
 	 */
 	public void searchForFreeIntervals(ArrayList<DateTime> dateTimes) {
 		if (dateTimes.size() > 1) {
-			System.out.print(Constants.MESSAGE_INVALID_NUMBER_OF_DATES);
+			MainFrame.print_add(Constants.MESSAGE_INVALID_NUMBER_OF_DATES, 2);
 			return;
 		}
 
@@ -508,10 +508,10 @@ public class TaskManager {
         TaskManagerUtils.checkValidityIndex(index, tasks);
         
         if (dateTimes.size() > 1) {
-            System.out.print(Constants.MESSAGE_INVALID_NUMBER_OF_DATES);
+            MainFrame.print_add(Constants.MESSAGE_INVALID_NUMBER_OF_DATES, 2);
             return;
         } else if (duration <= 0) {
-            System.out.print(Constants.MESSAGE_INCOMPLETE_COMMAND);
+            MainFrame.print_add(Constants.MESSAGE_INCOMPLETE_COMMAND, 2);
             return;
         }
         

@@ -9,6 +9,7 @@ import org.joda.time.DateTime;
 import sg.edu.nus.cs2103.sudo.COMMAND_TYPE;
 import sg.edu.nus.cs2103.sudo.Constants;
 import sg.edu.nus.cs2103.ui.DisplayUtils;
+import sg.edu.nus.cs2103.ui.MainFrame;
 import sg.edu.nus.cs2103.ui.UI;
 
 //@author A0099317U
@@ -89,12 +90,12 @@ public final class LogicHandler {
 		try {
 			switch (userCommand) {
 			case INVALID:
-				System.out.print(
-						Constants.MESSAGE_INVALID_COMMAND);
+				MainFrame.print_add(
+						Constants.MESSAGE_INVALID_COMMAND, 3);
 				return;
 			case INCOMPLETE:
-				System.out.print(
-						Constants.MESSAGE_INCOMPLETE_COMMAND);
+				MainFrame.print_add(
+						Constants.MESSAGE_INCOMPLETE_COMMAND, 3);
 				return;
 			case DISPLAY:
 				this.manager.displayAllTasks();
@@ -191,7 +192,7 @@ public final class LogicHandler {
 		} else {
 			int numResults = this.manager.delete(taskDescription);
 			if (numResults > 1) {
-				System.out.println(Constants.MESSAGE_ENTER_TASK_ID);
+				MainFrame.print_add("\n"+Constants.MESSAGE_ENTER_TASK_ID, 1);
 				int id = scanner.nextInt();
 				this.manager.delete(id);
 			}
@@ -212,7 +213,7 @@ public final class LogicHandler {
 			ArrayList<DateTime> dateTimes) throws Exception {
 
 		if (taskDescription == null) {
-			System.out.print(Constants.MESSAGE_MISSING_DESCRIPTION);
+			MainFrame.print_add(Constants.MESSAGE_MISSING_DESCRIPTION,2);
 			return;
 		}
 
@@ -231,7 +232,7 @@ public final class LogicHandler {
 					DisplayUtils.formatDate(dateTimes.get(0)),
 					DisplayUtils.formatDate(dateTimes.get(1)));
 		} else {
-			System.out.print(Constants.MESSAGE_INVALID_NUMBER_OF_DATES);
+			MainFrame.print_add(Constants.MESSAGE_INVALID_NUMBER_OF_DATES, 2);
 		}
 		this.manager.displayAllTasks();
 	}

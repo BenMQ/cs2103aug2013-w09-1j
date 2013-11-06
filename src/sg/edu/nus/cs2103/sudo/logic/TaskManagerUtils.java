@@ -9,6 +9,7 @@ import org.joda.time.DateTimeComparator;
 
 import sg.edu.nus.cs2103.sudo.Constants;
 import sg.edu.nus.cs2103.sudo.storage.StorageHandler;
+import sg.edu.nus.cs2103.ui.MainFrame;
 
 /**
  * This class contains static methods that help execute some of the methods in
@@ -266,10 +267,10 @@ public class TaskManagerUtils {
 			throw new IllegalStateException(Constants.MESSAGE_NO_SEARCH_RESULTS);
 		}
 
-		System.out.println();
-		System.out.println(Constants.MESSAGE_SEARCH_RESULTS);
+		MainFrame.print_add("\n",0);
+		MainFrame.print_add(Constants.MESSAGE_SEARCH_RESULTS, 1);
 		for (int i = 0; i < searchResults.size(); i++) {
-			System.out.println(searchResults.get(i).toString());
+			MainFrame.print_add(searchResults.get(i).toString(), 0);
 		}
 	}
 	/**
@@ -312,9 +313,9 @@ public class TaskManagerUtils {
 	 */
 	public static void showDisplayMessage(boolean showAll) {
 		if (showAll) {
-			System.out.print(Constants.MESSAGE_DISPLAY_ALL);
+			MainFrame.print_add(Constants.MESSAGE_DISPLAY_ALL, 2);
 		} else {
-			System.out.print(Constants.MESSAGE_DISPLAY);
+			MainFrame.print_add(Constants.MESSAGE_DISPLAY, 2);
 		}
 	}
 	
@@ -322,8 +323,8 @@ public class TaskManagerUtils {
 	 * Shows the correct display message for finished tasks.
 	 */
 	public static void showDisplayMessage() {
-		System.out.print(Constants.MESSAGE_DISPLAY_FINISHED);
-		System.out.println(Constants.FINISHED_TASK_SEPARATOR);
+		MainFrame.print_add(Constants.MESSAGE_DISPLAY_FINISHED, 2);
+		MainFrame.print_add(Constants.FINISHED_TASK_SEPARATOR, 2);
 	}
 	
 	public static void clearTasks(ArrayList<Task> tasks) {

@@ -13,6 +13,7 @@ import sg.edu.nus.cs2103.sudo.HelpConstants;
 import sg.edu.nus.cs2103.sudo.exceptions.NoHistoryException;
 import sg.edu.nus.cs2103.sudo.storage.StorageHandler;
 import sg.edu.nus.cs2103.ui.DisplayUtils;
+import sg.edu.nus.cs2103.ui.MainFrame;
 
 /**
  * @author chenminqi
@@ -77,9 +78,9 @@ public class TaskManager {
 		TaskManagerUtils.updateAllIds(tasks);
 		try {
 			taskManager = new TaskManager();
-			System.out.println("Files rebuilt.");
+			MainFrame.print_add("Files rebuilt.",1);
 		} catch (Exception e) {
-			System.out.println("Files rebuiling failed.");
+			MainFrame.print_add("Files rebuiling failed.",3);
 			e.printStackTrace();
 		}
 	}
@@ -151,7 +152,7 @@ public class TaskManager {
 			if (task.isComplete()) {
 				completed = Constants.TASK_COMPLETED_FLAG;
 			}
-			System.out.println(DisplayUtils.prettyPrint(task) + " " + completed);
+			MainFrame.print_add(DisplayUtils.prettyPrint(task) + " " + completed, 0);
 		}
 	}
 
@@ -191,16 +192,16 @@ public class TaskManager {
 				} else {
 					if (!floatingStarted && task.isFloatingTask()) {
 						floatingStarted = true;
-						System.out.println(Constants.FLOATING_TASK_SEPARATOR);
+						MainFrame.print_add(Constants.FLOATING_TASK_SEPARATOR,2);
 					}
 					if (!finishedStarted && task.isComplete()) {
 						finishedStarted = true;
-						System.out.println(Constants.FINISHED_TASK_SEPARATOR);
+						MainFrame.print_add(Constants.FINISHED_TASK_SEPARATOR,2);
 					}
 				}
 				// End of Day-level separators
 
-				System.out.println(DisplayUtils.prettyPrint(task) + " " + completed);
+				MainFrame.print_add(DisplayUtils.prettyPrint(task) + " " + completed, 0);
 			}
 
 		}
@@ -401,11 +402,11 @@ public class TaskManager {
 				String output = interval.getStart().toString("hh:mm a")
 						+ " to "
 						+ interval.getEnd().toString("hh:mm a");
-				System.out.println(output);
+				MainFrame.print_add(output,2);
 			}
 		}
 		if (noSlotsFound) {
-			System.out.println(Constants.MESSAGE_NO_FREE_SLOTS);
+			MainFrame.print_add(Constants.MESSAGE_NO_FREE_SLOTS,3);
 		}
 	}
 
@@ -569,7 +570,7 @@ public class TaskManager {
 				}
 			}
 		}
-		System.out.println(Constants.MESSAGE_NO_FREE_SLOTS);
+		MainFrame.print_add(Constants.MESSAGE_NO_FREE_SLOTS,3);
 	}
 
 	/**
@@ -636,13 +637,13 @@ public class TaskManager {
 	public void undo() {
 		try {
 			tasks = (ArrayList<Task>) storage.undo().clone();
-			System.out.println(Constants.MESSAGE_UNDO);
+			MainFrame.print_add(Constants.MESSAGE_UNDO,2);
 			// saveTasks();
 		} catch (FileNotFoundException e) {
 			storage.rebuildHistory();
-			System.out.println(Constants.MESSAGE_HISTORY_LOAD_ERROR);
+			MainFrame.print_add(Constants.MESSAGE_HISTORY_LOAD_ERROR,3);
 		} catch (NoHistoryException e) {
-			System.out.println(Constants.MESSAGE_LAST_HISTORY);
+			MainFrame.print_add(Constants.MESSAGE_LAST_HISTORY,2);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -670,13 +671,13 @@ public class TaskManager {
 	public void redo() {
 		try {
 			tasks = (ArrayList<Task>) storage.redo().clone();
-			System.out.println(Constants.MESSAGE_REDO);
+			MainFrame.print_add(Constants.MESSAGE_REDO,2);
 			// saveTasks();
 		} catch (FileNotFoundException e) {
 			storage.rebuildHistory();
-			System.out.println(Constants.MESSAGE_HISTORY_LOAD_ERROR);
+			MainFrame.print_add(Constants.MESSAGE_HISTORY_LOAD_ERROR,3);
 		} catch (NoHistoryException e) {
-			System.out.println(Constants.MESSAGE_LAST_HISTORY);
+			MainFrame.print_add(Constants.MESSAGE_LAST_HISTORY,2);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -692,14 +693,14 @@ public class TaskManager {
 	 */
 	public void help(String topic) {
 		if (topic == null) {
-			System.out.println(HelpConstants.MESSAGE_WELCOME_HELP_PAGE);
+			MainFrame.print_add(HelpConstants.MESSAGE_WELCOME_HELP_PAGE,1);
 		} else {
 			String helpMessage = HelpConstants.helpTopics.get(topic
 					.toUpperCase());
 			if (helpMessage == null) {
 				System.out.printf(HelpConstants.HELP_NOT_FOUND, topic);
 			} else {
-				System.out.println(helpMessage);
+				MainFrame.print_add(helpMessage,2);
 			}
 		}
 	}
@@ -732,7 +733,7 @@ public class TaskManager {
 		}
 		int toReturn = 100 * completed / this.tasks.size();
 		if (toReturn == 100) {
-			// System.out.println("You have finished all tasks!");
+			// MainFrame.print_add("You have finished all tasks!");
 		}
 		return toReturn;
 	}

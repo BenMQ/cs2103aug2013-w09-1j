@@ -19,18 +19,8 @@ import java.awt.event.KeyEvent;
 
 
 
-
-
-
-
-
-
-
-import javax.swing.BorderFactory;
-import javax.swing.text.DefaultCaret;
-import javax.swing.text.SimpleAttributeSet;
-import javax.swing.text.StyleConstants;
-
+import javax.swing.*;
+import javax.swing.text.*;
 import org.jnativehook.GlobalScreen;
 import org.jnativehook.NativeHookException;
 import org.jnativehook.keyboard.NativeKeyEvent;
@@ -46,11 +36,42 @@ public class MainFrame extends javax.swing.JFrame implements NativeKeyListener {
     /**
      * Creates new form MainFrame
      */
+	
+	static private StyledDocument styledDoc = new DefaultStyledDocument();
+	static public void print_add(String ipt, int colorCode){
+		switch (colorCode){
+		case 0:
+			insertDoc(styledDoc,ipt,"Green");
+			break;
+		case 1:
+			insertDoc(styledDoc,ipt,"White");
+			break;
+		case 2:
+			insertDoc(styledDoc,ipt,"Yellow");
+			break;
+		case 3:
+			insertDoc(styledDoc,ipt,"Red");
+			break;
+		default:
+			insertDoc(styledDoc,ipt,"Green");
+		}
+	}
+	
+	
     public MainFrame() {
 		manager = TaskManager.getTaskManager();
 		logicHandler = LogicHandler.getLogicHandler(manager, null);
 		initComponents();
 		toVisible();
+		rebuildStyle();
+    }
+    
+    private void rebuildStyle(){
+    	StyledDocument styledDoc = new DefaultStyledDocument();
+		createStyle("Green",styledDoc,15,0,0,0,Color.GREEN,"Courier");
+		createStyle("White",styledDoc,15,1,0,0,Color.WHITE,"Courier");
+		createStyle("Yellow",styledDoc,15,0,1,0,Color.YELLOW,"Courier");
+		createStyle("Red",styledDoc,15,1,0,0,Color.RED,"Courier");
     }
     
 	public void nativeKeyTyped(NativeKeyEvent arg0) {
@@ -99,6 +120,30 @@ public class MainFrame extends javax.swing.JFrame implements NativeKeyListener {
 		this.setVisible(true);
 	}
 	
+	public static void createStyle(String style,StyledDocument doc,int size,int bold,int italic,int underline,Color color,String fontName)
+	 {
+	  Style sys = StyleContext.getDefaultStyleContext().getStyle(StyleContext.DEFAULT_STYLE);
+	  try { doc.removeStyle(style); } catch(Exception e) {}
+	  
+	  Style s = doc.addStyle(style,sys); // add
+	  StyleConstants.setFontSize(s,size); // size
+	  StyleConstants.setBold(s,(bold==1)?true:false); // bold
+	  StyleConstants.setItalic(s,(italic==1)?true:false); // italian
+	  StyleConstants.setUnderline(s,(underline==1)?true:false); // downline
+	  StyleConstants.setForeground(s,color); // color
+	  StyleConstants.setFontFamily(s,fontName);  // font
+	 }
+	
+	 public static void insertDoc(StyledDocument styledDoc, String content,String currentStyle)
+	 {
+	  try {
+	   styledDoc.insertString(styledDoc.getLength(),content,styledDoc.getStyle(currentStyle));
+	  } catch (BadLocationException e) {
+	   System.err.println("BadLocationException: " + e);
+	  }
+	 }
+	
+	
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -108,13 +153,15 @@ public class MainFrame extends javax.swing.JFrame implements NativeKeyListener {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
     private void initComponents() {
     	//to take over the output
+    	
+    	
     	outContent = new ByteArrayOutputStream();
 		System.setOut(new PrintStream(outContent));
         jScrollPaneInput = new javax.swing.JScrollPane();
         jTextPaneInput = new javax.swing.JTextField();
         jTextArea1 = new javax.swing.JTextArea();
         jScrollPane1 = new javax.swing.JScrollPane();
-        MainTextPane = new javax.swing.JTextPane();
+        MainTextPane = new javax.swing.JTextPane(styledDoc);
         jScrollPane2 = new javax.swing.JScrollPane();
         jScrollPane3 = new javax.swing.JScrollPane();
         FloatingTextArea = new javax.swing.JTextArea();
@@ -154,13 +201,15 @@ public class MainFrame extends javax.swing.JFrame implements NativeKeyListener {
 						String userInput =  jTextPaneInput.getText();
 						jTextPaneInput.setText(null);
 						logicHandler.executeCommand(userInput);
-						MainTextPane.setText(outContent.toString());
+						if(isDemo){
+						//MainTextPane.setText(outContent.toString());
+						}
 						outContent.reset();
+						rebuildStyle();
 						// String[] floatings =
 						// updateFloating(manager.getFloatingTask());
 						try {
 							FloatingTextArea.setText(
-									
 									manager.displayFloatingTasks());
 						} catch (IllegalStateException w) {
 							FloatingTextArea
@@ -192,7 +241,7 @@ public class MainFrame extends javax.swing.JFrame implements NativeKeyListener {
         
         Color backgroundColor = Color.green;
         SimpleAttributeSet background = new SimpleAttributeSet();
-        StyleConstants.setBackground(background, backgroundColor);
+
         MainTextPane.getStyledDocument().setParagraphAttributes(0, 
         		MainTextPane.getDocument().getLength(), background, false);
      

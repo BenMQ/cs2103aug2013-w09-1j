@@ -131,7 +131,7 @@ public class TaskManager {
 		int index = taskId - 1;
 		TaskManagerUtils.checkValidityIndex(index, tasks);
 
-		System.out.printf(Constants.MESSAGE_EDIT, taskId);
+		MainFrame.print_add(String.format(Constants.MESSAGE_EDIT, taskId),2);
 		TaskManagerUtils.editTaskHelper(taskDescription, dates, index, tasks);
 
 		TaskManagerUtils.sortAndUpdateIds(tasks);
@@ -259,7 +259,7 @@ public class TaskManager {
 		}
 
 		currTask.setComplete(true);
-		System.out.printf(Constants.MESSAGE_FINISH, currTask.description);
+		MainFrame.print_add(String.format(Constants.MESSAGE_FINISH, currTask.description),2);
 
 		TaskManagerUtils.sortAndUpdateIds(tasks);
 		storage.save(true);
@@ -288,7 +288,7 @@ public class TaskManager {
 		}
 
 		currTask.setComplete(false);
-		System.out.printf(Constants.MESSAGE_UNFINISH, currTask.description);
+		MainFrame.print_add(String.format(Constants.MESSAGE_UNFINISH, currTask.description),2);
 
 		TaskManagerUtils.sortAndUpdateIds(tasks);
 		storage.save(true);
@@ -311,7 +311,7 @@ public class TaskManager {
 	public ArrayList<Task> searchAndDisplay(String searchStr)
 			throws NullPointerException, IllegalStateException {
 
-		System.out.printf(Constants.MESSAGE_SEARCH, searchStr);
+		MainFrame.print_add(String.format(Constants.MESSAGE_SEARCH, searchStr),1);
 
 		ArrayList<Task> searchResults = search(searchStr, false);
 		TaskManagerUtils.displaySearchResults(searchResults);
@@ -395,8 +395,8 @@ public class TaskManager {
 			MutableInterval interval = free.get(i);
 			if (interval.toDurationMillis() >= Constants.FREE_SLOT_MINIMUM_DURATION) {
 				if (noSlotsFound) {
-					System.out.printf(Constants.MESSAGE_FREE_SLOTS_PREFIX,
-					        timeRange.get(0).toString("dd MMMM"));
+					MainFrame.print_add(String.format(Constants.MESSAGE_FREE_SLOTS_PREFIX,
+					        timeRange.get(0).toString("dd MMMM")),1);
 					noSlotsFound = false;
 				}
 				String output = interval.getStart().toString("hh:mm a")
@@ -555,9 +555,9 @@ public class TaskManager {
 					range.add(end);
 					
 					TaskManagerUtils.editTaskHelper(null, range, index, tasks);
-					System.out.printf(Constants.MESSAGE_ADD_TIMED,
+					MainFrame.print_add(String.format(Constants.MESSAGE_ADD_TIMED,
 							description, DisplayUtils.formatDate(start),
-							DisplayUtils.formatDate(end));
+							DisplayUtils.formatDate(end)),1);
 					
 					TaskManagerUtils.sortAndUpdateIds(tasks);
 					
@@ -618,8 +618,8 @@ public class TaskManager {
 
 		TaskManagerUtils.checkValidityIndex(index, tasks);
 
-		System.out.printf(Constants.MESSAGE_DELETE,
-				tasks.get(index).description);
+		MainFrame.print_add(String.format(Constants.MESSAGE_DELETE,
+				tasks.get(index).description),1);
 
 		tasks.remove(index);
 		TaskManagerUtils.sortAndUpdateIds(tasks);
@@ -698,7 +698,7 @@ public class TaskManager {
 			String helpMessage = HelpConstants.helpTopics.get(topic
 					.toUpperCase());
 			if (helpMessage == null) {
-				System.out.printf(HelpConstants.HELP_NOT_FOUND, topic);
+				MainFrame.print_add(String.format(HelpConstants.HELP_NOT_FOUND, topic),3);
 			} else {
 				MainFrame.print_add(helpMessage,2);
 			}

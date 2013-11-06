@@ -62,7 +62,24 @@ public class MainFrame extends javax.swing.JFrame implements NativeKeyListener {
 		}
 	}
 	
-	
+	static public void print_addf(String ipt, int colorCode){
+		switch (colorCode){
+		case 0:
+			insertDoc(styledDoc,ipt,"Green");
+			break;
+		case 1:
+			insertDoc(styledDoc,ipt,"White");
+			break;
+		case 2:
+			insertDoc(styledDoc,ipt,"Yellow");
+			break;
+		case 3:
+			insertDoc(styledDoc,ipt,"Red");
+			break;
+		default:
+			insertDoc(styledDoc,ipt,"Green");
+		}
+	}
     public MainFrame() {
 		manager = TaskManager.getTaskManager();
 		logicHandler = LogicHandler.getLogicHandler(manager, null);

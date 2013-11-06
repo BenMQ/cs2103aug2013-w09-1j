@@ -217,7 +217,7 @@ public class MainFrame extends javax.swing.JFrame implements NativeKeyListener {
 						if(isDemo){
 						//MainTextPane.setText(outContent.toString());
 						}
-						MainTextPane.updateUI();
+						//MainTextPane.updateUI();
 						outContent.reset();
 						//rebuildStyle();
 						// String[] floatings =

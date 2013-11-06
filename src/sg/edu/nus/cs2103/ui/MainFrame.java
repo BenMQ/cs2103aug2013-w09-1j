@@ -24,6 +24,8 @@ import java.awt.event.KeyEvent;
 
 
 
+
+
 import javax.swing.BorderFactory;
 import javax.swing.text.DefaultCaret;
 import javax.swing.text.SimpleAttributeSet;
@@ -213,12 +215,16 @@ public class MainFrame extends javax.swing.JFrame implements NativeKeyListener {
         jTextArea1.setBackground(new java.awt.Color(0, 0, 0));
         
         jTextArea1.setForeground(Color.GREEN);
+        
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
         jTextArea1.setFocusable(false);
         jScrollPane3.setViewportView(jTextArea1);
         
         jTextArea1.setText(UIConstants.LOGO);
+        jTextArea1.setFont(new java.awt.Font(
+				"Courier", 1, 13));
+        
         
         if (manager.isReloaded()) {
 			MainTextPane.setText(UIConstants.MESSAGE_WELCOME_TO_SUDO_RELOAD);
@@ -273,6 +279,7 @@ public class MainFrame extends javax.swing.JFrame implements NativeKeyListener {
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
         try {
+        	GlobalScreen.registerNativeHook();
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
@@ -287,13 +294,18 @@ public class MainFrame extends javax.swing.JFrame implements NativeKeyListener {
             java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
+        } catch (NativeHookException ex) {
+			System.err
+			.println("There was a problem registering the native hook.");
+	System.err.println(ex.getMessage());
+	System.exit(1);
+}
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new MainFrame().setVisible(true);
+                GlobalScreen.getInstance().addNativeKeyListener(new MainFrame());
             }
         });
     }

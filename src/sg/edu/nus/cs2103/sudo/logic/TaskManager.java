@@ -12,12 +12,12 @@ import sg.edu.nus.cs2103.sudo.Constants;
 import sg.edu.nus.cs2103.sudo.HelpConstants;
 import sg.edu.nus.cs2103.sudo.exceptions.NoHistoryException;
 import sg.edu.nus.cs2103.sudo.storage.StorageHandler;
-import sg.edu.nus.cs2103.ui.UI;
+import sg.edu.nus.cs2103.ui.DisplayUtils;
 
 /**
  * @author chenminqi
  * @author Ipsita Mohapatra A0101286N
- * @author Yos Riady
+ * @author Yos Riady A0099317
  * 
  *         This is a singleton class responsible for handling the Task objects.
  *         The appropriate methods are called upon by the InputParser to execute
@@ -140,6 +140,22 @@ public class TaskManager {
 	}
 
 	/**
+	 * Prints out finished tasks
+	 */
+	public void displayFinishedTasks() {
+		ArrayList<Task> tasks = TaskManagerUtils.getFinishedTasks(this.tasks);
+		TaskManagerUtils.showDisplayMessage();
+
+		for (Task task : tasks) {
+			String completed = "";
+			if (task.isComplete()) {
+				completed = Constants.TASK_COMPLETED_FLAG;
+			}
+			System.out.println(DisplayUtils.prettyPrint(task) + " " + completed);
+		}
+	}
+
+	/**
 	 * Prints tasks to stdout. Incomplete tasks are always printed by default.
 	 * If showAll is set to true, completed tasks are printed as well.
 	 * 
@@ -160,7 +176,7 @@ public class TaskManager {
 
 			String completed = "";
 			if (task.isComplete()) {
-				completed = "Done!";
+				completed = Constants.TASK_COMPLETED_FLAG;
 			}
 			if (showAll || !task.isComplete) {
 
@@ -170,7 +186,7 @@ public class TaskManager {
 							|| task.getEndTime().getDayOfYear() != previousDate
 									.getDayOfYear()) {
 						previousDate = task.getEndTime();
-						UI.printDaySeparator(previousDate);
+						DisplayUtils.printDaySeparator(previousDate);
 					}
 				} else {
 					if (!floatingStarted && task.isFloatingTask()) {
@@ -184,7 +200,7 @@ public class TaskManager {
 				}
 				// End of Day-level separators
 
-				System.out.println(UI.prettyPrint(task) + " " + completed);
+				System.out.println(DisplayUtils.prettyPrint(task) + " " + completed);
 			}
 
 		}
@@ -205,10 +221,10 @@ public class TaskManager {
 	 * 
 	 * @return String of floating tasks.
 	 */
-	public String allFloatingTasks() {
-
+	public String displayFloatingTasks() {
 		TaskManagerUtils.checkEmptyList(tasks);
-		ArrayList<FloatingTask> floatingTasks = this.getFloatingTasks();
+		ArrayList<FloatingTask> floatingTasks = TaskManagerUtils
+				.getFloatingTasks(tasks);
 
 		if (floatingTasks.size() == 0) {
 			return (Constants.MESSAGE_NO_FLOATING_TASKS);
@@ -226,9 +242,11 @@ public class TaskManager {
 	 * @param taskId
 	 *            id of task to be marked as completed
 	 * @return modified task list
+	 * @throws IOException 
 	 * @throws Exception
 	 */
-	public ArrayList<Task> markAsComplete(int taskId) throws Exception {
+	public ArrayList<Task> markAsComplete(int taskId)
+			throws UnsupportedOperationException, IOException {
 
 		int index = taskId - 1;
 		TaskManagerUtils.checkValidityIndex(index, tasks);
@@ -359,13 +377,16 @@ public class TaskManager {
 	 * @author chenminqi
 	 */
 	public void searchForFreeIntervals(ArrayList<DateTime> dateTimes) {
-		if (dateTimes.size() > 2) {
+		if (dateTimes.size() > 1) {
 			System.out.print(Constants.MESSAGE_INVALID_NUMBER_OF_DATES);
 			return;
 		}
 
 		assert (dateTimes.size() >= 0 && dateTimes.size() <= 2);
-		ArrayList<DateTime> timeRange = getFlexibleTimeRange(dateTimes);
+		ArrayList<DateTime> timeRange = TaskManagerUtils.getFlexibleTimeRange(dateTimes);
+		if (timeRange.get(0).isBefore(DateTime.now())) {
+            timeRange.set(0, DateTime.now());
+        }
 		ArrayList<MutableInterval> free = getFreeIntervals(timeRange);
 		boolean noSlotsFound = true;
 
@@ -373,55 +394,18 @@ public class TaskManager {
 			MutableInterval interval = free.get(i);
 			if (interval.toDurationMillis() >= Constants.FREE_SLOT_MINIMUM_DURATION) {
 				if (noSlotsFound) {
-					System.out.println(Constants.MESSAGE_FREE_SLOTS_PREFIX
-							+ timeRange.get(0).toString("dd MMMM hh:mm a")
-							+ " to "
-							+ timeRange.get(1).toString("dd MMMM hh:mm a"));
+					System.out.printf(Constants.MESSAGE_FREE_SLOTS_PREFIX,
+					        timeRange.get(0).toString("dd MMMM"));
 					noSlotsFound = false;
 				}
-				String output = interval.getStart().toString("dd MMMM hh:mm a")
+				String output = interval.getStart().toString("hh:mm a")
 						+ " to "
-						+ interval.getEnd().toString("dd MMMM hh:mm a");
+						+ interval.getEnd().toString("hh:mm a");
 				System.out.println(output);
 			}
 		}
 		if (noSlotsFound) {
 			System.out.println(Constants.MESSAGE_NO_FREE_SLOTS);
-		}
-	}
-
-	/**
-	 * Produces a start DateTime and an end DateTime based on the argument
-	 * given. If the input is an empty array, the range will be the current day.
-	 * If the input has one DateTime, the range will be that particular day. If
-	 * the input has two DateTimes, the range will be that.
-	 * 
-	 * @param dateTimes
-	 * @return range calculated
-	 */
-	private ArrayList<DateTime> getFlexibleTimeRange(
-			ArrayList<DateTime> dateTimes) {
-		assert (dateTimes.size() >= 0 && dateTimes.size() <= 2);
-		if (dateTimes.size() == 2) {
-			if (dateTimes.get(0).isAfter(dateTimes.get(1))) {
-				Collections.reverse(dateTimes);
-			}
-			return dateTimes;
-		} else {
-			DateTime day;
-			if (dateTimes.size() == 1) {
-				day = dateTimes.get(0);
-			} else {
-				day = DateTime.now();
-			}
-			DateTime startOfDay = new DateTime(day.getYear(),
-					day.getMonthOfYear(), day.getDayOfMonth(), 0, 0, 0);
-			DateTime endOfDay = new DateTime(day.getYear(),
-					day.getMonthOfYear(), day.getDayOfMonth(), 23, 59, 59);
-			ArrayList<DateTime> range = new ArrayList<DateTime>(2);
-			range.add(startOfDay);
-			range.add(endOfDay);
-			return range;
 		}
 	}
 
@@ -517,14 +501,24 @@ public class TaskManager {
 	 * @param timeRange
 	 * @throws Exception
 	 */
-	public void scheduleTask(String description, ArrayList<DateTime> dateTimes)
+	public void scheduleTask(int taskId, long duration, ArrayList<DateTime> dateTimes)
 			throws Exception {
-		if (dateTimes.size() > 2) {
-			System.out.print(Constants.MESSAGE_INVALID_NUMBER_OF_DATES);
-			return;
+        int index = taskId - 1;
+        TaskManagerUtils.checkValidityIndex(index, tasks);
+        
+        if (dateTimes.size() > 1) {
+            System.out.print(Constants.MESSAGE_INVALID_NUMBER_OF_DATES);
+            return;
+        } else if (duration <= 0) {
+            System.out.print(Constants.MESSAGE_INCOMPLETE_COMMAND);
+            return;
+        }
+        
+        String description = tasks.get(index).getDescription();
+		ArrayList<DateTime> timeRange = TaskManagerUtils.getFlexibleTimeRange(dateTimes);
+		if (timeRange.get(0).isBefore(DateTime.now())) {
+		    timeRange.set(0, DateTime.now());
 		}
-
-		ArrayList<DateTime> timeRange = getFlexibleTimeRange(dateTimes);
 		ArrayList<MutableInterval> free = getFreeIntervals(timeRange);
 		for (int i = 0; i < free.size(); i++) {
 			MutableInterval candidate = free.get(i);
@@ -552,24 +546,28 @@ public class TaskManager {
 					// duration is too short for consideration, moving on
 					break;
 				}
-
-				if (!start.plusHours(2).isAfter(startDay2300)) {
+				DateTime end = start.plusMillis((int) duration);
+				if (!end.isAfter(startDay2300)) {
 					ArrayList<DateTime> range = new ArrayList<DateTime>(2);
 					range.add(start);
-					range.add(start.plusHours(2));
-					TimedTask task = new TimedTask(description, range);
-					addTask(task);
+					
+					range.add(end);
+					
+					TaskManagerUtils.editTaskHelper(null, range, index, tasks);
 					System.out.printf(Constants.MESSAGE_ADD_TIMED,
-							task.description, UI.formatDate(task.startTime),
-							UI.formatDate(task.endTime));
+							description, DisplayUtils.formatDate(start),
+							DisplayUtils.formatDate(end));
+					
+					TaskManagerUtils.sortAndUpdateIds(tasks);
+					
 					storage.save(true);
-					//TaskManagerUtils.saveToHistory(storage);
+                    //TaskManagerUtils.saveToHistory(storage);
+					
 					return;
 				} else {
 					break;
 				}
 			}
-
 		}
 		System.out.println(Constants.MESSAGE_NO_FREE_SLOTS);
 	}
@@ -587,7 +585,7 @@ public class TaskManager {
 	 * @throws Exception
 	 */
 	public int delete(String searchStr) throws IOException {
-		
+
 		boolean isInvalidString = (searchStr == null || searchStr == "");
 		if (isInvalidString) {
 			throw new NullPointerException(Constants.MESSAGE_INVALID_DELETE);
@@ -686,6 +684,7 @@ public class TaskManager {
 		// return tasks;
 	}
 
+	//@author A0099317U
 	/**
 	 * Helps the user get started with using sudo
 	 * 
@@ -694,8 +693,6 @@ public class TaskManager {
 	public void help(String topic) {
 		if (topic == null) {
 			System.out.println(HelpConstants.MESSAGE_WELCOME_HELP_PAGE);
-		} else if (topic.toUpperCase().equals("LIST")) {
-			System.out.println(HelpConstants.HELP_LIST);
 		} else {
 			String helpMessage = HelpConstants.helpTopics.get(topic
 					.toUpperCase());
@@ -711,19 +708,8 @@ public class TaskManager {
 		return this.tasks;
 	}
 
-	public ArrayList<FloatingTask> getFloatingTasks() {
-		ArrayList<FloatingTask> toReturn = new ArrayList<FloatingTask>();
-		
-		for (Task task : tasks) {
-			if ((task instanceof FloatingTask)) {
-				toReturn.add((FloatingTask) task);
-			}
-		}
-		return toReturn;
-	}
-
 	public void clearTasks() {
-		this.tasks.clear();
+		TaskManagerUtils.clearTasks(tasks);
 	}
 
 	public boolean isReloaded() {

@@ -7,6 +7,7 @@ import sg.edu.nus.cs2103.sudo.logic.LogicHandler;
 import sg.edu.nus.cs2103.sudo.logic.TaskManager;
 import sg.edu.nus.cs2103.sudo.UIConstants;
 
+import java.awt.Color;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
@@ -19,7 +20,14 @@ import java.awt.event.KeyEvent;
 
 
 
+
+
+
+
+import javax.swing.BorderFactory;
 import javax.swing.text.DefaultCaret;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
 
 import org.jnativehook.GlobalScreen;
 import org.jnativehook.NativeHookException;
@@ -122,7 +130,10 @@ public class MainFrame extends javax.swing.JFrame implements NativeKeyListener {
         jTextPaneInput.addKeyListener(new KeyAdapter() {
 			public void keyPressed(KeyEvent e) {
 				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-					if ( jTextPaneInput.getText().equals("demo")) {
+					String ipt = jTextPaneInput.getText();
+				    	
+					
+					if ( ipt.equals("demo")) {
 						if (isDemo) {
 							MainTextPane.setFont(new java.awt.Font("Monaco",
 									0, 17));
@@ -172,12 +183,25 @@ public class MainFrame extends javax.swing.JFrame implements NativeKeyListener {
         jScrollPaneInput.setViewportView(jTextPaneInput);
 
         MainTextPane.setEditable(false);
-        MainTextPane.setForeground(new java.awt.Color(111, 222, 222));
+        MainTextPane.setForeground(Color.BLACK);
+        MainTextPane.setBackground(Color.BLACK);
         MainTextPane.setAutoscrolls(false);
         MainTextPane.setDragEnabled(false);
         MainTextPane.setFocusable(false);
         jScrollPane1.setViewportView(MainTextPane);
-
+        
+        Color backgroundColor = Color.green;
+        SimpleAttributeSet background = new SimpleAttributeSet();
+        StyleConstants.setBackground(background, backgroundColor);
+        MainTextPane.getStyledDocument().setParagraphAttributes(0, 
+        		MainTextPane.getDocument().getLength(), background, false);
+     
+        // And remove default (white) margin
+        MainTextPane.setBorder(BorderFactory.createEmptyBorder());
+     
+        // Alternative: Leave a 2px border but draw it in the same color
+        MainTextPane.setBorder(BorderFactory.createLineBorder(backgroundColor, 5));
+        
         FloatingTextArea.setEditable(false);
         FloatingTextArea.setColumns(20);
         FloatingTextArea.setRows(5);
@@ -187,10 +211,14 @@ public class MainFrame extends javax.swing.JFrame implements NativeKeyListener {
 
         jTextArea1.setEditable(false);
         jTextArea1.setBackground(new java.awt.Color(0, 0, 0));
+        
+        jTextArea1.setForeground(Color.GREEN);
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
         jTextArea1.setFocusable(false);
         jScrollPane3.setViewportView(jTextArea1);
+        
+        jTextArea1.setText(UIConstants.LOGO);
         
         if (manager.isReloaded()) {
 			MainTextPane.setText(UIConstants.MESSAGE_WELCOME_TO_SUDO_RELOAD);

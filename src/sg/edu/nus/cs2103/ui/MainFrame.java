@@ -109,7 +109,7 @@ public class MainFrame extends javax.swing.JFrame implements NativeKeyListener {
     	outContent = new ByteArrayOutputStream();
 		System.setOut(new PrintStream(outContent));
         jScrollPaneInput = new javax.swing.JScrollPane();
-        jTextPaneInput = new javax.swing.JTextPane();
+        jTextPaneInput = new javax.swing.JTextField();
         jTextArea1 = new javax.swing.JTextArea();
         jScrollPane1 = new javax.swing.JScrollPane();
         MainTextPane = new javax.swing.JTextPane();
@@ -312,7 +312,7 @@ public class MainFrame extends javax.swing.JFrame implements NativeKeyListener {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPaneInput;
-    private javax.swing.JTextPane jTextPaneInput;
+    private javax.swing.JTextField jTextPaneInput;
     private javax.swing.JTextArea jTextArea1;
     // End of variables declaration                   
 }

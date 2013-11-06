@@ -76,7 +76,7 @@ public class MainFrame extends javax.swing.JFrame implements NativeKeyListener {
 			insertDoc(styledDoc,ipt,"Blue");
 			break;
 		case 3:
-			insertDoc(styledDoc,ipt,"Red");
+			insertDoc(styledDoc,ipt,"Yellow");
 			break;
 		default:
 			insertDoc(styledDoc,ipt,"Green");
@@ -103,7 +103,7 @@ public class MainFrame extends javax.swing.JFrame implements NativeKeyListener {
 		createStyle("Green",styledDoc,18,1,0,0,Color.GREEN,"Courier");
 		createStyle("White",styledDoc,18,1,0,0,Color.WHITE,"Courier");
 		createStyle("Blue",styledDoc,18,1,1,0,new java.awt.Color(175, 242, 246),"Courier");
-		createStyle("Red",styledDoc,18,1,0,0,Color.RED,"Courier");
+		createStyle("Yellow",styledDoc,18,1,0,0,new java.awt.Color(250, 250, 133),"Courier");
     }
     
 	public void nativeKeyTyped(NativeKeyEvent arg0) {

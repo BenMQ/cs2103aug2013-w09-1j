@@ -270,7 +270,7 @@ public class TaskManagerUtils {
 		MainFrame.print_add("\n",0);
 		MainFrame.print_add(Constants.MESSAGE_SEARCH_RESULTS, 1);
 		for (int i = 0; i < searchResults.size(); i++) {
-			MainFrame.print_add(searchResults.get(i).toString(), 0);
+			MainFrame.print_add("\n"+searchResults.get(i).toString(), 0);
 		}
 	}
 	/**

@@ -47,22 +47,7 @@ public class MainFrame extends javax.swing.JFrame implements NativeKeyListener {
     /**
      * Creates new form MainFrame
      */
-	static public javax.swing.JTextPane MainTextPane = new javax.swing.JTextPane(){
-		
-		@Override
-        protected void paintComponent(Graphics g) {
-            // set background green - but can draw image here too
-            g.setColor(Color.GREEN);
-            g.fillRect(0, 0, getWidth(), getHeight());
-
-            // uncomment the following to draw an image
-            // Image img = ...;
-            // g.drawImage(img, 0, 0, this);
-
-            super.paintComponent(g);
-        }
-		
-	};
+	static public javax.swing.JTextPane MainTextPane = new javax.swing.JTextPane();
 	static public StyledDocument styledDoc = MainTextPane.getStyledDocument();
 	static public void print_add(String ipt, int colorCode){
 		switch (colorCode){
@@ -70,13 +55,16 @@ public class MainFrame extends javax.swing.JFrame implements NativeKeyListener {
 			insertDoc(styledDoc,ipt,"Green");
 			break;
 		case 1:
-			insertDoc(styledDoc,ipt,"White");
+			insertDoc(styledDoc,ipt,"Yellow");
 			break;
 		case 2:
 			insertDoc(styledDoc,ipt,"Blue");
 			break;
 		case 3:
-			insertDoc(styledDoc,ipt,"Yellow");
+			insertDoc(styledDoc,ipt,"Red");
+			break;
+		case 4:
+			insertDoc(styledDoc,ipt,"White");
 			break;
 		default:
 			insertDoc(styledDoc,ipt,"Green");
@@ -100,10 +88,11 @@ public class MainFrame extends javax.swing.JFrame implements NativeKeyListener {
 		}
     	//MainTextPane.setBackground(Color.WHITE);
     	StyledDocument styledDoc = MainTextPane.getStyledDocument();
-		createStyle("Green",styledDoc,18,1,0,0,Color.GREEN,"Courier");
-		createStyle("White",styledDoc,18,1,0,0,Color.WHITE,"Courier");
-		createStyle("Blue",styledDoc,18,1,1,0,new java.awt.Color(175, 242, 246),"Courier");
-		createStyle("Yellow",styledDoc,18,1,0,0,new java.awt.Color(250, 250, 133),"Courier");
+		createStyle("Green",styledDoc,18,1,0,0,Color.GREEN,"OCR A Std");
+		createStyle("Yellow",styledDoc,18,1,0,0,new Color(254, 254, 125),"OCR A Std");
+		createStyle("Blue",styledDoc,18,1,1,0,new java.awt.Color(145, 192, 246),"OCR A Std");
+		createStyle("Red",styledDoc,18,1,0,0,new java.awt.Color(254, 100, 100),"OCR A Std");
+		createStyle("White",styledDoc,18,1,1,0,Color.WHITE,"OCR A Std");
     }
     
 	public void nativeKeyTyped(NativeKeyEvent arg0) {
@@ -208,10 +197,12 @@ public class MainFrame extends javax.swing.JFrame implements NativeKeyListener {
         
         jTextPaneInput.addKeyListener(new KeyAdapter() {
 			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_UP) {
+					jScrollPane3.setAlignmentY(jScrollPane3.getAlignmentY()+10);
+				}
+				
 				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 					String ipt = jTextPaneInput.getText();
-				    	
-					
 					if ( ipt.equals("demo")) {
 						if (isDemo) {
 							MainTextPane.setFont(new java.awt.Font("Monaco",
@@ -301,9 +292,10 @@ public class MainFrame extends javax.swing.JFrame implements NativeKeyListener {
         
         
         if (manager.isReloaded()) {
-			MainFrame.print_add((UIConstants.MESSAGE_WELCOME_TO_SUDO_RELOAD),1);
+			MainFrame.print_add((UIConstants.MESSAGE_WELCOME_TO_SUDO_RELOAD),0);
+			MainFrame.print_add((UIConstants.MESSAGE_BETTER_ON_MAC),4);
 		} else {
-			MainFrame.print_add((UIConstants.MESSAGE_WELCOME_TO_SUDO_FIRST),1);
+			MainFrame.print_add((UIConstants.MESSAGE_WELCOME_TO_SUDO_FIRST),0);
 		}
 		try {
 			FloatingTextArea.setText(manager.displayFloatingTasks());
@@ -317,7 +309,7 @@ public class MainFrame extends javax.swing.JFrame implements NativeKeyListener {
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(org.jdesktop.layout.GroupLayout.TRAILING, jScrollPaneInput)
             .add(layout.createSequentialGroup()
-                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 340, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 940, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(org.jdesktop.layout.GroupLayout.TRAILING, jScrollPane2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 250, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)

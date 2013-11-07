@@ -152,7 +152,8 @@ public class TaskManager {
 			if (task.isComplete()) {
 				completed = Constants.TASK_COMPLETED_FLAG;
 			}
-			MainFrame.print_add(DisplayUtils.prettyPrint(task) + " " + completed, 0);
+			DisplayUtils.prettyPrint(task);
+			MainFrame.print_add(" "+ completed+"\n", 1);
 		}
 	}
 
@@ -201,7 +202,9 @@ public class TaskManager {
 				}
 				// End of Day-level separators
 
-				MainFrame.print_add("\n"+DisplayUtils.prettyPrint(task) + " " + completed, 0);
+				MainFrame.print_add("\n",0);
+				DisplayUtils.prettyPrint(task);
+				MainFrame.print_add(" " + completed, 1);
 			}
 
 		}

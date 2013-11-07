@@ -314,7 +314,7 @@ public class TaskManager {
 	public ArrayList<Task> searchAndDisplay(String searchStr)
 			throws NullPointerException, IllegalStateException {
 
-		MainFrame.print_add(String.format(Constants.MESSAGE_SEARCH, searchStr),2);
+		MainFrame.print_add(String.format(Constants.MESSAGE_SEARCH, searchStr)+"\n",2);
 
 		ArrayList<Task> searchResults = search(searchStr, false);
 		TaskManagerUtils.displaySearchResults(searchResults);

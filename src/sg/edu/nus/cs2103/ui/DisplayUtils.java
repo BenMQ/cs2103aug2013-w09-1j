@@ -18,7 +18,7 @@ public class DisplayUtils {
 	 * Returns a pretty string representation of a task.
 	 * @param Task
 	 */
-	public static String prettyPrint(Task task){
+	public static void prettyPrint(Task task){
 		//Reference: http://joda-time.sourceforge.net/apidocs/org/joda/time/format/DateTimeFormat.html
 		DateTimeFormatter onlytimeformat = DateTimeFormat.forPattern("ha");
 		if(task.getEndTime() !=null && task.getEndTime().getMinuteOfHour() > 0){
@@ -26,14 +26,18 @@ public class DisplayUtils {
 		} 
 		
 		if(task.getStartTime() == null && task.getEndTime() == null){
-			return task.getId() + ". " + task.getDescription();
+			MainFrame.print_add(task.getId() + ". ",4);
+			MainFrame.print_add(task.getDescription(),0);
 		} else if (task.getStartTime() == null){
-			return task.getId() + ". [by "+task.getEndTime().toString(onlytimeformat)+"] "+ task.getDescription();
+			MainFrame.print_add(task.getId() + ". [by "+task.getEndTime().toString(onlytimeformat)+"] ",4);
+			MainFrame.print_add(task.getDescription(),0);
 		} else {
 			if(task.getStartTime().getDayOfYear() == task.getEndTime().getDayOfYear()){
-				return task.getId() + ". ["+task.getStartTime().toString(onlytimeformat)+" - "+task.getEndTime().toString(onlytimeformat)+"] "+ task.getDescription();
+				MainFrame.print_add(task.getId() + ". ["+task.getStartTime().toString(onlytimeformat)+" - "+task.getEndTime().toString(onlytimeformat)+"] ",4);
+				MainFrame.print_add(task.getDescription(),0);
 			}
-			return task.getId() + ". ["+task.getStartTime().toString(onlytimeformat)+" - "+task.getEndTime().toString(onlytimeformat)+"] "+ task.getDescription();
+			MainFrame.print_add(task.getId() + ". ["+task.getStartTime().toString(onlytimeformat)+" - "+task.getEndTime().toString(onlytimeformat)+"] ",4);
+			MainFrame.print_add(task.getDescription(),0);
 		}
 	}	
 	

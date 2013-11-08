@@ -43,6 +43,7 @@ public class InputParser {
 		
 		//remove 'by' due to parsing inconsistencies
 		userInput = userInput.replace("by", "");
+		userInput = userInput.replace("today", "");
 		
 		//Each DateGroup contains a list of Date
 		List<DateGroup> dateGroups = dtparser.parse(userInput);

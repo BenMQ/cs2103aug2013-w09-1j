@@ -8,9 +8,11 @@ import org.joda.time.DateTime;
 
 import sg.edu.nus.cs2103.sudo.COMMAND_TYPE;
 import sg.edu.nus.cs2103.sudo.Constants;
+import sg.edu.nus.cs2103.sudo.exceptions.IncompleteCommandException;
+import sg.edu.nus.cs2103.sudo.exceptions.InvalidCommandException;
 import sg.edu.nus.cs2103.ui.DisplayUtils;
 import sg.edu.nus.cs2103.ui.MainFrame;
-import sg.edu.nus.cs2103.ui.UI;
+
 
 //@author A0099317U
 /**
@@ -96,13 +98,15 @@ public final class LogicHandler {
 		try {
 			switch (userCommand) {
 			case INVALID:
-				MainFrame.print_add(
-						Constants.MESSAGE_INVALID_COMMAND, 3);
-				return;
+//				MainFrame.print_add(
+//						Constants.MESSAGE_INVALID_COMMAND, 3);
+//				return;
+				throw new InvalidCommandException();
 			case INCOMPLETE:
-				MainFrame.print_add(
-						Constants.MESSAGE_INCOMPLETE_COMMAND, 3);
-				return;
+//				MainFrame.print_add(
+//						Constants.MESSAGE_INCOMPLETE_COMMAND, 3);
+//				return;
+				throw new IncompleteCommandException();
 			case DISPLAY:
 				this.manager.displayAllTasks();
 				return;
@@ -168,21 +172,9 @@ public final class LogicHandler {
 			default:
 				assert false; //Invalid commands are caught.
 				return;
-			}
-		} catch (IOException e) {
-			System.out.println("Sorry, there was a problem with I/O.");
-		} catch (IllegalStateException e) {
-			System.out.printf(e.getMessage());
-		} catch (IndexOutOfBoundsException e) {
-			System.out.printf(e.getMessage());
-		} catch (UnsupportedOperationException e) {
-			System.out.printf(e.getMessage());
-		} catch (NullPointerException e) {
-			System.out.printf(e.getMessage());
-		} catch (IllegalArgumentException e) {
-			System.out.printf(e.getMessage());			
+			}		
 		} catch (Exception e) {
-			System.out.println("Sorry, but we ran into a problem. " + e.getMessage());
+			MainFrame.print_add(e.getMessage(), 3);
 		}
 	}
 

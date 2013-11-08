@@ -1,20 +1,29 @@
 package sg.edu.nus.cs2103.ui;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
+
 import sg.edu.nus.cs2103.sudo.logic.LogicHandler;
 import sg.edu.nus.cs2103.sudo.logic.TaskManager;
 import sg.edu.nus.cs2103.sudo.UIConstants;
+
 import java.awt.Color;
 import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
+
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.plaf.ColorUIResource;
 import javax.swing.text.*;
+
 import org.jnativehook.GlobalScreen;
 import org.jnativehook.NativeHookException;
 import org.jnativehook.keyboard.NativeKeyEvent;
@@ -26,11 +35,43 @@ import org.jnativehook.keyboard.NativeKeyListener;
  */
 public class GUI extends javax.swing.JFrame implements NativeKeyListener {
 
+	/*TEST FOR FUN*/
+
+    private static class MyTextPane extends JTextPane {
+        public MyTextPane() {
+            super();
+            setOpaque(false);
+            // this is needed if using Nimbus L&F - see http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6687960
+            setBackground(new Color(0,0,0,0));
+        }
+        @Override
+        protected void paintComponent(Graphics g) {
+            // set background green - but can draw image here too
+            g.setColor(Color.BLACK);
+            g.fillRect(0, 0, getWidth(), getHeight());
+
+            BufferedImage img = null;
+            try {
+                img = ImageIO.read(new File("MIKU.JPG"));
+            } catch (IOException e) {
+            }
+             g.drawImage(img, 0, 0, this);
+
+            super.paintComponent(g);
+        }
+    }
+	
+	
+	
+	
+	
+	
+	
     /**
      * The following code creates new GUI.
      * MainTextPane is the main text displaying area which is static so that other static objects can call it.
      */
-	static public javax.swing.JTextPane MainTextPane = new javax.swing.JTextPane();
+	static public MyTextPane MainTextPane = new MyTextPane();
 	
     /**
      * StyledDocument stores all text layouts for MainTextPane.
@@ -77,7 +118,7 @@ public class GUI extends javax.swing.JFrame implements NativeKeyListener {
 	  StyleConstants.setUnderline(s,(underline==1)?true:false); // downline
 	  StyleConstants.setForeground(s,color); // color
 	  StyleConstants.setFontFamily(s,fontName);  // font
-	  StyleConstants.setBackground(s, Color.BLACK);
+	  //StyleConstants.setBackground(s, Color.BLACK);
 	 }
 	
 	 public static void useStyle(StyledDocument styledDoc, String content,String currentStyle)
@@ -90,9 +131,8 @@ public class GUI extends javax.swing.JFrame implements NativeKeyListener {
 	 }
 	 
 	 /**
-	     * rebuildStyle resets all styles for styledDoc.
-	     */
-	    
+	  * rebuildStyle resets all styles for styledDoc.
+	  */
 	 private void rebuildStyle(){
 	    	try {
 				styledDoc.remove(0, styledDoc.getLength());
@@ -102,7 +142,7 @@ public class GUI extends javax.swing.JFrame implements NativeKeyListener {
 				e.printStackTrace();
 			}
 	    	StyledDocument styledDoc = MainTextPane.getStyledDocument();
-			addNewStyle("Green",styledDoc,18,1,0,0,Color.GREEN,"OCR A Std");//main text
+			addNewStyle("Green",styledDoc,18,1,0,0,Color.CYAN,"OCR A Std");//main text
 			addNewStyle("Yellow",styledDoc,18,1,0,0,new Color(254, 254, 125),"OCR A Std");//labels
 			addNewStyle("Blue",styledDoc,18,1,1,0,new java.awt.Color(145, 192, 246),"OCR A Std");//command feedback
 			addNewStyle("Red",styledDoc,18,1,0,0,new java.awt.Color(254, 100, 100),"OCR A Std");//Error

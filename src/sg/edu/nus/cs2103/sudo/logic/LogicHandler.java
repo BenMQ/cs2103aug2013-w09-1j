@@ -164,7 +164,7 @@ public final class LogicHandler {
 				return;
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			System.out.println("Sorry, there was a problem with I/O.");
 		} catch (IllegalStateException e) {
 			System.out.printf(e.getMessage());
 		} catch (IndexOutOfBoundsException e) {
@@ -176,7 +176,7 @@ public final class LogicHandler {
 		} catch (IllegalArgumentException e) {
 			System.out.printf(e.getMessage());			
 		} catch (Exception e) {
-			e.printStackTrace();
+			System.out.println("Sorry, but we ran into a problem. " + e.getMessage());
 		}
 	}
 

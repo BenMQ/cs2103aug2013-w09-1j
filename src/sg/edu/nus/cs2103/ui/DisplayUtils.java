@@ -25,21 +25,31 @@ public class DisplayUtils {
 	 * Prints a pretty string representation of a Task.
 	 * @param Task
 	 */
-	public static void prettyPrint (Task task) {
+	public static String prettyPrint (Task task) {
+		String toReturn = "";
 		DateTimeFormatter onlytimeformat = HOUR_FORMAT;
 		if (hasZeroMinutes(task.getEndTime())) {
 			onlytimeformat = HOUR_MINUTE_FORMAT;
 		} 
 		
 		if (task.getStartTime() == null && task.getEndTime() == null) {
-			MainFrame.print_add(task.getId() + ". ", 4);
-			MainFrame.print_add(task.getDescription(), 0);
+			GUI.print_add(task.getId() + ". ", 4);
+			toReturn+=(task.getId() + ". ");
+			GUI.print_add(task.getDescription(), 0);
+			toReturn+=(task.getDescription());
+			return toReturn;
 		} else if (task.getStartTime() == null){
-			MainFrame.print_add(formatDeadlineTask(task, onlytimeformat), 4);
-			MainFrame.print_add(task.getDescription(), 0);
+			GUI.print_add(formatDeadlineTask(task, onlytimeformat), 4);
+			toReturn+=(formatDeadlineTask(task, onlytimeformat));
+			GUI.print_add(task.getDescription(), 0);
+			toReturn+=task.getDescription();
+			return toReturn;
 		} else {
-			MainFrame.print_add(formatTimedTask(task, onlytimeformat), 4);
-			MainFrame.print_add(task.getDescription(), 0);
+			GUI.print_add(formatTimedTask(task, onlytimeformat), 4);
+			toReturn+=(formatTimedTask(task, onlytimeformat));
+			GUI.print_add(task.getDescription(), 0);
+			toReturn+=(formatTimedTask(task, onlytimeformat));
+			return toReturn;
 		}
 	}	
 	
@@ -94,7 +104,7 @@ public class DisplayUtils {
 		if (label.contains("verdue")) {
 			index += 2;
 		}
-		MainFrame.print_add("\n["+ label + "]" + fillString(
+		GUI.print_add("\n["+ label + "]" + fillString(
 				separatorLength, SEPARATOR_CHAR), index);
 	}	
 	
@@ -108,7 +118,7 @@ public class DisplayUtils {
 			Task task) {
 		if (!finishedStarted && task.isComplete()) {
 			finishedStarted = true;
-			MainFrame.print_add(Constants.FINISHED_TASK_SEPARATOR, 1);
+			GUI.print_add(Constants.FINISHED_TASK_SEPARATOR, 1);
 		}
 		return finishedStarted;
 	}
@@ -123,7 +133,7 @@ public class DisplayUtils {
 			Task task) {
 		if (!floatingStarted && task.isFloatingTask()) {
 			floatingStarted = true;
-			MainFrame.print_add(Constants.FLOATING_TASK_SEPARATOR, 1);
+			GUI.print_add(Constants.FLOATING_TASK_SEPARATOR, 1);
 		}
 		return floatingStarted;
 	}

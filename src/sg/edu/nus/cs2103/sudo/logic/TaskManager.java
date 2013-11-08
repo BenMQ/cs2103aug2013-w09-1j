@@ -13,7 +13,7 @@ import sg.edu.nus.cs2103.sudo.HelpConstants;
 import sg.edu.nus.cs2103.sudo.exceptions.NoHistoryException;
 import sg.edu.nus.cs2103.sudo.storage.StorageHandler;
 import sg.edu.nus.cs2103.ui.DisplayUtils;
-import sg.edu.nus.cs2103.ui.MainFrame;
+import sg.edu.nus.cs2103.ui.GUI;
 
 /**
  * @author chenminqi
@@ -78,9 +78,11 @@ public class TaskManager {
 		TaskManagerUtils.updateAllIds(tasks);
 		try {
 			taskManager = new TaskManager();
-			MainFrame.print_add("Files rebuilt.",2);
+			GUI.print_add("Files rebuilt.",2);
+
 		} catch (Exception e) {
-			MainFrame.print_add("Files rebuiling failed.",3);
+			GUI.print_add("Files rebuiling failed.",3);
+
 			e.printStackTrace();
 		}
 	}
@@ -120,7 +122,8 @@ public class TaskManager {
 			ArrayList<DateTime> dateTimes) throws Exception {
 
 		if (taskDescription == null) {
-			MainFrame.print_add(Constants.MESSAGE_MISSING_DESCRIPTION,2);
+			GUI.print_add(Constants.MESSAGE_MISSING_DESCRIPTION,2);
+
 			return;
 		}
 
@@ -128,18 +131,22 @@ public class TaskManager {
 		int numOfDates = dateTimes.size();
 		if (numOfDates == 0) {
 			this.addTask(new FloatingTask(taskDescription));
-			MainFrame.print_add(String.format(Constants.MESSAGE_ADD_FLOATING, taskDescription),2);
+			GUI.print_add(String.format(Constants.MESSAGE_ADD_FLOATING, taskDescription),2);
+
 		} else if (numOfDates == 1) {
 			this.addTask(new DeadlineTask(taskDescription, dateTimes));
-			MainFrame.print_add(String.format(Constants.MESSAGE_ADD_DEADLINE, taskDescription,
+			GUI.print_add(String.format(Constants.MESSAGE_ADD_DEADLINE, taskDescription,
 					DisplayUtils.formatDate(dateTimes.get(0))),2);
+			
 		} else if (numOfDates == 2) {
 			this.addTask(new TimedTask(taskDescription, dateTimes));
-			MainFrame.print_add(String.format(Constants.MESSAGE_ADD_TIMED, taskDescription,
+			GUI.print_add(String.format(Constants.MESSAGE_ADD_TIMED, taskDescription,
 					DisplayUtils.formatDate(dateTimes.get(0)),
 					DisplayUtils.formatDate(dateTimes.get(1))), 2);
+			
 		} else {
-			MainFrame.print_add(Constants.MESSAGE_INVALID_NUMBER_OF_DATES, 2);
+			GUI.print_add(Constants.MESSAGE_INVALID_NUMBER_OF_DATES, 2);
+			
 		}
 	}	
 
@@ -168,7 +175,8 @@ public class TaskManager {
 		int index = taskId - 1;
 		TaskManagerUtils.checkValidityIndex(index, tasks);
 
-		MainFrame.print_add(String.format(Constants.MESSAGE_EDIT, taskId),2);
+		GUI.print_add(String.format(Constants.MESSAGE_EDIT, taskId),2);
+	
 		TaskManagerUtils.editTaskHelper(taskDescription, dates, index, tasks);
 
 		TaskManagerUtils.sortAndUpdateIds(tasks);
@@ -189,8 +197,10 @@ public class TaskManager {
 			if (task.isComplete()) {
 				completed = Constants.TASK_COMPLETED_FLAG;
 			}
+			GUI.print_add("\n",1);
 			DisplayUtils.prettyPrint(task);
-			MainFrame.print_add(" "+ completed+"\n", 1);
+			GUI.print_add(" "+ completed, 1);
+			
 		}
 	}
 
@@ -229,9 +239,10 @@ public class TaskManager {
 							insertFinishedSeparator(finishedStarted, task);
 				}
 
-				MainFrame.print_add("\n",0);
+				GUI.print_add("\n",0);
 				DisplayUtils.prettyPrint(task);
-				MainFrame.print_add(" " + completed, 1);
+				GUI.print_add(" " + completed, 1);
+				
 			}
 
 		}
@@ -287,8 +298,8 @@ public class TaskManager {
 		}
 
 		currTask.setComplete(true);
-		MainFrame.print_add(String.format(Constants.MESSAGE_FINISH, currTask.description),2);
-
+		GUI.print_add(String.format(Constants.MESSAGE_FINISH, currTask.description),2);
+		
 		TaskManagerUtils.sortAndUpdateIds(tasks);
 		storage.save(true);
 		//TaskManagerUtils.saveToHistory(storage);
@@ -316,8 +327,8 @@ public class TaskManager {
 		}
 
 		currTask.setComplete(false);
-		MainFrame.print_add(String.format(Constants.MESSAGE_UNFINISH, currTask.description),2);
-
+		GUI.print_add(String.format(Constants.MESSAGE_UNFINISH, currTask.description),2);
+	
 		TaskManagerUtils.sortAndUpdateIds(tasks);
 		storage.save(true);
 		//TaskManagerUtils.saveToHistory(storage);
@@ -339,8 +350,8 @@ public class TaskManager {
 	public ArrayList<Task> searchAndDisplay(String searchStr)
 			throws NullPointerException, IllegalStateException {
 
-		MainFrame.print_add(String.format(Constants.MESSAGE_SEARCH, searchStr)+"\n",2);
-
+		GUI.print_add(String.format(Constants.MESSAGE_SEARCH, searchStr),2);
+		
 		ArrayList<Task> searchResults = search(searchStr, false);
 		TaskManagerUtils.displaySearchResults(searchResults);
 
@@ -407,7 +418,8 @@ public class TaskManager {
 	 */
 	public void searchForFreeIntervals(ArrayList<DateTime> dateTimes) {
 		if (dateTimes.size() > 1) {
-			MainFrame.print_add(Constants.MESSAGE_INVALID_NUMBER_OF_DATES, 3);
+			GUI.print_add(Constants.MESSAGE_INVALID_NUMBER_OF_DATES, 3);
+			
 			return;
 		}
 
@@ -423,18 +435,21 @@ public class TaskManager {
 			MutableInterval interval = free.get(i);
 			if (interval.toDurationMillis() >= Constants.FREE_SLOT_MINIMUM_DURATION) {
 				if (noSlotsFound) {
-					MainFrame.print_add(String.format(Constants.MESSAGE_FREE_SLOTS_PREFIX,
+					GUI.print_add(String.format(Constants.MESSAGE_FREE_SLOTS_PREFIX,
 					        timeRange.get(0).toString("dd MMMM")),1);
+					
 					noSlotsFound = false;
 				}
 				String output = interval.getStart().toString("hh:mm a")
 						+ " to "
 						+ interval.getEnd().toString("hh:mm a");
-				MainFrame.print_add(output,1);
+				GUI.print_add(output,1);
+				
 			}
 		}
 		if (noSlotsFound) {
-			MainFrame.print_add(Constants.MESSAGE_NO_FREE_SLOTS,3);
+			GUI.print_add(Constants.MESSAGE_NO_FREE_SLOTS,3);
+		
 		}
 	}
 
@@ -536,19 +551,21 @@ public class TaskManager {
         try {
             TaskManagerUtils.checkValidityIndex(index, tasks);  
         } catch (IndexOutOfBoundsException e) {
-            MainFrame.print_add(Constants.MESSAGE_INVALID_TASK_INDEX, 3);
+            GUI.print_add(Constants.MESSAGE_INVALID_TASK_INDEX, 3);
+            
             return;
         }
         if (dateTimes.size() > 1) {
-            MainFrame.print_add(Constants.MESSAGE_INVALID_NUMBER_OF_DATES, 3);
+            GUI.print_add(Constants.MESSAGE_INVALID_NUMBER_OF_DATES, 3);
+            
             return;
         } else if (duration <= 0) {
-            MainFrame.print_add(Constants.MESSAGE_INCOMPLETE_COMMAND, 3);
+            GUI.print_add(Constants.MESSAGE_INCOMPLETE_COMMAND, 3);
             return;
         }
         
         if (tasks.get(index).isComplete()) {
-            MainFrame.print_add(Constants.MESSAGE_ALREADY_COMPLETE, 3);
+            GUI.print_add(Constants.MESSAGE_ALREADY_COMPLETE, 3);
             return;
         }
         String description = tasks.get(index).getDescription();
@@ -591,7 +608,7 @@ public class TaskManager {
 					range.add(end);
 					
 					TaskManagerUtils.editTaskHelper(null, range, index, tasks);
-					MainFrame.print_add(String.format(Constants.MESSAGE_ADD_TIMED,
+					GUI.print_add(String.format(Constants.MESSAGE_ADD_TIMED,
 							description, DisplayUtils.formatDate(start),
 							DisplayUtils.formatDate(end)),1);
 					
@@ -606,7 +623,7 @@ public class TaskManager {
 				}
 			}
 		}
-		MainFrame.print_add(Constants.MESSAGE_NO_FREE_SLOTS,3);
+		GUI.print_add(Constants.MESSAGE_NO_FREE_SLOTS,3);
 	}
 
 	/**
@@ -654,7 +671,7 @@ public class TaskManager {
 
 		TaskManagerUtils.checkValidityIndex(index, tasks);
 
-		MainFrame.print_add(String.format(Constants.MESSAGE_DELETE,
+		GUI.print_add(String.format(Constants.MESSAGE_DELETE,
 				tasks.get(index).description),3);
 
 		tasks.remove(index);
@@ -673,13 +690,13 @@ public class TaskManager {
 	public void undo() {
 		try {
 			tasks = (ArrayList<Task>) storage.undo().clone();
-			MainFrame.print_add(Constants.MESSAGE_UNDO,2);
+			GUI.print_add(Constants.MESSAGE_UNDO,2);
 			// saveTasks();
 		} catch (FileNotFoundException e) {
 			storage.rebuildHistory();
-			MainFrame.print_add(Constants.MESSAGE_HISTORY_LOAD_ERROR,3);
+			GUI.print_add(Constants.MESSAGE_HISTORY_LOAD_ERROR,3);
 		} catch (NoHistoryException e) {
-			MainFrame.print_add(Constants.MESSAGE_LAST_HISTORY,2);
+			GUI.print_add(Constants.MESSAGE_LAST_HISTORY,2);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -707,13 +724,13 @@ public class TaskManager {
 	public void redo() {
 		try {
 			tasks = (ArrayList<Task>) storage.redo().clone();
-			MainFrame.print_add(Constants.MESSAGE_REDO,2);
+			GUI.print_add(Constants.MESSAGE_REDO,2);
 			// saveTasks();
 		} catch (FileNotFoundException e) {
 			storage.rebuildHistory();
-			MainFrame.print_add(Constants.MESSAGE_HISTORY_LOAD_ERROR,3);
+			GUI.print_add(Constants.MESSAGE_HISTORY_LOAD_ERROR,3);
 		} catch (NoHistoryException e) {
-			MainFrame.print_add(Constants.MESSAGE_LAST_HISTORY,2);
+			GUI.print_add(Constants.MESSAGE_LAST_HISTORY,2);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -729,14 +746,14 @@ public class TaskManager {
 	 */
 	public void help(String topic) {
 		if (topic == null) {
-			MainFrame.print_add(HelpConstants.MESSAGE_WELCOME_HELP_PAGE,1);
+			GUI.print_add(HelpConstants.MESSAGE_WELCOME_HELP_PAGE,1);
 		} else {
 			String helpMessage = HelpConstants.helpTopics.get(topic
 					.toUpperCase());
 			if (helpMessage == null) {
-				MainFrame.print_add(String.format(HelpConstants.HELP_NOT_FOUND, topic),3);
+				GUI.print_add(String.format(HelpConstants.HELP_NOT_FOUND, topic),3);
 			} else {
-				MainFrame.print_add(helpMessage,1);
+				GUI.print_add(helpMessage,1);
 			}
 		}
 	}
@@ -769,7 +786,7 @@ public class TaskManager {
 		}
 		int toReturn = 100 * completed / this.tasks.size();
 		if (toReturn == 100) {
-			// MainFrame.print_add("You have finished all tasks!");
+			// GUI.print_add("You have finished all tasks!");
 		}
 		return toReturn;
 	}

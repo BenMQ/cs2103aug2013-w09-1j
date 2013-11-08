@@ -220,12 +220,13 @@ public class TaskManager {
 			if (showAll || !task.isComplete) {
 
 				if (!task.isComplete() && !task.isFloatingTask()) {
-					previousDate = DisplayUtils.insertDateSeparators(previousDate, task);
+					previousDate = DisplayUtils.
+							insertDateSeparators(previousDate, task);
 				} else {
-					floatingStarted = DisplayUtils.insertFloatingSeparator(floatingStarted,
-							task);
-					finishedStarted = DisplayUtils.insertFinishedSeparator(finishedStarted,
-							task);
+					floatingStarted = DisplayUtils.
+							insertFloatingSeparator(floatingStarted, task);
+					finishedStarted = DisplayUtils.
+							insertFinishedSeparator(finishedStarted, task);
 				}
 
 				MainFrame.print_add("\n",0);
@@ -261,9 +262,7 @@ public class TaskManager {
 		}
 
 		String toReturn = TaskManagerUtils.formatFloatingTasks(floatingTasks);
-
 		return toReturn;
-
 	}
 
 	/**

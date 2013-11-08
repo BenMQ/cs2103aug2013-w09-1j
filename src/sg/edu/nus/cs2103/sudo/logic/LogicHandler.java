@@ -38,6 +38,12 @@ public final class LogicHandler {
 		if (manager == null) {
 			throw new NullPointerException("TaskManager cannot be null!");
 		}
+		
+		//Uncomment this once Dake finishes the fix at MainFrame
+//		if (scanner == null) {
+//			throw new NullPointerException("Scanner cannot be null!");
+//		}		
+		
 		this.manager = manager;
 		this.scanner = scanner;
 	}

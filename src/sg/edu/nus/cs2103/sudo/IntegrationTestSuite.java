@@ -107,6 +107,7 @@ public class IntegrationTestSuite {
 		testStorageContent();
 	}	
 	
+	
 	@Test
 	public void testValidAliases() throws IOException {
 		String userInput = "do 'make waffles for breakfast' by Monday 14 October 2pm";
@@ -153,10 +154,21 @@ public class IntegrationTestSuite {
 	}
 	
 	
-	@Test
-	public void testEdit() {
-		assert true;
-	}
+//	@Test
+//	public void testEdit() {
+//		String userInput = "add 'make waffles' by November 12 10pm";
+//		runCommand(userInput);
+//		
+//		//'by 10pm' -> 1am
+//		//'10pm' -> 10pm
+//		
+//		userInput = "edit 1 by 10pm";
+//		ArrayList<DateTime> dateTimes = InputParser.
+//				parseDateTime(userInput);
+//		
+//		assertEquals("", dateTimes.get(0).toString());	
+//		
+//	}
 
 	@Test
 	public void testSearch() throws IOException {

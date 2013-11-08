@@ -41,6 +41,9 @@ public class InputParser {
 			userInput = userInput.replace(desc, "");
 		}
 		
+		//remove 'by' due to parsing inconsistencies
+		userInput = userInput.replace("by", "");
+		
 		//Each DateGroup contains a list of Date
 		List<DateGroup> dateGroups = dtparser.parse(userInput);
 		ArrayList<List<Date>> dateLists = ParserUtils.getDateLists(dateGroups);	

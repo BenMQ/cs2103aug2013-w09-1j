@@ -173,6 +173,8 @@ public final class LogicHandler {
 			System.out.printf(e.getMessage());
 		} catch (NullPointerException e) {
 			System.out.printf(e.getMessage());
+		} catch (IllegalArgumentException e) {
+			System.out.printf(e.getMessage());			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -508,18 +508,22 @@ public class TaskManager {
 	public void scheduleTask(int taskId, long duration, ArrayList<DateTime> dateTimes)
 			throws Exception {
         int index = taskId - 1;
-        TaskManagerUtils.checkValidityIndex(index, tasks);
-        
+        try {
+            TaskManagerUtils.checkValidityIndex(index, tasks);  
+        } catch (IndexOutOfBoundsException e) {
+            MainFrame.print_add(Constants.MESSAGE_INVALID_TASK_INDEX, 3);
+            return;
+        }
         if (dateTimes.size() > 1) {
-            MainFrame.print_add(Constants.MESSAGE_INVALID_NUMBER_OF_DATES, 2);
+            MainFrame.print_add(Constants.MESSAGE_INVALID_NUMBER_OF_DATES, 3);
             return;
         } else if (duration <= 0) {
-            MainFrame.print_add(Constants.MESSAGE_INCOMPLETE_COMMAND, 2);
+            MainFrame.print_add(Constants.MESSAGE_INCOMPLETE_COMMAND, 3);
             return;
         }
         
         if (tasks.get(index).isComplete()) {
-            MainFrame.print_add(Constants.MESSAGE_ALREADY_COMPLETE, 2);
+            MainFrame.print_add(Constants.MESSAGE_ALREADY_COMPLETE, 3);
             return;
         }
         String description = tasks.get(index).getDescription();

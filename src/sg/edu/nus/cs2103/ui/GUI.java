@@ -3,148 +3,69 @@ package sg.edu.nus.cs2103.ui;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
-
 import sg.edu.nus.cs2103.sudo.logic.LogicHandler;
 import sg.edu.nus.cs2103.sudo.logic.TaskManager;
 import sg.edu.nus.cs2103.sudo.UIConstants;
-
 import java.awt.Color;
 import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-
-/**
- *
- * @author Liu Dake
- */
-
-
-
-
-
-
-
-
-
-
-
 import javax.swing.*;
 import javax.swing.plaf.ColorUIResource;
 import javax.swing.text.*;
-
 import org.jnativehook.GlobalScreen;
 import org.jnativehook.NativeHookException;
 import org.jnativehook.keyboard.NativeKeyEvent;
 import org.jnativehook.keyboard.NativeKeyListener;
 
-
 /**
  *
- * @author LiuDake
+ * @author LiuDake A0105656
  */
 public class GUI extends javax.swing.JFrame implements NativeKeyListener {
 
     /**
-     * Creates new form GUI
+     * The following code creates new GUI.
+     * MainTextPane is the main text displaying area which is static so that other static objects can call it.
      */
 	static public javax.swing.JTextPane MainTextPane = new javax.swing.JTextPane();
+	
+    /**
+     * StyledDocument stores all text layouts for MainTextPane.
+     */
+	
 	static public StyledDocument styledDoc = MainTextPane.getStyledDocument();
+	
+	/**
+     * print_add is for logic part to send display message(string and color code) to GUI.
+     */
+	
 	static public void print_add(String ipt, int colorCode){
 		System.out.print(ipt);
 		switch (colorCode){
 		case 0:
-			insertDoc(styledDoc,ipt,"Green");
+			useStyle(styledDoc,ipt,"Green");
 			break;
 		case 1:
-			insertDoc(styledDoc,ipt,"Yellow");
+			useStyle(styledDoc,ipt,"Yellow");
 			break;
 		case 2:
-			insertDoc(styledDoc,ipt,"Blue");
+			useStyle(styledDoc,ipt,"Blue");
 			break;
 		case 3:
-			insertDoc(styledDoc,ipt,"Red");
+			useStyle(styledDoc,ipt,"Red");
 			break;
 		case 4:
-			insertDoc(styledDoc,ipt,"White");
+			useStyle(styledDoc,ipt,"White");
 			break;
 		default:
-			insertDoc(styledDoc,ipt,"Green");
-		}
-	}
-	
-    public GUI() {
-		manager = TaskManager.getTaskManager();
-		logicHandler = LogicHandler.getLogicHandler(manager, null);
-		rebuildStyle();
-		initComponents();
-		toVisible();
-    }
-    
-    private void rebuildStyle(){
-    	try {
-			styledDoc.remove(0, styledDoc.getLength());
-		} catch (BadLocationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-    	//MainTextPane.setBackground(Color.WHITE);
-    	StyledDocument styledDoc = MainTextPane.getStyledDocument();
-		createStyle("Green",styledDoc,18,1,0,0,Color.GREEN,"OCR A Std");
-		createStyle("Yellow",styledDoc,18,1,0,0,new Color(254, 254, 125),"OCR A Std");
-		createStyle("Blue",styledDoc,18,1,1,0,new java.awt.Color(145, 192, 246),"OCR A Std");
-		createStyle("Red",styledDoc,18,1,0,0,new java.awt.Color(254, 100, 100),"OCR A Std");
-		createStyle("White",styledDoc,18,1,1,0,Color.WHITE,"OCR A Std");
-    }
-    
-	public void nativeKeyTyped(NativeKeyEvent arg0) {
-		// .TODO Auto-generated method stub
-		// To implement unimplemented method
-	}
-	public void nativeKeyPressed(NativeKeyEvent e) {
-		currentKey = e.getKeyCode();
-		if (currentKey == UIConstants.KEYBOARD_TAB) {
-			keyOne = true;
-		}
-		if (currentKey == UIConstants.KEYBOARD_SPACE) {
-			keyTwo = true;
-		}
-		if (keyOne && keyTwo) {
-			if (isShown) {
-				isShown = false;
-				toInvisible();
-			} else {
-				isShown = true;
-				toVisible();
-			}
-		}
-		if (e.getKeyCode() == NativeKeyEvent.VK_ESCAPE) {
-			GlobalScreen.unregisterNativeHook();
-			System.exit(0);
+			useStyle(styledDoc,ipt,"Green");
 		}
 	}
 
-	public void nativeKeyReleased(NativeKeyEvent e) {
-		currentKey = e.getKeyCode();
-		if (currentKey == UIConstants.KEYBOARD_TAB) {
-			keyOne = false;
-		}
-		if (currentKey == UIConstants.KEYBOARD_SPACE) {
-			keyTwo = false;
-		}
-	}
-	
-	
-	public void toInvisible() {
-		this.setVisible(false);
-	}
-
-	public void toVisible() {
-		this.setVisible(true);
-	}
-	
-	public static void createStyle(String style,StyledDocument doc,int size,int bold,int italic,int underline,Color color,String fontName)
+	public static void addNewStyle(String style,StyledDocument doc,int size,int bold,int italic,int underline,Color color,String fontName)
 	 {
 	  Style sys = StyleContext.getDefaultStyleContext().getStyle(StyleContext.DEFAULT_STYLE);
 	  try { doc.removeStyle(style); } catch(Exception e) {}
@@ -159,7 +80,7 @@ public class GUI extends javax.swing.JFrame implements NativeKeyListener {
 	  StyleConstants.setBackground(s, Color.BLACK);
 	 }
 	
-	 public static void insertDoc(StyledDocument styledDoc, String content,String currentStyle)
+	 public static void useStyle(StyledDocument styledDoc, String content,String currentStyle)
 	 {
 	  try {
 	   styledDoc.insertString(styledDoc.getLength(),content,styledDoc.getStyle(currentStyle));
@@ -167,84 +88,144 @@ public class GUI extends javax.swing.JFrame implements NativeKeyListener {
 	   System.err.println("BadLocationException: " + e);
 	  }
 	 }
+	 
+	 /**
+	     * rebuildStyle resets all styles for styledDoc.
+	     */
+	    
+	 private void rebuildStyle(){
+	    	try {
+				styledDoc.remove(0, styledDoc.getLength());
+				//Remove default style if anything exists in styledDoc
+			} catch (BadLocationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	    	StyledDocument styledDoc = MainTextPane.getStyledDocument();
+			addNewStyle("Green",styledDoc,18,1,0,0,Color.GREEN,"OCR A Std");//main text
+			addNewStyle("Yellow",styledDoc,18,1,0,0,new Color(254, 254, 125),"OCR A Std");//labels
+			addNewStyle("Blue",styledDoc,18,1,1,0,new java.awt.Color(145, 192, 246),"OCR A Std");//command feedback
+			addNewStyle("Red",styledDoc,18,1,0,0,new java.awt.Color(254, 100, 100),"OCR A Std");//Error
+			addNewStyle("White",styledDoc,18,1,1,0,Color.WHITE,"OCR A Std");//ID and highlighted texts
+	    }
+	 
+	 
+	 
+	/**
+	 * GUI class builder. Initialize logicHandler, build text styles, then initialize GUI components.
+	 */	
+    public GUI() {
+		manager = TaskManager.getTaskManager();
+		logicHandler = LogicHandler.getLogicHandler(manager, null);
+		rebuildStyle();
+		initComponents();
+		toVisible();
+    }
+    
+    
+    /*
+     * jNativeHook provides global keyboard listener for shortcut key.
+     * 
+     * */
+    
+	public void nativeKeyTyped(NativeKeyEvent arg0) {
+		// .TODO Auto-generated method stub
+		// To implement unimplemented method
+	}
 	
+	
+	//Detect whether TAB and Space are both pressed. If so then change visibility of GUI
+	public void nativeKeyPressed(NativeKeyEvent e) {
+		currentKey = e.getKeyCode();
+		if (currentKey == UIConstants.KEYBOARD_TAB) {
+			TABPressed = true;
+		}
+		if (currentKey == UIConstants.KEYBOARD_SPACE) {
+			SpacePressed = true;
+		}
+		if (TABPressed && SpacePressed) {
+			if (isVisibleGUI) {
+				isVisibleGUI = false;
+				toInvisible();
+			} else {
+				isVisibleGUI = true;
+				toVisible();
+			}
+		}
+		if (e.getKeyCode() == NativeKeyEvent.VK_ESCAPE) {
+			GlobalScreen.unregisterNativeHook();
+			System.exit(0);
+		}
+	}
+
+	//If TAB or Space is released then change state of TABPressed and SpacePressed
+	public void nativeKeyReleased(NativeKeyEvent e) {
+		currentKey = e.getKeyCode();
+		if (currentKey == UIConstants.KEYBOARD_TAB) {
+			TABPressed = false;
+		}
+		if (currentKey == UIConstants.KEYBOARD_SPACE) {
+			SpacePressed = false;
+		}
+	}
+	
+	
+	//Visibility
+	public void toInvisible() {
+		this.setVisible(false);
+	}
+
+	public void toVisible() {
+		this.setVisible(true);
+	}
 	
     /**
      * This method is called from within the constructor to initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is always
-     * regenerated by the Form Editor.
      */
     @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
+    
     private void initComponents() {
-    	//to take over the output
     	
-    	
-    	outContent = new ByteArrayOutputStream();
-		System.setOut(new PrintStream(outContent));
+    	//Initialize all GUI components
         jScrollPaneInput = new javax.swing.JScrollPane();
         jTextPaneInput = new javax.swing.JTextField();
-        jTextArea1 = new javax.swing.JTextArea();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jScrollPane3 = new javax.swing.JScrollPane(JScrollPane.VERTICAL_SCROLLBAR_NEVER,JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        jTextAreaLogo = new javax.swing.JTextArea();
+        jScrollPaneMainText = new javax.swing.JScrollPane();
+        jScrollPaneFloating = new javax.swing.JScrollPane();
+        jScrollPaneLogo = new javax.swing.JScrollPane(JScrollPane.VERTICAL_SCROLLBAR_NEVER,JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);//Scrollbar invisible
         FloatingTextArea = new javax.swing.JTextArea();
-        previousInput = new ArrayList<String>();
-		DefaultCaret caret = (DefaultCaret) FloatingTextArea.getCaret();
-		caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        jTextPaneInput.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                jTextPaneInputKeyPressed(evt);
-            }
-        });
         
+        //previous command
+        previousInput = new ArrayList<String>();
+        
+        //Set caret for FloatingTextArea to ALWAYS_UPDATE
+		DefaultCaret caret = (DefaultCaret) FloatingTextArea.getCaret();
+		caret.setUpdatePolicy(DefaultCaret.NEVER_UPDATE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        //KeyListeners for keyboard actions
         jTextPaneInput.addKeyListener(new KeyAdapter() {
 			public void keyPressed(KeyEvent e) {
+				//previous command
 				if (e.getKeyCode() == KeyEvent.VK_UP && previousInputPointer>=0){
 					previousInputPointer--;
 					jTextPaneInput.setText(previousInput.get(previousInputPointer+1));
 				}
+				//"next" command
 				if (e.getKeyCode() == KeyEvent.VK_DOWN && previousInputPointer<previousInput.size()-1){
 					previousInputPointer++;
 					jTextPaneInput.setText(previousInput.get(previousInputPointer));
 				}
+				//execute
 				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 					String ipt = jTextPaneInput.getText();
 					if(!ipt.equals("")){
 						previousInput.add(ipt);
 						previousInputPointer=previousInput.size()-1;
 					}
-					if ( ipt.equals("demo")) {
-						if (isDemo) {
-							MainTextPane.setFont(new java.awt.Font("Monaco",
-									0, 17));
-							FloatingTextArea.setFont(new java.awt.Font(
-									"Monaco", 0, 12));
-							 jTextPaneInput.setText(null);
-							isDemo = false;
-						} else {
-							MainTextPane.setFont(new java.awt.Font("Monaco",
-									0, 25));
-							FloatingTextArea.setFont(new java.awt.Font(
-									"Monaco", 0, 16));
-							// mainTextFrame.setText("Font:Demo mode on");
-							 jTextPaneInput.setText(null);
-							isDemo = true;
-						}
-					} else {
 						rebuildStyle();
 						String userInput =  jTextPaneInput.getText();
 						jTextPaneInput.setText(null);
 						logicHandler.executeCommand(userInput);
-						if(isDemo){
-						//MainTextPane.setText(outContent.toString());
-						}
-						//MainTextPane.updateUI();
-						outContent.reset();
-						//rebuildStyle();
-						// String[] floatings =
-						// updateFloating(manager.getFloatingTask());
 						try {
 							FloatingTextArea.setText(
 									manager.displayFloatingTasks());
@@ -252,7 +233,7 @@ public class GUI extends javax.swing.JFrame implements NativeKeyListener {
 							FloatingTextArea
 									.setText(UIConstants.MESSAGE_EMPTY_LIST);
 						}
-					}
+					
 				}
 				
 				//Add color change code here
@@ -263,20 +244,15 @@ public class GUI extends javax.swing.JFrame implements NativeKeyListener {
 
         
         
-        
+        //GUI components properties and behavior
         jScrollPaneInput.setViewportView(jTextPaneInput);
-
         MainTextPane.setEditable(false);
-       // MainTextPane.setForeground(Color.BLACK);
         MainTextPane.setBackground(Color.BLACK);
         MainTextPane.setAutoscrolls(false);
         MainTextPane.setDragEnabled(false);
         MainTextPane.setFocusable(false);
-        
         ((DefaultCaret) MainTextPane.getCaret()).setUpdatePolicy(DefaultCaret.NEVER_UPDATE);
-        
-        jScrollPane1.setViewportView(MainTextPane);
-        
+        jScrollPaneMainText.setViewportView(MainTextPane);
         FloatingTextArea.setEditable(false);
         FloatingTextArea.setColumns(20);
         FloatingTextArea.setRows(5);
@@ -286,73 +262,63 @@ public class GUI extends javax.swing.JFrame implements NativeKeyListener {
 				"Courier", 0, 14));
         FloatingTextArea.setBackground(Color.BLACK);
         FloatingTextArea.setForeground(Color.GREEN);
-        jScrollPane2.setViewportView(FloatingTextArea);
-
-        jTextArea1.setEditable(false);
-        jTextArea1.setBackground(new java.awt.Color(0, 0, 0));
-        
-        jTextArea1.setForeground(Color.GREEN);
-        
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jTextArea1.setFocusable(false);
-        jScrollPane3.setViewportView(jTextArea1);
-        
-        jTextArea1.setText(UIConstants.LOGO);
-        jTextArea1.setFont(new java.awt.Font(
+        jScrollPaneFloating.setViewportView(FloatingTextArea);
+        jTextAreaLogo.setEditable(false);
+        jTextAreaLogo.setBackground(new java.awt.Color(0, 0, 0));
+        jTextAreaLogo.setForeground(Color.GREEN);
+        jTextAreaLogo.setColumns(20);
+        jTextAreaLogo.setRows(5);
+        jTextAreaLogo.setFocusable(false);
+        jScrollPaneLogo.setViewportView(jTextAreaLogo);
+        jTextAreaLogo.setText(UIConstants.LOGO);
+        jTextAreaLogo.setFont(new java.awt.Font(
 				"Courier", 1, 13));
         
-        
+        //Welcome message
         if (manager.isReloaded()) {
 			GUI.print_add((UIConstants.MESSAGE_WELCOME_TO_SUDO_RELOAD),0);
-//			GUI.print_add((UIConstants.MESSAGE_BETTER_ON_MAC),4);
+			//GUI.print_add((UIConstants.MESSAGE_BETTER_ON_MAC),4);
 		} else {
 			GUI.print_add((UIConstants.MESSAGE_WELCOME_TO_SUDO_FIRST),0);
 		}
+        
+        //Floating task area
 		try {
 			FloatingTextArea.setText(manager.displayFloatingTasks());
 		} catch (IllegalStateException e) {
 			FloatingTextArea.setText(UIConstants.MESSAGE_EMPTY_LIST);
 		}
 		
+		//Layout setup, do not modify
 	    org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(org.jdesktop.layout.GroupLayout.TRAILING, jScrollPaneInput)
             .add(layout.createSequentialGroup()
-                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 940, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .add(jScrollPaneMainText, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 940, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(org.jdesktop.layout.GroupLayout.TRAILING, jScrollPane2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 250, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(org.jdesktop.layout.GroupLayout.TRAILING, jScrollPane3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 250, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, jScrollPaneFloating, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 250, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, jScrollPaneLogo, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 250, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jScrollPane1)
+                    .add(jScrollPaneMainText)
                     .add(layout.createSequentialGroup()
-                        .add(jScrollPane3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 121, Short.MAX_VALUE)
+                        .add(jScrollPaneLogo, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 121, Short.MAX_VALUE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(jScrollPane2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 579, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
+                        .add(jScrollPaneFloating, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 579, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jScrollPaneInput, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
         );
-
         pack();
-    }// </editor-fold>                        
-
-    private void jTextPaneInputKeyPressed(java.awt.event.KeyEvent evt) {                                          
-    	
-    }                                         
-
-    /**
-     * @param args the command line arguments
-     */
+    }
+    
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
@@ -386,21 +352,20 @@ public class GUI extends javax.swing.JFrame implements NativeKeyListener {
         });
     }
   
+    //variables
 	private int currentKey;
-	private Boolean keyOne = false;
-	private Boolean keyTwo = false;
-	private Boolean isShown = true;
-	private Boolean isDemo = false;
-	private ByteArrayOutputStream outContent;
+	private Boolean TABPressed = false;
+	private Boolean SpacePressed = false;
+	private Boolean isVisibleGUI = true;
 	private TaskManager manager;
 	private LogicHandler logicHandler;
     private javax.swing.JTextArea FloatingTextArea;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPaneMainText;
+    private javax.swing.JScrollPane jScrollPaneFloating;
+    private javax.swing.JScrollPane jScrollPaneLogo;
     private javax.swing.JScrollPane jScrollPaneInput;
     private javax.swing.JTextField jTextPaneInput;
-    private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JTextArea jTextAreaLogo;
     private ArrayList<String> previousInput;
     private int previousInputPointer;
     // End of variables declaration                   

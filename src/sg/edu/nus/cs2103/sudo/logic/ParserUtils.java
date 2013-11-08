@@ -148,4 +148,32 @@ public class ParserUtils {
 	    return period.toDurationFrom(new DateTime(0)).getMillis();
 	}
 	
+	/**
+	 * Set the time of an Joda DateTime object to 00:00
+	 * 
+	 * @param datetime
+	 * @return a copy with modified time as 00:00
+	 */
+	public static DateTime setTimeStartDay(DateTime datetime) {
+		if (datetime == null) {
+			return null;
+		}
+		return datetime.withHourOfDay(0).withMinuteOfHour(0).withSecondOfMinute(0)
+				.withMillisOfSecond(0);
+	}
+
+	/**
+	 * Set the time of an Joda DateTime object to 23:59
+	 * 
+	 * @param datetime
+	 * @return a copy with modified time as 23:59
+	 */
+	public static DateTime setTimeEndDay(DateTime datetime) {
+		if (datetime == null) {
+			return null;
+		}
+		return datetime.withHourOfDay(23).withMinuteOfHour(59).withSecondOfMinute(0)
+				.withMillisOfSecond(0);
+	}	
+	
 }

@@ -19,8 +19,8 @@ public class HelpConstants {
 	public static final String HELP_FINISH = "To mark a task as completed:\nfinish [task index]\nTo mark a task as incomplete:\nunfinish [task index]\nYou could also type in the following instead of 'finish': 'complete', 'done'.\n\n";
 	public static final String HELP_UNDO = "To undo the last action, simply type: undo\nTo redo the last action, simply type: redo\n\n";
 	public static final String HELP_SEARCH = "To search for any incomplete task:\nsearch '[search term]'\nTo search for any incomplete or completed task:\nsearch -all '[search term]'\nTo search for tasks on a particular day or time:\nsearch [date/time]\nsearch [date/time] to [date/time]\nYou could also type in the following instead of 'search': 'find'.\n\n";
-	public static final String HELP_FREE = "To find free time slots for today:\nfree today\n\n";
-	public static final String HELP_SCHEDULE = "To add a task and automatically schedule it into a free period today, use:\nschedule '[description]' [duration]\ne.g. schedule 'do yoga' 1h\n\n";
+	public static final String HELP_FREE = "To find free time slots on a given date:\nfree today\nDate defaults to today if omitted.\n\n";
+	public static final String HELP_SCHEDULE = "To add a task and automatically schedule it into a free period, use:\nschedule [task index] [duration] [date]\ne.g. schedule 3 1h30m tomorrow\nDate defaults to today if omitted.\n\n";
 
 	public static final HashMap<String, String> helpTopics = new HashMap<String, String>() {
 		/**

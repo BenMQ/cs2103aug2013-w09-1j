@@ -22,10 +22,7 @@ public class DisplayUtils {
 	private static final char SEPARATOR_CHAR = '=';
 
 	/**
-	 * Returns a pretty string representation of a task.
-	 * Reference: http://joda-time.sourceforge.net/apidocs/org/joda/time/
-	 * format/DateTimeFormat.html
-	 * 
+	 * Prints a pretty string representation of a Task.
 	 * @param Task
 	 */
 	public static void prettyPrint (Task task) {
@@ -73,15 +70,12 @@ public class DisplayUtils {
 			Task task) {
 		
 		DateTime time = task.getEndTime();
-
 		if(task.isTimedTask()){
 			time = task.getStartTime();
 		}
 		
-		
-		if (previousDate == null
-				|| time.getDayOfYear() != previousDate
-						.getDayOfYear()) {
+		if (previousDate == null || time.getDayOfYear() != 
+				previousDate.getDayOfYear()) {
 			previousDate = time;
 			DisplayUtils.printDateSeparator(previousDate);
 		}
@@ -179,15 +173,16 @@ public class DisplayUtils {
 	public static String formatTimedTask(Task task,
 			DateTimeFormatter onlytimeformat) {
 		if(task.isOnSameDay()){
-			return task.getId() + ". [" + task.getStartTime().
+			return new StringBuilder(task.getId() + ". [" + task.getStartTime().
 					toString(onlytimeformat) + " - "  
-					+ task.getEndTime().toString(onlytimeformat) + "] ";
+					+ task.getEndTime().toString(onlytimeformat) + 
+					"] ").toString();
 		}
 		
-		return task.getId() + ". [" + task.getStartTime().
+		return new StringBuilder(task.getId() + ". [" + task.getStartTime().
 				toString(onlytimeformat) + " - " 
 				+ task.getEndTime().toString(DATE_MONTH_FORMAT) + " " 
-				+ task.getEndTime().toString(onlytimeformat) + "] ";
+				+ task.getEndTime().toString(onlytimeformat) + "] ").toString();
 	}
 
 	/**
@@ -198,8 +193,8 @@ public class DisplayUtils {
 	 */		
 	public static String formatDeadlineTask(Task task,
 			DateTimeFormatter onlytimeformat) {
-		return task.getId() + ". [by " + task.getEndTime().
-				toString(onlytimeformat) + "] ";
+		return new StringBuilder(task.getId() + ". [by " + task.getEndTime().
+				toString(onlytimeformat) + "] ").toString();
 	}	
 	
 }

@@ -518,6 +518,10 @@ public class TaskManager {
             return;
         }
         
+        if (tasks.get(index).isComplete()) {
+            MainFrame.print_add(Constants.MESSAGE_ALREADY_COMPLETE, 2);
+            return;
+        }
         String description = tasks.get(index).getDescription();
 		ArrayList<DateTime> timeRange = TaskManagerUtils.getFlexibleTimeRange(dateTimes);
 		if (timeRange.get(0).isBefore(DateTime.now())) {

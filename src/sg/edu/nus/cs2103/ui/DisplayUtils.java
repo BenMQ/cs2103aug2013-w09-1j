@@ -48,7 +48,7 @@ public class DisplayUtils {
 			GUI.print_add(formatTimedTask(task, onlytimeformat), 4);
 			toReturn+=(formatTimedTask(task, onlytimeformat));
 			GUI.print_add(task.getDescription(), 0);
-			toReturn+=(formatTimedTask(task, onlytimeformat));
+			toReturn+=task.getDescription();
 			return toReturn;
 		}
 	}	

@@ -105,6 +105,43 @@ public class TaskManager {
 		storage.save(true);
 		return tasks;
 	}
+	
+	/**
+	 * Adds a task based on the number of date
+	 * arguments.
+	 * 
+	 * @param taskDescription
+	 *            The task description
+	 * @param dateTimes
+	 *            A list of DateTimes
+	 * @throws Exception
+	 */
+	public void add(String taskDescription,
+			ArrayList<DateTime> dateTimes) throws Exception {
+
+		if (taskDescription == null) {
+			MainFrame.print_add(Constants.MESSAGE_MISSING_DESCRIPTION,2);
+			return;
+		}
+
+		assert taskDescription != null;
+		int numOfDates = dateTimes.size();
+		if (numOfDates == 0) {
+			this.addTask(new FloatingTask(taskDescription));
+			MainFrame.print_add(String.format(Constants.MESSAGE_ADD_FLOATING, taskDescription),2);
+		} else if (numOfDates == 1) {
+			this.addTask(new DeadlineTask(taskDescription, dateTimes));
+			MainFrame.print_add(String.format(Constants.MESSAGE_ADD_DEADLINE, taskDescription,
+					DisplayUtils.formatDate(dateTimes.get(0))),2);
+		} else if (numOfDates == 2) {
+			this.addTask(new TimedTask(taskDescription, dateTimes));
+			MainFrame.print_add(String.format(Constants.MESSAGE_ADD_TIMED, taskDescription,
+					DisplayUtils.formatDate(dateTimes.get(0)),
+					DisplayUtils.formatDate(dateTimes.get(1))), 2);
+		} else {
+			MainFrame.print_add(Constants.MESSAGE_INVALID_NUMBER_OF_DATES, 2);
+		}
+	}	
 
 	/**
 	 * Replaces the task indicated by the displayId with the newTask Changes
@@ -182,25 +219,14 @@ public class TaskManager {
 			}
 			if (showAll || !task.isComplete) {
 
-				// Start of Day-level separators
 				if (!task.isComplete() && !task.isFloatingTask()) {
-					if (previousDate == null
-							|| task.getEndTime().getDayOfYear() != previousDate
-									.getDayOfYear()) {
-						previousDate = task.getEndTime();
-						DisplayUtils.printDaySeparator(previousDate);
-					}
+					previousDate = DisplayUtils.insertDateSeparators(previousDate, task);
 				} else {
-					if (!floatingStarted && task.isFloatingTask()) {
-						floatingStarted = true;
-						MainFrame.print_add(Constants.FLOATING_TASK_SEPARATOR,1);
-					}
-					if (!finishedStarted && task.isComplete()) {
-						finishedStarted = true;
-						MainFrame.print_add(Constants.FINISHED_TASK_SEPARATOR,1);
-					}
+					floatingStarted = DisplayUtils.insertFloatingSeparator(floatingStarted,
+							task);
+					finishedStarted = DisplayUtils.insertFinishedSeparator(finishedStarted,
+							task);
 				}
-				// End of Day-level separators
 
 				MainFrame.print_add("\n",0);
 				DisplayUtils.prettyPrint(task);

@@ -62,6 +62,10 @@ public abstract class Task {
 		return this.getStartTime() != null && this.isDeadlineTask();
 	}
 	
+	public boolean isOnSameDay(){
+		return this.getStartTime().getDayOfYear() == this.getEndTime().getDayOfYear();
+	}
+	
 	/**
 	 * Converts the task object into a string with the following format:
 	 * 1) Timed task: desc from x to y

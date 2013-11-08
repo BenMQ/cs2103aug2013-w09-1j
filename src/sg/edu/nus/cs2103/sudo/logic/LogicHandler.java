@@ -98,14 +98,8 @@ public final class LogicHandler {
 		try {
 			switch (userCommand) {
 			case INVALID:
-//				MainFrame.print_add(
-//						Constants.MESSAGE_INVALID_COMMAND, 3);
-//				return;
 				throw new InvalidCommandException();
 			case INCOMPLETE:
-//				MainFrame.print_add(
-//						Constants.MESSAGE_INCOMPLETE_COMMAND, 3);
-//				return;
 				throw new IncompleteCommandException();
 			case DISPLAY:
 				this.manager.displayAllTasks();
@@ -126,7 +120,8 @@ public final class LogicHandler {
 				this.manager.displayAllTasks();
 				return;
 			case ADD:
-				delegateAddTasks(taskDescription, dateTimes);
+				this.manager.add(taskDescription, dateTimes);
+				this.manager.displayAllTasks();
 				return;
 			case DELETE:;
 				delegateDelete(taskDescription, targetId);
@@ -178,6 +173,9 @@ public final class LogicHandler {
 		}
 	}
 
+	// TODO: Refactor below methods
+	
+	
 	/**
 	 * Delegates delete commands to the TaskManager delete API based on the
 	 * number of search results.
@@ -197,44 +195,6 @@ public final class LogicHandler {
 				this.manager.delete(id);
 			}
 		}
-	}
-
-	/**
-	 * Delegates to the TaskManager add API based on the number of date
-	 * arguments.
-	 * 
-	 * @param taskDescription
-	 *            The task description
-	 * @param dateTimes
-	 *            A list of DateTimes
-	 * @throws Exception
-	 */
-	public void delegateAddTasks(String taskDescription,
-			ArrayList<DateTime> dateTimes) throws Exception {
-
-		if (taskDescription == null) {
-			MainFrame.print_add(Constants.MESSAGE_MISSING_DESCRIPTION,2);
-			return;
-		}
-
-		assert taskDescription != null;
-		int numOfDates = dateTimes.size();
-		if (numOfDates == 0) {
-			this.manager.addTask(new FloatingTask(taskDescription));
-			MainFrame.print_add(String.format(Constants.MESSAGE_ADD_FLOATING, taskDescription),2);
-		} else if (numOfDates == 1) {
-			this.manager.addTask(new DeadlineTask(taskDescription, dateTimes));
-			MainFrame.print_add(String.format(Constants.MESSAGE_ADD_DEADLINE, taskDescription,
-					DisplayUtils.formatDate(dateTimes.get(0))),2);
-		} else if (numOfDates == 2) {
-			this.manager.addTask(new TimedTask(taskDescription, dateTimes));
-			MainFrame.print_add(String.format(Constants.MESSAGE_ADD_TIMED, taskDescription,
-					DisplayUtils.formatDate(dateTimes.get(0)),
-					DisplayUtils.formatDate(dateTimes.get(1))), 2);
-		} else {
-			MainFrame.print_add(Constants.MESSAGE_INVALID_NUMBER_OF_DATES, 2);
-		}
-		this.manager.displayAllTasks();
 	}
 
 }

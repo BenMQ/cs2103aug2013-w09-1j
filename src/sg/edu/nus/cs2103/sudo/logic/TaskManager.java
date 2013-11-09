@@ -104,7 +104,6 @@ public class TaskManager {
 		tasks.add(newTask);
 
 		TaskManagerUtils.sortAndUpdateIds(tasks);
-		//TaskManagerUtils.saveToHistory(storage);
 		storage.save(true);
 		return tasks;
 	}
@@ -181,7 +180,6 @@ public class TaskManager {
 
 		TaskManagerUtils.sortAndUpdateIds(tasks);
 		storage.save(true);
-		//TaskManagerUtils.saveToHistory(storage);
 		return tasks;
 	}
 
@@ -302,7 +300,6 @@ public class TaskManager {
 		
 		TaskManagerUtils.sortAndUpdateIds(tasks);
 		storage.save(true);
-		//TaskManagerUtils.saveToHistory(storage);
 
 		return tasks;
 	}
@@ -331,8 +328,6 @@ public class TaskManager {
 	
 		TaskManagerUtils.sortAndUpdateIds(tasks);
 		storage.save(true);
-		//TaskManagerUtils.saveToHistory(storage);
-
 		return tasks;
 	}
 
@@ -615,7 +610,6 @@ public class TaskManager {
 					TaskManagerUtils.sortAndUpdateIds(tasks);
 					
 					storage.save(true);
-                    //TaskManagerUtils.saveToHistory(storage);
 					
 					return;
 				} else {
@@ -692,17 +686,13 @@ public class TaskManager {
 		try {
 			tasks = (ArrayList<Task>) storage.undo().clone();
 			GUI.print_add(Constants.MESSAGE_UNDO,GUIConstants.COLOR_CODE_BLUE);
-			// saveTasks();
 		} catch (FileNotFoundException e) {
 			storage.rebuildHistory();
 			GUI.print_add(Constants.MESSAGE_HISTORY_LOAD_ERROR,GUIConstants.COLOR_CODE_RED);
 		} catch (NoHistoryException e) {
 			GUI.print_add(Constants.MESSAGE_LAST_HISTORY,GUIConstants.COLOR_CODE_BLUE);
-		} catch (IOException e) {
-			e.printStackTrace();
 		}
 		TaskManagerUtils.updateAllIds(tasks);
-		// return tasks;
 	}
 
 	/**
@@ -726,17 +716,15 @@ public class TaskManager {
 		try {
 			tasks = (ArrayList<Task>) storage.redo().clone();
 			GUI.print_add(Constants.MESSAGE_REDO,GUIConstants.COLOR_CODE_BLUE);
-			// saveTasks();
 		} catch (FileNotFoundException e) {
 			storage.rebuildHistory();
-			GUI.print_add(Constants.MESSAGE_HISTORY_LOAD_ERROR,GUIConstants.COLOR_CODE_RED);
+			GUI.print_add(Constants.MESSAGE_HISTORY_LOAD_ERROR,
+					GUIConstants.COLOR_CODE_RED);
 		} catch (NoHistoryException e) {
-			GUI.print_add(Constants.MESSAGE_LAST_HISTORY,GUIConstants.COLOR_CODE_BLUE);
-		} catch (IOException e) {
-			e.printStackTrace();
+			GUI.print_add(Constants.MESSAGE_LAST_HISTORY,
+					GUIConstants.COLOR_CODE_BLUE);
 		}
 		TaskManagerUtils.updateAllIds(tasks);
-		// return tasks;
 	}
 
 	//@author A0099317U
@@ -747,12 +735,14 @@ public class TaskManager {
 	 */
 	public void help(String topic) {
 		if (topic == null) {
-			GUI.print_add(HelpConstants.MESSAGE_WELCOME_HELP_PAGE,GUIConstants.COLOR_CODE_YELLOW);
+			GUI.print_add(HelpConstants.MESSAGE_WELCOME_HELP_PAGE,
+					GUIConstants.COLOR_CODE_YELLOW);
 		} else {
 			String helpMessage = HelpConstants.helpTopics.get(topic
 					.toUpperCase());
 			if (helpMessage == null) {
-				GUI.print_add(String.format(HelpConstants.HELP_NOT_FOUND, topic),GUIConstants.COLOR_CODE_RED);
+				GUI.print_add(String.format(HelpConstants.HELP_NOT_FOUND, topic),
+						GUIConstants.COLOR_CODE_RED);
 			} else {
 				GUI.print_add(helpMessage,GUIConstants.COLOR_CODE_YELLOW);
 			}
@@ -773,23 +763,6 @@ public class TaskManager {
 
 	public int getTaskNumber() {
 		return this.tasks.size();
-	}
-
-	public int getCompletedPercentage() {
-		int completed = 0;
-		for (Task t : tasks) {
-			if (t.isComplete) {
-				completed++;
-			}
-		}
-		if (this.tasks.size() == 0) {
-			return 0;
-		}
-		int toReturn = 100 * completed / this.tasks.size();
-		if (toReturn == 100) {
-			// GUI.print_add("You have finished all tasks!");
-		}
-		return toReturn;
 	}
 
 }

@@ -7,10 +7,8 @@ import java.util.Scanner;
 import org.joda.time.DateTime;
 
 import sg.edu.nus.cs2103.sudo.COMMAND_TYPE;
-import sg.edu.nus.cs2103.sudo.Constants;
 import sg.edu.nus.cs2103.sudo.exceptions.IncompleteCommandException;
 import sg.edu.nus.cs2103.sudo.exceptions.InvalidCommandException;
-import sg.edu.nus.cs2103.ui.DisplayUtils;
 import sg.edu.nus.cs2103.ui.GUI;
 import sg.edu.nus.cs2103.ui.GUIConstants;
 

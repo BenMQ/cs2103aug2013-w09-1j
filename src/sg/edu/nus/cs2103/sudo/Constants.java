@@ -74,6 +74,8 @@ public class Constants {
 
 	public static final DateTimeFormatter DATE_MONTH_FORMAT = 
 			DateTimeFormat.forPattern("EEE d MMM");
+	public static final DateTimeFormatter DATE_MONTH_YEAR_FORMAT = 
+			DateTimeFormat.forPattern("EEE d MMM y");
 	public static final DateTimeFormatter HOUR_FORMAT = 
 			DateTimeFormat.forPattern("ha");
 	public static final DateTimeFormatter HOUR_MINUTE_FORMAT = 

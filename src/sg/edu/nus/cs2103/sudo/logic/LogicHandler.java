@@ -171,9 +171,6 @@ public final class LogicHandler {
 		}
 	}
 
-	// TODO: Refactor below methods
-	
-	
 	/**
 	 * Delegates delete commands to the TaskManager delete API based on the
 	 * number of search results.

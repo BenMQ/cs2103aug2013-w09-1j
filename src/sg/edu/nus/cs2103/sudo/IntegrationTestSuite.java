@@ -200,7 +200,7 @@ public class IntegrationTestSuite {
 	@Test
 	public void testFinishTask() {
 		assert true;
-	}	
+	}
 	
 	@Test
 	public void testDisplayAll() {

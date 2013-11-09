@@ -170,7 +170,7 @@ public class IntegrationTestSuite {
 	// @author A0101286N
 	@Test
 	public void testSearch() throws IOException {
-		prepareTaskListForSearch();
+		prepareTaskListForTestSearch();
 
 		String userInput = "search 'nus'";
 		searchMultipleResults(userInput);
@@ -184,7 +184,7 @@ public class IntegrationTestSuite {
 		searchNoResults(userInput);
 	}
 
-	private void prepareTaskListForSearch() {
+	private void prepareTaskListForTestSearch() {
 		String userInput = "add 'submit proposal to tutor at NUS' " +
 				"by 26 October 6pm";
 		runCommand(userInput);
@@ -212,7 +212,7 @@ public class IntegrationTestSuite {
 				"to Sun 27 October 10:00 AM\n\n"; 
 		testCommand(userInput, expectedOutput);
 	}
-
+	
 	@Test
 	public void testSort() throws IOException {
 		String userInput = "add 'make dinner' by today 5pm"; 
@@ -220,7 +220,8 @@ public class IntegrationTestSuite {
 		
 		userInput = "add 'make lunch' by today 11am";
 		runCommand(userInput);
-		
+	
+		// equivalence partitioning: sorting by date
 		userInput = "all";
 		testCommand(userInput, "Displaying all tasks\n\n" +
 				"[Overdue: Sat 9 Nov]================================\n" +
@@ -230,6 +231,7 @@ public class IntegrationTestSuite {
 		userInput = "finish 1";
 		runCommand(userInput);
 		
+		// equivalence partitioning: sorting by incomplete tasks
 		userInput = "all";
 		testCommand(userInput, "Displaying all tasks\n\n" +
 				"[Today: Sat 9 Nov]==================================\n" +

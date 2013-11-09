@@ -80,7 +80,7 @@ public class IntegrationTestSuite {
 		String userInput = "add 'make waffles for breakfast'";
 		String taskDescription = InputParser.parseDescription(userInput);
 		String expectedOutput = String.format(Constants.MESSAGE_ADD_FLOATING,
-				taskDescription);
+				taskDescription)+"Remaining tasks:\n[Floating tasks]==========================\n1. make waffles for breakfast ";
 
 		testCommand(userInput, expectedOutput);
 		testStorageContent();
@@ -94,7 +94,7 @@ public class IntegrationTestSuite {
 				"dd MMMM hh:mm a");
 		String taskDescription = InputParser.parseDescription(userInput);
 		String expectedOutput = String.format(Constants.MESSAGE_ADD_DEADLINE,
-				taskDescription, endTime);
+				taskDescription, endTime)+"Remaining tasks:\n[Overdue: Mon 14 Oct]=====================\n1. [by 2PM] make waffles for breakfast ";
 
 		testCommand(userInput, expectedOutput);
 		testStorageContent();
@@ -110,8 +110,7 @@ public class IntegrationTestSuite {
 				"dd MMMM hh:mm a");
 		String taskDescription = InputParser.parseDescription(userInput);
 		String expectedOutput = String.format(Constants.MESSAGE_ADD_TIMED,
-				taskDescription, startTime, endTime);
-
+				taskDescription, startTime, endTime)+"Remaining tasks:\n[Overdue: Mon 14 Oct]=====================\n1. [2PM - Wed 16 Oct 2PM] make waffles for breakfast ";
 		testCommand(userInput, expectedOutput);
 		testStorageContent();
 	}	
@@ -123,7 +122,7 @@ public class IntegrationTestSuite {
 		String taskDescription = InputParser.parseDescription(userInput);
 		runCommand(userInput);
 		
-		String expectedOutput = String.format(Constants.MESSAGE_DELETE, taskDescription);
+		String expectedOutput = String.format(Constants.MESSAGE_DELETE+UIConstants.MESSAGE_EMPTY_LIST, taskDescription);
 		testCommand("remove 'waffle'", expectedOutput);		
 		
 		testStorageContent();
@@ -141,9 +140,9 @@ public class IntegrationTestSuite {
 		String taskDescription = InputParser.parseDescription(userInput);
 		runCommand(userInput);
 		
-		String expectedOutput = String.format(Constants.MESSAGE_DELETE, taskDescription);
+		String expectedOutput = String.format(Constants.MESSAGE_DELETE+UIConstants.MESSAGE_EMPTY_LIST, taskDescription);
 
-		testCommand("delete 'waffle'", expectedOutput);
+		testCommand("delete 'waffle'\n", expectedOutput);
 		testStorageContent();
 	}
 	
@@ -182,7 +181,7 @@ public class IntegrationTestSuite {
 				searchTerm);
 
 		testCommand(userInput, expectedOutput
-				+ "\nSearch Results\n1. submit proposal to tutor at NUS by Sat 26 October 06:00 PM\n2. have coffee with mentor in Nus from Sun 27 October 09:00 AM to Sun 27 October 10:00 AM\n");
+				+ "\nSearch Results\n1. submit proposal to tutor at NUS by Sat 26 October 06:00 PM\n2. have coffee with mentor in Nus from Sun 27 October 09:00 AM to Sun 27 October 10:00 AM");
 	}
 	
 	@Test
@@ -203,7 +202,7 @@ public class IntegrationTestSuite {
 	@Test 
 	public void testEmptyDisplay() throws IOException {
 		String userInput = "display";
-		testCommand(userInput, Constants.MESSAGE_DISPLAY+Constants.MESSAGE_EMPTY_LIST);
+		testCommand(userInput, Constants.MESSAGE_EMPTY_LIST);
 	}
 	
 	// Helper test method for operations not directly being tested

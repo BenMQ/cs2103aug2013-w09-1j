@@ -13,6 +13,7 @@ import org.joda.time.DateTime;
 
 import sg.edu.nus.cs2103.sudo.Constants;
 import sg.edu.nus.cs2103.sudo.StorageConstants;
+import sg.edu.nus.cs2103.sudo.UIConstants;
 import sg.edu.nus.cs2103.sudo.exceptions.MissingFileException;
 import sg.edu.nus.cs2103.sudo.exceptions.NoHistoryException;
 import sg.edu.nus.cs2103.sudo.logic.DeadlineTask;
@@ -20,6 +21,7 @@ import sg.edu.nus.cs2103.sudo.logic.FloatingTask;
 import sg.edu.nus.cs2103.sudo.logic.InputParser;
 import sg.edu.nus.cs2103.sudo.logic.Task;
 import sg.edu.nus.cs2103.sudo.logic.TimedTask;
+import sg.edu.nus.cs2103.ui.GUI;
 import sg.edu.nus.cs2103.ui.UI;
 
 public class StorageHandler {
@@ -114,7 +116,7 @@ public class StorageHandler {
 			}
 			return isReloaded;
 		} catch (FileNotFoundException e) {
-			UI.forcePrint("History file was removed or deleted.");
+			GUI.print_add(UIConstants.MESSAGE_NO_HISTORY, 4);
 			saveHistory();
 			e.printStackTrace();
 		} catch (IOException e) {

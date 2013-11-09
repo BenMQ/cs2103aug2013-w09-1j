@@ -184,16 +184,6 @@ public class TaskManagerUtils {
 	}
 
 	/**
-	 * Saves the task list to history and also saves the file. To be executed
-	 * after each operation is completed.
-	 * 
-	 * @throws IOException
-	 */
-	public static void saveToHistory(StorageHandler storage) throws IOException {
-		storage.save(true);
-	}
-
-	/**
 	 * Helper method to format the floating tasks nicely.
 	 * 
 	 * @param floatingTasks

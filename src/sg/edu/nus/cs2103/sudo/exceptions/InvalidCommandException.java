@@ -2,6 +2,7 @@ package sg.edu.nus.cs2103.sudo.exceptions;
 
 import sg.edu.nus.cs2103.sudo.Constants;
 
+//@author A0099317U
 public class InvalidCommandException extends Exception {
 	private static final long serialVersionUID = 1L;
 	private final String DEFAULT_MESSAGE = Constants.MESSAGE_INVALID_COMMAND;

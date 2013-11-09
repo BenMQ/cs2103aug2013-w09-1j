@@ -80,7 +80,7 @@ public class IntegrationTestSuite {
 		String userInput = "add 'make waffles for breakfast'";
 		String taskDescription = InputParser.parseDescription(userInput);
 		String expectedOutput = String.format(Constants.MESSAGE_ADD_FLOATING,
-				taskDescription)+"Remained tasks:\n[Floating tasks]==========================\n1. make waffles for breakfast ";
+				taskDescription)+"Remaining tasks:\n[Floating tasks]==========================\n1. make waffles for breakfast ";
 
 		testCommand(userInput, expectedOutput);
 		testStorageContent();
@@ -94,7 +94,7 @@ public class IntegrationTestSuite {
 				"dd MMMM hh:mm a");
 		String taskDescription = InputParser.parseDescription(userInput);
 		String expectedOutput = String.format(Constants.MESSAGE_ADD_DEADLINE,
-				taskDescription, endTime)+"Remained tasks:\n[Overdue: Mon 14 Oct]=====================\n1. [by 2PM] make waffles for breakfast ";
+				taskDescription, endTime)+"Remaining tasks:\n[Overdue: Mon 14 Oct]=====================\n1. [by 2PM] make waffles for breakfast ";
 
 		testCommand(userInput, expectedOutput);
 		testStorageContent();
@@ -110,7 +110,7 @@ public class IntegrationTestSuite {
 				"dd MMMM hh:mm a");
 		String taskDescription = InputParser.parseDescription(userInput);
 		String expectedOutput = String.format(Constants.MESSAGE_ADD_TIMED,
-				taskDescription, startTime, endTime)+"Remained tasks:\n[Overdue: Mon 14 Oct]=====================\n1. [2PM - Wed 16 Oct 2PM] make waffles for breakfast ";
+				taskDescription, startTime, endTime)+"Remaining tasks:\n[Overdue: Mon 14 Oct]=====================\n1. [2PM - Wed 16 Oct 2PM] make waffles for breakfast ";
 		testCommand(userInput, expectedOutput);
 		testStorageContent();
 	}	

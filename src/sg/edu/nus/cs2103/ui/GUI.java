@@ -55,7 +55,7 @@ public class GUI extends javax.swing.JFrame implements NativeKeyListener {
                 img = ImageIO.read(new File("MIKU.JPG"));
             } catch (IOException e) {
             }
-             g.drawImage(img, 0, 0, this);
+            //g.drawImage(img, 0, 0, this);
 
             super.paintComponent(g);
         }
@@ -148,9 +148,6 @@ public class GUI extends javax.swing.JFrame implements NativeKeyListener {
 			addNewStyle("Red",styledDoc,18,1,0,0,new java.awt.Color(254, 100, 100),"OCR A Std");//Error
 			addNewStyle("White",styledDoc,18,1,1,0,Color.WHITE,"OCR A Std");//ID and highlighted texts
 	    }
-	 
-	 
-	 
 	/**
 	 * GUI class builder. Initialize logicHandler, build text styles, then initialize GUI components.
 	 */	
@@ -329,7 +326,7 @@ public class GUI extends javax.swing.JFrame implements NativeKeyListener {
 			FloatingTextArea.setText(UIConstants.MESSAGE_EMPTY_LIST);
 		}
 		
-		//Layout setup, do not modify
+		//Layout setup - do not modify
 	    org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(

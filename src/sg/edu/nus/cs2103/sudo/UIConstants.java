@@ -17,5 +17,6 @@ public class UIConstants {
 //	public static final String MESSAGE_BETTER_ON_MAC = "\nTo get the best experience, we recommand Mac OS X.";
 	
 	public static final String MESSAGE_EMPTY_LIST = "Task List is empty!\n";
+	public static final String MESSAGE_NO_HISTORY = "History file was removed or deleted.";
 	
 }

@@ -216,7 +216,6 @@ public class IntegrationTestSuite {
 
 		userInput = "finish 1";
 		testCommand(userInput, Constants.MESSAGE_ALREADY_COMPLETE);
-
 	}
 
 	@Test

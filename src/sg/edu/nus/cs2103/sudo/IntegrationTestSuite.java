@@ -200,8 +200,31 @@ public class IntegrationTestSuite {
 	}
 
 	@Test
-	public void testSort() {
-		assert true;
+	public void testSort() throws IOException {
+		String userInput = "add 'make dinner' by today 5pm"; 
+		runCommand(userInput);
+		
+		userInput = "add 'make lunch' by today 11am";
+		runCommand(userInput);
+		
+		userInput = "all";
+		testCommand(userInput, "Displaying all tasks\n\n" +
+				"[Overdue: Sat 9 Nov]================================\n" +
+				"1. [by 11AM] make lunch \n" +
+				"2. [by 5PM] make dinner ");
+		
+		userInput = "finish 1";
+		runCommand(userInput);
+		
+		userInput = "all";
+		testCommand(userInput, "Displaying all tasks\n\n" +
+				"[Today: Sat 9 Nov]==================================\n" +
+				"1. [by 5PM] make dinner \n\n" +
+				"[Finished tasks]====================================\n" +
+				"2. [by 11AM] make lunch Done!");
+		
+		
+		
 	}
 
 	@Test
@@ -252,7 +275,7 @@ public class IntegrationTestSuite {
 		testCommand(userInput, "Displaying all tasks\n\n" +
 				"[Tomorrow: Sun 10 Nov]==============================\n" +
 				"1. [by 9PM] make waffles \n\n" +
-				"[Finished tasks]====================================\n\n" +
+				"[Finished tasks]====================================\n" +
 				"2. [7PM - 9PM] do assignment for 2103 Done!");
 	}
 

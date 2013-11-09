@@ -233,14 +233,25 @@ public class IntegrationTestSuite {
 		userInput = "unfinish 1";
 		testCommand(userInput, "Un-Finished task: make waffles for breakfast\n"
 				+ "Remaining tasks:\n"
-				+ "[Tomorrow: Sun 10 Nov]=============================="
+				+ "[Tomorrow: Sun 10 Nov]==============================\n"
 				+ "1. [by 2PM] make waffles for breakfast ");
-
 	}
 
 	@Test
-	public void testDisplayAll() {
-		assert true;
+	public void testDisplayAll() throws IOException {
+		String userInput = "add 'make waffles' by tomorrow 9pm"; 
+		runCommand(userInput);
+		userInput = "add 'do assignment for 2103' from today 7pm to 9pm";
+		runCommand(userInput);
+		userInput = "finish 1";
+		runCommand(userInput);
+				
+		userInput = "all";
+		testCommand(userInput, "Displaying all tasks\n\n" +
+				"[Tomorrow: Sun 10 Nov]==============================\n" +
+				"1. [by 9PM] make waffles \n\n" +
+				"[Finished tasks]====================================\n\n" +
+				"2. [7PM - 9PM] do assignment for 2103 Done!");
 	}
 
 	@Test

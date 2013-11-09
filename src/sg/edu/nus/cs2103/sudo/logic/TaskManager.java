@@ -217,7 +217,7 @@ public class TaskManager {
 		boolean floatingStarted = false;
 		boolean finishedStarted = false;
 
-		TaskManagerUtils.showDisplayMessage(showAll);
+		TaskManagerUtils.showDisplayMessage(tasks, showAll);
 
 		for (int i = 0; i < tasks.size(); i++) {
 

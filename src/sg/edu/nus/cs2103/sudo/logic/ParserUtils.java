@@ -12,7 +12,6 @@ import org.joda.time.format.PeriodParser;
 
 import sg.edu.nus.cs2103.sudo.AliasConstants;
 import sg.edu.nus.cs2103.sudo.COMMAND_TYPE;
-import sg.edu.nus.cs2103.sudo.Constants;
 
 import com.joestelmach.natty.DateGroup;
 

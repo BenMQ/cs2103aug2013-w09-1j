@@ -1,14 +1,12 @@
 package sg.edu.nus.cs2103.sudo.logic;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 
 import org.joda.time.DateTime;
-import org.joda.time.DateTimeComparator;
 
 import sg.edu.nus.cs2103.sudo.Constants;
-import sg.edu.nus.cs2103.sudo.storage.StorageHandler;
+
 import sg.edu.nus.cs2103.ui.DisplayUtils;
 import sg.edu.nus.cs2103.ui.GUI;
 import sg.edu.nus.cs2103.ui.GUIConstants;
@@ -18,7 +16,7 @@ import sg.edu.nus.cs2103.ui.GUIConstants;
  * This class contains static methods that help execute some of the methods in
  * TaskManager.
  * 
- * @author A0101286N
+ * @author Ipsita Mohapatra
  * 
  */
 public class TaskManagerUtils {
@@ -397,4 +395,16 @@ public class TaskManagerUtils {
 		}
 		return toReturn;
 	}
+	
+	//@author A0105656E
+	/**
+	 * Transfer all tasks from one ArrayList to another ArrayList
+	 **/
+	public static void transferTasks(ArrayList<Task> from, ArrayList<Task> to) {
+		to.clear();
+		for(Task t:from){
+			to.add(t);
+		}
+	}
+	
 }

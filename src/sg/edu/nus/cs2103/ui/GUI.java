@@ -313,7 +313,7 @@ public class GUI extends javax.swing.JFrame implements NativeKeyListener {
 			FloatingTextArea.setText("Floating tasks:\n\n"+
 					manager.displayFloatingTasks());
 		} catch (IllegalStateException e) {
-			FloatingTextArea.setText(Constants.MESSAGE_EMPTY_LIST);
+			FloatingTextArea.setText(e.getMessage());
 		}
 		
 		//Layout setup - do not modify

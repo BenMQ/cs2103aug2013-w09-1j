@@ -440,19 +440,19 @@ public class TaskManager {
 				if (noSlotsFound) {
 					GUI.print_add(
 					        String.format(Constants.MESSAGE_FREE_SLOTS_PREFIX,
-					        timeRange.get(0).toString("dd MMMM")),1);
+					        timeRange.get(0).toString("dd MMMM")), 1);
 					
 					noSlotsFound = false;
 				}
 				String output = interval.getStart().toString("hh:mm a")
 						+ " to "
 						+ interval.getEnd().toString("hh:mm a");
-				GUI.print_add(output,1);
+				GUI.print_add(output, 1);
 				
 			}
 		}
 		if (noSlotsFound) {
-			GUI.print_add(Constants.MESSAGE_NO_FREE_SLOTS,3);
+			GUI.print_add(Constants.MESSAGE_NO_FREE_SLOTS, 3);
 		}
 	}
 
@@ -571,14 +571,10 @@ public class TaskManager {
 			DateTime startDay2300;
 			DateTime nextDay0800;
 
-			while (candidate.toDurationMillis() >= 2 * 60 * 60 * 1000) {
+			while (candidate.toDurationMillis() >= duration) {
 				start = candidate.getStart();
-				startDay0800 = new DateTime(start.getYear(),
-				                            start.getMonthOfYear(),
-				                            start.getDayOfMonth(), 8, 0, 0);
-				startDay2300 = new DateTime(start.getYear(),
-				                            start.getMonthOfYear(),
-				                            start.getDayOfMonth(), 23, 0, 0);
+				startDay0800 = getStartOfWorkingHours(start);
+				startDay2300 = getEndOfWorkingHours(start);
 				nextDay0800 = startDay0800.plusDays(1);
 				try {
 					if (start.isBefore(startDay0800)) {
@@ -603,7 +599,7 @@ public class TaskManager {
 					TaskManagerUtils.editTaskHelper(null, range, index, tasks);
 					GUI.print_add(String.format(Constants.MESSAGE_ADD_TIMED,
 							description, DisplayUtils.formatDate(start),
-							DisplayUtils.formatDate(end)),1);
+							DisplayUtils.formatDate(end)), 1);
 					
 					TaskManagerUtils.sortAndUpdateIds(tasks);
 					
@@ -616,8 +612,20 @@ public class TaskManager {
 				}
 			}
 		}
-		GUI.print_add(Constants.MESSAGE_NO_FREE_SLOTS,3);
+		GUI.print_add(Constants.MESSAGE_NO_FREE_SLOTS, 3);
 	}
+
+    public DateTime getEndOfWorkingHours(DateTime start) {
+        return new DateTime(start.getYear(),
+                                    start.getMonthOfYear(),
+                                    start.getDayOfMonth(), 23, 0, 0);
+    }
+
+    public DateTime getStartOfWorkingHours(DateTime start) {
+        return new DateTime(start.getYear(),
+                                    start.getMonthOfYear(),
+                                    start.getDayOfMonth(), 8, 0, 0);
+    }
 
 	
 	//@author A0101286N 

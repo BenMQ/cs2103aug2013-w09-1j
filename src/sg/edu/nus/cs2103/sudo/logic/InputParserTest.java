@@ -8,6 +8,7 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import sg.edu.nus.cs2103.sudo.COMMAND_TYPE;
 import sg.edu.nus.cs2103.sudo.Constants;
 import sg.edu.nus.cs2103.sudo.logic.InputParser;
 import org.joda.time.DateTime;
@@ -37,19 +38,19 @@ public class InputParserTest {
 	
 	@Test
 	public void testParseStringDate(){
-		ArrayList<DateTime> dates = InputParser.parseDateTime("fake 'fake' 2013-10-14T14:00 to 2013-10-14T16:00");
+		ArrayList<DateTime> dates = InputParser.parseDateTime("fake 'fake' 2013-10-14T14:00 to 2013-10-14T16:00", COMMAND_TYPE.INVALID);
 		assertEquals(2, dates.size());		
 	}
 	
 	@Test
 	public void testParseOneDate() {
-		ArrayList<DateTime> dates = InputParser.parseDateTime("add 'finish homework' by 29 december");
+		ArrayList<DateTime> dates = InputParser.parseDateTime("add 'finish homework' by 29 december", COMMAND_TYPE.ADD);
 		assertEquals(1, dates.size());
 	}
 	
 	@Test
 	public void testParseTwoDates() {
-		ArrayList<DateTime> dates = InputParser.parseDateTime("add 'golf' from the day before next thursday to 19 december");
+		ArrayList<DateTime> dates = InputParser.parseDateTime("add 'golf' from the day before next thursday to 19 december", COMMAND_TYPE.ADD);
 		assertEquals(2, dates.size());
 	}
 
@@ -98,7 +99,7 @@ public class InputParserTest {
 	public void testParseAddDeadlineTask() throws IOException{
 		String userInput = "add 'make waffles for breakfast' by Monday 14 October 2pm";
 		String taskDescription = InputParser.parseDescription(userInput);
-		ArrayList<DateTime> dateTimes = InputParser.parseDateTime(userInput);
+		ArrayList<DateTime> dateTimes = InputParser.parseDateTime(userInput, COMMAND_TYPE.ADD);
 		String endTime = dateTimes.get(0).toString(
 				"EEE dd MMMM hh:mm a");
 		String expectedOutput = String.format(Constants.MESSAGE_ADD_DEADLINE, taskDescription, endTime);
@@ -111,7 +112,7 @@ public class InputParserTest {
 	public void testParseAddTimedTask() throws IOException{
 		String userInput = "add 'make waffles for breakfast' from 13 October to 14 October 2pm";
 		String taskDescription = InputParser.parseDescription(userInput);
-		ArrayList<DateTime> dateTimes = InputParser.parseDateTime(userInput);
+		ArrayList<DateTime> dateTimes = InputParser.parseDateTime(userInput, COMMAND_TYPE.ADD);
 		String startTime = dateTimes.get(0).toString(
 				"EEE dd MMMM hh:mm a");
 		String endTime = dateTimes.get(1).toString(

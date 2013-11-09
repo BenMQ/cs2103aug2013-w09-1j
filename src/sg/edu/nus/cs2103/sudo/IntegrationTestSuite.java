@@ -90,7 +90,7 @@ public class IntegrationTestSuite {
 	@Test
 	public void testAddDeadlineTask() throws IOException {
 		String userInput = "add 'make waffles for breakfast' by Monday 14 October 2pm";
-		ArrayList<DateTime> dateTimes = InputParser.parseDateTime(userInput);
+		ArrayList<DateTime> dateTimes = InputParser.parseDateTime(userInput, COMMAND_TYPE.ADD);
 		String endTime = dateTimes.get(0).toString(
 				"dd MMMM hh:mm a");
 		String taskDescription = InputParser.parseDescription(userInput);
@@ -104,7 +104,7 @@ public class IntegrationTestSuite {
 	@Test
 	public void testTimedTask() throws IOException {
 		String userInput = "add 'make waffles for breakfast' from Monday 14 October 2pm to Wednesday 16 October";
-		ArrayList<DateTime> dateTimes = InputParser.parseDateTime(userInput);
+		ArrayList<DateTime> dateTimes = InputParser.parseDateTime(userInput, COMMAND_TYPE.ADD);
 		String startTime = dateTimes.get(0).toString(
 				"dd MMMM hh:mm a");
 		String endTime = dateTimes.get(1).toString(

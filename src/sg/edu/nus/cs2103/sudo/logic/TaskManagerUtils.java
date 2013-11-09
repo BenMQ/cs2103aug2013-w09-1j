@@ -267,7 +267,7 @@ public class TaskManagerUtils {
      * @param dateTimes DateTimes parsed from the input
      * @param index parsed index from the input
      */
-    public static boolean validateScheduleParameters(long duration,
+    public static boolean validateScheduleParams(long duration,
             ArrayList<DateTime> dateTimes, int index, ArrayList<Task> tasks) {
         try {
             TaskManagerUtils.checkValidityIndex(index, tasks);  

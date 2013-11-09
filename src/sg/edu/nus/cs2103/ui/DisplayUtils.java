@@ -40,11 +40,11 @@ public class DisplayUtils {
 	public static String addPrefix(int previousDay) {
 		String prefix = "";
 		if (previousDay < DateTime.now().getDayOfYear()) {
-			prefix = Constants.OVERDUE_PREFIX;
+			prefix = GUIConstants.OVERDUE_PREFIX;
 		} else if (previousDay == DateTime.now().getDayOfYear()) {
-			prefix = Constants.TODAY_PREFIX;
+			prefix = GUIConstants.TODAY_PREFIX;
 		} else if (previousDay == (DateTime.now().getDayOfYear() + 1)) {
-			prefix = Constants.TOMORROW_PREFIX;
+			prefix = GUIConstants.TOMORROW_PREFIX;
 		}
 		return prefix;
 	}	

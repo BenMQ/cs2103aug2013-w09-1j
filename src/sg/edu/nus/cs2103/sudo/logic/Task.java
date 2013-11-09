@@ -105,6 +105,6 @@ public abstract class Task {
 	
 	public abstract String toStringForFile();
 	
-	
+	public abstract String getAddMessage();
 	
 }

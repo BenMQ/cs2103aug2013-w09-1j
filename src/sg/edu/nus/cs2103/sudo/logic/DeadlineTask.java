@@ -7,6 +7,9 @@ import java.util.ArrayList;
 
 import org.joda.time.DateTime;
 
+import sg.edu.nus.cs2103.sudo.Constants;
+import sg.edu.nus.cs2103.ui.DisplayUtils;
+
 
 /**
  * @author Ipsita Mohapatra A0101286N
@@ -44,4 +47,10 @@ public class DeadlineTask extends Task {
 		return "DEADLINE" + "#" + description + "#" + returnedEndTime + "#"
 				+ isComplete;
 	}
+	
+	public String getAddMessage() {
+		return String.format(Constants.MESSAGE_ADD_DEADLINE, 
+				this.description,
+				DisplayUtils.formatDate(this.endTime));
+	}	
 }

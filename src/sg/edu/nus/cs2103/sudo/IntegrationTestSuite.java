@@ -166,7 +166,8 @@ public class IntegrationTestSuite {
 		assertEquals("1. [8AM - 12PM] make waffles for lunch",
 				DisplayUtils.prettyPrint(task));
 	}
-
+	
+	// @author A0101286N
 	@Test
 	public void testSearch() throws IOException {
 		String userInput = "add 'submit proposal to tutor at NUS' " +

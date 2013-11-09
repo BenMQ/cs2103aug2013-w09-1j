@@ -106,7 +106,6 @@ public class TaskManager {
 		tasks.add(newTask);
 
 		TaskManagerUtils.sortAndUpdateIds(tasks);
-		storage.save(true);
 		return tasks;
 	}
 	
@@ -150,6 +149,7 @@ public class TaskManager {
 					GUIConstants.COLOR_CODE_BLUE);
 			
 		}
+		storage.save(true);
 	}	
 
 	/**
@@ -685,7 +685,7 @@ public class TaskManager {
 	 */
 	public void undo() {
 		try {
-			tasks = (ArrayList<Task>) storage.undo().clone();
+			tasks=storage.undo();
 			GUI.print_add(Constants.MESSAGE_UNDO,GUIConstants.COLOR_CODE_BLUE);
 		} catch (FileNotFoundException e) {
 			storage.rebuildHistory();
@@ -713,7 +713,7 @@ public class TaskManager {
 	 */
 	public void redo() {
 		try {
-			tasks = (ArrayList<Task>) storage.redo().clone();
+			tasks=storage.redo();
 			GUI.print_add(Constants.MESSAGE_REDO,GUIConstants.COLOR_CODE_BLUE);
 		} catch (FileNotFoundException e) {
 			storage.rebuildHistory();

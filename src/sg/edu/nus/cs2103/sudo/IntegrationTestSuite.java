@@ -237,7 +237,6 @@ public class IntegrationTestSuite {
 
 	}
 
->>>>>>> other
 	@Test
 	public void testDisplayAll() {
 		assert true;

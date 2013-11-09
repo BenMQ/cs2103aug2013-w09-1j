@@ -239,14 +239,13 @@ public class TaskManager {
 		ArrayList<FloatingTask> floatingTasks = TaskManagerUtils
 				.getFloatingTasks(tasks);
 
-		if (floatingTasks.isEmpty()) {
-			throw new IllegalStateException(Constants.MESSAGE_NO_FLOATING_TASKS);
-		}
+		TaskManagerUtils.checkEmptyFloatingList(floatingTasks);
 
 		String toReturn = TaskManagerUtils.formatFloatingTasks(floatingTasks);
 		return toReturn;
 	}
 
+	
 	/**
 	 * Mark an incomplete task as completed.
 	 * 

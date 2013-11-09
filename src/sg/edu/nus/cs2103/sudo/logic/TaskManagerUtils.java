@@ -87,15 +87,19 @@ public class TaskManagerUtils {
 		return task;
 	}
 
-	/**
-	 * To check if the task list is empty. If yes, throw exception.
-	 */
 	public static void checkEmptyList(ArrayList<Task> list)
 			throws IllegalStateException {
 		if (list.isEmpty()) {
 			throw new IllegalStateException(Constants.MESSAGE_EMPTY_LIST);
 		}
 	}
+	
+	public static void checkEmptyFloatingList(ArrayList<FloatingTask> floatingTasks) {
+		if (floatingTasks.isEmpty()) {
+			throw new IllegalStateException(Constants.MESSAGE_NO_FLOATING_TASKS);
+		}
+	}
+
 
 	/**
 	 * Checks for the validity of the index used in operations. If invalid,

@@ -1,16 +1,13 @@
 package sg.edu.nus.cs2103.sudo.logic;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 import org.joda.time.DateTime;
 
 import sg.edu.nus.cs2103.sudo.COMMAND_TYPE;
-import sg.edu.nus.cs2103.sudo.Constants;
 import sg.edu.nus.cs2103.sudo.exceptions.IncompleteCommandException;
 import sg.edu.nus.cs2103.sudo.exceptions.InvalidCommandException;
-import sg.edu.nus.cs2103.ui.DisplayUtils;
 import sg.edu.nus.cs2103.ui.GUI;
 import sg.edu.nus.cs2103.ui.GUIConstants;
 
@@ -125,7 +122,11 @@ public final class LogicHandler {
 				this.manager.displayAllTasks();
 				return;
 			case DELETE:;
-				delegateDelete(taskDescription, targetId);
+				if (taskDescription == null) {
+					this.manager.delete(targetId);
+				} else {
+					this.manager.delete(taskDescription);
+				}
 				this.manager.displayAllTasks();
 				return;
 			case EDIT:
@@ -168,22 +169,6 @@ public final class LogicHandler {
 			}		
 		} catch (Exception e) {
 			GUI.print_add(e.getMessage(), GUIConstants.COLOR_CODE_RED);
-		}
-	}
-
-	/**
-	 * Delegates delete commands to the TaskManager delete API based on the
-	 * number of search results.
-	 * 
-	 * @param taskDescription
-	 * @throws IOException
-	 */
-	public void delegateDelete(String taskDescription, int targetId)
-			throws IOException {
-		if (taskDescription == null) {
-			this.manager.delete(targetId);
-		} else {
-			this.manager.delete(taskDescription);
 		}
 	}
 

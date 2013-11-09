@@ -311,14 +311,15 @@ public class IntegrationTestSuite {
 
 	@Test
 	public void testDisplayAll() throws IOException {
-		String userInput = "add 'make waffles' by tomorrow 9pm"; 
-		runCommand(userInput);
-		userInput = "add 'do assignment for 2103' from today 7pm to 9pm";
-		runCommand(userInput);
-		userInput = "finish 1";
-		runCommand(userInput);
+		String userInput;
+		prepareTaskListForTestDisplayAll();
 				
 		userInput = "all";
+		displayIncompleteAndCompleteTasks(userInput);
+	}
+
+	private void displayIncompleteAndCompleteTasks(String userInput)
+			throws IOException {
 		testCommand(userInput, "Displaying all tasks\n\n" +
 				"[Tomorrow: Sun 10 Nov]==============================\n" +
 				"1. [by 9PM] make waffles \n\n" +
@@ -326,8 +327,18 @@ public class IntegrationTestSuite {
 				"2. [7PM - 9PM] do assignment for 2103 Done!");
 	}
 
+	private void prepareTaskListForTestDisplayAll() {
+		String userInput = "add 'make waffles' by tomorrow 9pm"; 
+		runCommand(userInput);
+		userInput = "add 'do assignment for 2103' from today 7pm to 9pm";
+		runCommand(userInput);
+		userInput = "finish 1";
+		runCommand(userInput);
+	}
+
 	@Test
 	public void testEmptyDisplay() throws IOException {
+		// boundary case: display when task list is empty
 		String userInput = "display";
 		testCommand(userInput, Constants.MESSAGE_EMPTY_LIST);
 	}

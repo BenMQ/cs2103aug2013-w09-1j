@@ -422,11 +422,7 @@ public class TaskManager {
 			return;
 		}
 
-		ArrayList<DateTime> timeRange = 
-		        TaskManagerUtils.getFlexibleTimeRange(dateTimes);
-		if (timeRange.get(0).isBefore(DateTime.now())) {
-            timeRange.set(0, DateTime.now());
-        }
+		ArrayList<DateTime> timeRange = getTimeRangeFromNow(dateTimes);
 		ArrayList<MutableInterval> free = getFreeIntervals(timeRange);
 		boolean noSlotsFound = true;
 
@@ -551,24 +547,19 @@ public class TaskManager {
 	                         ArrayList<DateTime> dateTimes) throws Exception {
         int index = taskId - 1;
         
-        TaskManagerUtils.validateScheduleParameters(duration, dateTimes,
-                                                    index, tasks);
+        boolean valid = TaskManagerUtils
+                .validateScheduleParams(duration, dateTimes, index, tasks);
         
-        String description = tasks.get(index).getDescription();
+        if (!valid) {
+            return;
+        }
         
-		ArrayList<DateTime> timeRange = 
-		        TaskManagerUtils.getFlexibleTimeRange(dateTimes);
+		ArrayList<DateTime> timeRange = getTimeRangeFromNow(dateTimes);
 		
-		if (timeRange.get(0).isBefore(DateTime.now())) {
-		    timeRange.set(0, DateTime.now());
-		}
 		ArrayList<MutableInterval> free = getFreeIntervals(timeRange);
 		for (int i = 0; i < free.size(); i++) {
 			MutableInterval candidate = free.get(i);
-			DateTime start;
-			DateTime startDay0800;
-			DateTime startDay2300;
-			DateTime nextDay0800;
+			DateTime start, startDay0800, startDay2300, nextDay0800;
 
 			while (candidate.toDurationMillis() >= duration) {
 				start = candidate.getStart();
@@ -588,33 +579,62 @@ public class TaskManager {
 					break;
 				}
 				DateTime end = start.plusMillis((int) duration);
-				
 				if (!end.isAfter(startDay2300)) {
-					ArrayList<DateTime> range = new ArrayList<DateTime>(2);
-					range.add(start);
-					
-					range.add(end);
-					
-					TaskManagerUtils.editTaskHelper(null, range, index, tasks);
-					GUI.print_add(String.format(
-					                Constants.MESSAGE_ADD_TIMED,
-        							description, DisplayUtils.formatDate(start),
-        							DisplayUtils.formatDate(end)),
-							GUIConstants.COLOR_CODE_YELLOW);
-					
-					TaskManagerUtils.sortAndUpdateIds(tasks);
-					
-					storage.save(true);
-					
+					scheduleTaskWithDetails(index, start, end);
 					return;
 				} else {
 					break;
 				}
 			}
 		}
-		GUI.print_add(Constants.MESSAGE_NO_FREE_SLOTS,
+		GUI.print_add(Constants.MESSAGE_NO_FREE_SLOTS, 
 		              GUIConstants.COLOR_CODE_RED);
 	}
+	
+	/**
+	 * Gets a time range that is strictly after the current time. See also
+	 * getFlexibleTimeRange
+	 * @param dateTimes an array of no more than 2 elements.
+	 * @return a pair of DateTimes that indicates a time range
+	 */
+    public ArrayList<DateTime> getTimeRangeFromNow(
+            ArrayList<DateTime> dateTimes) {
+        
+        ArrayList<DateTime> timeRange = 
+		        TaskManagerUtils.getFlexibleTimeRange(dateTimes);
+		
+		if (timeRange.get(0).isBefore(DateTime.now())) {
+		    timeRange.set(0, DateTime.now());
+		}
+        return timeRange;
+    }
+	
+	/**
+	 * Schedule a task into the specified start and end time period
+	 * @param index internal index of the task
+	 * @param start start time of the intended slot 
+	 * @param end end time of the intended slot
+	 * @throws IOException
+	 */
+    public void scheduleTaskWithDetails(int index,
+            DateTime start, DateTime end) throws IOException {
+        ArrayList<DateTime> range = new ArrayList<DateTime>(2);
+        range.add(start);
+        range.add(end);
+        
+        String description = tasks.get(index).getDescription();
+        
+        TaskManagerUtils.editTaskHelper(null, range, index, tasks);
+        GUI.print_add(String.format(
+                        Constants.MESSAGE_ADD_TIMED,
+        				description, DisplayUtils.formatDate(start),
+        				DisplayUtils.formatDate(end)),
+        		GUIConstants.COLOR_CODE_YELLOW);
+        
+        TaskManagerUtils.sortAndUpdateIds(tasks);
+        
+        storage.save(true);
+    }
 
     public DateTime getEndOfWorkingHours(DateTime start) {
         return new DateTime(start.getYear(),

@@ -157,8 +157,6 @@ public final class LogicHandler {
 			case HELP:
 				this.manager.help(taskDescription);
 				return;
-			case PASS:
-				return;
 			case EXIT:
 				this.manager.saveTasks();
 				System.exit(0);

@@ -133,6 +133,11 @@ public class IntegrationTestSuite {
 	}
 
 	@Test
+	public void testDeleteInvalidId(){
+		assert true;
+	}
+	
+	@Test
 	public void testPrettyPrint() throws IOException {
 		String userInput = "add 'make waffles for lunch' from 14 October 10am to 14 October 2pm";
 		runCommand(userInput);
@@ -164,10 +169,12 @@ public class IntegrationTestSuite {
 
 	@Test
 	public void testSearch() throws IOException {
-		String userInput = "add 'submit proposal to tutor at NUS' by 26 October 6pm";
+		String userInput = "add 'submit proposal to tutor at NUS' " +
+				"by 26 October 6pm";
 		runCommand(userInput);
 
-		userInput = "add 'have coffee with mentor in Nus' from 27 Oct 9am to 27 Oct 10am";
+		userInput = "add 'have coffee with mentor in Nus' from " +
+				"27 Oct 9am to 27 Oct 10am";
 		runCommand(userInput);
 
 		userInput = "search 'nus'";
@@ -178,7 +185,10 @@ public class IntegrationTestSuite {
 		testCommand(
 				userInput,
 				expectedOutput
-						+ "\nSearch Results\n1. submit proposal to tutor at NUS by Sat 26 October 06:00 PM\n2. have coffee with mentor in Nus from Sun 27 October 09:00 AM to Sun 27 October 10:00 AM");
+						+ "\nSearch Results\n1. submit proposal to tutor " +
+						"at NUS by Sat 26 October 06:00 PM\n2. have coffee " +
+						"with mentor in Nus from Sun 27 October 09:00 AM " +
+						"to Sun 27 October 10:00 AM");
 	}
 
 	@Test
@@ -204,9 +214,6 @@ public class IntegrationTestSuite {
 				"1. [by 5PM] make dinner \n\n" +
 				"[Finished tasks]====================================\n" +
 				"2. [by 11AM] make lunch Done!");
-		
-		
-		
 	}
 
 	@Test
@@ -266,14 +273,22 @@ public class IntegrationTestSuite {
 		String userInput = "display";
 		testCommand(userInput, Constants.MESSAGE_EMPTY_LIST);
 	}
-
-	// Helper test method for operations not directly being tested
+	
+	//@author A0099317U
+	/**
+	 * Helper test method for operations not currently
+	 * being tested.
+	 * @param String
+	 */			
 	public void runCommand(String userInput) {
 		logicHandler.executeCommand(userInput);
 		outContent.reset();
 	}
 
-	// Helper test method to also test console output
+	/**
+	 * Helper test method to also test console output.
+	 * @param String
+	 */	
 	private void testCommand(String userInput, String expectedOutput)
 			throws IOException {
 		logicHandler.executeCommand(userInput);
@@ -281,7 +296,10 @@ public class IntegrationTestSuite {
 		outContent.reset();
 	}
 
-	// Helper test method to automatically test storage content
+	/**
+	 * Helper test method to test storage content.
+	 * @param String
+	 */	
 	public void testStorageContent() throws FileNotFoundException, IOException {
 		savefile_reader = new BufferedReader(new FileReader(SAVE_FILENAME));
 		for (Task task : manager.getTasks()) {

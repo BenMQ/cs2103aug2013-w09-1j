@@ -105,6 +105,7 @@ public abstract class Task {
 	
 	public abstract String toStringForFile();
 	
+	//@author A0099317U
 	public abstract String getAddMessage();
 	
 	public abstract String getDateString();

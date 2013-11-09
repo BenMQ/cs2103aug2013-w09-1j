@@ -164,7 +164,7 @@ public final class LogicHandler {
 			default:
 				assert false; //Invalid commands are caught.
 				return;
-			}		
+			}
 		} catch (Exception e) {
 			GUI.print_add(e.getMessage(), GUIConstants.COLOR_CODE_RED);
 		}

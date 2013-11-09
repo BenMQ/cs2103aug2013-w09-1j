@@ -15,18 +15,16 @@ public class DisplayUtils {
 	 * Prints a pretty string representation of a Task.
 	 * @param Task
 	 */
-	public static String prettyPrint (Task task) {		
-		if (task.getStartTime() == null && task.getEndTime() == null) {
-			return GUI.print_add(task.getId() + 
-					". ", GUIConstants.COLOR_CODE_WHITE) + 
-					GUI.print_add(task.getDescription(), 
-							GUIConstants.COLOR_CODE_GREEN);
-		} else {
-			return GUI.print_add(task.getDateString(), 
-					GUIConstants.COLOR_CODE_WHITE) + 
-					GUI.print_add(task.getDescription(), 
-							GUIConstants.COLOR_CODE_GREEN);
-		}
+	public static String prettyPrint (Task task) {
+		String taskString = task.getDateString();
+		if (task.isFloatingTask()) {
+			taskString = task.getId() + ". ";
+		} 
+		
+		return GUI.print_add(taskString, 
+				GUIConstants.COLOR_CODE_WHITE) + 
+				GUI.print_add(task.getDescription(), 
+						GUIConstants.COLOR_CODE_GREEN);
 	}	
 	
 	/**
@@ -35,15 +33,18 @@ public class DisplayUtils {
 	 * @param int
 	 */	
 	public static String addPrefix(DateTime previousDate) {
+		String prefix = "";
 		DateTime today = DateTime.now();
 		DateTime tomorrow = DateTime.now().plusDays(1);
-		String prefix = "";
+		boolean is_overdue = previousDate.compareTo(DateTime.now()) < 0;
+		boolean is_today = isSameDate(previousDate, today);
+		boolean is_tomorrow = isSameDate(previousDate, tomorrow);
 		
-		if (previousDate.compareTo(DateTime.now()) < 0) {
+		if (is_overdue) {
 			prefix = GUIConstants.OVERDUE_PREFIX;
-		} else if (isSameDate(previousDate, today)) {
+		} else if (is_today) {
 			prefix = GUIConstants.TODAY_PREFIX;
-		} else if (isSameDate(previousDate, tomorrow)) {
+		} else if (is_tomorrow) {
 			prefix = GUIConstants.TOMORROW_PREFIX;
 		}
 		return prefix;
@@ -57,11 +58,11 @@ public class DisplayUtils {
 	 */		
 	public static DateTime insertDateSeparators(DateTime previousDate, 
 			Task task) {
-		DateTime time = task.getEndTime();
+		DateTime currentDate = task.getEndTime();
 		boolean dateIsNull = (previousDate == null);
 		
-		if (dateIsNull || !isSameDate(time, previousDate)) {
-			previousDate = time;
+		if (dateIsNull || !isSameDate(currentDate, previousDate)) {
+			previousDate = currentDate;
 			DisplayUtils.printDateSeparator(previousDate);
 		}
 		return previousDate;
@@ -77,10 +78,23 @@ public class DisplayUtils {
 	public static void printDateSeparator(DateTime previousDate) {
 		DateTimeFormatter dateFormat = getDateFormat(previousDate);
 		String prefix = addPrefix(previousDate);
-		String label = prefix + previousDate.toString(dateFormat);
+		String label = createLabel(previousDate, dateFormat, prefix);
 		int color = getPrefixColor(prefix);
 		
 		GUI.print_add("\n["+ label + "]" + generateSeparator(label), color);
+	}
+
+	/**
+	 * Returns a string label containing any contextual prefixes 
+	 * (Today, Overdue, etc) and date information.
+	 * 
+	 * @param DateTime
+	 * @param DateTimeFormatter
+	 * @param String
+	 */		
+	public static String createLabel(DateTime previousDate,
+			DateTimeFormatter dateFormat, String prefix) {
+		return prefix + previousDate.toString(dateFormat);
 	}
 	
 	
@@ -94,7 +108,9 @@ public class DisplayUtils {
 	 */
 	public static DateTimeFormatter getDateFormat(DateTime previousDate) {
 		DateTimeFormatter dateFormat = Constants.DATE_MONTH_FORMAT;
-		if(previousDate.getYear() != DateTime.now().getYear()){
+		boolean isNotTheSameYear = previousDate.getYear() 
+				!= DateTime.now().getYear();
+		if(isNotTheSameYear){
 			dateFormat = Constants.DATE_MONTH_YEAR_FORMAT;
 		}
 		return dateFormat;

@@ -50,7 +50,7 @@ public class GUI extends javax.swing.JFrame implements NativeKeyListener {
                 img = ImageIO.read(new File(GUIConstants.BACKGROUND_IMAGE_NAME));
             } catch (IOException e) {
             }
-            //g.drawImage(img, 0, 0, this);
+            g.drawImage(img, 0, 0, this);
 
             super.paintComponent(g);
         }
@@ -300,10 +300,12 @@ public class GUI extends javax.swing.JFrame implements NativeKeyListener {
         
         //Welcome message
         if (manager.isReloaded()) {
-			GUI.print_add((Constants.MESSAGE_WELCOME_TO_SUDO_RELOAD),GUIConstants.COLOR_CODE_GREEN);
+			GUI.print_add((Constants.MESSAGE_WELCOME_TO_SUDO_RELOAD_A),GUIConstants.COLOR_CODE_GREEN);
+			GUI.print_add((Constants.MESSAGE_WELCOME_TO_SUDO_RELOAD_B),GUIConstants.COLOR_CODE_WHITE);
 			//GUI.print_add((UIConstants.MESSAGE_BETTER_ON_MAC),4);
 		} else {
-			GUI.print_add((Constants.MESSAGE_WELCOME_TO_SUDO_FIRST),GUIConstants.COLOR_CODE_GREEN);
+			GUI.print_add((Constants.MESSAGE_WELCOME_TO_SUDO_FIRST_A),GUIConstants.COLOR_CODE_GREEN);
+			GUI.print_add((Constants.MESSAGE_WELCOME_TO_SUDO_FIRST_B),GUIConstants.COLOR_CODE_WHITE);
 		}
         
         //Floating task area

@@ -541,10 +541,11 @@ public class TaskManager {
 	}
 
 	/**
-	 * Schedules a task
+	 * Schedules an incomplete to a free slot selected automatically.
 	 * 
-	 * @param description
-	 * @param timeRange
+	 * @param taskId the task ID to be scheduled, must not be a completed task
+	 * @param duration the duration of the task in milliseconds
+	 * @param dateTimes desired time range
 	 * @throws Exception
 	 */
 	public void scheduleTask(int taskId, long duration,
@@ -555,8 +556,10 @@ public class TaskManager {
                                                     index, tasks);
         
         String description = tasks.get(index).getDescription();
+        
 		ArrayList<DateTime> timeRange = 
 		        TaskManagerUtils.getFlexibleTimeRange(dateTimes);
+		
 		if (timeRange.get(0).isBefore(DateTime.now())) {
 		    timeRange.set(0, DateTime.now());
 		}
@@ -590,6 +593,7 @@ public class TaskManager {
 					break;
 				}
 				DateTime end = start.plusMillis((int) duration);
+				
 				if (!end.isAfter(startDay2300)) {
 					ArrayList<DateTime> range = new ArrayList<DateTime>(2);
 					range.add(start);

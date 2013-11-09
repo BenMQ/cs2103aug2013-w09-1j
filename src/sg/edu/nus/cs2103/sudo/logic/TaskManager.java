@@ -548,8 +548,14 @@ public class TaskManager {
 	                         ArrayList<DateTime> dateTimes) throws Exception {
         int index = taskId - 1;
         
-        TaskManagerUtils.validateScheduleParameters(duration, dateTimes,
-                                                    index, tasks);
+        boolean valid = 
+                TaskManagerUtils.validateScheduleParameters(duration,
+                                                            dateTimes,
+                                                            index,
+                                                            tasks);
+        if (!valid) {
+            return;
+        }
         
         String description = tasks.get(index).getDescription();
         

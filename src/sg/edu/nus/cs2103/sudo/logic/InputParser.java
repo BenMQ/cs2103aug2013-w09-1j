@@ -66,7 +66,7 @@ public class InputParser {
 	    
 	    String[] relevantWord = 
 	            Arrays.copyOfRange(inputWords,
-	                               ParserUtils.irrelevantWordsSize(command),
+	                               ParserUtils.getNumWordsToTrim(command),
 	                               inputWords.length);
 	    return ParserUtils.joinString(relevantWord, " ");
 	}

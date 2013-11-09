@@ -10,6 +10,7 @@ import org.joda.time.DateTimeComparator;
 import sg.edu.nus.cs2103.sudo.Constants;
 import sg.edu.nus.cs2103.sudo.storage.StorageHandler;
 import sg.edu.nus.cs2103.ui.GUI;
+import sg.edu.nus.cs2103.ui.GUIConstants;
 
 /**
  * This class contains static methods that help execute some of the methods in
@@ -267,11 +268,11 @@ public class TaskManagerUtils {
 			throw new IllegalStateException(Constants.MESSAGE_NO_SEARCH_RESULTS);
 		}
 
-		GUI.print_add(Constants.MESSAGE_SEARCH_RESULTS, 1);
+		GUI.print_add("\n"+Constants.MESSAGE_SEARCH_RESULTS, GUIConstants.COLOR_CODE_YELLOW);
 		for (int i = 0; i < searchResults.size(); i++) {
-			GUI.print_add("\n"+searchResults.get(i).toString(), 0);
+			GUI.print_add("\n"+searchResults.get(i).toString(), GUIConstants.COLOR_CODE_GREEN);
 		}
-		GUI.print_add("\n\n",0);
+		GUI.print_add("\n\n",GUIConstants.COLOR_CODE_GREEN);
 	}
 	
 	//@author A0099314Y
@@ -340,20 +341,24 @@ public class TaskManagerUtils {
         try {
             TaskManagerUtils.checkValidityIndex(index, tasks);  
         } catch (IndexOutOfBoundsException e) {
-            GUI.print_add(Constants.MESSAGE_INVALID_TASK_INDEX, 3);
+            GUI.print_add(Constants.MESSAGE_INVALID_TASK_INDEX, 
+                          GUIConstants.COLOR_CODE_RED);
             
             return;
         }
         if (dateTimes.size() > 1) {
-            GUI.print_add(Constants.MESSAGE_INVALID_NUMBER_OF_DATES, 3);
+            GUI.print_add(Constants.MESSAGE_INVALID_NUMBER_OF_DATES, 
+                          GUIConstants.COLOR_CODE_RED);
             return;
         } else if (duration <= 0) {
-            GUI.print_add(Constants.MESSAGE_INCOMPLETE_COMMAND, 3);
+            GUI.print_add(Constants.MESSAGE_INCOMPLETE_COMMAND, 
+                          GUIConstants.COLOR_CODE_RED);
             return;
         }
         
         if (tasks.get(index).isComplete()) {
-            GUI.print_add(Constants.MESSAGE_ALREADY_COMPLETE, 3);
+            GUI.print_add(Constants.MESSAGE_ALREADY_COMPLETE, 
+                          GUIConstants.COLOR_CODE_RED);
             return;
         }
     }
@@ -361,11 +366,20 @@ public class TaskManagerUtils {
 	/**
 	 * Shows the correct display message depending on showAll.
 	 */
-	public static void showDisplayMessage(boolean showAll) {
+	public static void showDisplayMessage(ArrayList<Task> tasks,
+	        boolean showAll) {
 		if (showAll) {
-			GUI.print_add(Constants.MESSAGE_DISPLAY_ALL, 2);
+			GUI.print_add(Constants.MESSAGE_DISPLAY_ALL,
+			              GUIConstants.COLOR_CODE_BLUE);
 		} else {
-			GUI.print_add(Constants.MESSAGE_DISPLAY, 2);
+			if (tasks.isEmpty()) {
+				GUI.print_add(Constants.MESSAGE_EMPTY_LIST,
+				              GUIConstants.COLOR_CODE_BLUE); 
+			} else {
+				GUI.print_add(Constants.MESSAGE_DISPLAY,
+				              GUIConstants.COLOR_CODE_BLUE);
+
+			}
 		}
 	}
 
@@ -374,8 +388,8 @@ public class TaskManagerUtils {
 	 * Shows the correct display message for finished tasks.
 	 */
 	public static void showDisplayMessage() {
-		GUI.print_add(Constants.MESSAGE_DISPLAY_FINISHED, 2);
-		GUI.print_add(Constants.FINISHED_TASK_SEPARATOR, 2);
+		GUI.print_add(Constants.MESSAGE_DISPLAY_FINISHED, GUIConstants.COLOR_CODE_BLUE);
+		GUI.print_add(Constants.FINISHED_TASK_SEPARATOR, GUIConstants.COLOR_CODE_BLUE);
 	}
 	
 	public static void clearTasks(ArrayList<Task> tasks) {

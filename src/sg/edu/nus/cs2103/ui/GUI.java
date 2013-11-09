@@ -1,28 +1,22 @@
 package sg.edu.nus.cs2103.ui;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.PrintStream;
 import java.util.ArrayList;
 
 import sg.edu.nus.cs2103.sudo.logic.LogicHandler;
 import sg.edu.nus.cs2103.sudo.logic.TaskManager;
-import sg.edu.nus.cs2103.sudo.UIConstants;
+import sg.edu.nus.cs2103.sudo.Constants;
 
 import java.awt.Color;
 import java.awt.Frame;
-import java.awt.GradientPaint;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.swing.plaf.ColorUIResource;
 import javax.swing.text.*;
 
 import org.jnativehook.GlobalScreen;
@@ -43,7 +37,7 @@ public class GUI extends javax.swing.JFrame implements NativeKeyListener {
             super();
             setOpaque(false);
             // this is needed if using Nimbus L&F - see http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6687960
-            setBackground(new Color(0,0,0,0));
+            setBackground(Color.BLACK);
         }
         @Override
         protected void paintComponent(Graphics g) {
@@ -53,7 +47,7 @@ public class GUI extends javax.swing.JFrame implements NativeKeyListener {
 
             BufferedImage img = null;
             try {
-                img = ImageIO.read(new File("MIKU.JPG"));
+                img = ImageIO.read(new File(GUIConstants.BACKGROUND_IMAGE_NAME));
             } catch (IOException e) {
             }
             //g.drawImage(img, 0, 0, this);
@@ -61,12 +55,6 @@ public class GUI extends javax.swing.JFrame implements NativeKeyListener {
             super.paintComponent(g);
         }
     }
-	
-	
-	
-	
-	
-	
 	
     /**
      * The following code creates new GUI.
@@ -84,26 +72,27 @@ public class GUI extends javax.swing.JFrame implements NativeKeyListener {
      * print_add is for logic part to send display message(string and color code) to GUI.
      */
 	
-	static public void print_add(String ipt, int colorCode){
+	static public String print_add(String ipt, int colorCode){
 		System.out.print(ipt);
 		switch (colorCode){
-		case 0:
+		case GUIConstants.COLOR_CODE_GREEN:
 			useStyle(styledDoc,ipt,"Green");
-			break;
-		case 1:
+			return ipt;
+		case GUIConstants.COLOR_CODE_YELLOW:
 			useStyle(styledDoc,ipt,"Yellow");
-			break;
-		case 2:
+			return ipt;
+		case GUIConstants.COLOR_CODE_BLUE:
 			useStyle(styledDoc,ipt,"Blue");
-			break;
-		case 3:
+			return ipt;
+		case GUIConstants.COLOR_CODE_RED:
 			useStyle(styledDoc,ipt,"Red");
-			break;
-		case 4:
+			return ipt;
+		case GUIConstants.COLOR_CODE_WHITE:
 			useStyle(styledDoc,ipt,"White");
-			break;
+			return ipt;
 		default:
 			useStyle(styledDoc,ipt,"Green");
+			return ipt;
 		}
 	}
 
@@ -143,7 +132,7 @@ public class GUI extends javax.swing.JFrame implements NativeKeyListener {
 				e.printStackTrace();
 			}
 	    	StyledDocument styledDoc = MainTextPane.getStyledDocument();
-			addNewStyle("Green",styledDoc,18,1,0,0,Color.CYAN,"OCR A Std");//main text
+			addNewStyle("Green",styledDoc,18,1,0,0,Color.GREEN,"OCR A Std");//main text
 			addNewStyle("Yellow",styledDoc,18,1,0,0,new Color(254, 254, 125),"OCR A Std");//labels
 			addNewStyle("Blue",styledDoc,18,1,1,0,new java.awt.Color(145, 192, 246),"OCR A Std");//command feedback
 			addNewStyle("Red",styledDoc,18,1,0,0,new java.awt.Color(254, 100, 100),"OCR A Std");//Error
@@ -174,10 +163,10 @@ public class GUI extends javax.swing.JFrame implements NativeKeyListener {
 	//Detect whether TAB and Space are both pressed. If so then change visibility of GUI
 	public void nativeKeyPressed(NativeKeyEvent e) {
 		currentKey = e.getKeyCode();
-		if (currentKey == UIConstants.KEYBOARD_TAB) {
+		if (currentKey == GUIConstants.KEYBOARD_TAB) {
 			TABPressed = true;
 		}
-		if (currentKey == UIConstants.KEYBOARD_SPACE) {
+		if (currentKey == GUIConstants.KEYBOARD_SPACE) {
 			SpacePressed = true;
 		}
 		if (TABPressed && SpacePressed) {
@@ -198,10 +187,10 @@ public class GUI extends javax.swing.JFrame implements NativeKeyListener {
 	//If TAB or Space is released then change state of TABPressed and SpacePressed
 	public void nativeKeyReleased(NativeKeyEvent e) {
 		currentKey = e.getKeyCode();
-		if (currentKey == UIConstants.KEYBOARD_TAB) {
+		if (currentKey == GUIConstants.KEYBOARD_TAB) {
 			TABPressed = false;
 		}
-		if (currentKey == UIConstants.KEYBOARD_SPACE) {
+		if (currentKey == GUIConstants.KEYBOARD_SPACE) {
 			SpacePressed = false;
 		}
 	}
@@ -268,7 +257,7 @@ public class GUI extends javax.swing.JFrame implements NativeKeyListener {
 									manager.displayFloatingTasks());
 						} catch (IllegalStateException w) {
 							FloatingTextArea
-									.setText(UIConstants.MESSAGE_EMPTY_LIST);
+									.setText(Constants.MESSAGE_EMPTY_LIST);
 						}
 					
 				}
@@ -307,23 +296,23 @@ public class GUI extends javax.swing.JFrame implements NativeKeyListener {
         jTextAreaLogo.setRows(5);
         jTextAreaLogo.setFocusable(false);
         jScrollPaneLogo.setViewportView(jTextAreaLogo);
-        jTextAreaLogo.setText(UIConstants.LOGO);
+        jTextAreaLogo.setText(Constants.LOGO);
         jTextAreaLogo.setFont(new java.awt.Font(
 				"Courier", 1, 13));
         
         //Welcome message
         if (manager.isReloaded()) {
-			GUI.print_add((UIConstants.MESSAGE_WELCOME_TO_SUDO_RELOAD),0);
+			GUI.print_add((Constants.MESSAGE_WELCOME_TO_SUDO_RELOAD),GUIConstants.COLOR_CODE_GREEN);
 			//GUI.print_add((UIConstants.MESSAGE_BETTER_ON_MAC),4);
 		} else {
-			GUI.print_add((UIConstants.MESSAGE_WELCOME_TO_SUDO_FIRST),0);
+			GUI.print_add((Constants.MESSAGE_WELCOME_TO_SUDO_FIRST),GUIConstants.COLOR_CODE_GREEN);
 		}
         
         //Floating task area
 		try {
 			FloatingTextArea.setText(manager.displayFloatingTasks());
 		} catch (IllegalStateException e) {
-			FloatingTextArea.setText(UIConstants.MESSAGE_EMPTY_LIST);
+			FloatingTextArea.setText(Constants.MESSAGE_EMPTY_LIST);
 		}
 		
 		//Layout setup - do not modify

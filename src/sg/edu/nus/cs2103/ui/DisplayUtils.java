@@ -80,7 +80,7 @@ public class DisplayUtils {
 		if (label.contains("verdue")) {
 			index += 2;
 		}
-		GUI.print_add("\n["+ label + "]" + fillString(
+		GUI.print_add("\n\n["+ label + "]" + fillString(
 				separatorLength, Constants.SEPARATOR_CHAR), index);
 	}	
 	

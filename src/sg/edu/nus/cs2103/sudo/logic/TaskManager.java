@@ -14,6 +14,7 @@ import sg.edu.nus.cs2103.sudo.exceptions.NoHistoryException;
 import sg.edu.nus.cs2103.sudo.storage.StorageHandler;
 import sg.edu.nus.cs2103.ui.DisplayUtils;
 import sg.edu.nus.cs2103.ui.GUI;
+import sg.edu.nus.cs2103.ui.GUIConstants;
 
 /**
  * @author chenminqi
@@ -78,10 +79,10 @@ public class TaskManager {
 		TaskManagerUtils.updateAllIds(tasks);
 		try {
 			taskManager = new TaskManager();
-			GUI.print_add("Files rebuilt.",2);
+			GUI.print_add("Files rebuilt.",GUIConstants.COLOR_CODE_RED);
 
 		} catch (Exception e) {
-			GUI.print_add("Files rebuiling failed.",3);
+			GUI.print_add("Files rebuiling failed.",GUIConstants.COLOR_CODE_RED);
 
 			e.printStackTrace();
 		}
@@ -122,7 +123,7 @@ public class TaskManager {
 			ArrayList<DateTime> dateTimes) throws Exception {
 
 		if (taskDescription == null) {
-			GUI.print_add(Constants.MESSAGE_MISSING_DESCRIPTION,2);
+			GUI.print_add(Constants.MESSAGE_MISSING_DESCRIPTION,GUIConstants.COLOR_CODE_BLUE);
 
 			return;
 		}
@@ -131,21 +132,21 @@ public class TaskManager {
 		int numOfDates = dateTimes.size();
 		if (numOfDates == 0) {
 			this.addTask(new FloatingTask(taskDescription));
-			GUI.print_add(String.format(Constants.MESSAGE_ADD_FLOATING, taskDescription),2);
+			GUI.print_add(String.format(Constants.MESSAGE_ADD_FLOATING, taskDescription),GUIConstants.COLOR_CODE_BLUE);
 
 		} else if (numOfDates == 1) {
 			this.addTask(new DeadlineTask(taskDescription, dateTimes));
 			GUI.print_add(String.format(Constants.MESSAGE_ADD_DEADLINE, taskDescription,
-					DisplayUtils.formatDate(dateTimes.get(0))),2);
+					DisplayUtils.formatDate(dateTimes.get(0))),GUIConstants.COLOR_CODE_BLUE);
 			
 		} else if (numOfDates == 2) {
 			this.addTask(new TimedTask(taskDescription, dateTimes));
 			GUI.print_add(String.format(Constants.MESSAGE_ADD_TIMED, taskDescription,
 					DisplayUtils.formatDate(dateTimes.get(0)),
-					DisplayUtils.formatDate(dateTimes.get(1))), 2);
+					DisplayUtils.formatDate(dateTimes.get(1))), GUIConstants.COLOR_CODE_BLUE);
 			
 		} else {
-			GUI.print_add(Constants.MESSAGE_INVALID_NUMBER_OF_DATES, 2);
+			GUI.print_add(Constants.MESSAGE_INVALID_NUMBER_OF_DATES, GUIConstants.COLOR_CODE_BLUE);
 			
 		}
 	}	
@@ -175,7 +176,7 @@ public class TaskManager {
 		int index = taskId - 1;
 		TaskManagerUtils.checkValidityIndex(index, tasks);
 
-		GUI.print_add(String.format(Constants.MESSAGE_EDIT, taskId),2);
+		GUI.print_add(String.format(Constants.MESSAGE_EDIT, taskId),GUIConstants.COLOR_CODE_BLUE);
 	
 		TaskManagerUtils.editTaskHelper(taskDescription, dates, index, tasks);
 
@@ -197,9 +198,9 @@ public class TaskManager {
 			if (task.isComplete()) {
 				completed = Constants.TASK_COMPLETED_FLAG;
 			}
-			GUI.print_add("\n",1);
+			GUI.print_add("\n",GUIConstants.COLOR_CODE_YELLOW);
 			DisplayUtils.prettyPrint(task);
-			GUI.print_add(" "+ completed, 1);
+			GUI.print_add(" "+ completed, GUIConstants.COLOR_CODE_YELLOW);
 			
 		}
 	}
@@ -239,9 +240,9 @@ public class TaskManager {
 							insertFinishedSeparator(finishedStarted, task);
 				}
 
-				GUI.print_add("\n",0);
+				GUI.print_add("\n",GUIConstants.COLOR_CODE_GREEN);
 				DisplayUtils.prettyPrint(task);
-				GUI.print_add(" " + completed, 1);
+				GUI.print_add(" " + completed, GUIConstants.COLOR_CODE_YELLOW);
 				
 			}
 
@@ -298,7 +299,7 @@ public class TaskManager {
 		}
 
 		currTask.setComplete(true);
-		GUI.print_add(String.format(Constants.MESSAGE_FINISH, currTask.description),2);
+		GUI.print_add(String.format(Constants.MESSAGE_FINISH, currTask.description),GUIConstants.COLOR_CODE_YELLOW);
 		
 		TaskManagerUtils.sortAndUpdateIds(tasks);
 		storage.save(true);
@@ -327,7 +328,7 @@ public class TaskManager {
 		}
 
 		currTask.setComplete(false);
-		GUI.print_add(String.format(Constants.MESSAGE_UNFINISH, currTask.description),2);
+		GUI.print_add(String.format(Constants.MESSAGE_UNFINISH, currTask.description),GUIConstants.COLOR_CODE_YELLOW);
 	
 		TaskManagerUtils.sortAndUpdateIds(tasks);
 		storage.save(true);
@@ -350,7 +351,7 @@ public class TaskManager {
 	public ArrayList<Task> searchAndDisplay(String searchStr)
 			throws NullPointerException, IllegalStateException {
 
-		GUI.print_add(String.format(Constants.MESSAGE_SEARCH, searchStr),2);
+		GUI.print_add(String.format(Constants.MESSAGE_SEARCH, searchStr),GUIConstants.COLOR_CODE_YELLOW);
 		
 		ArrayList<Task> searchResults = search(searchStr, false);
 		TaskManagerUtils.displaySearchResults(searchResults);
@@ -418,7 +419,7 @@ public class TaskManager {
 	 */
 	public void searchForFreeIntervals(ArrayList<DateTime> dateTimes) {
 		if (dateTimes.size() > 1) {
-			GUI.print_add(Constants.MESSAGE_INVALID_NUMBER_OF_DATES, 3);
+			GUI.print_add(Constants.MESSAGE_INVALID_NUMBER_OF_DATES, GUIConstants.COLOR_CODE_RED);
 			
 			return;
 		}
@@ -436,19 +437,19 @@ public class TaskManager {
 			if (interval.toDurationMillis() >= Constants.FREE_SLOT_MINIMUM_DURATION) {
 				if (noSlotsFound) {
 					GUI.print_add(String.format(Constants.MESSAGE_FREE_SLOTS_PREFIX,
-					        timeRange.get(0).toString("dd MMMM")),1);
+					        timeRange.get(0).toString("dd MMMM")),GUIConstants.COLOR_CODE_YELLOW);
 					
 					noSlotsFound = false;
 				}
 				String output = interval.getStart().toString("hh:mm a")
 						+ " to "
 						+ interval.getEnd().toString("hh:mm a");
-				GUI.print_add(output,1);
+				GUI.print_add(output,GUIConstants.COLOR_CODE_YELLOW);
 				
 			}
 		}
 		if (noSlotsFound) {
-			GUI.print_add(Constants.MESSAGE_NO_FREE_SLOTS,3);
+			GUI.print_add(Constants.MESSAGE_NO_FREE_SLOTS,GUIConstants.COLOR_CODE_RED);
 		
 		}
 	}
@@ -551,21 +552,21 @@ public class TaskManager {
         try {
             TaskManagerUtils.checkValidityIndex(index, tasks);  
         } catch (IndexOutOfBoundsException e) {
-            GUI.print_add(Constants.MESSAGE_INVALID_TASK_INDEX, 3);
+            GUI.print_add(Constants.MESSAGE_INVALID_TASK_INDEX, GUIConstants.COLOR_CODE_RED);
             
             return;
         }
         if (dateTimes.size() > 1) {
-            GUI.print_add(Constants.MESSAGE_INVALID_NUMBER_OF_DATES, 3);
+            GUI.print_add(Constants.MESSAGE_INVALID_NUMBER_OF_DATES, GUIConstants.COLOR_CODE_RED);
             
             return;
         } else if (duration <= 0) {
-            GUI.print_add(Constants.MESSAGE_INCOMPLETE_COMMAND, 3);
+            GUI.print_add(Constants.MESSAGE_INCOMPLETE_COMMAND, GUIConstants.COLOR_CODE_RED);
             return;
         }
         
         if (tasks.get(index).isComplete()) {
-            GUI.print_add(Constants.MESSAGE_ALREADY_COMPLETE, 3);
+            GUI.print_add(Constants.MESSAGE_ALREADY_COMPLETE, GUIConstants.COLOR_CODE_RED);
             return;
         }
         String description = tasks.get(index).getDescription();
@@ -610,7 +611,7 @@ public class TaskManager {
 					TaskManagerUtils.editTaskHelper(null, range, index, tasks);
 					GUI.print_add(String.format(Constants.MESSAGE_ADD_TIMED,
 							description, DisplayUtils.formatDate(start),
-							DisplayUtils.formatDate(end)),1);
+							DisplayUtils.formatDate(end)),GUIConstants.COLOR_CODE_YELLOW);
 					
 					TaskManagerUtils.sortAndUpdateIds(tasks);
 					
@@ -623,7 +624,7 @@ public class TaskManager {
 				}
 			}
 		}
-		GUI.print_add(Constants.MESSAGE_NO_FREE_SLOTS,3);
+		GUI.print_add(Constants.MESSAGE_NO_FREE_SLOTS,GUIConstants.COLOR_CODE_RED);
 	}
 
 	/**
@@ -672,7 +673,7 @@ public class TaskManager {
 		TaskManagerUtils.checkValidityIndex(index, tasks);
 
 		GUI.print_add(String.format(Constants.MESSAGE_DELETE,
-				tasks.get(index).description),3);
+				tasks.get(index).description),GUIConstants.COLOR_CODE_RED);
 
 		tasks.remove(index);
 		TaskManagerUtils.sortAndUpdateIds(tasks);
@@ -690,13 +691,13 @@ public class TaskManager {
 	public void undo() {
 		try {
 			tasks = (ArrayList<Task>) storage.undo().clone();
-			GUI.print_add(Constants.MESSAGE_UNDO,2);
+			GUI.print_add(Constants.MESSAGE_UNDO,GUIConstants.COLOR_CODE_BLUE);
 			// saveTasks();
 		} catch (FileNotFoundException e) {
 			storage.rebuildHistory();
-			GUI.print_add(Constants.MESSAGE_HISTORY_LOAD_ERROR,3);
+			GUI.print_add(Constants.MESSAGE_HISTORY_LOAD_ERROR,GUIConstants.COLOR_CODE_RED);
 		} catch (NoHistoryException e) {
-			GUI.print_add(Constants.MESSAGE_LAST_HISTORY,2);
+			GUI.print_add(Constants.MESSAGE_LAST_HISTORY,GUIConstants.COLOR_CODE_BLUE);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -724,13 +725,13 @@ public class TaskManager {
 	public void redo() {
 		try {
 			tasks = (ArrayList<Task>) storage.redo().clone();
-			GUI.print_add(Constants.MESSAGE_REDO,2);
+			GUI.print_add(Constants.MESSAGE_REDO,GUIConstants.COLOR_CODE_BLUE);
 			// saveTasks();
 		} catch (FileNotFoundException e) {
 			storage.rebuildHistory();
-			GUI.print_add(Constants.MESSAGE_HISTORY_LOAD_ERROR,3);
+			GUI.print_add(Constants.MESSAGE_HISTORY_LOAD_ERROR,GUIConstants.COLOR_CODE_RED);
 		} catch (NoHistoryException e) {
-			GUI.print_add(Constants.MESSAGE_LAST_HISTORY,2);
+			GUI.print_add(Constants.MESSAGE_LAST_HISTORY,GUIConstants.COLOR_CODE_BLUE);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -746,14 +747,14 @@ public class TaskManager {
 	 */
 	public void help(String topic) {
 		if (topic == null) {
-			GUI.print_add(HelpConstants.MESSAGE_WELCOME_HELP_PAGE,1);
+			GUI.print_add(HelpConstants.MESSAGE_WELCOME_HELP_PAGE,GUIConstants.COLOR_CODE_YELLOW);
 		} else {
 			String helpMessage = HelpConstants.helpTopics.get(topic
 					.toUpperCase());
 			if (helpMessage == null) {
-				GUI.print_add(String.format(HelpConstants.HELP_NOT_FOUND, topic),3);
+				GUI.print_add(String.format(HelpConstants.HELP_NOT_FOUND, topic),GUIConstants.COLOR_CODE_RED);
 			} else {
-				GUI.print_add(helpMessage,1);
+				GUI.print_add(helpMessage,GUIConstants.COLOR_CODE_YELLOW);
 			}
 		}
 	}

@@ -12,6 +12,7 @@ import sg.edu.nus.cs2103.sudo.exceptions.IncompleteCommandException;
 import sg.edu.nus.cs2103.sudo.exceptions.InvalidCommandException;
 import sg.edu.nus.cs2103.ui.DisplayUtils;
 import sg.edu.nus.cs2103.ui.GUI;
+import sg.edu.nus.cs2103.ui.GUIConstants;
 
 
 //@author A0099317U
@@ -42,9 +43,9 @@ public final class LogicHandler {
 		}
 		
 		//Uncomment this once Dake finishes the fix at GUI
-//		if (scanner == null) {
-//			throw new NullPointerException("Scanner cannot be null!");
-//		}		
+		//if (scanner == null) {
+			//throw new NullPointerException("Scanner cannot be null!");
+	//	}		
 		
 		this.manager = manager;
 		this.scanner = scanner;
@@ -166,7 +167,7 @@ public final class LogicHandler {
 				return;
 			}		
 		} catch (Exception e) {
-			GUI.print_add(e.getMessage(), 3);
+			GUI.print_add(e.getMessage(), GUIConstants.COLOR_CODE_RED);
 		}
 	}
 
@@ -187,7 +188,7 @@ public final class LogicHandler {
 		} else {
 			int numResults = this.manager.delete(taskDescription);
 			if (numResults > 1) {
-				GUI.print_add("\n"+Constants.MESSAGE_ENTER_TASK_ID, 2);
+				GUI.print_add("\n"+Constants.MESSAGE_ENTER_TASK_ID, GUIConstants.COLOR_CODE_BLUE);
 				int id = scanner.nextInt();
 				this.manager.delete(id);
 			}

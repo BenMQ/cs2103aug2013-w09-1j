@@ -25,4 +25,5 @@ public class UIConstants {
 	public static final String MESSAGE_NO_HISTORY = "History file was removed" +
 			" or deleted.";
 	
+	
 }

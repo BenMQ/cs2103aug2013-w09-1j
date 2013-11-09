@@ -29,4 +29,8 @@ public class FloatingTask extends Task {
 		return String.format(Constants.MESSAGE_ADD_FLOATING, this.description);
 	}
 
+	public String getDisplayString() {
+		return this.description;
+	}
+
 }

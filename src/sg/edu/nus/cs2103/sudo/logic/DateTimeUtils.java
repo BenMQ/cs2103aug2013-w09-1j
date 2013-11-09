@@ -14,8 +14,9 @@ public class DateTimeUtils {
 	 * @return boolean
 	 */		
 	public static boolean hasZeroMinutes(final DateTime datetime) {
-		return datetime != null 
-				&& datetime.getMinuteOfHour() > 0;
+		boolean isNotNull = (datetime != null);
+		boolean hasZeroMinutes = datetime.getMinuteOfHour() > 0;
+		return isNotNull && hasZeroMinutes;
 	}
 	
     /**

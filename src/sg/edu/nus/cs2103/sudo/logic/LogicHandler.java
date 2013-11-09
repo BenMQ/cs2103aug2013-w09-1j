@@ -17,7 +17,6 @@ import sg.edu.nus.cs2103.ui.GUIConstants;
  * LogicHandler is a facade class responsible for providing a simple API to
  * handle most of the Task operations of sudo.
  * 
- * @author Yos Riady
  */
 public final class LogicHandler {
 

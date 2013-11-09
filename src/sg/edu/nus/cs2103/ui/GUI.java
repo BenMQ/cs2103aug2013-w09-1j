@@ -296,7 +296,7 @@ public class GUI extends javax.swing.JFrame implements NativeKeyListener {
         jTextAreaLogo.setRows(5);
         jTextAreaLogo.setFocusable(false);
         jScrollPaneLogo.setViewportView(jTextAreaLogo);
-        jTextAreaLogo.setText(Constants.LOGO);
+        jTextAreaLogo.setText(GUIConstants.LOGO);
         jTextAreaLogo.setFont(new java.awt.Font(
 				"Courier", 1, 13));
         

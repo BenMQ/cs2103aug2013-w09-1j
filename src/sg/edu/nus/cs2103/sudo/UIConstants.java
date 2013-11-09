@@ -1,5 +1,6 @@
+// TO BE REMOVED
 package sg.edu.nus.cs2103.sudo;
-
+/* 
 public class UIConstants {
 
 	public static final int KEYBOARD_SPACE = 32;
@@ -27,3 +28,4 @@ public class UIConstants {
 	
 	
 }
+*/

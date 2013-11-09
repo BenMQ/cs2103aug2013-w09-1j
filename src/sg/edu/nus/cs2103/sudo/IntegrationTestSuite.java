@@ -266,7 +266,7 @@ public class IntegrationTestSuite {
 
 	private void finishValidTask(String userInput) throws IOException {
 		testCommand(userInput, "Finished task: make waffles for breakfast\n"
-				+ "Remaining tasks:");
+				+ "Remaining tasks:\n");
 	}
 
 	private void prepareTaskListForTestFinish() {

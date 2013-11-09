@@ -278,6 +278,8 @@ public class IntegrationTestSuite {
 	
 	private void prepareTaskListForTestUnfinish() {
 		prepareTaskListForTestFinish();
+		String userInput = "finish 1";
+		runCommand(userInput);
 	}
 
 	private void finishInvalidTaskId(String userInput) throws IOException {
@@ -286,12 +288,11 @@ public class IntegrationTestSuite {
 	
 	private void unfinishInvalidTaskId(String userInput) throws IOException {
 		finishInvalidTaskId(userInput);
-		userInput = "finish 1";
-		runCommand(userInput);
+		
 	}
 
 	@Test
-	public void testUnfinishTask() throws IOException {
+	public void testUnfinish() throws IOException {
 		// boundary case: unfinish task which does not exist
 		String userInput = "unfinish 1";
 		unfinishInvalidTaskId(userInput);
@@ -304,7 +305,7 @@ public class IntegrationTestSuite {
 
 	private void UnfinishValidTask(String userInput) throws IOException {
 		testCommand(userInput, "Un-Finished task: make waffles for breakfast\n"
-				+ "Remaining tasks:\n"
+				+ "Remaining tasks:\n\n"
 				+ "[Tomorrow: Sun 10 Nov]==============================\n"
 				+ "1. [by 2PM] make waffles for breakfast ");
 	}

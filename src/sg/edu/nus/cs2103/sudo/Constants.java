@@ -1,5 +1,8 @@
 package sg.edu.nus.cs2103.sudo;
 
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+
 public class Constants {
 
 	public static final String MESSAGE_INVALID_COMMAND = "Invalid command.\n";
@@ -56,4 +59,16 @@ public class Constants {
 	public static final String FINISHED_TASK_SEPARATOR = "\n[Finished tasks]==========================";
 	public static final String FLOATING_TASK_SEPARATOR = "\n[Floating tasks]==========================";
 
+	public static final String TOMORROW_PREFIX = "Tomorrow: ";
+	public static final String TODAY_PREFIX = "Today: ";
+	public static final String OVERDUE_PREFIX = "Overdue: ";
+	public static final DateTimeFormatter DATE_MONTH_FORMAT = 
+			DateTimeFormat.forPattern("EEE d MMM");
+	public static final DateTimeFormatter HOUR_FORMAT = 
+			DateTimeFormat.forPattern("ha");
+	public static final DateTimeFormatter HOUR_MINUTE_FORMAT = 
+			DateTimeFormat.forPattern("h:mma");
+	public static final int SEPARATOR_LENGTH = 40;
+	public static final char SEPARATOR_CHAR = '=';	
+	
 }

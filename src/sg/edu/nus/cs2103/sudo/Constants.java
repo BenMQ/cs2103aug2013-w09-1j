@@ -25,9 +25,9 @@ public class Constants {
 	public static final String MESSAGE_SEARCH = "Searching: %s\n";
 	public static final String MESSAGE_EDIT = "Edited: %s\n";
 	public static final String MESSAGE_DELETE = "Deleted: %s\n";
-	public static final String MESSAGE_MULTIPLE_DELETE = "\nYou have multiple " +
+	public static final String MESSAGE_MULTIPLE_DELETE = "You have multiple " +
 			"items that match your delete search term.\nTo delete a particular" +
-			" task, type: delete <task index>";
+			" task, type: delete <task index>\n\n";
 
 	public static final String MESSAGE_MISSING_DESCRIPTION = "Task description" +
 			" should be between single quotes.\n";

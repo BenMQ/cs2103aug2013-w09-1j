@@ -654,6 +654,7 @@ public class TaskManager {
 		} else if (numResults == 1) {
 			delete(searchResults.get(0).getId());
 		} else {
+			GUI.print_add("\n"+Constants.MESSAGE_MULTIPLE_DELETE, 2);
 			TaskManagerUtils.displaySearchResults(searchResults);
 		}
 

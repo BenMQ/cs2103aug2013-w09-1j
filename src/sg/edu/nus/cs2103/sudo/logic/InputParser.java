@@ -1,6 +1,7 @@
 package sg.edu.nus.cs2103.sudo.logic;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
@@ -32,26 +33,42 @@ public class InputParser {
 	 * @param userInput 			string of the user's input
 	 * @return ArrayList<DateTime>	A list of DateTime objects
 	 */	
-	public static ArrayList<DateTime> parseDateTime(String userInput) {
+	public static ArrayList<DateTime> parseDateTime(String userInput,
+	        COMMAND_TYPE command) {
 		Parser dtparser = new Parser();
 
-		//remove Description
-		String desc = parseDescription(userInput);
-		if (desc != null) {
-			userInput = userInput.replace(desc, "");
-		}
-		
-		//remove 'by' due to parsing inconsistencies
-		userInput = userInput.replace("by", "");
-		userInput = userInput.replace("today", "");
+		String dateTimeString = retrieveDateTimeString(userInput, command);
 		
 		//Each DateGroup contains a list of Date
-		List<DateGroup> dateGroups = dtparser.parse(userInput);
+		List<DateGroup> dateGroups = dtparser.parse(dateTimeString);
 		ArrayList<List<Date>> dateLists = ParserUtils.getDateLists(dateGroups);	
 		ArrayList<DateTime> dateTimes = ParserUtils.
 				convertToDateTimes(dateLists);
 		
 		return dateTimes;
+	}
+	
+	/**
+	 * Strips the command and other irrelevant arguments in the user input.
+	 * @param userInput user input string
+	 * @param command the type of the command
+	 * @return the input string with irrelevant keywords stripped away
+	 */
+	public static String retrieveDateTimeString(String userInput,
+	        COMMAND_TYPE command) {
+	    //remove Description
+        String desc = parseDescription(userInput);
+        if (desc != null) {
+            userInput = userInput.replace(desc, "");
+        }
+        
+	    String[] inputWords = userInput.trim().split("\\s+");
+	    
+	    String[] relevantWord = 
+	            Arrays.copyOfRange(inputWords,
+	                               ParserUtils.irrelevantWordsSize(command),
+	                               inputWords.length);
+	    return ParserUtils.joinString(relevantWord, " ");
 	}
 
 	/**

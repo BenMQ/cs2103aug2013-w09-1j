@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 import org.joda.time.DateTime;
 
+import sg.edu.nus.cs2103.sudo.COMMAND_TYPE;
 import sg.edu.nus.cs2103.sudo.Constants;
 import sg.edu.nus.cs2103.sudo.StorageConstants;
 import sg.edu.nus.cs2103.sudo.UIConstants;
@@ -149,7 +150,9 @@ public class StorageHandler {
 			bound = next.indexOf("#");
 			String dateAndTime =  next.substring(0, bound);
 			String finished = next.substring(bound+1);
-			ArrayList<DateTime> dateTimes = InputParser.parseDateTime("fake 'fake' "+dateAndTime);
+			ArrayList<DateTime> dateTimes = 
+			        InputParser.parseDateTime("fake 'fake' " + dateAndTime,
+			                                  COMMAND_TYPE.INVALID);
 			DeadlineTask ddt = new DeadlineTask(descrbtion, dateTimes);
 			if(finished.equals("true")){
 				ddt.setComplete(true);
@@ -162,7 +165,9 @@ public class StorageHandler {
 			bound = next.indexOf("#");
 			String dateAndTime =  next.substring(0, bound);
 			String finished = next.substring(bound+1);
-			ArrayList<DateTime> dateTimes = InputParser.parseDateTime("fake 'fake' "+dateAndTime);
+			ArrayList<DateTime> dateTimes =
+			        InputParser.parseDateTime("fake 'fake' "+ dateAndTime,
+			                                  COMMAND_TYPE.INVALID);
 			TimedTask tmt = new TimedTask(descrbtion, dateTimes );
 			if(finished.equals("true")){
 				tmt.setComplete(true);

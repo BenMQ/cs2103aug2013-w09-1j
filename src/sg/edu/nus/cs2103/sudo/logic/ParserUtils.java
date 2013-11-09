@@ -176,5 +176,42 @@ public class ParserUtils {
 
         return period.toDurationFrom(new DateTime(0)).getMillis();
     }
+
+    /**
+     * Calculates the number of words that are irrelevant to date time parsing
+     * @param command type of command
+     * @return the number of words at the beginning of the command that are not
+     * relevant to date time parsing
+     */
+    public static int irrelevantWordsSize(COMMAND_TYPE command) {
+        switch (command) {
+        case SCHEDULE:
+            return 3;
+        case EDIT:
+            return 2;
+        case INVALID:
+            return 0;
+        default:
+            return 1;
+        }
+    }
+    
+    /**
+     * Joins an array of strings with the delimiter
+     * @param strings array of strings to join
+     * @return joined strings
+     */
+    public static String joinString(String[] strings, String delimiter) {
+        StringBuffer buffer = new StringBuffer();
+        
+        for (int i = 0; i < strings.length; i++) {
+            buffer.append(strings[i]);
+            if (i < strings.length - 1) {
+                buffer.append(delimiter);
+            }
+        }
+        
+        return buffer.toString();
+    }
     
 }

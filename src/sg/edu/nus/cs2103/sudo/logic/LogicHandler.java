@@ -93,7 +93,7 @@ public final class LogicHandler {
 		long duration = InputParser.parseDuration(userInput);
 		
 		ArrayList<DateTime> dateTimes = InputParser.
-				parseDateTime(userInput);
+				parseDateTime(userInput, userCommand);
 
 		try {
 			switch (userCommand) {

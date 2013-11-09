@@ -263,13 +263,6 @@ public class TaskManagerTest {
 		assertEquals("Deleted: learn how to fish\n", outContent.toString());
 		outContent.reset();
 		
-		
-
-		// equivalence partitioning: when search results of delete > 1
-		// manager.delete("nus");
-		// assertEquals("Search Results\n1. Submit proposal at Nus by Mon 21 October 12:00 AM\n2. Have dinner with family in NUS from Wed 23 October 07:00 PM to Wed 23 October 09:00 PM\n",
-		// outContent.toString());
-
 		assertEquals(
 				"1. Submit proposal at Nus by Mon 21 October 12:00 AM false\n" +
 				"2. Have dinner with family in NUS from Wed 23 October 07:00 PM" +

@@ -25,6 +25,7 @@ public class FloatingTask extends Task {
 		return "floating" + "#" + description + "#" + isComplete;
 	}
 	
+	//@author A0099317U
 	public String getAddMessage(){
 		return String.format(Constants.MESSAGE_ADD_FLOATING, this.description);
 	}

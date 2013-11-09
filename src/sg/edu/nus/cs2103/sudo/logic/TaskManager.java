@@ -19,7 +19,7 @@ import sg.edu.nus.cs2103.ui.GUIConstants;
 /**
  * @author chenminqi
  * @author Ipsita Mohapatra A0101286N
- * @author Yos Riady A0099317
+ * @author Yos Riady A0099317U
  * 
  *         This is a singleton class responsible for handling the Task objects.
  *         The appropriate methods are called upon by the InputParser to execute

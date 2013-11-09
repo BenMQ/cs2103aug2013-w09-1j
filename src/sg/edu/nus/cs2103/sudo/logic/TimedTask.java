@@ -85,6 +85,7 @@ public class TimedTask extends Task {
 		}
 	}
 	
+	//@author A0099317U
 	public String getAddMessage() {
 		return String.format(Constants.MESSAGE_ADD_TIMED, this.description,
 				DisplayUtils.formatDate(this.startTime),

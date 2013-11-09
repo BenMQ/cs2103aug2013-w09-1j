@@ -11,6 +11,7 @@ import sg.edu.nus.cs2103.sudo.logic.TaskManager;
 import sg.edu.nus.cs2103.sudo.UIConstants;
 
 import java.awt.Color;
+import java.awt.Frame;
 import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -156,9 +157,8 @@ public class GUI extends javax.swing.JFrame implements NativeKeyListener {
 		logicHandler = LogicHandler.getLogicHandler(manager, null);
 		rebuildStyle();
 		initComponents();
-		toVisible();
+		this.setVisible(true);
     }
-    
     
     /*
      * jNativeHook provides global keyboard listener for shortcut key.
@@ -209,11 +209,11 @@ public class GUI extends javax.swing.JFrame implements NativeKeyListener {
 	
 	//Visibility
 	public void toInvisible() {
-		this.setVisible(false);
+		this.setState(Frame.ICONIFIED);
 	}
 
 	public void toVisible() {
-		this.setVisible(true);
+		this.setState(Frame.NORMAL);
 	}
 	
     /**

@@ -81,7 +81,8 @@ public class IntegrationTestSuite {
 		String taskDescription = InputParser.parseDescription(userInput);
 		String expectedOutput = String.format(Constants.MESSAGE_ADD_FLOATING,
 				taskDescription)+"Remaining tasks:\n[Floating tasks]==========================\n1. make waffles for breakfast ";
-
+		expectedOutput += "Displaying incomplete tasks\n\n[Floating tasks]==========================\n1. make waffles for breakfast \n";
+		
 		testCommand(userInput, expectedOutput);
 		testStorageContent();
 	}
@@ -95,7 +96,7 @@ public class IntegrationTestSuite {
 		String taskDescription = InputParser.parseDescription(userInput);
 		String expectedOutput = String.format(Constants.MESSAGE_ADD_DEADLINE,
 				taskDescription, endTime)+"Remaining tasks:\n[Overdue: Mon 14 Oct]=====================\n1. [by 2PM] make waffles for breakfast ";
-
+		expectedOutput += "Displaying incomplete tasks\n\n[Overdue: Mon 14 Oct]=====================\n1. [by 2PM] make waffles for breakfast \n";
 		testCommand(userInput, expectedOutput);
 		testStorageContent();
 	}

@@ -33,7 +33,7 @@ public class TaskManagerTest {
 	Scanner user = new Scanner(System.in);
 	private static TaskManager manager;
 	private File savefile;
-	
+
 	private final static String floatingTaskDescription = "learn how to fish";
 	private final static String timedTaskDescription = "Trying an invalid time interval";
 
@@ -71,8 +71,7 @@ public class TaskManagerTest {
 
 		// boundary case: add task with invalid time interval
 		try {
-			manager.addTask(new TimedTask(timedTaskDescription,
-					dateTimes));
+			manager.addTask(new TimedTask(timedTaskDescription, dateTimes));
 		} catch (Exception e) {
 			assertEquals(Constants.MESSAGE_END_BEFORE_START_TIME,
 					e.getMessage());
@@ -83,13 +82,13 @@ public class TaskManagerTest {
 		dateTimes.add(new DateTime());
 		dateTimes.add(new DateTime());
 		
-		/*
+		// boundary case: adding the same start and end time 
+		try {
 			manager.addTask(new TimedTask("Trying same start and end time",
 					dateTimes));
 		} catch (Exception e) {
 			assertEquals(Constants.MESSAGE_SAME_START_END_TIME, e.getMessage());
 		}
-		*/
 
 		manager.addTask(new TimedTask(0, "Have dinner with family in NUS",
 				false, new DateTime(2013, 10, 23, 19, 0, 0, 0), new DateTime(
@@ -165,7 +164,7 @@ public class TaskManagerTest {
 			manager.editTask(4, "learn to sew from mom",
 					new ArrayList<DateTime>());
 		} catch (Exception e) {
-			assertEquals("Invalid task index\n", e.getMessage());
+			assertEquals("Invalid task index.\n", e.getMessage());
 		}
 
 		// boundary case: string input is empty
@@ -225,28 +224,28 @@ public class TaskManagerTest {
 		assertEquals(
 				"1. Submit proposal at Nus by Mon 21 October 12:00 AM false\n2. Have dinner with family in NUS from Wed 23 October 07:00 PM to Wed 23 October 09:00 PM false\n3. learn how to fish false\n",
 				displayTasks(manager.getTasks()));
-	
+
 		// boundary case: task id is 0
 		try {
 			manager.delete(0);
 		} catch (Exception e) {
 			assertEquals(Constants.MESSAGE_INVALID_TASK_INDEX, e.getMessage());
 		}
-		
-		// equivalence partitioning: when search results of delete is 1 
+
+		// equivalence partitioning: when search results of delete is 1
 		manager.delete("fish");
 		assertEquals("Deleted: learn how to fish\n", outContent.toString());
 		outContent.reset();
-		
+
 		// equivalence partitioning: when search results of delete > 1
 		// manager.delete("nus");
-		// assertEquals("Search Results\n1. Submit proposal at Nus by Mon 21 October 12:00 AM\n2. Have dinner with family in NUS from Wed 23 October 07:00 PM to Wed 23 October 09:00 PM\n", outContent.toString());
-		
+		// assertEquals("Search Results\n1. Submit proposal at Nus by Mon 21 October 12:00 AM\n2. Have dinner with family in NUS from Wed 23 October 07:00 PM to Wed 23 October 09:00 PM\n",
+		// outContent.toString());
+
 		assertEquals(
 				"1. Submit proposal at Nus by Mon 21 October 12:00 AM false\n2. Have dinner with family in NUS from Wed 23 October 07:00 PM to Wed 23 October 09:00 PM false\n",
 				displayTasks(manager.getTasks()));
-		
-	
+
 	}
 
 	@Test

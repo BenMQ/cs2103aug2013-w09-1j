@@ -405,7 +405,8 @@ public class TaskManager {
 
 		return searchResults;
 	}
-
+	
+	//@author A0099314Y
 	/**
 	 * Search and prints out intervals that are free during the current day.
 	 * Intervals shorter than 10 minutes are ignored.
@@ -415,17 +416,17 @@ public class TaskManager {
 	 *            will be that day. if none is specified, the date range will be
 	 *            the current day.
 	 * 
-	 * @author chenminqi
 	 */
 	public void searchForFreeIntervals(ArrayList<DateTime> dateTimes) {
-		if (dateTimes.size() > 1) {
+        assert (dateTimes.size() >= 0 && dateTimes.size() <= 2);
+        
+        if (dateTimes.size() > 1) {
 			GUI.print_add(Constants.MESSAGE_INVALID_NUMBER_OF_DATES, 3);
-			
 			return;
 		}
 
-		assert (dateTimes.size() >= 0 && dateTimes.size() <= 2);
-		ArrayList<DateTime> timeRange = TaskManagerUtils.getFlexibleTimeRange(dateTimes);
+		ArrayList<DateTime> timeRange = 
+		        TaskManagerUtils.getFlexibleTimeRange(dateTimes);
 		if (timeRange.get(0).isBefore(DateTime.now())) {
             timeRange.set(0, DateTime.now());
         }
@@ -434,9 +435,11 @@ public class TaskManager {
 
 		for (int i = 0; i < free.size(); i++) {
 			MutableInterval interval = free.get(i);
-			if (interval.toDurationMillis() >= Constants.FREE_SLOT_MINIMUM_DURATION) {
+			if (interval.toDurationMillis() >= 
+			        Constants.FREE_SLOT_MINIMUM_DURATION) {
 				if (noSlotsFound) {
-					GUI.print_add(String.format(Constants.MESSAGE_FREE_SLOTS_PREFIX,
+					GUI.print_add(
+					        String.format(Constants.MESSAGE_FREE_SLOTS_PREFIX,
 					        timeRange.get(0).toString("dd MMMM")),1);
 					
 					noSlotsFound = false;
@@ -450,20 +453,18 @@ public class TaskManager {
 		}
 		if (noSlotsFound) {
 			GUI.print_add(Constants.MESSAGE_NO_FREE_SLOTS,3);
-		
 		}
 	}
 
 	/**
-	 * Searches for all occupied time slots of today. If the actual slot of the
-	 * day ends before 2359hrs, an interval [2359hrs, 2359hrs] which lasts for 0
-	 * seconds will be inserted at the end.
+	 * Searches for all occupied time slots of a given time range. An interval
+	 * that corresponds to the last second of the given time range, which lasts
+     * for 0 seconds will be inserted at the end.
 	 * 
-	 * @return intervals that are occupied today, the last item is guaranteed to
-	 *         end at 2359hrs, and hence guaranteed to have at least 1 item
+     * @param timeRange ArrayList of two DateTimes that indicates the time range
+     *                  to be searched for
+	 * @return intervals that are occupied today, at least 1 item will be 
 	 *         returned.
-	 * @author chenminqi
-	 * @param timeRange
 	 */
 	public ArrayList<MutableInterval> getOccupiedIntervals(
 			ArrayList<DateTime> timeRange) {
@@ -546,31 +547,16 @@ public class TaskManager {
 	 * @param timeRange
 	 * @throws Exception
 	 */
-	public void scheduleTask(int taskId, long duration, ArrayList<DateTime> dateTimes)
-			throws Exception {
+	public void scheduleTask(int taskId, long duration,
+	                         ArrayList<DateTime> dateTimes) throws Exception {
         int index = taskId - 1;
-        try {
-            TaskManagerUtils.checkValidityIndex(index, tasks);  
-        } catch (IndexOutOfBoundsException e) {
-            GUI.print_add(Constants.MESSAGE_INVALID_TASK_INDEX, 3);
-            
-            return;
-        }
-        if (dateTimes.size() > 1) {
-            GUI.print_add(Constants.MESSAGE_INVALID_NUMBER_OF_DATES, 3);
-            
-            return;
-        } else if (duration <= 0) {
-            GUI.print_add(Constants.MESSAGE_INCOMPLETE_COMMAND, 3);
-            return;
-        }
         
-        if (tasks.get(index).isComplete()) {
-            GUI.print_add(Constants.MESSAGE_ALREADY_COMPLETE, 3);
-            return;
-        }
+        TaskManagerUtils.validateScheduleParameters(duration, dateTimes,
+                                                    index, tasks);
+        
         String description = tasks.get(index).getDescription();
-		ArrayList<DateTime> timeRange = TaskManagerUtils.getFlexibleTimeRange(dateTimes);
+		ArrayList<DateTime> timeRange = 
+		        TaskManagerUtils.getFlexibleTimeRange(dateTimes);
 		if (timeRange.get(0).isBefore(DateTime.now())) {
 		    timeRange.set(0, DateTime.now());
 		}
@@ -585,9 +571,11 @@ public class TaskManager {
 			while (candidate.toDurationMillis() >= 2 * 60 * 60 * 1000) {
 				start = candidate.getStart();
 				startDay0800 = new DateTime(start.getYear(),
-						start.getMonthOfYear(), start.getDayOfMonth(), 8, 0, 0);
+				                            start.getMonthOfYear(),
+				                            start.getDayOfMonth(), 8, 0, 0);
 				startDay2300 = new DateTime(start.getYear(),
-						start.getMonthOfYear(), start.getDayOfMonth(), 23, 0, 0);
+				                            start.getMonthOfYear(),
+				                            start.getDayOfMonth(), 23, 0, 0);
 				nextDay0800 = startDay0800.plusDays(1);
 				try {
 					if (start.isBefore(startDay0800)) {
@@ -627,6 +615,8 @@ public class TaskManager {
 		GUI.print_add(Constants.MESSAGE_NO_FREE_SLOTS,3);
 	}
 
+	
+	//@author A0101286N 
 	/**
 	 * Removes the task by first searching for the search string in the task
 	 * description. If there is exactly one match, just delete it. If there are

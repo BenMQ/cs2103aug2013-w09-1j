@@ -52,7 +52,8 @@ public class Constants {
 	public static final String MESSAGE_FINISH = "Finished task: %s\n";
 	public static final String MESSAGE_UNFINISH = "Un-Finished task: %s\n";
 
-	public static final String MESSAGE_NO_FREE_SLOTS = "No free slots found. :(";
+	public static final String MESSAGE_NO_FREE_SLOTS = 
+	        "No free slots found. :(\n";
 	public static final String MESSAGE_FREE_SLOTS_PREFIX = "Here are your " +
 			"free time slots for %s:\n";
 

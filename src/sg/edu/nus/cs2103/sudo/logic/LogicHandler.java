@@ -38,11 +38,6 @@ public final class LogicHandler {
 			throw new NullPointerException("TaskManager cannot be null!");
 		}
 		
-		//Uncomment this once Dake finishes the fix at GUI
-		//if (scanner == null) {
-			//throw new NullPointerException("Scanner cannot be null!");
-	//	}		
-		
 		this.manager = manager;
 		this.scanner = scanner;
 	}
@@ -88,7 +83,6 @@ public final class LogicHandler {
 				parseDescription(userInput);
 		int targetId = InputParser.parseId(userInput);
 		long duration = InputParser.parseDuration(userInput);
-		
 		ArrayList<DateTime> dateTimes = InputParser.
 				parseDateTime(userInput, userCommand);
 
@@ -105,7 +99,8 @@ public final class LogicHandler {
 				this.manager.displayAllTasks(true);
 				return;
 			case FINISH:
-				if(targetId == Integer.MIN_VALUE){
+				boolean idNotFound = (targetId == InputParser.NOT_FOUND);
+				if(idNotFound){
 					this.manager.displayFinishedTasks();
 				} else {
 					this.manager.markAsComplete(targetId);

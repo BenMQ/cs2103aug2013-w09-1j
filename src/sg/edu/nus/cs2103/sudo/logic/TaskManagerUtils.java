@@ -397,4 +397,16 @@ public class TaskManagerUtils {
 		}
 		return toReturn;
 	}
+	
+	//@author A0105656E
+	/**
+	 * Transfer all tasks from one ArrayList to another ArrayList
+	 **/
+	public static void transferTasks(ArrayList<Task> from, ArrayList<Task> to) {
+		to.clear();
+		for(Task t:from){
+			to.add(t);
+		}
+	}
+	
 }

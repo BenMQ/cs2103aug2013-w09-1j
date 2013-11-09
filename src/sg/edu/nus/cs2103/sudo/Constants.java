@@ -27,7 +27,6 @@ public class Constants {
 			"items that match your delete search term.\nTo delete a particular" +
 			" task, type: delete <task index>\n\n";
 
-	public static final String MESSAGE_ENTER_TASK_ID = "Please enter task id:";
 	public static final String MESSAGE_MISSING_DESCRIPTION = "Task description should be between single quotes.\n";
 	public static final String MESSAGE_SAME_START_END_TIME = "Start date and end date for the task are the same!\n";
 	public static final String MESSAGE_END_BEFORE_START_TIME = "End date of the task occurs before start date!\n";
@@ -75,6 +74,8 @@ public class Constants {
 
 	public static final DateTimeFormatter DATE_MONTH_FORMAT = 
 			DateTimeFormat.forPattern("EEE d MMM");
+	public static final DateTimeFormatter DATE_MONTH_YEAR_FORMAT = 
+			DateTimeFormat.forPattern("EEE d MMM y");
 	public static final DateTimeFormatter HOUR_FORMAT = 
 			DateTimeFormat.forPattern("ha");
 	public static final DateTimeFormatter HOUR_MINUTE_FORMAT = 

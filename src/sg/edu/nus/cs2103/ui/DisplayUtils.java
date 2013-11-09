@@ -37,13 +37,13 @@ public class DisplayUtils {
 	 * and so on based on current day
 	 * @param int
 	 */	
-	public static String addPrefix(int previousDay) {
+	public static String addPrefix(DateTime previousDate) {
 		String prefix = "";
-		if (previousDay < DateTime.now().getDayOfYear()) {
+		if (previousDate.compareTo(DateTime.now()) < 0) {
 			prefix = GUIConstants.OVERDUE_PREFIX;
-		} else if (previousDay == DateTime.now().getDayOfYear()) {
+		} else if (isSameDate(previousDate, DateTime.now())) {
 			prefix = GUIConstants.TODAY_PREFIX;
-		} else if (previousDay == (DateTime.now().getDayOfYear() + 1)) {
+		} else if (isSameDate(previousDate, DateTime.now().plusDays(1))) {
 			prefix = GUIConstants.TOMORROW_PREFIX;
 		}
 		return prefix;
@@ -60,8 +60,7 @@ public class DisplayUtils {
 		
 		DateTime time = task.getEndTime();
 		
-		if (previousDate == null || time.getDayOfYear() != 
-				previousDate.getDayOfYear()) {
+		if (previousDate == null || !isSameDate(time, previousDate)) {
 			previousDate = time;
 			DisplayUtils.printDateSeparator(previousDate);
 		}
@@ -74,8 +73,16 @@ public class DisplayUtils {
 	 */	
 	public static void printDateSeparator(DateTime previousDate) {
 		int index = 1;
-		String prefix = addPrefix(previousDate.getDayOfYear());
-		String label = prefix + previousDate.toString(Constants.DATE_MONTH_FORMAT);
+		String prefix = addPrefix(previousDate);
+		
+		DateTimeFormatter dateFormat = Constants.DATE_MONTH_FORMAT;
+		if(previousDate.getYear() != DateTime.now().getYear()){
+			dateFormat = Constants.DATE_MONTH_YEAR_FORMAT;
+		}
+		
+		String label = prefix + previousDate.toString(dateFormat);
+		
+		
 		int separatorLength = Constants.SEPARATOR_LENGTH - label.length();
 		if (label.contains("verdue")) {
 			index += 2;
@@ -139,4 +146,27 @@ public class DisplayUtils {
 	public static String formatDate(final DateTime datetime) {
 		return datetime.toString("dd MMMM hh:mm a");
 	}
+	
+	/**
+	 * This operation check if 2 DateTime objects have exactly same date
+	 * 
+	 * @param dt1
+	 *            is first date time
+	 * @param dt2
+	 *            is second date time
+	 * @return true if 2 objects have same date or false if otherwise
+	 * 
+	 */
+	public static boolean isSameDate(DateTime dt1, DateTime dt2) {
+		if (dt1 == null && dt2 == null)
+			return true;
+		if (dt1 == null && dt2 != null)
+			return false;
+		if (dt1 != null && dt2 == null)
+			return false;
+
+		return ((dt1.getYear() == dt2.getYear())
+				&& (dt1.getMonthOfYear() == dt2.getMonthOfYear()) 
+				&& (dt1.getDayOfMonth() == dt2.getDayOfMonth()));
+	}	
 }

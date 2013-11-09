@@ -312,11 +312,16 @@ public class TaskManagerUtils {
 	/**
 	 * Shows the correct display message depending on showAll.
 	 */
-	public static void showDisplayMessage(boolean showAll) {
+	public static void showDisplayMessage(ArrayList<Task> tasks, boolean showAll) {
 		if (showAll) {
 			GUI.print_add(Constants.MESSAGE_DISPLAY_ALL, 2);
 		} else {
-			GUI.print_add(Constants.MESSAGE_DISPLAY, 2);
+			if (tasks.isEmpty()) {
+				GUI.print_add(Constants.MESSAGE_EMPTY_LIST, 2); 
+			} else {
+				GUI.print_add(Constants.MESSAGE_DISPLAY, 2);
+
+			}
 		}
 	}
 	

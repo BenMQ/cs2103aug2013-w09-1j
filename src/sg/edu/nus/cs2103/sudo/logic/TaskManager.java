@@ -478,7 +478,7 @@ public class TaskManager {
 		for (int i = tasks.size() - 1; i >= 0; i--) {
 			Task task = tasks.get(i);
 
-			if (task.isComplete() || !(task instanceof TimedTask)) {
+			if (task.isComplete() || !(task.isTimedTask())) {
 				// we are only concerned with incomplete TimedTask
 				continue;
 			} else if (!task.endTime.isAfter(start)) {

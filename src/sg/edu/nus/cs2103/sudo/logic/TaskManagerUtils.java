@@ -9,6 +9,7 @@ import org.joda.time.DateTimeComparator;
 
 import sg.edu.nus.cs2103.sudo.Constants;
 import sg.edu.nus.cs2103.sudo.storage.StorageHandler;
+import sg.edu.nus.cs2103.ui.DisplayUtils;
 import sg.edu.nus.cs2103.ui.GUI;
 import sg.edu.nus.cs2103.ui.GUIConstants;
 
@@ -181,6 +182,40 @@ public class TaskManagerUtils {
 		}
 		return toReturn;
 	}
+	
+	public static void formatAllTasks(ArrayList<Task> tasks, boolean showAll) {
+		boolean floatingStarted = false;
+		boolean finishedStarted = false;
+		DateTime previousDate = null;
+		
+		for (int i = 0; i < tasks.size(); i++) {
+
+			Task task = tasks.get(i);
+
+			String completed = "";
+			if (task.isComplete()) {
+				completed = Constants.TASK_COMPLETED_FLAG;
+			}
+			if (showAll || !task.isComplete) {
+
+				if (!task.isComplete() && !task.isFloatingTask()) {
+					previousDate = DisplayUtils.
+							insertDateSeparators(previousDate, task);
+				} else {
+					floatingStarted = DisplayUtils.
+							insertFloatingSeparator(floatingStarted, task);
+					finishedStarted = DisplayUtils.
+							insertFinishedSeparator(finishedStarted, task);
+				}
+
+				GUI.print_add("\n",GUIConstants.COLOR_CODE_GREEN);
+				DisplayUtils.prettyPrint(task);
+				GUI.print_add(" " + completed, GUIConstants.COLOR_CODE_YELLOW);
+				
+			}
+		}
+	}
+
 
 	/**
 	 * @param searchStr

@@ -68,7 +68,8 @@ public class TaskManager {
 	public void preloadTasks(ArrayList<Task> tasks) {
 		this.tasks = tasks;
 	}
-
+	
+	// @author DAKE!!
 	public void relaunch() {
 		StorageHandler.resetAll(Constants.FILE_NAME);
 		tasks = new ArrayList<Task>();
@@ -80,12 +81,13 @@ public class TaskManager {
 			GUI.print_add("Files rebuilt.",GUIConstants.COLOR_CODE_RED);
 
 		} catch (Exception e) {
-			GUI.print_add("Files rebuiling failed.",GUIConstants.COLOR_CODE_RED);
+			GUI.print_add("Files rebuiling failed.", GUIConstants.COLOR_CODE_RED);
 
 			e.printStackTrace();
 		}
 	}
-
+	
+	// @author A0101286N
 	/**
 	 * Adds a new task into the list. Maintains a sorted list of items after
 	 * each add.
@@ -122,7 +124,6 @@ public class TaskManager {
 		if (taskDescription == null) {
 			GUI.print_add(Constants.MESSAGE_MISSING_DESCRIPTION, 
 					GUIConstants.COLOR_CODE_BLUE);
-
 			return;
 		}
 
@@ -212,41 +213,13 @@ public class TaskManager {
 	 */
 	public void displayAllTasks(boolean showAll) throws IllegalStateException {
 		TaskManagerUtils.checkEmptyList(tasks);
-		DateTime previousDate = null;
-		boolean floatingStarted = false;
-		boolean finishedStarted = false;
-
+	
 		TaskManagerUtils.showDisplayMessage(tasks, showAll);
-
-		for (int i = 0; i < tasks.size(); i++) {
-
-			Task task = tasks.get(i);
-
-			String completed = "";
-			if (task.isComplete()) {
-				completed = Constants.TASK_COMPLETED_FLAG;
-			}
-			if (showAll || !task.isComplete) {
-
-				if (!task.isComplete() && !task.isFloatingTask()) {
-					previousDate = DisplayUtils.
-							insertDateSeparators(previousDate, task);
-				} else {
-					floatingStarted = DisplayUtils.
-							insertFloatingSeparator(floatingStarted, task);
-					finishedStarted = DisplayUtils.
-							insertFinishedSeparator(finishedStarted, task);
-				}
-
-				GUI.print_add("\n",GUIConstants.COLOR_CODE_GREEN);
-				DisplayUtils.prettyPrint(task);
-				GUI.print_add(" " + completed, GUIConstants.COLOR_CODE_YELLOW);
-				
-			}
-
-		}
+		
+		TaskManagerUtils.formatAllTasks(tasks, showAll);
 	}
 
+	
 	/**
 	 * Prints all incomplete tasks only.
 	 * 

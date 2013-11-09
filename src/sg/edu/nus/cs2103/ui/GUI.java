@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 import sg.edu.nus.cs2103.sudo.logic.LogicHandler;
 import sg.edu.nus.cs2103.sudo.logic.TaskManager;
-import sg.edu.nus.cs2103.sudo.UIConstants;
+import sg.edu.nus.cs2103.sudo.Constants;
 
 import java.awt.Color;
 import java.awt.Frame;
@@ -143,7 +143,7 @@ public class GUI extends javax.swing.JFrame implements NativeKeyListener {
 				e.printStackTrace();
 			}
 	    	StyledDocument styledDoc = MainTextPane.getStyledDocument();
-			addNewStyle("Green",styledDoc,18,1,0,0,Color.CYAN,"OCR A Std");//main text
+			addNewStyle("Green",styledDoc,18,1,0,0,Color.GREEN,"OCR A Std");//main text
 			addNewStyle("Yellow",styledDoc,18,1,0,0,new Color(254, 254, 125),"OCR A Std");//labels
 			addNewStyle("Blue",styledDoc,18,1,1,0,new java.awt.Color(145, 192, 246),"OCR A Std");//command feedback
 			addNewStyle("Red",styledDoc,18,1,0,0,new java.awt.Color(254, 100, 100),"OCR A Std");//Error
@@ -174,10 +174,10 @@ public class GUI extends javax.swing.JFrame implements NativeKeyListener {
 	//Detect whether TAB and Space are both pressed. If so then change visibility of GUI
 	public void nativeKeyPressed(NativeKeyEvent e) {
 		currentKey = e.getKeyCode();
-		if (currentKey == UIConstants.KEYBOARD_TAB) {
+		if (currentKey == Constants.KEYBOARD_TAB) {
 			TABPressed = true;
 		}
-		if (currentKey == UIConstants.KEYBOARD_SPACE) {
+		if (currentKey == Constants.KEYBOARD_SPACE) {
 			SpacePressed = true;
 		}
 		if (TABPressed && SpacePressed) {
@@ -198,10 +198,10 @@ public class GUI extends javax.swing.JFrame implements NativeKeyListener {
 	//If TAB or Space is released then change state of TABPressed and SpacePressed
 	public void nativeKeyReleased(NativeKeyEvent e) {
 		currentKey = e.getKeyCode();
-		if (currentKey == UIConstants.KEYBOARD_TAB) {
+		if (currentKey == Constants.KEYBOARD_TAB) {
 			TABPressed = false;
 		}
-		if (currentKey == UIConstants.KEYBOARD_SPACE) {
+		if (currentKey == Constants.KEYBOARD_SPACE) {
 			SpacePressed = false;
 		}
 	}
@@ -268,7 +268,7 @@ public class GUI extends javax.swing.JFrame implements NativeKeyListener {
 									manager.displayFloatingTasks());
 						} catch (IllegalStateException w) {
 							FloatingTextArea
-									.setText(UIConstants.MESSAGE_EMPTY_LIST);
+									.setText(Constants.MESSAGE_EMPTY_LIST);
 						}
 					
 				}
@@ -307,23 +307,23 @@ public class GUI extends javax.swing.JFrame implements NativeKeyListener {
         jTextAreaLogo.setRows(5);
         jTextAreaLogo.setFocusable(false);
         jScrollPaneLogo.setViewportView(jTextAreaLogo);
-        jTextAreaLogo.setText(UIConstants.LOGO);
+        jTextAreaLogo.setText(Constants.LOGO);
         jTextAreaLogo.setFont(new java.awt.Font(
 				"Courier", 1, 13));
         
         //Welcome message
         if (manager.isReloaded()) {
-			GUI.print_add((UIConstants.MESSAGE_WELCOME_TO_SUDO_RELOAD),0);
+			GUI.print_add((Constants.MESSAGE_WELCOME_TO_SUDO_RELOAD),0);
 			//GUI.print_add((UIConstants.MESSAGE_BETTER_ON_MAC),4);
 		} else {
-			GUI.print_add((UIConstants.MESSAGE_WELCOME_TO_SUDO_FIRST),0);
+			GUI.print_add((Constants.MESSAGE_WELCOME_TO_SUDO_FIRST),0);
 		}
         
         //Floating task area
 		try {
 			FloatingTextArea.setText(manager.displayFloatingTasks());
 		} catch (IllegalStateException e) {
-			FloatingTextArea.setText(UIConstants.MESSAGE_EMPTY_LIST);
+			FloatingTextArea.setText(Constants.MESSAGE_EMPTY_LIST);
 		}
 		
 		//Layout setup - do not modify

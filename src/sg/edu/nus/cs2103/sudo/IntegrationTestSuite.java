@@ -122,7 +122,7 @@ public class IntegrationTestSuite {
 		String taskDescription = InputParser.parseDescription(userInput);
 		runCommand(userInput);
 		
-		String expectedOutput = String.format(Constants.MESSAGE_DELETE+UIConstants.MESSAGE_EMPTY_LIST, taskDescription);
+		String expectedOutput = String.format(Constants.MESSAGE_DELETE+Constants.MESSAGE_EMPTY_LIST, taskDescription);
 		testCommand("remove 'waffle'", expectedOutput);		
 		
 		testStorageContent();
@@ -140,7 +140,7 @@ public class IntegrationTestSuite {
 		String taskDescription = InputParser.parseDescription(userInput);
 		runCommand(userInput);
 		
-		String expectedOutput = String.format(Constants.MESSAGE_DELETE+UIConstants.MESSAGE_EMPTY_LIST, taskDescription);
+		String expectedOutput = String.format(Constants.MESSAGE_DELETE+Constants.MESSAGE_EMPTY_LIST, taskDescription);
 
 		testCommand("delete 'waffle'\n", expectedOutput);
 		testStorageContent();

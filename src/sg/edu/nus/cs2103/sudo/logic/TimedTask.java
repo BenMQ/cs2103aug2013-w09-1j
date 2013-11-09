@@ -4,8 +4,10 @@ import java.util.ArrayList;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeComparator;
+import org.joda.time.format.DateTimeFormatter;
 
 import sg.edu.nus.cs2103.sudo.Constants;
+import sg.edu.nus.cs2103.ui.DisplayUtils;
 
 /**
  * @author Ipsita Mohapatra A0101286N
@@ -80,6 +82,36 @@ public class TimedTask extends Task {
 				throw new IllegalArgumentException(
 						Constants.MESSAGE_END_BEFORE_START_TIME);
 			}
+		}
+	}
+	
+	public String getAddMessage() {
+		return String.format(Constants.MESSAGE_ADD_TIMED, this.description,
+				DisplayUtils.formatDate(this.startTime),
+				DisplayUtils.formatDate(this.endTime));
+	}
+
+	/**
+	 * Helper method to return a formatted string for Timed tasks.
+	 * @param Task
+	 * @return String
+	 */	
+	public String getDisplayString() {
+		DateTimeFormatter onlytimeformat = Constants.HOUR_FORMAT;
+		if (TaskManagerUtils.hasZeroMinutes(this.getEndTime())) {
+			onlytimeformat = Constants.HOUR_MINUTE_FORMAT;
+		}		
+		
+		if(this.isOnSameDay()){
+			return new StringBuilder(this.getId() + ". [" + this.getStartTime().
+					toString(onlytimeformat) + " - "  
+					+ this.getEndTime().toString(onlytimeformat) + 
+					"] ").toString();
+		} else {
+			return new StringBuilder(this.getId() + ". ["
+				+ this.getStartTime().toString(Constants.DATE_MONTH_FORMAT) 
+				+ " " + this.getStartTime().toString(onlytimeformat) + " - "
+				+ this.getEndTime().toString(onlytimeformat) + "] ").toString();
 		}
 	}
 }

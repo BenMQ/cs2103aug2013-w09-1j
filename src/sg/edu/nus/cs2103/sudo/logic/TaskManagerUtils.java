@@ -272,6 +272,7 @@ public class TaskManagerUtils {
 		for (int i = 0; i < searchResults.size(); i++) {
 			GUI.print_add("\n"+searchResults.get(i).toString(), GUIConstants.COLOR_CODE_GREEN);
 		}
+		GUI.print_add("\n\n",GUIConstants.COLOR_CODE_GREEN);
 	}
 	/**
      * Produces a start DateTime and an end DateTime based on the argument
@@ -352,4 +353,14 @@ public class TaskManagerUtils {
 		}
 		return toReturn;
 	}
+	
+	/**
+	 * Determines if a DateTime has zero minute values.
+	 * @param DateTime
+	 * @return boolean
+	 */		
+	public static boolean hasZeroMinutes(final DateTime datetime) {
+		return datetime != null 
+				&& datetime.getMinuteOfHour() > 0;
+	}	
 }

@@ -6,6 +6,10 @@ package sg.edu.nus.cs2103.sudo.logic;
 import java.util.ArrayList;
 
 import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormatter;
+
+import sg.edu.nus.cs2103.sudo.Constants;
+import sg.edu.nus.cs2103.ui.DisplayUtils;
 
 
 /**
@@ -44,4 +48,26 @@ public class DeadlineTask extends Task {
 		return "DEADLINE" + "#" + description + "#" + returnedEndTime + "#"
 				+ isComplete;
 	}
+	
+	public String getAddMessage() {
+		return String.format(Constants.MESSAGE_ADD_DEADLINE, 
+				this.description,
+				DisplayUtils.formatDate(this.endTime));
+	}
+
+	/**
+	 * Helper method to return a formatted string for Deadline tasks.
+	 * @param Task
+	 * @return String
+	 */
+	public String getDisplayString() {
+		DateTimeFormatter onlytimeformat = Constants.HOUR_FORMAT;
+		if (TaskManagerUtils.hasZeroMinutes(this.getEndTime())) {
+			onlytimeformat = Constants.HOUR_MINUTE_FORMAT;
+		}		
+		
+		return new StringBuilder(this.getId() + ". [by " + this.getEndTime().
+				toString(onlytimeformat) + "] ").toString();
+	}
+	
 }

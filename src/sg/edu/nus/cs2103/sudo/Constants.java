@@ -1,5 +1,9 @@
 package sg.edu.nus.cs2103.sudo;
 
+
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+
 public class Constants {
 
 	public static final String MESSAGE_INVALID_COMMAND = "Invalid command.\n";
@@ -19,6 +23,10 @@ public class Constants {
 	public static final String MESSAGE_SEARCH = "Searching: %s\n";
 	public static final String MESSAGE_EDIT = "Edited: %s\n";
 	public static final String MESSAGE_DELETE = "Deleted: %s\n";
+	public static final String MESSAGE_MULTIPLE_DELETE = "You have multiple " +
+			"items that match your delete search term.\nTo delete a particular" +
+			" task, type: delete <task index>\n\n";
+
 	public static final String MESSAGE_ENTER_TASK_ID = "Please enter task id:";
 	public static final String MESSAGE_MISSING_DESCRIPTION = "Task description should be between single quotes.\n";
 	public static final String MESSAGE_SAME_START_END_TIME = "Start date and end date for the task are the same!\n";
@@ -64,5 +72,16 @@ public class Constants {
 	public static final String MESSAGE_WELCOME_TO_SUDO_RELOAD = "Welcome back, dear user.\nYour past records have been loaded successfully.\nTo get a full list of commands, type: help\nTo learn more about a command: help [command]\n";
 //	public static final String MESSAGE_BETTER_ON_MAC = "\nTo get the best experience, we recommand Mac OS X.";
 	
-
+	public static final String TOMORROW_PREFIX = "Tomorrow: ";
+	public static final String TODAY_PREFIX = "Today: ";
+	public static final String OVERDUE_PREFIX = "Overdue: ";
+	public static final DateTimeFormatter DATE_MONTH_FORMAT = 
+			DateTimeFormat.forPattern("EEE d MMM");
+	public static final DateTimeFormatter HOUR_FORMAT = 
+			DateTimeFormat.forPattern("ha");
+	public static final DateTimeFormatter HOUR_MINUTE_FORMAT = 
+			DateTimeFormat.forPattern("h:mma");
+	public static final int SEPARATOR_LENGTH = 50;
+	public static final char SEPARATOR_CHAR = '=';	
+	
 }

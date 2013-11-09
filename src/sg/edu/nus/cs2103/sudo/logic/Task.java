@@ -107,6 +107,6 @@ public abstract class Task {
 	
 	public abstract String getAddMessage();
 	
-	public abstract String getDisplayString();
+	public abstract String getDateString();
 	
 }

@@ -327,7 +327,8 @@ public class TaskManager {
 		}
 
 		currTask.setComplete(false);
-		GUI.print_add(String.format(Constants.MESSAGE_UNFINISH, currTask.description),2);
+		GUI.print_add(String.format(Constants.MESSAGE_UNFINISH, 
+				currTask.description),2);
 	
 		TaskManagerUtils.sortAndUpdateIds(tasks);
 		storage.save(true);

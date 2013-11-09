@@ -123,7 +123,7 @@ public class IntegrationTestSuite {
 		String taskDescription = InputParser.parseDescription(userInput);
 		runCommand(userInput);
 		
-		String expectedOutput = String.format(Constants.MESSAGE_DELETE+UIConstants.MESSAGE_EMPTY_LIST, taskDescription);
+		String expectedOutput = String.format(Constants.MESSAGE_DELETE+Constants.MESSAGE_EMPTY_LIST, taskDescription);
 		testCommand("remove 'waffle'", expectedOutput);		
 		
 		testStorageContent();
@@ -141,7 +141,7 @@ public class IntegrationTestSuite {
 		String taskDescription = InputParser.parseDescription(userInput);
 		runCommand(userInput);
 		
-		String expectedOutput = String.format(Constants.MESSAGE_DELETE+UIConstants.MESSAGE_EMPTY_LIST, taskDescription);
+		String expectedOutput = String.format(Constants.MESSAGE_DELETE+Constants.MESSAGE_EMPTY_LIST, taskDescription);
 
 		testCommand("delete 'waffle'\n", expectedOutput);
 		testStorageContent();
@@ -165,7 +165,14 @@ public class IntegrationTestSuite {
 	
 	@Test
 	public void testEdit() {
-		assert true;
+		String userInput = "add 'make waffles for lunch' from 12 December 10am to 2pm";
+		runCommand(userInput);
+		
+		userInput = "edit 1 from 8am to 12pm";
+		runCommand(userInput);
+		
+		Task task = IntegrationTestSuite.manager.getTasks().get(0);
+		assertEquals("1. [8AM - 12PM] make waffles for lunch",DisplayUtils.prettyPrint(task));
 	}
 
 	@Test

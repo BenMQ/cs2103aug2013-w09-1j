@@ -440,13 +440,14 @@ public class TaskManager {
 				if (noSlotsFound) {
 					GUI.print_add(
 					        String.format(Constants.MESSAGE_FREE_SLOTS_PREFIX,
-					        timeRange.get(0).toString("dd MMMM")), 1);
+					        timeRange.get(0).toString("dd MMMM")) + "\n", 1);
 					
 					noSlotsFound = false;
 				}
 				String output = interval.getStart().toString("hh:mm a")
 						+ " to "
-						+ interval.getEnd().toString("hh:mm a");
+						+ interval.getEnd().toString("hh:mm a")
+						+ "\n";
 				GUI.print_add(output, 1);
 				
 			}

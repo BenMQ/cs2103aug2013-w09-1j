@@ -241,8 +241,7 @@ public class TaskManager {
 
 		TaskManagerUtils.checkEmptyFloatingList(floatingTasks);
 
-		String toReturn = TaskManagerUtils.formatFloatingTasks(floatingTasks);
-		return toReturn;
+		return TaskManagerUtils.formatFloatingTasks(floatingTasks);
 	}
 
 	

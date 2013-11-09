@@ -114,7 +114,7 @@ public class StorageHandler {
 			}
 			return isReloaded;
 		} catch (FileNotFoundException e) {
-			UI.forcePrint("History file was removed or deleted.");
+			System.out.print("History file was removed or deleted.");
 			saveHistory();
 			e.printStackTrace();
 		} catch (IOException e) {

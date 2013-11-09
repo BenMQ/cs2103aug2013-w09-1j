@@ -236,12 +236,11 @@ public class TaskManager {
 	 * @return String of floating tasks.
 	 */
 	public String displayFloatingTasks() {
-		TaskManagerUtils.checkEmptyList(tasks);
 		ArrayList<FloatingTask> floatingTasks = TaskManagerUtils
 				.getFloatingTasks(tasks);
 
-		if (floatingTasks.size() == 0) {
-			return (Constants.MESSAGE_NO_FLOATING_TASKS);
+		if (floatingTasks.isEmpty()) {
+			throw new IllegalStateException(Constants.MESSAGE_NO_FLOATING_TASKS);
 		}
 
 		String toReturn = TaskManagerUtils.formatFloatingTasks(floatingTasks);

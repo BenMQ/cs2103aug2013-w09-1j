@@ -270,7 +270,75 @@ public class TaskManagerTest {
 				displayTasks(manager.getTasks()));
 
 	}
+	
+	//@author A0099314Y 
+	@Test
+	public void testGetFlexibleTimeRangeEmpty() {
+	    ArrayList<DateTime> input = new ArrayList<DateTime>();
+	    ArrayList<DateTime> actual = 
+	            TaskManagerUtils.getFlexibleTimeRange(input); 
+	    DateTime dt0000 = today(0, 0);
+        DateTime dt2359 = today(23, 59, 59);
+        ArrayList<DateTime> expected = new ArrayList<DateTime>();
+        expected.add(dt0000);
+        expected.add(dt2359);
+	    assertEquals(expected, actual);
+	}
+	
+	@Test
+    public void testGetFlexibleTimeRangeOneInput() {
+        DateTime dt0000 = today(0, 0);
+        DateTime dt2359 = today(23, 59, 59);
+        
+        ArrayList<DateTime> input = new ArrayList<DateTime>();
+        input.add(dt2359);
+        
+        ArrayList<DateTime> actual = 
+                TaskManagerUtils.getFlexibleTimeRange(input); 
+        
+        ArrayList<DateTime> expected = new ArrayList<DateTime>();
+        expected.add(dt0000);
+        expected.add(dt2359);
+        assertEquals(expected, actual);
+    }
+    
+	@Test
+    public void testGetFlexibleTimeRangeTwoInputs() {
+        DateTime tmr1300 = today(13, 0).plusDays(1);
+        DateTime dt2359 = today(23, 59, 59);
+        
+        ArrayList<DateTime> input = new ArrayList<DateTime>();
+        input.add(dt2359);
+        input.add(tmr1300);
+        
+        ArrayList<DateTime> actual = 
+                TaskManagerUtils.getFlexibleTimeRange(input); 
+        
+        ArrayList<DateTime> expected = new ArrayList<DateTime>();
+        expected.add(dt2359);
+        expected.add(tmr1300);
+        assertEquals(expected, actual);
+    }
+	
+	@Test
+    public void testGetFlexibleTimeRangeTwoInputsReversed() {
+        DateTime tmr1300 = today(13, 0).plusDays(1);
+        DateTime dt2359 = today(23, 59, 59);
+        
+        ArrayList<DateTime> input = new ArrayList<DateTime>();
 
+        input.add(tmr1300);
+        input.add(dt2359);
+        
+        ArrayList<DateTime> actual = 
+                TaskManagerUtils.getFlexibleTimeRange(input); 
+        
+        ArrayList<DateTime> expected = new ArrayList<DateTime>();
+        expected.add(dt2359);
+        expected.add(tmr1300);
+        assertEquals(expected, actual);
+    }
+    
 	@Test
 	public void testSearchForFreeIntervalsNoTask() throws Exception {
 		DateTime now = new DateTime();
@@ -381,9 +449,13 @@ public class TaskManagerTest {
 
 	}
 
-	private DateTime today(int hours, int minutes) {
+	private DateTime today(int hours, int minutes, int seconds) {
 		DateTime now = DateTime.now();
 		return new DateTime(now.getYear(), now.getMonthOfYear(),
-				now.getDayOfMonth(), hours, minutes, 0);
+				now.getDayOfMonth(), hours, minutes, seconds);
+	}
+	
+	private DateTime today(int hours, int minutes) {
+	    return today(hours, minutes, 0);
 	}
 }

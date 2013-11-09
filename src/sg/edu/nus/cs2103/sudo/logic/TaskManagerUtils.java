@@ -281,7 +281,7 @@ public class TaskManagerUtils {
      * If the input has one DateTime, the range will be that particular day. If
      * the input has two DateTimes, the range will be that.
      * 
-     * @param dateTimes
+     * @param dateTimes arrayList of start and end DateTime
      * @return range calculated
      */
     public static ArrayList<DateTime> getFlexibleTimeRange(
@@ -299,15 +299,32 @@ public class TaskManagerUtils {
             } else {
                 day = DateTime.now();
             }
-            DateTime startOfDay = new DateTime(day.getYear(),
-                    day.getMonthOfYear(), day.getDayOfMonth(), 0, 0, 0);
-            DateTime endOfDay = new DateTime(day.getYear(),
-                    day.getMonthOfYear(), day.getDayOfMonth(), 23, 59, 59);
+            DateTime startOfDay = getStartOfDay(day);
+            DateTime endOfDay = getEndOfDay(day);
             ArrayList<DateTime> range = new ArrayList<DateTime>(2);
             range.add(startOfDay);
             range.add(endOfDay);
             return range;
         }
+    }
+    /**
+     * Gets the last second of the day as a DateTime
+     * @param day date to be used
+     * @return the same day, but with 23:59:59
+     */
+    public static DateTime getEndOfDay(DateTime day) {
+        return new DateTime(day.getYear(),
+                day.getMonthOfYear(), day.getDayOfMonth(), 23, 59, 59);
+    }
+    
+    /**
+     * Gets the first second of the day as a Date
+     * @param day date to be used
+     * @return the same day, but with 00:00:00
+     */
+    public static DateTime getStartOfDay(DateTime day) {
+        return new DateTime(day.getYear(),
+                day.getMonthOfYear(), day.getDayOfMonth(), 0, 0, 0);
     }
     
     /**

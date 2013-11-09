@@ -234,37 +234,58 @@ public class IntegrationTestSuite {
 		// equivalence partitioning: sorting by incomplete tasks
 		userInput = "all";
 		testCommand(userInput, "Displaying all tasks\n\n" +
-				"[Today: Sat 9 Nov]==================================\n" +
+				"[Overdue: Sat 9 Nov]================================\n" +
 				"1. [by 5PM] make dinner \n\n" +
 				"[Finished tasks]====================================\n" +
 				"2. [by 11AM] make lunch Done!");
 	}
 
 	@Test
-	public void testFinishTask() throws IOException {
+	public void testFinish() throws IOException {
+		// boundary case: finish task which does not exist
 		String userInput = "finish 1";
-		testCommand(userInput, Constants.MESSAGE_INVALID_TASK_INDEX);
+		finishInvalidTaskId(userInput);
+		userInput = "finish 0";
+		finishInvalidTaskId(userInput);
+		userInput = "finish -1";
+		finishInvalidTaskId(userInput);
+		
+		prepareTaskListForTestFinish();
 
+		userInput = "finish 1";
+		finishValidTask(userInput);
+		
+		// boundary case: finish a completed task
+		userInput = "finish 1";
+		finishFinishedTask(userInput);
+	}
+
+	private void finishFinishedTask(String userInput) throws IOException {
+		testCommand(userInput, Constants.MESSAGE_ALREADY_COMPLETE);
+	}
+
+	private void finishValidTask(String userInput) throws IOException {
+		testCommand(userInput, "Finished task: make waffles for breakfast\n"
+				+ "Remaining tasks:");
+	}
+
+	private void prepareTaskListForTestFinish() {
+		String userInput;
 		userInput = "add 'make waffles for breakfast' by tomorrow 2pm";
 		InputParser.parseDescription(userInput);
 		runCommand(userInput);
+	}
 
-		userInput = "finish 1";
-		testCommand(userInput, "Finished task: make waffles for breakfast\n"
-				+ "Remaining tasks:");
-
-		userInput = "finish 1";
-		testCommand(userInput, Constants.MESSAGE_ALREADY_COMPLETE);
+	private void finishInvalidTaskId(String userInput) throws IOException {
+		testCommand(userInput, Constants.MESSAGE_INVALID_TASK_INDEX);
 	}
 
 	@Test
 	public void testUnfinishTask() throws IOException {
 		String userInput = "unfinish 1";
-		testCommand(userInput, Constants.MESSAGE_INVALID_TASK_INDEX);
+		finishInvalidTaskId(userInput);
 
-		userInput = "add 'make waffles for breakfast' by tomorrow 2pm";
-		InputParser.parseDescription(userInput);
-		runCommand(userInput);
+		prepareTaskListForTestFinish();
 		userInput = "finish 1";
 		runCommand(userInput);
 

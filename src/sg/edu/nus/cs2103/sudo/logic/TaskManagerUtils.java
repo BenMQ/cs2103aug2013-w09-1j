@@ -273,6 +273,8 @@ public class TaskManagerUtils {
 		}
 		GUI.print_add("\n\n",0);
 	}
+	
+	//@author A0099314Y
 	/**
      * Produces a start DateTime and an end DateTime based on the argument
      * given. If the input is an empty array, the range will be the current day.
@@ -308,6 +310,37 @@ public class TaskManagerUtils {
         }
     }
     
+    /**
+     * Validates parameters for schedule command, must have a valid index that
+     * is not completed, the dateTimes must have at most 1 date, duration must
+     * be positive. 
+     * @param duration duration in milliseconds
+     * @param dateTimes DateTimes parsed from the input
+     * @param index parsed index from the input
+     */
+    public static void validateScheduleParameters(long duration,
+            ArrayList<DateTime> dateTimes, int index, ArrayList<Task> tasks) {
+        try {
+            TaskManagerUtils.checkValidityIndex(index, tasks);  
+        } catch (IndexOutOfBoundsException e) {
+            GUI.print_add(Constants.MESSAGE_INVALID_TASK_INDEX, 3);
+            
+            return;
+        }
+        if (dateTimes.size() > 1) {
+            GUI.print_add(Constants.MESSAGE_INVALID_NUMBER_OF_DATES, 3);
+            return;
+        } else if (duration <= 0) {
+            GUI.print_add(Constants.MESSAGE_INCOMPLETE_COMMAND, 3);
+            return;
+        }
+        
+        if (tasks.get(index).isComplete()) {
+            GUI.print_add(Constants.MESSAGE_ALREADY_COMPLETE, 3);
+            return;
+        }
+    }
+    
 	/**
 	 * Shows the correct display message depending on showAll.
 	 */
@@ -318,7 +351,8 @@ public class TaskManagerUtils {
 			GUI.print_add(Constants.MESSAGE_DISPLAY, 2);
 		}
 	}
-	
+
+	//@author A0101286N
 	/**
 	 * Shows the correct display message for finished tasks.
 	 */

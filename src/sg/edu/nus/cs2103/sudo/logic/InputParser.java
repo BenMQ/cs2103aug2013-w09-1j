@@ -36,10 +36,7 @@ public class InputParser {
 	public static ArrayList<DateTime> parseDateTime(String userInput,
 	        COMMAND_TYPE command) {
 		Parser dtparser = new Parser();
-
-		String dateTimeString = retrieveDateTimeString(userInput, command);
-		
-		//Each DateGroup contains a list of Date
+		String dateTimeString = getDateTimeString(userInput, command);
 		List<DateGroup> dateGroups = dtparser.parse(dateTimeString);
 		ArrayList<List<Date>> dateLists = ParserUtils.getDateLists(dateGroups);	
 		ArrayList<DateTime> dateTimes = ParserUtils.
@@ -54,16 +51,15 @@ public class InputParser {
 	 * @param command the type of the command
 	 * @return the input string with irrelevant keywords stripped away
 	 */
-	public static String retrieveDateTimeString(String userInput,
+	public static String getDateTimeString(String userInput,
 	        COMMAND_TYPE command) {
-	    //remove Description
+
         String desc = parseDescription(userInput);
         if (desc != null) {
             userInput = userInput.replace(desc, "");
         }
         
-	    String[] inputWords = userInput.trim().split("\\s+");
-	    
+	    String[] inputWords = userInput.trim().split("\\s+");	    
 	    String[] relevantWord = 
 	            Arrays.copyOfRange(inputWords,
 	                               ParserUtils.getNumWordsToTrim(command),
@@ -93,9 +89,7 @@ public class InputParser {
 		COMMAND_TYPE commandType = ParserUtils.getCommandType(commandWord);
 		assert commandType != null;
 		int numOfWords = ParserUtils.countWords(userInput);
-		if (numOfWords == 0) {
-			return COMMAND_TYPE.PASS; //Required for delete id input
-		} else if (numOfWords < ParserUtils.getNumOfWordsNeeded(commandType)) { 
+		if (numOfWords < ParserUtils.getNumOfWordsNeeded(commandType)) { 
 			return COMMAND_TYPE.INCOMPLETE;
 		} else {
 			return commandType;

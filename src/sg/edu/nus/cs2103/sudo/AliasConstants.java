@@ -8,7 +8,9 @@ public class AliasConstants {
 	/**
 	 *  This key-value table maps aliases to their corresponding COMMAND_TYPE.
 	 */
-	public static final HashMap<String, COMMAND_TYPE> aliases = new HashMap<String, COMMAND_TYPE>() {
+	public static final HashMap<String, COMMAND_TYPE> aliases = 
+			new HashMap<String, COMMAND_TYPE>() {
+				
 		private static final long serialVersionUID = 1L;
 		{
 			put("ADD", COMMAND_TYPE.ADD);

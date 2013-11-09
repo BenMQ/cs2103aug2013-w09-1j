@@ -131,20 +131,19 @@ public class TaskManager {
 		assert taskDescription != null;
 		int numOfDates = dateTimes.size();
 		if (numOfDates == 0) {
-			this.addTask(new FloatingTask(taskDescription));
-			GUI.print_add(String.format(Constants.MESSAGE_ADD_FLOATING, taskDescription),GUIConstants.COLOR_CODE_BLUE);
+			Task task = new FloatingTask(taskDescription);
+			this.addTask(task);
+			GUI.print_add(task.getAddMessage(),GUIConstants.COLOR_CODE_BLUE);
 
 		} else if (numOfDates == 1) {
-			this.addTask(new DeadlineTask(taskDescription, dateTimes));
-			GUI.print_add(String.format(Constants.MESSAGE_ADD_DEADLINE, taskDescription,
-					DisplayUtils.formatDate(dateTimes.get(0))),GUIConstants.COLOR_CODE_BLUE);
+			Task task = new DeadlineTask(taskDescription, dateTimes);
+			this.addTask(task);
+			GUI.print_add(task.getAddMessage(),GUIConstants.COLOR_CODE_BLUE);
 			
 		} else if (numOfDates == 2) {
-			this.addTask(new TimedTask(taskDescription, dateTimes));
-			GUI.print_add(String.format(Constants.MESSAGE_ADD_TIMED, taskDescription,
-					DisplayUtils.formatDate(dateTimes.get(0)),
-					DisplayUtils.formatDate(dateTimes.get(1))), GUIConstants.COLOR_CODE_BLUE);
-			
+			Task task = new TimedTask(taskDescription, dateTimes);
+			this.addTask(task);
+			GUI.print_add(task.getAddMessage(), GUIConstants.COLOR_CODE_BLUE);
 		} else {
 			GUI.print_add(Constants.MESSAGE_INVALID_NUMBER_OF_DATES, GUIConstants.COLOR_CODE_BLUE);
 			
@@ -479,7 +478,7 @@ public class TaskManager {
 		for (int i = tasks.size() - 1; i >= 0; i--) {
 			Task task = tasks.get(i);
 
-			if (task.isComplete() || !(task instanceof TimedTask)) {
+			if (task.isComplete() || !(task.isTimedTask())) {
 				// we are only concerned with incomplete TimedTask
 				continue;
 			} else if (!task.endTime.isAfter(start)) {
@@ -654,6 +653,7 @@ public class TaskManager {
 		} else if (numResults == 1) {
 			delete(searchResults.get(0).getId());
 		} else {
+			GUI.print_add("\n"+Constants.MESSAGE_MULTIPLE_DELETE, GUIConstants.COLOR_CODE_BLUE);
 			TaskManagerUtils.displaySearchResults(searchResults);
 		}
 

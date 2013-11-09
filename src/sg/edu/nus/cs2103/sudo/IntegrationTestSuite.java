@@ -81,7 +81,8 @@ public class IntegrationTestSuite {
 		String taskDescription = InputParser.parseDescription(userInput);
 		String expectedOutput = String.format(Constants.MESSAGE_ADD_FLOATING,
 				taskDescription)+"Remaining tasks:\n[Floating tasks]==========================\n1. make waffles for breakfast ";
-
+		expectedOutput += "Displaying incomplete tasks\n\n[Floating tasks]==========================\n1. make waffles for breakfast \n";
+		
 		testCommand(userInput, expectedOutput);
 		testStorageContent();
 	}
@@ -95,7 +96,7 @@ public class IntegrationTestSuite {
 		String taskDescription = InputParser.parseDescription(userInput);
 		String expectedOutput = String.format(Constants.MESSAGE_ADD_DEADLINE,
 				taskDescription, endTime)+"Remaining tasks:\n[Overdue: Mon 14 Oct]=====================\n1. [by 2PM] make waffles for breakfast ";
-
+		expectedOutput += "Displaying incomplete tasks\n\n[Overdue: Mon 14 Oct]=====================\n1. [by 2PM] make waffles for breakfast \n";
 		testCommand(userInput, expectedOutput);
 		testStorageContent();
 	}
@@ -164,7 +165,14 @@ public class IntegrationTestSuite {
 	
 	@Test
 	public void testEdit() {
-		assert true;
+		String userInput = "add 'make waffles for lunch' from 12 December 10am to 2pm";
+		runCommand(userInput);
+		
+		userInput = "edit 1 from 8am to 12pm";
+		runCommand(userInput);
+		
+		Task task = IntegrationTestSuite.manager.getTasks().get(0);
+		assertEquals("1. [8AM - 12PM] make waffles for lunch",DisplayUtils.prettyPrint(task));
 	}
 
 	@Test

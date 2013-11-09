@@ -1,5 +1,7 @@
 package sg.edu.nus.cs2103.sudo.logic;
 
+import sg.edu.nus.cs2103.sudo.Constants;
+
 /**
  * @author Ipsita Mohapatra A0101286N
  * 
@@ -21,6 +23,14 @@ public class FloatingTask extends Task {
 	// To be used to store in .txt
 	public String toStringForFile() {
 		return "floating" + "#" + description + "#" + isComplete;
+	}
+	
+	public String getAddMessage(){
+		return String.format(Constants.MESSAGE_ADD_FLOATING, this.description);
+	}
+
+	public String getDisplayString() {
+		return this.description;
 	}
 
 }

@@ -247,17 +247,17 @@ public class GUI extends javax.swing.JFrame implements NativeKeyListener {
 					if(!ipt.equals("")){
 						previousInput.add(ipt);
 						previousInputPointer=previousInput.size()-1;
-					}
 						rebuildStyle();
 						String userInput =  jTextPaneInput.getText();
 						jTextPaneInput.setText(null);
 						logicHandler.executeCommand(userInput);
 						try {
-							FloatingTextArea.setText(
+							FloatingTextArea.setText("Floating tasks:\n\n"+
 									manager.displayFloatingTasks());
 						} catch (IllegalStateException w) {
 							FloatingTextArea
 									.setText(Constants.MESSAGE_EMPTY_LIST);
+						}
 						}
 					
 				}
@@ -310,7 +310,8 @@ public class GUI extends javax.swing.JFrame implements NativeKeyListener {
         
         //Floating task area
 		try {
-			FloatingTextArea.setText(manager.displayFloatingTasks());
+			FloatingTextArea.setText("Floating tasks:\n\n"+
+					manager.displayFloatingTasks());
 		} catch (IllegalStateException e) {
 			FloatingTextArea.setText(Constants.MESSAGE_EMPTY_LIST);
 		}
@@ -377,7 +378,7 @@ public class GUI extends javax.swing.JFrame implements NativeKeyListener {
             }
         });
     }
-  
+    
     //variables
 	private int currentKey;
 	private Boolean TABPressed = false;

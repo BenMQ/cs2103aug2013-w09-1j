@@ -10,31 +10,19 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 import java.util.Scanner;
 
 import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
-import org.joda.time.LocalDate;
-import org.joda.time.LocalDateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.joestelmach.natty.DateGroup;
-import com.joestelmach.natty.Parser;
-
 import sg.edu.nus.cs2103.sudo.logic.InputParser;
 import sg.edu.nus.cs2103.sudo.logic.LogicHandler;
-import sg.edu.nus.cs2103.sudo.logic.ParserUtils;
 import sg.edu.nus.cs2103.sudo.logic.Task;
 import sg.edu.nus.cs2103.sudo.logic.TaskManager;
 import sg.edu.nus.cs2103.sudo.storage.StorageHandler;
 import sg.edu.nus.cs2103.ui.DisplayUtils;
-import sg.edu.nus.cs2103.ui.UI;
 
 //@author A0099317U
 public class IntegrationTestSuite {

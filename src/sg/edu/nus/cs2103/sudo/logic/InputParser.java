@@ -25,7 +25,7 @@ import com.joestelmach.natty.Parser;
 public class InputParser {
 	
 	/** Flag used when a Task of specified is not found. */
-    private static final int NOT_FOUND = -1;
+    private static final int NOT_FOUND = Integer.MIN_VALUE;
 
 	/**
 	 * Parses dates from the user's input string.

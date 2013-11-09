@@ -44,28 +44,6 @@ public class InputParser {
 		
 		return dateTimes;
 	}
-	
-	/**
-	 * Strips the command and other irrelevant arguments in the user input.
-	 * @param userInput user input string
-	 * @param command the type of the command
-	 * @return the input string with irrelevant keywords stripped away
-	 */
-	public static String getDateTimeString(String userInput,
-	        COMMAND_TYPE command) {
-
-        String desc = parseDescription(userInput);
-        if (desc != null) {
-            userInput = userInput.replace(desc, "");
-        }
-        
-	    String[] inputWords = userInput.trim().split("\\s+");	    
-	    String[] relevantWord = 
-	            Arrays.copyOfRange(inputWords,
-	                               ParserUtils.getNumWordsToTrim(command),
-	                               inputWords.length);
-	    return ParserUtils.joinString(relevantWord, " ");
-	}
 
 	/**
 	 * Reads the user input for command.
@@ -89,7 +67,9 @@ public class InputParser {
 		COMMAND_TYPE commandType = ParserUtils.getCommandType(commandWord);
 		assert commandType != null;
 		int numOfWords = ParserUtils.countWords(userInput);
-		if (numOfWords < ParserUtils.getNumOfWordsNeeded(commandType)) { 
+		boolean notEnoughArguments = numOfWords < 
+				ParserUtils.getNumOfWordsNeeded(commandType);
+		if (notEnoughArguments) { 
 			return COMMAND_TYPE.INCOMPLETE;
 		} else {
 			return commandType;
@@ -108,13 +88,23 @@ public class InputParser {
         Matcher m = p.matcher(userInput);
         if (m.find()) {
         	String description = m.group().substring(1, m.group().length() - 1);
-        	if(description.length() <= 0){
-        		return null;
-        	}
-            return description;
+        	return validateEmptyDescription(description);
         } else {
             return null;
         }
+	}
+
+	/**
+	 * Returns null for empty task descriptions.
+	 * 
+	 * @param String
+	 * @return String 
+	 */	
+	public static String validateEmptyDescription(String description) {
+		if(description.length() <= 0){
+			return null;
+		}
+		return description;
 	}
 	
 	//@author A0099314Y
@@ -159,5 +149,26 @@ public class InputParser {
             return millis;
         }
     }
+    
+	/**
+	 * Strips the command and other irrelevant arguments in the user input.
+	 * @param userInput user input string
+	 * @param command the type of the command
+	 * @return the input string with irrelevant keywords stripped away
+	 */
+	public static String getDateTimeString(String userInput,
+	        COMMAND_TYPE command) {
+        String desc = parseDescription(userInput);
+        if (desc != null) {
+            userInput = userInput.replace(desc, "");
+        }
+        
+	    String[] inputWords = userInput.trim().split("\\s+");	    
+	    String[] relevantWord = 
+	            Arrays.copyOfRange(inputWords,
+	                               ParserUtils.getNumWordsToTrim(command),
+	                               inputWords.length);
+	    return ParserUtils.joinString(relevantWord, " ");
+	}    
 }
 

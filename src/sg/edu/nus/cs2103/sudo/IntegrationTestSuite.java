@@ -355,7 +355,8 @@ public class IntegrationTestSuite {
 	}
 
 	/**
-	 * Helper test method to also test console output.
+	 * Helper test method to test logic correctness and console output.
+	 * @param String
 	 * @param String
 	 */	
 	private void testCommand(String userInput, String expectedOutput)

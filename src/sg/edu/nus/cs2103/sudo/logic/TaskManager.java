@@ -17,9 +17,6 @@ import sg.edu.nus.cs2103.ui.GUI;
 import sg.edu.nus.cs2103.ui.GUIConstants;
 
 /**
- * @author chenminqi
- * @author Ipsita Mohapatra A0101286N
- * @author Yos Riady A0099317
  * 
  *         This is a singleton class responsible for handling the Task objects.
  *         The appropriate methods are called upon by the InputParser to execute
@@ -27,7 +24,7 @@ import sg.edu.nus.cs2103.ui.GUIConstants;
  *         objects. It is also responsible for throwing exceptions when
  *         necessary.
  */
-
+// @author A0101286N
 public class TaskManager {
 
 	private static TaskManager taskManager;
@@ -59,6 +56,7 @@ public class TaskManager {
 		return taskManager;
 	}
 
+	
 	/**
 	 * Load an ArrayList of tasks into memory. This method should be called upon
 	 * launch after the storage unit has read the stored item from disk. This
@@ -122,7 +120,8 @@ public class TaskManager {
 			ArrayList<DateTime> dateTimes) throws Exception {
 
 		if (taskDescription == null) {
-			GUI.print_add(Constants.MESSAGE_MISSING_DESCRIPTION,GUIConstants.COLOR_CODE_BLUE);
+			GUI.print_add(Constants.MESSAGE_MISSING_DESCRIPTION, 
+					GUIConstants.COLOR_CODE_BLUE);
 
 			return;
 		}
@@ -144,7 +143,8 @@ public class TaskManager {
 			this.addTask(task);
 			GUI.print_add(task.getAddMessage(), GUIConstants.COLOR_CODE_BLUE);
 		} else {
-			GUI.print_add(Constants.MESSAGE_INVALID_NUMBER_OF_DATES, GUIConstants.COLOR_CODE_BLUE);
+			GUI.print_add(Constants.MESSAGE_INVALID_NUMBER_OF_DATES, 
+					GUIConstants.COLOR_CODE_BLUE);
 			
 		}
 	}	
@@ -174,7 +174,8 @@ public class TaskManager {
 		int index = taskId - 1;
 		TaskManagerUtils.checkValidityIndex(index, tasks);
 
-		GUI.print_add(String.format(Constants.MESSAGE_EDIT, taskId),GUIConstants.COLOR_CODE_BLUE);
+		GUI.print_add(String.format(Constants.MESSAGE_EDIT, taskId), 
+				GUIConstants.COLOR_CODE_BLUE);
 	
 		TaskManagerUtils.editTaskHelper(taskDescription, dates, index, tasks);
 
@@ -296,7 +297,8 @@ public class TaskManager {
 		}
 
 		currTask.setComplete(true);
-		GUI.print_add(String.format(Constants.MESSAGE_FINISH, currTask.description),GUIConstants.COLOR_CODE_YELLOW);
+		GUI.print_add(String.format(Constants.MESSAGE_FINISH, currTask.description),
+				GUIConstants.COLOR_CODE_YELLOW);
 		
 		TaskManagerUtils.sortAndUpdateIds(tasks);
 		storage.save(true);
@@ -324,7 +326,8 @@ public class TaskManager {
 		}
 
 		currTask.setComplete(false);
-		GUI.print_add(String.format(Constants.MESSAGE_UNFINISH, currTask.description),GUIConstants.COLOR_CODE_YELLOW);
+		GUI.print_add(String.format(Constants.MESSAGE_UNFINISH, currTask.description),
+				GUIConstants.COLOR_CODE_YELLOW);
 	
 		TaskManagerUtils.sortAndUpdateIds(tasks);
 		storage.save(true);
@@ -681,9 +684,10 @@ public class TaskManager {
 		storage.save(true);
 		//TaskManagerUtils.saveToHistory(storage);
 	}
-
+	
+	// @author DAKE
 	/**
-	 * @author Liu Dake
+	 * 
 	 * 
 	 *         If history does not exist, throw Exception
 	 * 
@@ -703,7 +707,7 @@ public class TaskManager {
 	}
 
 	/**
-	 * @author Liu Dake
+	 * 
 	 * @return
 	 * @throws IOException
 	 */
@@ -713,8 +717,6 @@ public class TaskManager {
 	}
 
 	/**
-	 * @author Liu Dake
-	 * 
 	 *         If no redo provision exists in history, throw Exception
 	 * 
 	 * @return

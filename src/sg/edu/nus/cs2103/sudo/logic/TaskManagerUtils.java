@@ -12,11 +12,12 @@ import sg.edu.nus.cs2103.sudo.storage.StorageHandler;
 import sg.edu.nus.cs2103.ui.GUI;
 import sg.edu.nus.cs2103.ui.GUIConstants;
 
+// @author A0101286N
 /**
  * This class contains static methods that help execute some of the methods in
  * TaskManager.
  * 
- * @author Ipsita Mohapatra A0101286N
+ * @author A0101286N
  * 
  */
 public class TaskManagerUtils {

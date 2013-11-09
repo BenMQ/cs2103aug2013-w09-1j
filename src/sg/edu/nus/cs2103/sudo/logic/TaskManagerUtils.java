@@ -352,4 +352,14 @@ public class TaskManagerUtils {
 		}
 		return toReturn;
 	}
+	
+	/**
+	 * Determines if a DateTime has zero minute values.
+	 * @param DateTime
+	 * @return boolean
+	 */		
+	public static boolean hasZeroMinutes(final DateTime datetime) {
+		return datetime != null 
+				&& datetime.getMinuteOfHour() > 0;
+	}	
 }

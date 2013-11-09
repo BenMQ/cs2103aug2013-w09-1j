@@ -214,7 +214,7 @@ public class TaskManager {
 	public void displayAllTasks(boolean showAll) throws IllegalStateException {
 		TaskManagerUtils.checkEmptyList(tasks);
 		DateTime previousDate = null;
-		boolean floatingStarted = false;
+		boolean floatingStarted = false;	
 		boolean finishedStarted = false;
 
 		TaskManagerUtils.showDisplayMessage(showAll);

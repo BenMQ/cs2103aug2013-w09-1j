@@ -267,8 +267,6 @@ public class GUI extends javax.swing.JFrame implements NativeKeyListener {
 			}
 			
 		});
-
-        
         
         //GUI components properties and behavior
         jScrollPaneInput.setViewportView(jTextPaneInput);

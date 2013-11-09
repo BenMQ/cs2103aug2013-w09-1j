@@ -20,7 +20,6 @@ public abstract class Task {
 	protected DateTime endTime;
 	
 	public Task() {}
-	
 	public Task(int id, String description, DateTime startTime, DateTime endTime) {
 	    this.id = id;
 	    this.description = description;

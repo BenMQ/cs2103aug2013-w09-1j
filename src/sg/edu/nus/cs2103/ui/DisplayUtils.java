@@ -81,7 +81,7 @@ public class DisplayUtils {
 		String label = createLabel(previousDate, dateFormat, prefix);
 		int color = getPrefixColor(prefix);
 		
-		GUI.print_add("\n["+ label + "]" + generateSeparator(label), color);
+		GUI.print_add("\n\n["+ label + "]" + generateSeparator(label), color);
 	}
 
 	/**

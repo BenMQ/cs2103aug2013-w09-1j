@@ -8,13 +8,10 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-
 import org.joda.time.DateTime;
-
 import sg.edu.nus.cs2103.sudo.COMMAND_TYPE;
 import sg.edu.nus.cs2103.sudo.Constants;
 import sg.edu.nus.cs2103.sudo.StorageConstants;
-import sg.edu.nus.cs2103.sudo.exceptions.MissingFileException;
 import sg.edu.nus.cs2103.sudo.exceptions.NoHistoryException;
 import sg.edu.nus.cs2103.sudo.logic.DeadlineTask;
 import sg.edu.nus.cs2103.sudo.logic.FloatingTask;
@@ -22,7 +19,6 @@ import sg.edu.nus.cs2103.sudo.logic.InputParser;
 import sg.edu.nus.cs2103.sudo.logic.Task;
 import sg.edu.nus.cs2103.sudo.logic.TimedTask;
 import sg.edu.nus.cs2103.ui.GUI;
-import sg.edu.nus.cs2103.ui.UI;
 
 public class StorageHandler {
 	/**
@@ -249,24 +245,29 @@ public class StorageHandler {
 	public ArrayList<Task> undo() throws NoHistoryException, FileNotFoundException{
 
 		if(history.size()>1){
-			history_redo.add(history.get(history.size()-1));
+			history_redo.add(tasksToStrings(tasks));
 			history.remove(history.size()-1);
-			saveHistory();
 			tasks = stringsToTasks(history.get(history.size()-1));
-		return stringsToTasks(history.get(history.size()-1));
+			saveHistory();
+		return tasks;
 		}else{
 			throw new NoHistoryException("Can not undo anymore.");
 		}
 	}
-
+	/**
+	 * Redo returns the change before undo made by the user.
+	 * It will not be saved after user exit
+	 * @return ArrayList<Task> the result of redo
+	 * @throws NoHistoryException
+	 * @throws FileNotFoundException 
+	 */	
 	public ArrayList<Task> redo() throws NoHistoryException, FileNotFoundException{
 		if(history_redo.size()>0){
-			history.add(history_redo.get(history_redo.size()-1));
-			ArrayList<String> toReturn = history_redo.get(history_redo.size()-1);
+			tasks = stringsToTasks(history_redo.get(history_redo.size()-1));
+			history.add(tasksToStrings(tasks));
 			history_redo.remove(history_redo.size()-1);
-				saveHistory();
-			tasks = stringsToTasks(toReturn);
-		return stringsToTasks(toReturn);
+			saveHistory();
+		return tasks;
 		}else{
 			throw new NoHistoryException("Can not redo anymore.");
 		}

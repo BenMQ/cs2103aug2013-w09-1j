@@ -131,24 +131,6 @@ public class ParserUtils {
 	}
 	
 	/**
-	 * Parse a string of the form 2h3m into milliseconds
-	 * http://stackoverflow.com/posts/11021986/revisions
-	 * @param periodString
-	 * @return the input string in milliseconds
-	 */
-	public static long parseDurationToMillis(String periodString) {
-	    PeriodParser parser = new PeriodFormatterBuilder()
-	       .appendHours().appendSuffix("h")
-	       .appendMinutes().appendSuffix("m")
-	       .toParser();
-
-	    MutablePeriod period = new MutablePeriod();
-	    parser.parseInto(period, periodString, 0, Locale.getDefault());
-
-	    return period.toDurationFrom(new DateTime(0)).getMillis();
-	}
-	
-	/**
 	 * Set the time of an Joda DateTime object to 00:00
 	 * 
 	 * @param datetime
@@ -174,6 +156,25 @@ public class ParserUtils {
 		}
 		return datetime.withHourOfDay(23).withMinuteOfHour(59).withSecondOfMinute(0)
 				.withMillisOfSecond(0);
-	}	
+	}
 	
+	//@author A0099314Y
+	/**
+     * Parse a string of the form 2h3m into milliseconds
+     * http://stackoverflow.com/posts/11021986/revisions
+     * @param periodString
+     * @return the input string in milliseconds
+     */
+    public static long parseDurationToMillis(String periodString) {
+        PeriodParser parser = new PeriodFormatterBuilder()
+           .appendHours().appendSuffix("h")
+           .appendMinutes().appendSuffix("m")
+           .toParser();
+
+        MutablePeriod period = new MutablePeriod();
+        parser.parseInto(period, periodString, 0, Locale.getDefault());
+
+        return period.toDurationFrom(new DateTime(0)).getMillis();
+    }
+    
 }

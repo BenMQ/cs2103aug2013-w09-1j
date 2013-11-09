@@ -106,6 +106,7 @@ public class InputParser {
         }
 	}
 	
+	//@author A0099314Y
 	/**
 	 * Attempts to get the content between first and second space, 
 	 * and parse as integer. -1 for unsuccessful parsing.

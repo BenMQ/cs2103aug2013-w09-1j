@@ -252,7 +252,7 @@ public class IntegrationTestSuite {
 		testCommand(userInput, "Displaying all tasks\n\n" +
 				"[Tomorrow: Sun 10 Nov]==============================\n" +
 				"1. [by 9PM] make waffles \n\n" +
-				"[Finished tasks]====================================\n\n" +
+				"[Finished tasks]====================================\n" +
 				"2. [7PM - 9PM] do assignment for 2103 Done!");
 	}
 

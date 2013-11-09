@@ -17,11 +17,15 @@ public class DisplayUtils {
 	 */
 	public static String prettyPrint (Task task) {		
 		if (task.getStartTime() == null && task.getEndTime() == null) {
-			return GUI.print_add(task.getId() + ". ", GUIConstants.COLOR_CODE_WHITE)+
-			GUI.print_add(task.getDescription(), GUIConstants.COLOR_CODE_GREEN);
+			return GUI.print_add(task.getId() + 
+					". ", GUIConstants.COLOR_CODE_WHITE) + 
+					GUI.print_add(task.getDescription(), 
+							GUIConstants.COLOR_CODE_GREEN);
 		} else {
-			return GUI.print_add(task.getDateString(), GUIConstants.COLOR_CODE_WHITE)+
-			GUI.print_add(task.getDescription(), GUIConstants.COLOR_CODE_GREEN);
+			return GUI.print_add(task.getDateString(), 
+					GUIConstants.COLOR_CODE_WHITE) + 
+					GUI.print_add(task.getDescription(), 
+							GUIConstants.COLOR_CODE_GREEN);
 		}
 	}	
 	

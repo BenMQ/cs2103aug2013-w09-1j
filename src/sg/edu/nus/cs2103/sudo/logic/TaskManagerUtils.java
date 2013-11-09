@@ -268,7 +268,7 @@ public class TaskManagerUtils {
      * @param dateTimes DateTimes parsed from the input
      * @param index parsed index from the input
      */
-    public static void validateScheduleParameters(long duration,
+    public static boolean validateScheduleParams(long duration,
             ArrayList<DateTime> dateTimes, int index, ArrayList<Task> tasks) {
         try {
             TaskManagerUtils.checkValidityIndex(index, tasks);  
@@ -276,23 +276,24 @@ public class TaskManagerUtils {
             GUI.print_add(Constants.MESSAGE_INVALID_TASK_INDEX, 
                           GUIConstants.COLOR_CODE_RED);
             
-            return;
+            return false;
         }
         if (dateTimes.size() > 1) {
             GUI.print_add(Constants.MESSAGE_INVALID_NUMBER_OF_DATES, 
                           GUIConstants.COLOR_CODE_RED);
-            return;
+            return false;
         } else if (duration <= 0) {
             GUI.print_add(Constants.MESSAGE_INCOMPLETE_COMMAND, 
                           GUIConstants.COLOR_CODE_RED);
-            return;
+            return false;
         }
         
         if (tasks.get(index).isComplete()) {
             GUI.print_add(Constants.MESSAGE_ALREADY_COMPLETE, 
                           GUIConstants.COLOR_CODE_RED);
-            return;
+            return false;
         }
+        return true;
     }
     
 	/**

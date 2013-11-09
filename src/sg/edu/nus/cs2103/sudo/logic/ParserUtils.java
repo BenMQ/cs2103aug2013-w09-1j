@@ -18,8 +18,9 @@ import com.joestelmach.natty.DateGroup;
 
 //@author A0099317U
 /**
- * This class contains some static methods to parse task information such as ID,
- * description, and dates.
+ * This class contains some static methods to parse task 
+ * information such as task ID, description, and natty-JodaDateTime
+ * conversion.
  * 
  * @author Yos Riady
  * 
@@ -155,7 +156,7 @@ public class ParserUtils {
      * @return the number of words at the beginning of the command that are not
      * relevant to date time parsing
      */
-    public static int irrelevantWordsSize(COMMAND_TYPE command) {
+    public static int getNumWordsToTrim(COMMAND_TYPE command) {
         switch (command) {
         case SCHEDULE:
             return 3;

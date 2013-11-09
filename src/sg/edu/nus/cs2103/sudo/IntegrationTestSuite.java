@@ -27,12 +27,6 @@ import sg.edu.nus.cs2103.ui.DisplayUtils;
 //@author A0099317U
 public class IntegrationTestSuite {
 
-	/**
-	 * Integration Test ideas: 1. Test task adding, check state of all
-	 * components: UI, parser, taskmanager, storage 2. Need to test history
-	 * 
-	 */
-
 	private static final String SAVE_FILENAME = "integration_test.sav";
 	private static final String HISTORY_FILENAME = "integration_history.sav";
 

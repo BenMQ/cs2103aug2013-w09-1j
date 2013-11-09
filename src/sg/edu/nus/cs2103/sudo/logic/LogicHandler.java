@@ -106,7 +106,7 @@ public final class LogicHandler {
 				this.manager.displayAllTasks(true);
 				return;
 			case FINISH:
-				if(targetId == -1){
+				if(targetId == Integer.MIN_VALUE){
 					this.manager.displayFinishedTasks();
 				} else {
 					this.manager.markAsComplete(targetId);
@@ -121,7 +121,7 @@ public final class LogicHandler {
 				this.manager.add(taskDescription, dateTimes);
 				this.manager.displayAllTasks();
 				return;
-			case DELETE:;
+			case DELETE:
 				if (taskDescription == null) {
 					this.manager.delete(targetId);
 				} else {
@@ -156,8 +156,6 @@ public final class LogicHandler {
 				return;
 			case HELP:
 				this.manager.help(taskDescription);
-				return;
-			case PASS:
 				return;
 			case EXIT:
 				this.manager.saveTasks();

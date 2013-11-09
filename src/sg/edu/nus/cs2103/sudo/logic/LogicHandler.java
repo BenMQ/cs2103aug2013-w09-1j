@@ -155,9 +155,6 @@ public final class LogicHandler {
 			case HELP:
 				this.manager.help(taskDescription);
 				return;
-			case DESTROY:
-				this.manager.relaunch();
-				return;
 			case PASS:
 				return;
 			case EXIT:

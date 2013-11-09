@@ -19,8 +19,4 @@ public class UI {
 		}
 	}
 	
-	public static void forcePrint(String message){
-		System.out.println(message);
-	}	
-	
 }

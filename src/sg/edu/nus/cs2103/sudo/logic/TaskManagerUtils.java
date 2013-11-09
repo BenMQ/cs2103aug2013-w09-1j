@@ -10,6 +10,7 @@ import org.joda.time.DateTimeComparator;
 import sg.edu.nus.cs2103.sudo.Constants;
 import sg.edu.nus.cs2103.sudo.storage.StorageHandler;
 import sg.edu.nus.cs2103.ui.GUI;
+import sg.edu.nus.cs2103.ui.GUIConstants;
 
 /**
  * This class contains static methods that help execute some of the methods in
@@ -267,10 +268,9 @@ public class TaskManagerUtils {
 			throw new IllegalStateException(Constants.MESSAGE_NO_SEARCH_RESULTS);
 		}
 
-		GUI.print_add("\n",0);
-		GUI.print_add(Constants.MESSAGE_SEARCH_RESULTS, 1);
+		GUI.print_add("\n"+Constants.MESSAGE_SEARCH_RESULTS, GUIConstants.COLOR_CODE_YELLOW);
 		for (int i = 0; i < searchResults.size(); i++) {
-			GUI.print_add("\n"+searchResults.get(i).toString(), 0);
+			GUI.print_add("\n"+searchResults.get(i).toString(), GUIConstants.COLOR_CODE_GREEN);
 		}
 	}
 	/**
@@ -323,8 +323,8 @@ public class TaskManagerUtils {
 	 * Shows the correct display message for finished tasks.
 	 */
 	public static void showDisplayMessage() {
-		GUI.print_add(Constants.MESSAGE_DISPLAY_FINISHED, 2);
-		GUI.print_add(Constants.FINISHED_TASK_SEPARATOR, 2);
+		GUI.print_add(Constants.MESSAGE_DISPLAY_FINISHED, GUIConstants.COLOR_CODE_BLUE);
+		GUI.print_add(Constants.FINISHED_TASK_SEPARATOR, GUIConstants.COLOR_CODE_BLUE);
 	}
 	
 	public static void clearTasks(ArrayList<Task> tasks) {

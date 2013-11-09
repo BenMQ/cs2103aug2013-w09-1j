@@ -18,7 +18,7 @@ public class DisplayUtils {
 			DateTimeFormat.forPattern("ha");
 	public static final DateTimeFormatter HOUR_MINUTE_FORMAT = 
 			DateTimeFormat.forPattern("h:mma");
-	private static final int SEPARATOR_LENGTH = 40;
+	private static final int SEPARATOR_LENGTH = 50;
 	private static final char SEPARATOR_CHAR = '=';
 
 	/**
@@ -33,23 +33,14 @@ public class DisplayUtils {
 		} 
 		
 		if (task.getStartTime() == null && task.getEndTime() == null) {
-			GUI.print_add(task.getId() + ". ", 4);
-			toReturn+=(task.getId() + ". ");
-			GUI.print_add(task.getDescription(), 0);
-			toReturn+=(task.getDescription());
-			return toReturn;
+			return GUI.print_add(task.getId() + ". ", GUIConstants.COLOR_CODE_WHITE)+
+			GUI.print_add(task.getDescription(), GUIConstants.COLOR_CODE_GREEN);
 		} else if (task.getStartTime() == null){
-			GUI.print_add(formatDeadlineTask(task, onlytimeformat), 4);
-			toReturn+=(formatDeadlineTask(task, onlytimeformat));
-			GUI.print_add(task.getDescription(), 0);
-			toReturn+=task.getDescription();
-			return toReturn;
+			return GUI.print_add(formatDeadlineTask(task, onlytimeformat), GUIConstants.COLOR_CODE_WHITE)+
+			GUI.print_add(task.getDescription(), GUIConstants.COLOR_CODE_GREEN);
 		} else {
-			GUI.print_add(formatTimedTask(task, onlytimeformat), 4);
-			toReturn+=(formatTimedTask(task, onlytimeformat));
-			GUI.print_add(task.getDescription(), 0);
-			toReturn+=task.getDescription();
-			return toReturn;
+			return GUI.print_add(formatTimedTask(task, onlytimeformat), GUIConstants.COLOR_CODE_WHITE)+
+			GUI.print_add(task.getDescription(), GUIConstants.COLOR_CODE_GREEN);
 		}
 	}	
 	
@@ -105,7 +96,7 @@ public class DisplayUtils {
 			index += 2;
 		}
 		GUI.print_add("\n["+ label + "]" + fillString(
-				separatorLength, SEPARATOR_CHAR), index);
+				separatorLength, SEPARATOR_CHAR) + "\n", index);
 	}	
 	
 	/**

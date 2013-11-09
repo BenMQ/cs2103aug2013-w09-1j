@@ -8,8 +8,7 @@ public class Constants {
 	public static final String MESSAGE_INVALID_SEARCH = "Search is invalid.\n";
 	public static final String MESSAGE_INVALID_DELETE = "Search term for delete is invalid.\n";
 	public static final String MESSAGE_SEARCH_RESULTS = "Search Results";
-
-	public static final String NOTHING_TO_DISPLAY = "Nothing to display.\n";
+	public static final String MESSAGE_NO_HISTORY = "History file was removed or deleted.";
 	public static final String MESSAGE_DISPLAY = "Remaining tasks:";
 	public static final String MESSAGE_DISPLAY_ALL = "Displaying all tasks\n";
 	public static final String MESSAGE_DISPLAY_FINISHED = "Displaying finished tasks\n";
@@ -22,10 +21,8 @@ public class Constants {
 	public static final String MESSAGE_DELETE = "Deleted: %s\n";
 	public static final String MESSAGE_ENTER_TASK_ID = "Please enter task id:";
 	public static final String MESSAGE_MISSING_DESCRIPTION = "Task description should be between single quotes.\n";
-
 	public static final String MESSAGE_SAME_START_END_TIME = "Start date and end date for the task are the same!\n";
 	public static final String MESSAGE_END_BEFORE_START_TIME = "End date of the task occurs before start date!\n";
-
 	public static final String MESSAGE_EMPTY_LIST = "Task List is empty!\n";
 	public static final String MESSAGE_ALREADY_COMPLETE = "The task is already complete.\n";
 	public static final String MESSAGE_ALREADY_INCOMPLETE = "The task is already incomplete.\n";
@@ -33,7 +30,7 @@ public class Constants {
 	public static final String MESSAGE_NO_FLOATING_TASKS = "No floating tasks.\n";
 	public static final String MESSAGE_FINISH = "Finished task: %s\n";
 	public static final String MESSAGE_UNFINISH = "Un-Finished task: %s\n";
-
+	public static final String NOTHING_TO_DISPLAY = "Nothing to display.\n";
 	public static final String MESSAGE_NO_FREE_SLOTS = "No free slots found. :(";
 	public static final String MESSAGE_FREE_SLOTS_PREFIX = "Here are your free time slots for %s:\n";
 
@@ -53,12 +50,8 @@ public class Constants {
 	public static final String MESSAGE_REDO = "Redo...";
 
 	public static final String TASK_COMPLETED_FLAG = "Done!";
-	public static final String FINISHED_TASK_SEPARATOR = "\n[Finished tasks]==========================";
-	public static final String FLOATING_TASK_SEPARATOR = "\n[Floating tasks]==========================";
-	
-
-	public static final int KEYBOARD_SPACE = 32;
-	public static final int KEYBOARD_TAB = 9;
+	public static final String FINISHED_TASK_SEPARATOR = "\n\n[Finished tasks]====================================\n";
+	public static final String FLOATING_TASK_SEPARATOR = "\n\n[Floating tasks]====================================\n";
 	
 	public static final String LOGO = 
 			"                     __    \n"+ 
@@ -70,8 +63,6 @@ public class Constants {
 	public static final String MESSAGE_WELCOME_TO_SUDO_FIRST = "Welcome to the world of sudo!\nFor first time users, to learn about the full list of commands, type: help\nTo learn more about a command, type: help [command]\n";
 	public static final String MESSAGE_WELCOME_TO_SUDO_RELOAD = "Welcome back, dear user.\nYour past records have been loaded successfully.\nTo get a full list of commands, type: help\nTo learn more about a command: help [command]\n";
 //	public static final String MESSAGE_BETTER_ON_MAC = "\nTo get the best experience, we recommand Mac OS X.";
-	
-	public static final String MESSAGE_NO_HISTORY = "History file was removed or deleted.";
 	
 
 }

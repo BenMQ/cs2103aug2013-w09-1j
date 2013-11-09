@@ -267,11 +267,11 @@ public class TaskManagerUtils {
 			throw new IllegalStateException(Constants.MESSAGE_NO_SEARCH_RESULTS);
 		}
 
-		GUI.print_add("\n",0);
 		GUI.print_add(Constants.MESSAGE_SEARCH_RESULTS, 1);
 		for (int i = 0; i < searchResults.size(); i++) {
 			GUI.print_add("\n"+searchResults.get(i).toString(), 0);
 		}
+		GUI.print_add("\n\n",0);
 	}
 	/**
      * Produces a start DateTime and an end DateTime based on the argument

@@ -185,12 +185,7 @@ public final class LogicHandler {
 		if (taskDescription == null) {
 			this.manager.delete(targetId);
 		} else {
-			int numResults = this.manager.delete(taskDescription);
-			if (numResults > 1) {
-				GUI.print_add("\n"+Constants.MESSAGE_MULTIPLE_DELETE, 2);
-				int id = scanner.nextInt();
-				this.manager.delete(id);
-			}
+			this.manager.delete(taskDescription);
 		}
 	}
 

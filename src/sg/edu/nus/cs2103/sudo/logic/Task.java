@@ -1,10 +1,8 @@
 package sg.edu.nus.cs2103.sudo.logic;
 
 import org.joda.time.DateTime;
-import org.joda.time.DateTimeComparator;
 
-import sg.edu.nus.cs2103.sudo.Constants;
-
+//@author A0101286N
 /**
  * @author Ipsita Mohapatra A0101286N
  *
@@ -22,7 +20,6 @@ public abstract class Task {
 	protected DateTime endTime;
 	
 	public Task() {}
-	
 	public Task(int id, String description, DateTime startTime, DateTime endTime) {
 	    this.id = id;
 	    this.description = description;

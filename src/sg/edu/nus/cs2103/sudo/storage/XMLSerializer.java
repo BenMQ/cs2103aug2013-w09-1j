@@ -5,8 +5,6 @@ import java.beans.XMLDecoder;
 import java.io.*;
 import java.util.ArrayList;
 
-import sg.edu.nus.cs2103.sudo.exceptions.MissingFileException;
-
 public class XMLSerializer {
     public static void write(ArrayList<ArrayList<String>> h, String name) throws FileNotFoundException{
         XMLEncoder encoder =

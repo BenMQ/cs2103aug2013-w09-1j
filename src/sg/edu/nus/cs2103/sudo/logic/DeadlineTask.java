@@ -11,9 +11,9 @@ import org.joda.time.format.DateTimeFormatter;
 import sg.edu.nus.cs2103.sudo.Constants;
 import sg.edu.nus.cs2103.ui.DisplayUtils;
 
-
+//@author A0101286N
 /**
- * @author Ipsita Mohapatra A0101286N
+ * @author Ipsita Mohapatra 
  * 
  *         This class stores the information about Deadline Tasks. Deadline
  *         Tasks will have an id, description, isComplete and endTime. None of

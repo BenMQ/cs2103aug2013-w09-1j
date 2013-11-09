@@ -187,7 +187,7 @@ public final class LogicHandler {
 		} else {
 			int numResults = this.manager.delete(taskDescription);
 			if (numResults > 1) {
-				GUI.print_add("\n"+Constants.MESSAGE_ENTER_TASK_ID, 2);
+				GUI.print_add("\n"+Constants.MESSAGE_MULTIPLE_DELETE, 2);
 				int id = scanner.nextInt();
 				this.manager.delete(id);
 			}

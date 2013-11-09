@@ -98,7 +98,7 @@ public class TimedTask extends Task {
 	 */	
 	public String getDateString() {
 		DateTimeFormatter onlytimeformat = Constants.HOUR_FORMAT;
-		if (TaskManagerUtils.hasZeroMinutes(this.getEndTime())) {
+		if (DateTimeUtils.hasZeroMinutes(this.getEndTime())) {
 			onlytimeformat = Constants.HOUR_MINUTE_FORMAT;
 		}		
 		

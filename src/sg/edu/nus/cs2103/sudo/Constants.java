@@ -79,13 +79,15 @@ public class Constants {
 	public static final String FLOATING_TASK_SEPARATOR = "\n\n"
 			+ "[Floating tasks]====================================";
 	
-	public static final String MESSAGE_WELCOME_TO_SUDO_FIRST = "Welcome to "
+	public static final String MESSAGE_WELCOME_TO_SUDO_FIRST_A = "Welcome to "
 			+ "the world of sudo!\nFor first time users, to learn about the "
-			+ "full list of commands, type: help\nTo learn more about a command,"
+			+ "full list of commands, type:\n";
+	public static final String MESSAGE_WELCOME_TO_SUDO_FIRST_B = "help\n\nTo learn more about a command,"
 			+ " type: help [command]\n";
-	public static final String MESSAGE_WELCOME_TO_SUDO_RELOAD = "Welcome back,"
-			+ " dear user.\nYour past records have been loaded successfully.\n"
-			+ "To get a full list of commands, type: help\nTo learn more about a"
+	public static final String MESSAGE_WELCOME_TO_SUDO_RELOAD_A = "Welcome back,"
+			+ " dear user.\nYour past records have been loaded successfully.\n";
+	
+	public static final String MESSAGE_WELCOME_TO_SUDO_RELOAD_B =	"To get a full list of commands, type: help\nTo learn more about a"
 			+ " command: help [command]\n";
 
 	public static final DateTimeFormatter DATE_MONTH_FORMAT = DateTimeFormat

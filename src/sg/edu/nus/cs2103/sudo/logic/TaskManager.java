@@ -130,25 +130,25 @@ public class TaskManager {
 		assert taskDescription != null;
 		int numOfDates = dateTimes.size();
 		if (numOfDates == 0) {
-			this.addTask(new FloatingTask(taskDescription));
-			GUI.print_add(String.format(Constants.MESSAGE_ADD_FLOATING, taskDescription),2);
+			Task task = new FloatingTask(taskDescription);
+			this.addTask(task);
+			GUI.print_add(task.getAddMessage(),2);
 
 		} else if (numOfDates == 1) {
-			this.addTask(new DeadlineTask(taskDescription, dateTimes));
-			GUI.print_add(String.format(Constants.MESSAGE_ADD_DEADLINE, taskDescription,
-					DisplayUtils.formatDate(dateTimes.get(0))),2);
+			Task task = new DeadlineTask(taskDescription, dateTimes);
+			this.addTask(task);
+			GUI.print_add(task.getAddMessage(),2);
 			
 		} else if (numOfDates == 2) {
-			this.addTask(new TimedTask(taskDescription, dateTimes));
-			GUI.print_add(String.format(Constants.MESSAGE_ADD_TIMED, taskDescription,
-					DisplayUtils.formatDate(dateTimes.get(0)),
-					DisplayUtils.formatDate(dateTimes.get(1))), 2);
+			Task task = new TimedTask(taskDescription, dateTimes);
+			this.addTask(task);
+			GUI.print_add(task.getAddMessage(), 2);
 			
 		} else {
 			GUI.print_add(Constants.MESSAGE_INVALID_NUMBER_OF_DATES, 2);
 			
 		}
-	}	
+	}
 
 	/**
 	 * Replaces the task indicated by the displayId with the newTask Changes

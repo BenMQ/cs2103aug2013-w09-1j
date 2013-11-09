@@ -258,15 +258,13 @@ public class TaskManager {
 			throws UnsupportedOperationException, IOException {
 
 		int index = taskId - 1;
+		
 		TaskManagerUtils.checkValidityIndex(index, tasks);
-
 		Task currTask = tasks.get(index);
-		if (currTask.isComplete()) {
-			throw new UnsupportedOperationException(
-					Constants.MESSAGE_ALREADY_COMPLETE);
-		}
-
+		TaskManagerUtils.checkIfAlreadyComplete(currTask);
+		
 		currTask.setComplete(true);
+		
 		GUI.print_add(String.format(Constants.MESSAGE_FINISH, currTask.description),
 				GUIConstants.COLOR_CODE_YELLOW);
 		
@@ -276,6 +274,7 @@ public class TaskManager {
 		return tasks;
 	}
 
+	
 	/**
 	 * Mark a completed task as incomplete.
 	 * 

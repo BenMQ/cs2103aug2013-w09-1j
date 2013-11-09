@@ -99,6 +99,14 @@ public class TaskManagerUtils {
 			throw new IllegalStateException(Constants.MESSAGE_NO_FLOATING_TASKS);
 		}
 	}
+	
+	public static void checkIfAlreadyComplete(Task currTask) {
+		if (currTask.isComplete()) {
+			throw new UnsupportedOperationException(
+					Constants.MESSAGE_ALREADY_COMPLETE);
+		}
+	}
+
 
 
 	/**

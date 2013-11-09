@@ -28,11 +28,12 @@ public class DisplayUtils {
 	}	
 	
 	/**
-	 * Adds contextual prefixes to day separators such as Today, Overdue, 
+	 * Returns contextual prefixes to day separators such as Today, Overdue, 
 	 * and so on based on current day
 	 * @param int
+	 * @return String
 	 */	
-	public static String addPrefix(DateTime previousDate) {
+	public static String getPrefix(DateTime previousDate) {
 		String prefix = "";
 		DateTime today = DateTime.now();
 		DateTime tomorrow = DateTime.now().plusDays(1);
@@ -77,7 +78,7 @@ public class DisplayUtils {
 	 */	
 	public static void printDateSeparator(DateTime previousDate) {
 		DateTimeFormatter dateFormat = getDateFormat(previousDate);
-		String prefix = addPrefix(previousDate);
+		String prefix = getPrefix(previousDate);
 		String label = createLabel(previousDate, dateFormat, prefix);
 		int color = getPrefixColor(prefix);
 		

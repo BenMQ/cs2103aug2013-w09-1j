@@ -14,7 +14,6 @@ import org.joda.time.DateTime;
 import sg.edu.nus.cs2103.sudo.COMMAND_TYPE;
 import sg.edu.nus.cs2103.sudo.Constants;
 import sg.edu.nus.cs2103.sudo.StorageConstants;
-import sg.edu.nus.cs2103.sudo.UIConstants;
 import sg.edu.nus.cs2103.sudo.exceptions.MissingFileException;
 import sg.edu.nus.cs2103.sudo.exceptions.NoHistoryException;
 import sg.edu.nus.cs2103.sudo.logic.DeadlineTask;
@@ -117,7 +116,7 @@ public class StorageHandler {
 			}
 			return isReloaded;
 		} catch (FileNotFoundException e) {
-			GUI.print_add(UIConstants.MESSAGE_NO_HISTORY, 4);
+			GUI.print_add(Constants.MESSAGE_NO_HISTORY, 4);
 			saveHistory();
 			e.printStackTrace();
 		} catch (IOException e) {

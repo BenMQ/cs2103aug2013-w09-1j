@@ -697,12 +697,11 @@ public class TaskManager {
 		TaskManagerUtils.checkValidityIndex(index, tasks);
 
 		GUI.print_add(String.format(Constants.MESSAGE_DELETE,
-				tasks.get(index).description),GUIConstants.COLOR_CODE_RED);
+				tasks.get(index).description), GUIConstants.COLOR_CODE_RED);
 
 		tasks.remove(index);
 		TaskManagerUtils.sortAndUpdateIds(tasks);
 		storage.save(true);
-		//TaskManagerUtils.saveToHistory(storage);
 	}
 	
 	// @author DAKE

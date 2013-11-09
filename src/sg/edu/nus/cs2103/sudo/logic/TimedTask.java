@@ -6,6 +6,7 @@ import org.joda.time.DateTime;
 import org.joda.time.DateTimeComparator;
 
 import sg.edu.nus.cs2103.sudo.Constants;
+import sg.edu.nus.cs2103.ui.DisplayUtils;
 
 /**
  * @author Ipsita Mohapatra A0101286N
@@ -81,6 +82,12 @@ public class TimedTask extends Task {
 						Constants.MESSAGE_END_BEFORE_START_TIME);
 			}
 		}
+	}
+	
+	public String getAddMessage() {
+		return String.format(Constants.MESSAGE_ADD_TIMED, this.description,
+				DisplayUtils.formatDate(this.startTime),
+				DisplayUtils.formatDate(this.endTime));
 	}
 }
 

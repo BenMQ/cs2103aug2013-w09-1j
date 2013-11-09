@@ -25,7 +25,7 @@ import com.joestelmach.natty.Parser;
 public class InputParser {
 	
 	/** Flag used when a Task of specified is not found. */
-    private static final int NOT_FOUND = Integer.MIN_VALUE;
+    public static final int NOT_FOUND = Integer.MIN_VALUE;
 
 	/**
 	 * Parses dates from the user's input string.
@@ -66,9 +66,11 @@ public class InputParser {
 		String commandWord = ParserUtils.getCommandWord(userInput);
 		COMMAND_TYPE commandType = ParserUtils.getCommandType(commandWord);
 		assert commandType != null;
+		
 		int numOfWords = ParserUtils.countWords(userInput);
 		boolean notEnoughArguments = numOfWords < 
 				ParserUtils.getNumOfWordsNeeded(commandType);
+		
 		if (notEnoughArguments) { 
 			return COMMAND_TYPE.INCOMPLETE;
 		} else {

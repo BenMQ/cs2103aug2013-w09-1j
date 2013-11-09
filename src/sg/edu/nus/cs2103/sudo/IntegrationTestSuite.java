@@ -165,7 +165,14 @@ public class IntegrationTestSuite {
 	
 	@Test
 	public void testEdit() {
-		assert true;
+		String userInput = "add 'make waffles for lunch' from 12 December 10am to 2pm";
+		runCommand(userInput);
+		
+		userInput = "edit 1 from 8am to 12pm";
+		runCommand(userInput);
+		
+		Task task = IntegrationTestSuite.manager.getTasks().get(0);
+		assertEquals("1. [8AM - 12PM] make waffles for lunch",DisplayUtils.prettyPrint(task));
 	}
 
 	@Test

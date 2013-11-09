@@ -3,12 +3,10 @@ package sg.edu.nus.cs2103.ui;
 import java.util.Arrays;
 
 import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import sg.edu.nus.cs2103.sudo.Constants;
 import sg.edu.nus.cs2103.sudo.logic.Task;
-import sg.edu.nus.cs2103.sudo.logic.TaskManagerUtils;
 
 //@author A0099317U
 public class DisplayUtils {
@@ -17,17 +15,12 @@ public class DisplayUtils {
 	 * Prints a pretty string representation of a Task.
 	 * @param Task
 	 */
-	public static String prettyPrint (Task task) {
-		String toReturn = "";
-		
+	public static String prettyPrint (Task task) {		
 		if (task.getStartTime() == null && task.getEndTime() == null) {
 			return GUI.print_add(task.getId() + ". ", GUIConstants.COLOR_CODE_WHITE)+
-			GUI.print_add(task.getDisplayString(), GUIConstants.COLOR_CODE_GREEN);
-		} else if (task.getStartTime() == null){
-			return GUI.print_add(task.getDisplayString(), GUIConstants.COLOR_CODE_WHITE)+
 			GUI.print_add(task.getDescription(), GUIConstants.COLOR_CODE_GREEN);
 		} else {
-			return GUI.print_add(task.getDisplayString(), GUIConstants.COLOR_CODE_WHITE)+
+			return GUI.print_add(task.getDateString(), GUIConstants.COLOR_CODE_WHITE)+
 			GUI.print_add(task.getDescription(), GUIConstants.COLOR_CODE_GREEN);
 		}
 	}	
@@ -38,12 +31,15 @@ public class DisplayUtils {
 	 * @param int
 	 */	
 	public static String addPrefix(DateTime previousDate) {
+		DateTime today = DateTime.now();
+		DateTime tomorrow = DateTime.now().plusDays(1);
 		String prefix = "";
+		
 		if (previousDate.compareTo(DateTime.now()) < 0) {
 			prefix = GUIConstants.OVERDUE_PREFIX;
-		} else if (isSameDate(previousDate, DateTime.now())) {
+		} else if (isSameDate(previousDate, today)) {
 			prefix = GUIConstants.TODAY_PREFIX;
-		} else if (isSameDate(previousDate, DateTime.now().plusDays(1))) {
+		} else if (isSameDate(previousDate, tomorrow)) {
 			prefix = GUIConstants.TOMORROW_PREFIX;
 		}
 		return prefix;
@@ -57,10 +53,10 @@ public class DisplayUtils {
 	 */		
 	public static DateTime insertDateSeparators(DateTime previousDate, 
 			Task task) {
-		
 		DateTime time = task.getEndTime();
+		boolean dateIsNull = (previousDate == null);
 		
-		if (previousDate == null || !isSameDate(time, previousDate)) {
+		if (dateIsNull || !isSameDate(time, previousDate)) {
 			previousDate = time;
 			DisplayUtils.printDateSeparator(previousDate);
 		}
@@ -68,46 +64,71 @@ public class DisplayUtils {
 	}
 	
 	/**
-	 * Adds constant-length date-level separators between groups of tasks.
+	 * Adds separators between groups of tasks on a different date.
+	 * For example, tasks for today are separated from tasks 
+	 * tomorrow and next Monday.
+	 * 
 	 * @param DateTime
 	 */	
 	public static void printDateSeparator(DateTime previousDate) {
-		int index = 1;
+		DateTimeFormatter dateFormat = getDateFormat(previousDate);
 		String prefix = addPrefix(previousDate);
+		String label = prefix + previousDate.toString(dateFormat);
+		int color = getPrefixColor(prefix);
 		
+		GUI.print_add("\n["+ label + "]" + generateSeparator(label), color);
+	}
+	
+	
+	/**
+	 * Returns date-month-year date format 
+	 * for tasks not on the current year, else 
+	 * returns a date-month format for task display. 
+	 * 
+	 * @param String
+	 * @return int
+	 */
+	public static DateTimeFormatter getDateFormat(DateTime previousDate) {
 		DateTimeFormatter dateFormat = Constants.DATE_MONTH_FORMAT;
 		if(previousDate.getYear() != DateTime.now().getYear()){
 			dateFormat = Constants.DATE_MONTH_YEAR_FORMAT;
 		}
-		
-		String label = prefix + previousDate.toString(dateFormat);
-		
-		
-		int separatorLength = Constants.SEPARATOR_LENGTH - label.length();
-		if (label.contains("verdue")) {
+		return dateFormat;
+	}
+
+	/**
+	 * Gets the right color (red, yellow, etc.)
+	 * for a particular String prefix (Overdue, etc.). 
+	 * 
+	 * @param String
+	 * @return int
+	 */
+	public static int getPrefixColor(String prefix) {
+		int index = 1;
+		if (prefix.equals(GUIConstants.OVERDUE_PREFIX)) {
 			index += 2;
 		}
-		GUI.print_add("\n["+ label + "]" + fillString(
-				separatorLength, Constants.SEPARATOR_CHAR), index);
+		return index;
 	}	
 	
 	/**
-	 * Adds separators to indicate finished tasks.
+	 * Adds separator to indicate finished tasks.
 	 * @param boolean
 	 * @param Task
 	 * @return boolean
-	 */		
+	 */	
 	public static boolean insertFinishedSeparator(boolean finishedStarted, 
 			Task task) {
 		if (!finishedStarted && task.isComplete()) {
 			finishedStarted = true;
-			GUI.print_add(Constants.FINISHED_TASK_SEPARATOR, 1);
+			GUI.print_add(Constants.FINISHED_TASK_SEPARATOR, 
+					GUIConstants.COLOR_CODE_YELLOW);
 		}
 		return finishedStarted;
 	}
 
 	/**
-	 * Adds separators to indicate floating tasks.
+	 * Adds separator to indicate floating tasks.
 	 * @param boolean
 	 * @param Task
 	 * @return boolean
@@ -116,9 +137,23 @@ public class DisplayUtils {
 			Task task) {
 		if (!floatingStarted && task.isFloatingTask()) {
 			floatingStarted = true;
-			GUI.print_add(Constants.FLOATING_TASK_SEPARATOR, 1);
+			GUI.print_add(Constants.FLOATING_TASK_SEPARATOR, 
+					GUIConstants.COLOR_CODE_YELLOW);
 		}
 		return floatingStarted;
+	}
+	
+	
+	/**
+	 * Generates a separator of constant length 
+	 * Constants.SEPARATOR_LENGTH
+	 * 
+	 * @param label
+	 * @return String
+	 */				
+	protected static String generateSeparator(String label){
+		int separatorLength = Constants.SEPARATOR_LENGTH - label.length();
+		return fillString(separatorLength, Constants.SEPARATOR_CHAR);
 	}
 	
 	/**

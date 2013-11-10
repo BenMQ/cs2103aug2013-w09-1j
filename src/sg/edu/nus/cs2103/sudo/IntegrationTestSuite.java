@@ -170,19 +170,32 @@ public class IntegrationTestSuite {
 
 	// @author A0101286N
 	@Test
-	public void testSearch() throws IOException {
+	public void testValidSearch() throws IOException {
 		prepareTaskListForTestSearch();
 
 		String userInput = "search 'nus'";
-		searchMultipleResults(userInput);
+		String expectedOutput = "\nSearch Results\n"
+				+ "1. [by 6PM] submit proposal to tutor at NUS \n"
+				+ "2. [9AM - 10AM] have coffee with mentor in Nus \n\n";
+		testCommand(userInput, expectedOutput);
+	}
+
+	@Test
+	public void testEmptyStringSearch() throws IOException {
+		prepareTaskListForTestSearch();
 
 		// boundary case: invalid search
-		userInput = "search ''";
-		searchEmptyString(userInput);
+		String userInput = "search ''";
+		testCommand(userInput, "Search is invalid.\n");
+	}
+
+	@Test
+	public void testNoSearchResults() throws IOException {
+		prepareTaskListForTestSearch();
 
 		// boundary case: search with no search results
-		userInput = "search 'fishes'";
-		searchNoResults(userInput);
+		String userInput = "search 'fishes'";
+		testCommand(userInput, "No search results found.\n");
 	}
 
 	private void prepareTaskListForTestSearch() {
@@ -193,21 +206,6 @@ public class IntegrationTestSuite {
 		userInput = "add 'have coffee with mentor in Nus' from "
 				+ "27 Oct 9am to 27 Oct 10am";
 		runCommand(userInput);
-	}
-
-	private void searchNoResults(String userInput) throws IOException {
-		testCommand(userInput, "No search results found.\n");
-	}
-
-	private void searchEmptyString(String userInput) throws IOException {
-		testCommand(userInput, "Search is invalid.\n");
-	}
-
-	private void searchMultipleResults(String userInput) throws IOException {
-		String expectedOutput = "\nSearch Results\n"
-				+ "1. [by 6PM] submit proposal to tutor at NUS \n"
-				+ "2. [9AM - 10AM] have coffee with mentor in Nus \n\n";
-		testCommand(userInput, expectedOutput);
 	}
 
 	@Test
@@ -237,7 +235,7 @@ public class IntegrationTestSuite {
 	}
 
 	@Test
-	public void testFinish() throws IOException {
+	public void testInvalidFinish() throws IOException {
 		// boundary case: finish task which does not exist
 		String userInput = "finish 1";
 		finishInvalidTaskId(userInput);
@@ -245,17 +243,26 @@ public class IntegrationTestSuite {
 		finishInvalidTaskId(userInput);
 		userInput = "finish -1";
 		finishInvalidTaskId(userInput);
-
-		prepareTaskListForTestFinish();
-
-		userInput = "finish 1";
-		finishValidTask(userInput);
-
-		// boundary case: finish a completed task
-		userInput = "finish 1";
-		finishFinishedTask(userInput);
 	}
 
+	@Test
+	public void testValidFinish() throws IOException {
+		prepareTaskListForTestFinish();
+
+		String userInput = "finish 1";
+		finishValidTask(userInput);
+
+	}
+	
+	@Test
+	public void testInvalidFinishCompletedTask() throws IOException {
+		prepareTaskListForTestFinish();
+		
+		// boundary case: finish a completed task
+		String userInput = "finish 1";
+		finishFinishedTask(userInput);
+	}
+	
 	private void finishFinishedTask(String userInput) throws IOException {
 		testCommand(userInput, Constants.MESSAGE_ALREADY_COMPLETE);
 	}
@@ -288,23 +295,24 @@ public class IntegrationTestSuite {
 	}
 
 	@Test
-	public void testUnfinish() throws IOException {
+	public void testInvalidUnfinish() throws IOException {
 		// boundary case: unfinish task which does not exist
 		String userInput = "unfinish 1";
 		unfinishInvalidTaskId(userInput);
-
+	}
+	
+	@Test 
+	public void testValidUnfinish() throws IOException {
 		prepareTaskListForTestUnfinish();
 
-		userInput = "unfinish 1";
-		UnfinishValidTask(userInput);
-	}
-
-	private void UnfinishValidTask(String userInput) throws IOException {
-		testCommand(userInput, "Un-Finished task: make waffles for breakfast\n"
+		String userInput = "unfinish 1";
+		String expectedOutput = "Un-Finished task: make waffles for breakfast\n"
 				+ "Remaining tasks:\n\n\n"
 				+ "[Fri 29 Nov]========================================\n"
-				+ "1. [by 2PM] make waffles for breakfast ");
+				+ "1. [by 2PM] make waffles for breakfast ";
+		testCommand(userInput, expectedOutput);
 	}
+
 
 	@Test
 	public void testDisplayAll() throws IOException {

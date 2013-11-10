@@ -258,9 +258,12 @@ public class IntegrationTestSuite {
 	@Test
 	public void testInvalidFinishCompletedTask() throws IOException {
 		prepareTaskListForTestFinish();
+			
+		String userInput = "finish 1";
+		runCommand(userInput);
 		
 		// boundary case: finish a completed task
-		String userInput = "finish 1";
+		userInput = "finish 1";
 		finishFinishedTask(userInput);
 	}
 	
@@ -278,6 +281,7 @@ public class IntegrationTestSuite {
 		userInput = "add 'make waffles for breakfast' by 29 Nov 2pm";
 		InputParser.parseDescription(userInput);
 		runCommand(userInput);
+		
 	}
 
 	private void prepareTaskListForTestUnfinish() {

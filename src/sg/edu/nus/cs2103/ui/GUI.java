@@ -31,36 +31,12 @@ import org.jnativehook.keyboard.NativeKeyListener;
 public class GUI extends javax.swing.JFrame implements NativeKeyListener {
 
 	/*TEST FOR FUN*/
-
-    private static class MyTextPane extends JTextPane {
-        public MyTextPane() {
-            super();
-            setOpaque(false);
-            // this is needed if using Nimbus L&F - see http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6687960
-            setBackground(Color.BLACK);
-        }
-        @Override
-        protected void paintComponent(Graphics g) {
-            // set background green - but can draw image here too
-            g.setColor(Color.BLACK);
-            g.fillRect(0, 0, getWidth(), getHeight());
-
-            BufferedImage img = null;
-            try {
-                img = ImageIO.read(new File(GUIConstants.BACKGROUND_IMAGE_NAME));
-            } catch (IOException e) {
-            }
-            //g.drawImage(img, 0, 0, this);
-
-            super.paintComponent(g);
-        }
-    }
 	
     /**
      * The following code creates new GUI.
      * MainTextPane is the main text displaying area which is static so that other static objects can call it.
      */
-	static public MyTextPane MainTextPane = new MyTextPane();
+	static public JTextPane MainTextPane = new JTextPane();
 	
     /**
      * StyledDocument stores all text layouts for MainTextPane.

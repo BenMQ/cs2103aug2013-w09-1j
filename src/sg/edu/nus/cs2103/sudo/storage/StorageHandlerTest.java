@@ -25,8 +25,7 @@ public class StorageHandlerTest {
 	private static ArrayList<Task> tasks = new ArrayList<Task>();
 	private static StorageHandler storage;
 	private static final String TEST_NAME = "Test.sav";
-	
-	//private static final String HISTORY_NAME = "Test.his";
+
 	private File file;
 	private File historyFile;
 	

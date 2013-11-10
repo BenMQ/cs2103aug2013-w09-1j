@@ -340,7 +340,7 @@ public class TaskManagerTest {
     public void testGetFlexibleTimeRangeThreeInputs() {
 
         DateTime dt0800 = today(8, 0);
-        DateTime dt0900 = today(9, 0)
+        DateTime dt0900 = today(9, 0);
         DateTime dt2359 = today(23, 59, 59);
         ArrayList<DateTime> input = new ArrayList<DateTime>();
 

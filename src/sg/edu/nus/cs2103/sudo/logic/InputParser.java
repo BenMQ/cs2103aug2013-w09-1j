@@ -162,9 +162,8 @@ public class InputParser {
 	        COMMAND_TYPE command) {
         String desc = parseDescription(userInput);
         if (desc != null) {
-            userInput = userInput.replace(desc, "");
+            userInput = userInput.replace("'" + desc + "'", "");
         }
-        
 	    String[] inputWords = userInput.trim().split("\\s+");	    
 	    String[] relevantWord = 
 	            Arrays.copyOfRange(inputWords,

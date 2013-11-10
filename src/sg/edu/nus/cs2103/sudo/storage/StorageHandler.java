@@ -36,14 +36,16 @@ public class StorageHandler {
 	public ArrayList<ArrayList<String>> history;
 	public ArrayList<ArrayList<String>> history_redo;
 	private ArrayList<Task> tasks;
+	private String historyName;
 
 	/**
 	 * (This is a singleton class)
 	 * Build a StorageHandler.
 	 * @param  fileName
 	 */
-	private StorageHandler(String fileName) {
+	private StorageHandler(String fileName, String historyName) {
 		this.fileName = fileName;
+		this.historyName = historyName;
 		initializeHistory();
 	}
 	
@@ -52,9 +54,9 @@ public class StorageHandler {
 	 * Give a StorageHandler.
 	 * @param fileName
 	 */
-	public static StorageHandler getStorageHandler(String fileName) {
+	public static StorageHandler getStorageHandler(String fileName, String historyName) {
 		if (storageHandler == null) {
-			storageHandler = new StorageHandler(fileName);
+			storageHandler = new StorageHandler(fileName, historyName);
 		}
 		return storageHandler;
 	}
@@ -71,9 +73,9 @@ public class StorageHandler {
 	/**
 	 * reset the StorageHandler and clear all files.
 	 */
-	public static void resetAll(String fileName) {
+	public static void resetAll(String fileName, String historyName) {
 		File file = new File(fileName);
-		File historyFile = new File(Constants.HISTORY_NAME);
+		File historyFile = new File(historyName);
 		if (file.exists()) {
 			file.delete();
 			historyFile.delete();
@@ -104,7 +106,7 @@ public class StorageHandler {
 	 * @throws FileNotFoundException
 	 */
 	private void readHistory() throws FileNotFoundException{
-		history = XMLSerializer.read(Constants.HISTORY_NAME);
+		history = XMLSerializer.read(historyName);
 	}
 	
 	/**
@@ -261,7 +263,7 @@ public class StorageHandler {
 	 */	
 	private void saveHistory(){
 			try {
-				XMLSerializer.write(history, Constants.HISTORY_NAME);
+				XMLSerializer.write(history, historyName);
 			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

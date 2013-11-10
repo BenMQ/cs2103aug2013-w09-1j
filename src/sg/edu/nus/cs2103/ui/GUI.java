@@ -1,24 +1,16 @@
 package sg.edu.nus.cs2103.ui;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 
 import sg.edu.nus.cs2103.sudo.logic.LogicHandler;
 import sg.edu.nus.cs2103.sudo.logic.TaskManager;
 import sg.edu.nus.cs2103.sudo.Constants;
-
 import java.awt.Color;
 import java.awt.Frame;
-import java.awt.Graphics;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.image.BufferedImage;
-
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.text.*;
-
 import org.jnativehook.GlobalScreen;
 import org.jnativehook.NativeHookException;
 import org.jnativehook.keyboard.NativeKeyEvent;
@@ -69,16 +61,13 @@ public class GUI extends javax.swing.JFrame implements NativeKeyListener {
 		}
 	}
 
-	public static void addNewStyle(String style,StyledDocument doc,int size,int bold,int italic,int underline,Color color,String fontName)
+	public static void addNewStyle(String style,StyledDocument doc,int size,int bold,int italic,Color color,String fontName)
 	 {
-	  Style sys = StyleContext.getDefaultStyleContext().getStyle(StyleContext.DEFAULT_STYLE);
-	  try { doc.removeStyle(style); } catch(Exception e) {}
-	  
+	  doc.removeStyle(style);//clean the style if exist
 	  Style s = doc.addStyle(style,null); // add
 	  StyleConstants.setFontSize(s,size); // size
 	  StyleConstants.setBold(s,(bold==1)?true:false); // bold
 	  StyleConstants.setItalic(s,(italic==1)?true:false); // italian
-	  StyleConstants.setUnderline(s,(underline==1)?true:false); // downline
 	  StyleConstants.setForeground(s,color); // color
 	  StyleConstants.setFontFamily(s,fontName);  // font
 	  //StyleConstants.setBackground(s, Color.BLACK);
@@ -105,17 +94,17 @@ public class GUI extends javax.swing.JFrame implements NativeKeyListener {
 				e.printStackTrace();
 			}
 	    	StyledDocument styledDoc = MainTextPane.getStyledDocument();
-			addNewStyle("Green",styledDoc,18,1,0,0,Color.GREEN,"OCR A Std");//main text
-			addNewStyle("Yellow",styledDoc,18,1,0,0,new Color(254, 254, 125),"OCR A Std");//labels
-			addNewStyle("Blue",styledDoc,18,1,1,0,new java.awt.Color(145, 192, 246),"OCR A Std");//command feedback
-			addNewStyle("Red",styledDoc,18,1,0,0,new java.awt.Color(254, 100, 100),"OCR A Std");//Error
-			addNewStyle("White",styledDoc,18,1,1,0,Color.WHITE,"OCR A Std");//ID and highlighted texts
+			addNewStyle("Green",styledDoc,18,1,0,Color.GREEN,"OCR A Std");//main text
+			addNewStyle("Yellow",styledDoc,18,1,0,new Color(254, 254, 125),"OCR A Std");//labels
+			addNewStyle("Blue",styledDoc,18,1,1,new java.awt.Color(145, 192, 246),"OCR A Std");//command feedback
+			addNewStyle("Red",styledDoc,18,1,0,new java.awt.Color(254, 100, 100),"OCR A Std");//Error
+			addNewStyle("White",styledDoc,18,1,1,Color.WHITE,"OCR A Std");//ID and highlighted texts
 	    }
 	/**
 	 * GUI class builder. Initialize logicHandler, build text styles, then initialize GUI components.
 	 */	
     public GUI() {
-		manager = TaskManager.getTaskManager();
+		manager = TaskManager.getTaskManager(Constants.FILE_NAME, Constants.HISTORY_NAME);
 		logicHandler = LogicHandler.getLogicHandler(manager, null);
 		rebuildStyle();
 		initComponents();

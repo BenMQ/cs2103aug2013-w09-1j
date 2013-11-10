@@ -30,16 +30,16 @@ public class TaskManagerTest {
 	Scanner user = new Scanner(System.in);
 	private static TaskManager manager;
 	private File savefile;
-
+	private File historyfile;
 	private final static String floatingTaskDescription = "learn how to fish";
 	private final static String timedTaskDescription = "Trying an invalid time interval";
 
 	@Before
 	public void setUp() throws FileNotFoundException {
 		savefile = new File(SAVE_FILENAME);
-		new File(HISTORY_FILENAME);
-		StorageHandler.getStorageHandler(SAVE_FILENAME);
-		manager = TaskManager.getTaskManager();
+		historyfile = new File(HISTORY_FILENAME);
+		StorageHandler.getStorageHandler(SAVE_FILENAME, HISTORY_FILENAME);
+		manager = TaskManager.getTaskManager(SAVE_FILENAME, HISTORY_FILENAME);
 		System.setOut(new PrintStream(outContent));
 	}
 
@@ -47,6 +47,7 @@ public class TaskManagerTest {
 	public void tearDown() throws IOException {
 		manager.clearTasks();
 		savefile.delete();
+		historyfile.delete();
 	}
 
 	/**

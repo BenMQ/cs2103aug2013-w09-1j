@@ -25,6 +25,8 @@ public class StorageHandlerTest {
 	private static ArrayList<Task> tasks = new ArrayList<Task>();
 	private static StorageHandler storage;
 	private static final String TEST_NAME = "Test.sav";
+	private static final String TEST_HISTORY_NAME = "Test.his";
+	
 
 	private File file;
 	private File historyFile;
@@ -41,7 +43,7 @@ public class StorageHandlerTest {
 	@Before
 	public void setUp() {
 		file = new File(TEST_NAME);
-		historyFile = new File(Constants.HISTORY_NAME);
+		historyFile = new File(TEST_HISTORY_NAME);
     }
 	
 	@After
@@ -54,7 +56,7 @@ public class StorageHandlerTest {
 	
 	@Test
 	public void initializationTest() throws Exception {
-		storage = StorageHandler.getStorageHandler(TEST_NAME);
+		storage = StorageHandler.getStorageHandler(TEST_NAME,TEST_HISTORY_NAME);
 		storage.prepareFile(tasks);
 		assertEquals(true, file.exists());
 		assertEquals(true, historyFile.exists());
@@ -62,7 +64,7 @@ public class StorageHandlerTest {
 	
 	@Test
 	public void writeTest() throws Exception {
-		storage = StorageHandler.getStorageHandler(TEST_NAME);
+		storage = StorageHandler.getStorageHandler(TEST_NAME, TEST_HISTORY_NAME);
 		storage.prepareFile(tasks);
 		String taskDescription = InputParser.parseDescription(userInput1);
 		ArrayList<DateTime> dates = InputParser.parseDateTime(userInput1, COMMAND_TYPE.ADD);
@@ -95,7 +97,7 @@ public class StorageHandlerTest {
 	
 	@Test
 	public void readTest() throws Exception {
-		storage = StorageHandler.getStorageHandler(TEST_NAME);
+		storage = StorageHandler.getStorageHandler(TEST_NAME, TEST_HISTORY_NAME);
 		storage.prepareFile(tasks);
 		String taskDescription = InputParser.parseDescription(userInput4);
 		ArrayList<DateTime> dates = InputParser.parseDateTime(userInput4, COMMAND_TYPE.ADD);
@@ -120,7 +122,7 @@ public class StorageHandlerTest {
 		assertEquals(true, file.exists());
 		assertEquals(true, historyFile.exists());
 		
-		storage = StorageHandler.getStorageHandler(TEST_NAME);
+		storage = StorageHandler.getStorageHandler(TEST_NAME, TEST_HISTORY_NAME);
 		storage.prepareFile(tasks);
 		assertEquals("TIMED#CS2100 Tutorial#2013-10-14T13:00 to 2013-10-14T14:00#false", tasks.get(0).toStringForFile());
 		assertEquals("TIMED#Japanese Tutorial A#2013-10-14T14:00 to 2013-10-14T16:00#false", tasks.get(1).toStringForFile());
@@ -131,7 +133,7 @@ public class StorageHandlerTest {
 	@Test
 	public void historyTest() throws Exception {
 		storage.resetStorageHandler();
-		storage = StorageHandler.getStorageHandler(TEST_NAME);
+		storage = StorageHandler.getStorageHandler(TEST_NAME, TEST_HISTORY_NAME);
 		storage.prepareFile(tasks);
 		String taskDescription = InputParser.parseDescription(userInput4);
 		ArrayList<DateTime> dates = InputParser.parseDateTime(userInput4, COMMAND_TYPE.ADD);
@@ -165,7 +167,7 @@ public class StorageHandlerTest {
 		tasks.clear();
 		assertEquals(true, file.exists());
 		assertEquals(true, historyFile.exists());
-		storage = StorageHandler.getStorageHandler(TEST_NAME);
+		storage = StorageHandler.getStorageHandler(TEST_NAME, TEST_HISTORY_NAME);
 		storage.prepareFile(tasks);
 		assertEquals("TIMED#CS2100 Tutorial#2013-10-14T13:00 to 2013-10-14T14:00#false", tasks.get(0).toStringForFile());
 		assertEquals("TIMED#Japanese Tutorial A#2013-10-14T14:00 to 2013-10-14T16:00#false", tasks.get(1).toStringForFile());
@@ -176,7 +178,7 @@ public class StorageHandlerTest {
 		StorageHandler.resetStorageHandler();
 		assertEquals(true, file.exists());
 		assertEquals(true, historyFile.exists());
-		storage = StorageHandler.getStorageHandler(TEST_NAME);
+		storage = StorageHandler.getStorageHandler(TEST_NAME, TEST_HISTORY_NAME);
 		storage.prepareFile(tasks);
 		tasks=(ArrayList<Task>) storage.undo().clone();
 		tasks=(ArrayList<Task>) storage.undo().clone();

@@ -179,7 +179,8 @@ public class IntegrationTestSuite {
 				+ "2. [9AM - 10AM] have coffee with mentor in Nus \n\n";
 		testCommand(userInput, expectedOutput);
 	}
-	
+
+	@Test
 	public void testEmptyStringSearch() throws IOException {
 		prepareTaskListForTestSearch();
 
@@ -187,10 +188,11 @@ public class IntegrationTestSuite {
 		String userInput = "search ''";
 		testCommand(userInput, "Search is invalid.\n");
 	}
-	
+
+	@Test
 	public void testNoSearchResults() throws IOException {
 		prepareTaskListForTestSearch();
-		
+
 		// boundary case: search with no search results
 		String userInput = "search 'fishes'";
 		testCommand(userInput, "No search results found.\n");
@@ -233,7 +235,7 @@ public class IntegrationTestSuite {
 	}
 
 	@Test
-	public void testFinish() throws IOException {
+	public void testInvalidFinish() throws IOException {
 		// boundary case: finish task which does not exist
 		String userInput = "finish 1";
 		finishInvalidTaskId(userInput);
@@ -241,17 +243,26 @@ public class IntegrationTestSuite {
 		finishInvalidTaskId(userInput);
 		userInput = "finish -1";
 		finishInvalidTaskId(userInput);
-
-		prepareTaskListForTestFinish();
-
-		userInput = "finish 1";
-		finishValidTask(userInput);
-
-		// boundary case: finish a completed task
-		userInput = "finish 1";
-		finishFinishedTask(userInput);
 	}
 
+	@Test
+	public void testValidFinish() throws IOException {
+		prepareTaskListForTestFinish();
+
+		String userInput = "finish 1";
+		finishValidTask(userInput);
+
+	}
+	
+	@Test
+	public void testInvalidFinishCompletedTask() throws IOException {
+		prepareTaskListForTestFinish();
+		
+		// boundary case: finish a completed task
+		String userInput = "finish 1";
+		finishFinishedTask(userInput);
+	}
+	
 	private void finishFinishedTask(String userInput) throws IOException {
 		testCommand(userInput, Constants.MESSAGE_ALREADY_COMPLETE);
 	}

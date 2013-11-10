@@ -12,7 +12,7 @@ public class Constants {
 			+ "full list of commands, type:\n";
 	public static final String MESSAGE_WELCOME_TO_SUDO_FIRST_B = "help\n\nTo " +
 			"learn more about a command,"
-			+ " type: help [command]\n";
+			+ " type: help <command>\n";
 	public static final String MESSAGE_WELCOME_TO_SUDO_RELOAD_A = "Welcome " +
 			"back, dear user.\nYour past records have been loaded " +
 			"successfully.\n";

@@ -80,7 +80,7 @@ public class InputParserTest {
 	
 	@Test
 	public void testParseIdNotFound(){	
-		assertEquals(-1, InputParser.parseId("add 'make waffles " +
+		assertEquals(InputParser.NOT_FOUND, InputParser.parseId("add 'make waffles " +
 				"for breakfast'"));
 	}	
 	
@@ -144,7 +144,7 @@ public class InputParserTest {
 	@Test
 	public void testParseAddMissingDescription() throws IOException{
 		String userInput = "add nothing";
-		testCommand(userInput, Constants.MESSAGE_MISSING_DESCRIPTION);
+		testCommand(userInput, Constants.MESSAGE_MISSING_DESCRIPTION + Constants.MESSAGE_EMPTY_LIST);
 		assertEquals(0, manager.getTasks().size());
 	}
 	

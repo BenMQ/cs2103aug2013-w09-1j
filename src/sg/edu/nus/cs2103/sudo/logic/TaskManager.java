@@ -56,7 +56,7 @@ public class TaskManager {
 		return taskManager;
 	}
 	
-	// @author DAKE!!
+	// @author A0105656E
 	/**
 	 * Load an ArrayList of tasks into memory. This method should be called upon
 	 * launch after the storage unit has read the stored item from disk. This
@@ -689,7 +689,7 @@ public class TaskManager {
 		storage.save(true);
 	}
 
-	// @author DAKE
+	// @author A0105656E
 	/**
 	 * If history does not exist, throw Exception
 	 * 

@@ -58,7 +58,7 @@ public class TaskManagerTest {
 	@Test
 	public void testAddTasks() throws Exception {
 		// adding valid floating task
-		manager.addTask(new FloatingTask(floatingTaskDescription));
+		manager.addTaskAndSort(new FloatingTask(floatingTaskDescription));
 		assertEquals("1. learn how to fish false\n",
 				displayTasks(manager.getTasks()));
 
@@ -68,7 +68,7 @@ public class TaskManagerTest {
 
 		// boundary case: add task with invalid time interval
 		try {
-			manager.addTask(new TimedTask(timedTaskDescription, dateTimes));
+			manager.addTaskAndSort(new TimedTask(timedTaskDescription, dateTimes));
 		} catch (Exception e) {
 			assertEquals(Constants.MESSAGE_END_BEFORE_START_TIME,
 					e.getMessage());
@@ -89,7 +89,7 @@ public class TaskManagerTest {
 		}
 		*/
 		
-		manager.addTask(new TimedTask(0, "Have dinner with family in NUS",
+		manager.addTaskAndSort(new TimedTask(0, "Have dinner with family in NUS",
 				false, new DateTime(2013, 10, 23, 19, 0, 0, 0), new DateTime(
 						2013, 10, 23, 21, 0, 0, 0)));
 		assertEquals(
@@ -98,7 +98,7 @@ public class TaskManagerTest {
 				displayTasks(manager.getTasks()));
 
 		// adding valid deadline task
-		manager.addTask(new DeadlineTask(0, "Submit proposal at Nus", false,
+		manager.addTaskAndSort(new DeadlineTask(0, "Submit proposal at Nus", false,
 				new DateTime(2013, 10, 21, 0, 0, 0, 0)));
 		assertEquals(
 				"1. Submit proposal at Nus by Mon 21 October 12:00 AM false\n" +
@@ -365,9 +365,9 @@ public class TaskManagerTest {
 		range.add(dt0000);
 		range.add(dt2359);
 		// some slots
-		manager.addTask(new TimedTask(0, "timed", false, today(11, 0), today(
+		manager.addTaskAndSort(new TimedTask(0, "timed", false, today(11, 0), today(
 				12, 0)));
-		manager.addTask(new TimedTask(0, "timed", false, today(17, 0), today(
+		manager.addTaskAndSort(new TimedTask(0, "timed", false, today(17, 0), today(
 				18, 0)));
 		ArrayList<MutableInterval> actual = manager.getFreeIntervals(range);
 		ArrayList<MutableInterval> expected = new ArrayList<MutableInterval>();
@@ -388,7 +388,7 @@ public class TaskManagerTest {
 		range.add(dt0000);
 		range.add(dt2359);
 		// whole day
-		manager.addTask(new TimedTask(0, "timed", false, dt0000, dt2359));
+		manager.addTaskAndSort(new TimedTask(0, "timed", false, dt0000, dt2359));
 		ArrayList<MutableInterval> actual = manager.getFreeIntervals(range);
 		ArrayList<MutableInterval> expected = new ArrayList<MutableInterval>();
         assertEquals(expected, actual);

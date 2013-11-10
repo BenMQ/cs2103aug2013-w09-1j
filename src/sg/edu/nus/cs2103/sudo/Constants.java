@@ -10,13 +10,13 @@ public class Constants {
 			+ "full list of commands, type:\n";
 	public static final String MESSAGE_WELCOME_TO_SUDO_FIRST_B = "help\n\nTo " +
 			"learn more about a command,"
-			+ " type: help [command]\n";
+			+ " type: help <command>\n";
 	public static final String MESSAGE_WELCOME_TO_SUDO_RELOAD_A = "Welcome " +
 			"back, dear user.\nYour past records have been loaded " +
 			"successfully.\n";
 	public static final String MESSAGE_WELCOME_TO_SUDO_RELOAD_B =	"To get " +
 			"a full list of commands, type: help\nTo learn more about a"
-			+ " command: help [command]\n";
+			+ " command: help <command>\n";
 	public static final String MESSAGE_INVALID_COMMAND = "Invalid command.\n";
 	public static final String MESSAGE_INVALID_TASK_INDEX = "Invalid task "
 			+ "index.\n";

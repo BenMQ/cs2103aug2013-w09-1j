@@ -20,11 +20,10 @@ import sg.edu.nus.cs2103.ui.GUIConstants;
 
 /**
  * 
- *         This is a singleton class responsible for handling the Task objects.
- *         The appropriate methods are called upon by the InputParser to execute
- *         user commands such as adding, editing, searching and deleting Task
- *         objects. It is also responsible for throwing exceptions when
- *         necessary.
+ * This is a singleton class responsible for handling the Task objects. The
+ * appropriate methods are called upon by the InputParser to execute user
+ * commands such as adding, editing, searching and deleting Task objects. It is
+ * also responsible for throwing exceptions when necessary.
  */
 // @author A0101286N
 public class TaskManager {
@@ -58,7 +57,6 @@ public class TaskManager {
 		return taskManager;
 	}
 
-	
 	/**
 	 * Load an ArrayList of tasks into memory. This method should be called upon
 	 * launch after the storage unit has read the stored item from disk. This
@@ -70,7 +68,7 @@ public class TaskManager {
 	public void preloadTasks(ArrayList<Task> tasks) {
 		this.tasks = tasks;
 	}
-	
+
 	// @author DAKE!!
 	public void relaunch() {
 		StorageHandler.resetAll(Constants.FILE_NAME);
@@ -80,15 +78,16 @@ public class TaskManager {
 		TaskManagerUtils.updateAllIds(tasks);
 		try {
 			taskManager = new TaskManager();
-			GUI.print_add("Files rebuilt.",GUIConstants.COLOR_CODE_RED);
+			GUI.print_add("Files rebuilt.", GUIConstants.COLOR_CODE_RED);
 
 		} catch (Exception e) {
-			GUI.print_add("Files rebuiling failed.", GUIConstants.COLOR_CODE_RED);
+			GUI.print_add("Files rebuiling failed.",
+					GUIConstants.COLOR_CODE_RED);
 
 			e.printStackTrace();
 		}
 	}
-	
+
 	// @author A0101286N
 	/**
 	 * Adds a new task into the list. Maintains a sorted list of items after
@@ -108,10 +107,9 @@ public class TaskManager {
 		TaskManagerUtils.sortAndUpdateIds(tasks);
 		return tasks;
 	}
-	
+
 	/**
-	 * Adds a task based on the number of date
-	 * arguments.
+	 * Adds a task based on the number of date arguments.
 	 * 
 	 * @param taskDescription
 	 *            The task description
@@ -119,11 +117,11 @@ public class TaskManager {
 	 *            A list of DateTimes
 	 * @throws Exception
 	 */
-	public void add(String taskDescription,
-			ArrayList<DateTime> dateTimes) throws Exception {
+	public void add(String taskDescription, ArrayList<DateTime> dateTimes)
+			throws Exception {
 
 		if (taskDescription == null) {
-			GUI.print_add(Constants.MESSAGE_MISSING_DESCRIPTION, 
+			GUI.print_add(Constants.MESSAGE_MISSING_DESCRIPTION,
 					GUIConstants.COLOR_CODE_BLUE);
 			return;
 		}
@@ -133,24 +131,24 @@ public class TaskManager {
 		if (numOfDates == 0) {
 			Task task = new FloatingTask(taskDescription);
 			this.addTask(task);
-			GUI.print_add(task.getAddMessage(),GUIConstants.COLOR_CODE_BLUE);
+			GUI.print_add(task.getAddMessage(), GUIConstants.COLOR_CODE_BLUE);
 
 		} else if (numOfDates == 1) {
 			Task task = new DeadlineTask(taskDescription, dateTimes);
 			this.addTask(task);
-			GUI.print_add(task.getAddMessage(),GUIConstants.COLOR_CODE_BLUE);
-			
+			GUI.print_add(task.getAddMessage(), GUIConstants.COLOR_CODE_BLUE);
+
 		} else if (numOfDates == 2) {
 			Task task = new TimedTask(taskDescription, dateTimes);
 			this.addTask(task);
 			GUI.print_add(task.getAddMessage(), GUIConstants.COLOR_CODE_BLUE);
 		} else {
-			GUI.print_add(Constants.MESSAGE_INVALID_NUMBER_OF_DATES, 
+			GUI.print_add(Constants.MESSAGE_INVALID_NUMBER_OF_DATES,
 					GUIConstants.COLOR_CODE_BLUE);
-			
+
 		}
 		storage.save(true);
-	}	
+	}
 
 	/**
 	 * Replaces the task indicated by the displayId with the newTask Changes
@@ -177,9 +175,9 @@ public class TaskManager {
 		int index = taskId - 1;
 		TaskManagerUtils.checkValidityIndex(index, tasks);
 
-		GUI.print_add(String.format(Constants.MESSAGE_EDIT, taskId), 
+		GUI.print_add(String.format(Constants.MESSAGE_EDIT, taskId),
 				GUIConstants.COLOR_CODE_BLUE);
-	
+
 		TaskManagerUtils.editTaskHelper(taskDescription, dates, index, tasks);
 
 		TaskManagerUtils.sortAndUpdateIds(tasks);
@@ -199,10 +197,10 @@ public class TaskManager {
 			if (task.isComplete()) {
 				completed = Constants.TASK_COMPLETED_FLAG;
 			}
-			GUI.print_add("\n",GUIConstants.COLOR_CODE_YELLOW);
+			GUI.print_add("\n", GUIConstants.COLOR_CODE_YELLOW);
 			DisplayUtils.prettyPrint(task);
-			GUI.print_add(" "+ completed, GUIConstants.COLOR_CODE_YELLOW);
-			
+			GUI.print_add(" " + completed, GUIConstants.COLOR_CODE_YELLOW);
+
 		}
 	}
 
@@ -215,13 +213,12 @@ public class TaskManager {
 	 */
 	public void displayAllTasks(boolean showAll) throws IllegalStateException {
 		TaskManagerUtils.checkEmptyList(tasks);
-	
+
 		TaskManagerUtils.showDisplayMessage(tasks, showAll);
-		
+
 		TaskManagerUtils.formatAllTasks(tasks, showAll);
 	}
 
-	
 	/**
 	 * Prints all incomplete tasks only.
 	 * 
@@ -246,37 +243,36 @@ public class TaskManager {
 		return TaskManagerUtils.formatFloatingTasks(floatingTasks);
 	}
 
-	
 	/**
 	 * Mark an incomplete task as completed.
 	 * 
 	 * @param taskId
 	 *            id of task to be marked as completed
 	 * @return modified task list
-	 * @throws IOException 
+	 * @throws IOException
 	 * @throws Exception
 	 */
 	public ArrayList<Task> markAsComplete(int taskId)
 			throws UnsupportedOperationException, IOException {
 
 		int index = taskId - 1;
-		
+
 		TaskManagerUtils.checkValidityIndex(index, tasks);
 		Task currTask = tasks.get(index);
 		TaskManagerUtils.checkIfAlreadyComplete(currTask);
-		
+
 		currTask.setComplete(true);
-		
-		GUI.print_add(String.format(Constants.MESSAGE_FINISH, currTask.description),
+
+		GUI.print_add(
+				String.format(Constants.MESSAGE_FINISH, currTask.description),
 				GUIConstants.COLOR_CODE_YELLOW);
-		
+
 		TaskManagerUtils.sortAndUpdateIds(tasks);
 		storage.save(true);
 
 		return tasks;
 	}
 
-	
 	/**
 	 * Mark a completed task as incomplete.
 	 * 
@@ -297,9 +293,10 @@ public class TaskManager {
 		}
 
 		currTask.setComplete(false);
-		GUI.print_add(String.format(Constants.MESSAGE_UNFINISH, currTask.description),
+		GUI.print_add(
+				String.format(Constants.MESSAGE_UNFINISH, currTask.description),
 				GUIConstants.COLOR_CODE_YELLOW);
-	
+
 		TaskManagerUtils.sortAndUpdateIds(tasks);
 		storage.save(true);
 		return tasks;
@@ -319,8 +316,9 @@ public class TaskManager {
 	public ArrayList<Task> searchAndDisplay(String searchStr)
 			throws NullPointerException, IllegalStateException {
 
-		GUI.print_add(String.format(Constants.MESSAGE_SEARCH, searchStr),GUIConstants.COLOR_CODE_YELLOW);
-		
+		GUI.print_add(String.format(Constants.MESSAGE_SEARCH, searchStr),
+				GUIConstants.COLOR_CODE_YELLOW);
+
 		ArrayList<Task> searchResults = search(searchStr, false);
 		TaskManagerUtils.displaySearchResults(searchResults);
 
@@ -373,8 +371,8 @@ public class TaskManager {
 
 		return searchResults;
 	}
-	
-	//@author A0099314Y
+
+	// @author A0099314Y
 	/**
 	 * Search and prints out intervals that are free during the current day.
 	 * Intervals shorter than 10 minutes are ignored.
@@ -386,10 +384,11 @@ public class TaskManager {
 	 * 
 	 */
 	public void searchForFreeIntervals(ArrayList<DateTime> dateTimes) {
-        assert (dateTimes.size() >= 0 && dateTimes.size() <= 2);
-        
+		assert (dateTimes.size() >= 0 && dateTimes.size() <= 2);
+
 		if (dateTimes.size() > 1) {
-			GUI.print_add(Constants.MESSAGE_INVALID_NUMBER_OF_DATES, GUIConstants.COLOR_CODE_RED);
+			GUI.print_add(Constants.MESSAGE_INVALID_NUMBER_OF_DATES,
+					GUIConstants.COLOR_CODE_RED);
 			return;
 		}
 
@@ -399,37 +398,36 @@ public class TaskManager {
 
 		for (int i = 0; i < free.size(); i++) {
 			MutableInterval interval = free.get(i);
-			if (interval.toDurationMillis() >= 
-			        Constants.FREE_SLOT_MINIMUM_DURATION) {
+			if (interval.toDurationMillis() >= Constants.FREE_SLOT_MINIMUM_DURATION) {
 				if (noSlotsFound) {
-					GUI.print_add(String.format(Constants.MESSAGE_FREE_SLOTS_PREFIX,
-					        timeRange.get(0).toString("dd MMMM")) + "\n", 
-					        GUIConstants.COLOR_CODE_YELLOW);
-				
+					GUI.print_add(
+							String.format(Constants.MESSAGE_FREE_SLOTS_PREFIX,
+									timeRange.get(0).toString("dd MMMM"))
+									+ "\n", GUIConstants.COLOR_CODE_YELLOW);
+
 					noSlotsFound = false;
 				}
 				String output = interval.getStart().toString("hh:mm a")
-						+ " to "
-						+ interval.getEnd().toString("hh:mm a")
-						+ "\n";
-				GUI.print_add(output,GUIConstants.COLOR_CODE_YELLOW);
-				
+						+ " to " + interval.getEnd().toString("hh:mm a") + "\n";
+				GUI.print_add(output, GUIConstants.COLOR_CODE_YELLOW);
+
 			}
 		}
 		if (noSlotsFound) {
 			GUI.print_add(Constants.MESSAGE_NO_FREE_SLOTS,
-			              GUIConstants.COLOR_CODE_RED);
+					GUIConstants.COLOR_CODE_RED);
 		}
 	}
 
 	/**
 	 * Searches for all occupied time slots of a given time range. An interval
 	 * that corresponds to the last second of the given time range, which lasts
-     * for 0 seconds will be inserted at the end.
+	 * for 0 seconds will be inserted at the end.
 	 * 
-     * @param timeRange ArrayList of two DateTimes that indicates the time range
-     *                  to be searched for
-	 * @return intervals that are occupied today, at least 1 item will be 
+	 * @param timeRange
+	 *            ArrayList of two DateTimes that indicates the time range to be
+	 *            searched for
+	 * @return intervals that are occupied today, at least 1 item will be
 	 *         returned.
 	 */
 	public ArrayList<MutableInterval> getOccupiedIntervals(
@@ -509,24 +507,27 @@ public class TaskManager {
 	/**
 	 * Schedules an incomplete to a free slot selected automatically.
 	 * 
-	 * @param taskId the task ID to be scheduled, must not be a completed task
-	 * @param duration the duration of the task in milliseconds
-	 * @param dateTimes desired time range
+	 * @param taskId
+	 *            the task ID to be scheduled, must not be a completed task
+	 * @param duration
+	 *            the duration of the task in milliseconds
+	 * @param dateTimes
+	 *            desired time range
 	 * @throws Exception
 	 */
 	public void scheduleTask(int taskId, long duration,
-	                         ArrayList<DateTime> dateTimes) throws Exception {
-        int index = taskId - 1;
-        
-        boolean valid = TaskManagerUtils
-                .validateScheduleParams(duration, dateTimes, index, tasks);
-        
-        if (!valid) {
-            return;
-        }
-        
+			ArrayList<DateTime> dateTimes) throws Exception {
+		int index = taskId - 1;
+
+		boolean valid = TaskManagerUtils.validateScheduleParams(duration,
+				dateTimes, index, tasks);
+
+		if (!valid) {
+			return;
+		}
+
 		ArrayList<DateTime> timeRange = getTimeRangeFromNow(dateTimes);
-		
+
 		ArrayList<MutableInterval> free = getFreeIntervals(timeRange);
 		for (int i = 0; i < free.size(); i++) {
 			MutableInterval candidate = free.get(i);
@@ -558,69 +559,69 @@ public class TaskManager {
 				}
 			}
 		}
-		GUI.print_add(Constants.MESSAGE_NO_FREE_SLOTS, 
-		              GUIConstants.COLOR_CODE_RED);
+		GUI.print_add(Constants.MESSAGE_NO_FREE_SLOTS,
+				GUIConstants.COLOR_CODE_RED);
 	}
-	
+
 	/**
 	 * Gets a time range that is strictly after the current time. See also
 	 * getFlexibleTimeRange
-	 * @param dateTimes an array of no more than 2 elements.
+	 * 
+	 * @param dateTimes
+	 *            an array of no more than 2 elements.
 	 * @return a pair of DateTimes that indicates a time range
 	 */
-    public ArrayList<DateTime> getTimeRangeFromNow(
-            ArrayList<DateTime> dateTimes) {
-        
-        ArrayList<DateTime> timeRange = 
-		        TaskManagerUtils.getFlexibleTimeRange(dateTimes);
-		
+	public ArrayList<DateTime> getTimeRangeFromNow(ArrayList<DateTime> dateTimes) {
+
+		ArrayList<DateTime> timeRange = TaskManagerUtils
+				.getFlexibleTimeRange(dateTimes);
+
 		if (timeRange.get(0).isBefore(DateTime.now())) {
-		    timeRange.set(0, DateTime.now());
+			timeRange.set(0, DateTime.now());
 		}
-        return timeRange;
-    }
-	
+		return timeRange;
+	}
+
 	/**
 	 * Schedule a task into the specified start and end time period
-	 * @param index internal index of the task
-	 * @param start start time of the intended slot 
-	 * @param end end time of the intended slot
+	 * 
+	 * @param index
+	 *            internal index of the task
+	 * @param start
+	 *            start time of the intended slot
+	 * @param end
+	 *            end time of the intended slot
 	 * @throws IOException
 	 */
-    public void scheduleTaskWithDetails(int index,
-            DateTime start, DateTime end) throws IOException {
-        ArrayList<DateTime> range = new ArrayList<DateTime>(2);
-        range.add(start);
-        range.add(end);
-        
-        String description = tasks.get(index).getDescription();
-        
-        TaskManagerUtils.editTaskHelper(null, range, index, tasks);
-        GUI.print_add(String.format(
-                        Constants.MESSAGE_ADD_TIMED,
-        				description, DisplayUtils.formatDate(start),
-        				DisplayUtils.formatDate(end)),
-        		GUIConstants.COLOR_CODE_YELLOW);
-        
-        TaskManagerUtils.sortAndUpdateIds(tasks);
-        
-        storage.save(true);
-    }
+	public void scheduleTaskWithDetails(int index, DateTime start, DateTime end)
+			throws IOException {
+		ArrayList<DateTime> range = new ArrayList<DateTime>(2);
+		range.add(start);
+		range.add(end);
 
-    public DateTime getEndOfWorkingHours(DateTime start) {
-        return new DateTime(start.getYear(),
-                                    start.getMonthOfYear(),
-                                    start.getDayOfMonth(), 23, 0, 0);
-    }
+		String description = tasks.get(index).getDescription();
 
-    public DateTime getStartOfWorkingHours(DateTime start) {
-        return new DateTime(start.getYear(),
-                                    start.getMonthOfYear(),
-                                    start.getDayOfMonth(), 8, 0, 0);
-    }
+		TaskManagerUtils.editTaskHelper(null, range, index, tasks);
+		GUI.print_add(String.format(Constants.MESSAGE_ADD_TIMED, description,
+				DisplayUtils.formatDate(start), DisplayUtils.formatDate(end)),
+				GUIConstants.COLOR_CODE_YELLOW);
 
-	
-	//@author A0101286N 
+		TaskManagerUtils.sortAndUpdateIds(tasks);
+
+		storage.save(true);
+	}
+
+	public DateTime getEndOfWorkingHours(DateTime start) {
+		return new DateTime(start.getYear(), start.getMonthOfYear(),
+				start.getDayOfMonth(), 23, 0, 0);
+	}
+
+	public DateTime getStartOfWorkingHours(DateTime start) {
+		return new DateTime(start.getYear(), start.getMonthOfYear(),
+				start.getDayOfMonth(), 8, 0, 0);
+	}
+
+	// @author A0101286N
 	/**
 	 * Removes the task by first searching for the search string in the task
 	 * description. If there is exactly one match, just delete it. If there are
@@ -648,7 +649,8 @@ public class TaskManager {
 		} else if (numResults == 1) {
 			delete(searchResults.get(0).getId());
 		} else {
-			GUI.print_add("\n"+Constants.MESSAGE_MULTIPLE_DELETE, GUIConstants.COLOR_CODE_BLUE);
+			GUI.print_add("\n" + Constants.MESSAGE_MULTIPLE_DELETE,
+					GUIConstants.COLOR_CODE_BLUE);
 			TaskManagerUtils.displaySearchResults(searchResults);
 		}
 
@@ -674,24 +676,26 @@ public class TaskManager {
 		TaskManagerUtils.sortAndUpdateIds(tasks);
 		storage.save(true);
 	}
-	
+
 	// @author DAKE
 	/**
 	 * 
 	 * 
-	 *         If history does not exist, throw Exception
+	 * If history does not exist, throw Exception
 	 * 
 	 * @return
 	 */
 	public void undo() {
 		try {
-			tasks=storage.undo();
-			GUI.print_add(Constants.MESSAGE_UNDO,GUIConstants.COLOR_CODE_BLUE);
+			tasks = storage.undo();
+			GUI.print_add(Constants.MESSAGE_UNDO, GUIConstants.COLOR_CODE_BLUE);
 		} catch (FileNotFoundException e) {
 			storage.rebuildHistory();
-			GUI.print_add(Constants.MESSAGE_HISTORY_LOAD_ERROR,GUIConstants.COLOR_CODE_RED);
+			GUI.print_add(Constants.MESSAGE_HISTORY_LOAD_ERROR,
+					GUIConstants.COLOR_CODE_RED);
 		} catch (NoHistoryException e) {
-			GUI.print_add(Constants.MESSAGE_LAST_HISTORY,GUIConstants.COLOR_CODE_BLUE);
+			GUI.print_add(Constants.MESSAGE_LAST_HISTORY,
+					GUIConstants.COLOR_CODE_BLUE);
 		}
 		TaskManagerUtils.updateAllIds(tasks);
 	}
@@ -707,14 +711,14 @@ public class TaskManager {
 	}
 
 	/**
-	 *         If no redo provision exists in history, throw Exception
+	 * If no redo provision exists in history, throw Exception
 	 * 
 	 * @return
 	 */
 	public void redo() {
 		try {
-			tasks=storage.redo();
-			GUI.print_add(Constants.MESSAGE_REDO,GUIConstants.COLOR_CODE_BLUE);
+			tasks = storage.redo();
+			GUI.print_add(Constants.MESSAGE_REDO, GUIConstants.COLOR_CODE_BLUE);
 		} catch (FileNotFoundException e) {
 			storage.rebuildHistory();
 			GUI.print_add(Constants.MESSAGE_HISTORY_LOAD_ERROR,
@@ -726,7 +730,7 @@ public class TaskManager {
 		TaskManagerUtils.updateAllIds(tasks);
 	}
 
-	//@author A0099317U
+	// @author A0099317U
 	/**
 	 * Helps the user get started with using sudo
 	 * 
@@ -740,10 +744,11 @@ public class TaskManager {
 			String helpMessage = HelpConstants.helpTopics.get(topic
 					.toUpperCase());
 			if (helpMessage == null) {
-				GUI.print_add(String.format(HelpConstants.HELP_NOT_FOUND, topic),
+				GUI.print_add(
+						String.format(HelpConstants.HELP_NOT_FOUND, topic),
 						GUIConstants.COLOR_CODE_RED);
 			} else {
-				GUI.print_add(helpMessage,GUIConstants.COLOR_CODE_YELLOW);
+				GUI.print_add(helpMessage, GUIConstants.COLOR_CODE_YELLOW);
 			}
 		}
 	}

@@ -63,7 +63,8 @@ public class IntegrationTestSuite {
 		String taskDescription = InputParser.parseDescription(userInput);
 		String expectedOutput = String.format(Constants.MESSAGE_ADD_FLOATING,
 				taskDescription)
-				+ "Remaining tasks:\n" + Constants.FLOATING_TASK_SEPARATOR 
+				+ "Remaining tasks:\n"
+				+ Constants.FLOATING_TASK_SEPARATOR
 				+ "\n1. make waffles for breakfast ";
 
 		testCommand(userInput, expectedOutput);
@@ -75,7 +76,7 @@ public class IntegrationTestSuite {
 		String userInput = "add 'make waffles for breakfast' by Monday 14 October 2pm";
 
 		ArrayList<DateTime> dateTimes = InputParser.parseDateTime(userInput,
-		                                                    COMMAND_TYPE.ADD);
+				COMMAND_TYPE.ADD);
 		String endTime = dateTimes.get(0).toString("dd MMMM hh:mm a");
 		String taskDescription = InputParser.parseDescription(userInput);
 		String expectedOutput = String.format(Constants.MESSAGE_ADD_DEADLINE,
@@ -87,8 +88,8 @@ public class IntegrationTestSuite {
 	@Test
 	public void testTimedTask() throws IOException {
 		String userInput = "add 'make waffles for breakfast' from Monday 14 October 2pm to Wednesday 16 October";
-		ArrayList<DateTime> dateTimes =
-		    InputParser.parseDateTime(userInput, COMMAND_TYPE.ADD);
+		ArrayList<DateTime> dateTimes = InputParser.parseDateTime(userInput,
+				COMMAND_TYPE.ADD);
 		String startTime = dateTimes.get(0).toString("dd MMMM hh:mm a");
 		String endTime = dateTimes.get(1).toString("dd MMMM hh:mm a");
 		String taskDescription = InputParser.parseDescription(userInput);
@@ -129,7 +130,7 @@ public class IntegrationTestSuite {
 		testCommand("delete 'waffle'\n", expectedOutput);
 		testStorageContent();
 	}
-	
+
 	@Test
 	public void testPrettyPrint() throws IOException {
 		String userInput = "add 'make waffles for lunch' from 14 October 10am to 14 October 2pm";
@@ -159,7 +160,7 @@ public class IntegrationTestSuite {
 		assertEquals("1. [8AM - 12PM] make waffles for lunch",
 				DisplayUtils.prettyPrint(task));
 	}
-	
+
 	// @author A0101286N
 	@Test
 	public void testSearch() throws IOException {
@@ -167,70 +168,65 @@ public class IntegrationTestSuite {
 
 		String userInput = "search 'nus'";
 		searchMultipleResults(userInput);
-		
-		//boundary case: invalid search
-		userInput = "search ''"; 
+
+		// boundary case: invalid search
+		userInput = "search ''";
 		searchEmptyString(userInput);
-		
+
 		// boundary case: search with no search results
 		userInput = "search 'fishes'";
 		searchNoResults(userInput);
 	}
 
 	private void prepareTaskListForTestSearch() {
-		String userInput = "add 'submit proposal to tutor at NUS' " +
-				"by 26 October 6pm";
+		String userInput = "add 'submit proposal to tutor at NUS' "
+				+ "by 26 October 6pm";
 		runCommand(userInput);
 
-		userInput = "add 'have coffee with mentor in Nus' from " +
-				"27 Oct 9am to 27 Oct 10am";
+		userInput = "add 'have coffee with mentor in Nus' from "
+				+ "27 Oct 9am to 27 Oct 10am";
 		runCommand(userInput);
 	}
 
 	private void searchNoResults(String userInput) throws IOException {
-		testCommand(userInput, "Searching: fishes\nNo search results found.\n");
+		testCommand(userInput, "No search results found.\n");
 	}
 
 	private void searchEmptyString(String userInput) throws IOException {
-		testCommand(userInput, "Searching: null\nSearch is invalid.\n");
+		testCommand(userInput, "Search is invalid.\n");
 	}
 
 	private void searchMultipleResults(String userInput) throws IOException {
-		String searchTerm = InputParser.parseDescription(userInput);
-		String expectedOutput = String.format(Constants.MESSAGE_SEARCH,
-				searchTerm);
-		expectedOutput += "\nSearch Results\n1. submit proposal to tutor " +
-				"at NUS by Sat 26 October 06:00 PM\n2. have coffee " +
-				"with mentor in Nus from Sun 27 October 09:00 AM " +
-				"to Sun 27 October 10:00 AM\n\n"; 
+		String expectedOutput = "\nSearch Results\n"
+				+ "1. [by 6PM] submit proposal to tutor at NUS \n"
+				+ "2. [9AM - 10AM] have coffee with mentor in Nus \n\n";
 		testCommand(userInput, expectedOutput);
 	}
-	
+
 	@Test
 	public void testSort() throws IOException {
-		String userInput = "add 'make dinner' by 10 November 2015 5pm"; 
+		String userInput = "add 'make dinner' by 10 November 2015 5pm";
 		runCommand(userInput);
-		
+
 		userInput = "add 'make lunch' by 10 November 2015 11am";
 		runCommand(userInput);
-	
+
 		// equivalence partitioning: sorting by date
 		userInput = "all";
-		testCommand(userInput, "Displaying all tasks\n\n\n" +
-				"[Tue 10 Nov 2015]===================================\n" +
-				"1. [by 11AM] make lunch \n" +
-				"2. [by 5PM] make dinner ");
-		
+		testCommand(userInput, "Displaying all tasks\n\n\n"
+				+ "[Tue 10 Nov 2015]===================================\n"
+				+ "1. [by 11AM] make lunch \n" + "2. [by 5PM] make dinner ");
+
 		userInput = "finish 1";
 		runCommand(userInput);
-		
+
 		// equivalence partitioning: sorting by incomplete tasks
 		userInput = "all";
-		testCommand(userInput, "Displaying all tasks\n\n\n" +
-				"[Tue 10 Nov 2015]===================================\n" +
-				"1. [by 5PM] make dinner \n\n" +
-				"[Finished tasks]====================================\n" +
-				"2. [by 11AM] make lunch Done!");
+		testCommand(userInput, "Displaying all tasks\n\n\n"
+				+ "[Tue 10 Nov 2015]===================================\n"
+				+ "1. [by 5PM] make dinner \n\n"
+				+ "[Finished tasks]====================================\n"
+				+ "2. [by 11AM] make lunch Done!");
 	}
 
 	@Test
@@ -242,12 +238,12 @@ public class IntegrationTestSuite {
 		finishInvalidTaskId(userInput);
 		userInput = "finish -1";
 		finishInvalidTaskId(userInput);
-		
+
 		prepareTaskListForTestFinish();
 
 		userInput = "finish 1";
 		finishValidTask(userInput);
-		
+
 		// boundary case: finish a completed task
 		userInput = "finish 1";
 		finishFinishedTask(userInput);
@@ -264,11 +260,11 @@ public class IntegrationTestSuite {
 
 	private void prepareTaskListForTestFinish() {
 		String userInput;
-		userInput = "add 'make waffles for breakfast' by tomorrow 2pm";
+		userInput = "add 'make waffles for breakfast' by 29 Nov 2pm";
 		InputParser.parseDescription(userInput);
 		runCommand(userInput);
 	}
-	
+
 	private void prepareTaskListForTestUnfinish() {
 		prepareTaskListForTestFinish();
 		String userInput = "finish 1";
@@ -278,10 +274,10 @@ public class IntegrationTestSuite {
 	private void finishInvalidTaskId(String userInput) throws IOException {
 		testCommand(userInput, Constants.MESSAGE_INVALID_TASK_INDEX);
 	}
-	
+
 	private void unfinishInvalidTaskId(String userInput) throws IOException {
 		finishInvalidTaskId(userInput);
-		
+
 	}
 
 	@Test
@@ -291,15 +287,15 @@ public class IntegrationTestSuite {
 		unfinishInvalidTaskId(userInput);
 
 		prepareTaskListForTestUnfinish();
-			
+
 		userInput = "unfinish 1";
 		UnfinishValidTask(userInput);
 	}
 
 	private void UnfinishValidTask(String userInput) throws IOException {
 		testCommand(userInput, "Un-Finished task: make waffles for breakfast\n"
-				+ "Remaining tasks:\n\n"
-				+ "[Tomorrow: Sun 10 Nov]==============================\n"
+				+ "Remaining tasks:\n\n\n"
+				+ "[Fri 29 Nov]========================================\n"
 				+ "1. [by 2PM] make waffles for breakfast ");
 	}
 
@@ -307,24 +303,24 @@ public class IntegrationTestSuite {
 	public void testDisplayAll() throws IOException {
 		String userInput;
 		prepareTaskListForTestDisplayAll();
-				
+
 		userInput = "all";
 		displayIncompleteAndCompleteTasks(userInput);
 	}
 
 	private void displayIncompleteAndCompleteTasks(String userInput)
 			throws IOException {
-		testCommand(userInput, "Displaying all tasks\n\n" +
-				"[Tomorrow: Sun 10 Nov]==============================\n" +
-				"1. [by 9PM] make waffles \n\n" +
-				"[Finished tasks]====================================\n" +
-				"2. [7PM - 9PM] do assignment for 2103 Done!");
+		testCommand(userInput, "Displaying all tasks\n\n\n"
+				+ "[Sat 30 Nov]========================================\n"
+				+ "1. [7PM - 9PM] do assignment for 2103 \n\n"
+				+ "[Finished tasks]====================================\n"
+				+ "2. [by 9PM] make waffles Done!");
 	}
 
 	private void prepareTaskListForTestDisplayAll() {
-		String userInput = "add 'make waffles' by tomorrow 9pm"; 
+		String userInput = "add 'make waffles' by 29 nov 9pm";
 		runCommand(userInput);
-		userInput = "add 'do assignment for 2103' from today 7pm to 9pm";
+		userInput = "add 'do assignment for 2103' from 30 nov 7pm to 9pm";
 		runCommand(userInput);
 		userInput = "finish 1";
 		runCommand(userInput);
@@ -336,13 +332,13 @@ public class IntegrationTestSuite {
 		String userInput = "display";
 		testCommand(userInput, Constants.MESSAGE_EMPTY_LIST);
 	}
-	
-	//@author A0099317U
+
+	// @author A0099317U
 	/**
-	 * Helper test method for operations not currently
-	 * being tested.
+	 * Helper test method for operations not currently being tested.
+	 * 
 	 * @param String
-	 */			
+	 */
 	public void runCommand(String userInput) {
 		logicHandler.executeCommand(userInput);
 		outContent.reset();
@@ -350,21 +346,23 @@ public class IntegrationTestSuite {
 
 	/**
 	 * Helper test method to test logic correctness and console output.
+	 * 
 	 * @param String
 	 * @param String
-	 */	
+	 */
 	private void testCommand(String userInput, String expectedOutput)
 			throws IOException {
 		logicHandler.executeCommand(userInput);
 		assertTrue(outContent.toString().contains(expectedOutput));
-//		assertEquals(expectedOutput, outContent.toString());
+		// assertEquals(expectedOutput, outContent.toString());
 		outContent.reset();
 	}
 
 	/**
 	 * Helper test method to test storage content.
+	 * 
 	 * @param String
-	 */	
+	 */
 	public void testStorageContent() throws FileNotFoundException, IOException {
 		savefile_reader = new BufferedReader(new FileReader(SAVE_FILENAME));
 		for (Task task : manager.getTasks()) {

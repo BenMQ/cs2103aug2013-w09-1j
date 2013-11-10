@@ -170,19 +170,30 @@ public class IntegrationTestSuite {
 
 	// @author A0101286N
 	@Test
-	public void testSearch() throws IOException {
+	public void testValidSearch() throws IOException {
 		prepareTaskListForTestSearch();
 
 		String userInput = "search 'nus'";
-		searchMultipleResults(userInput);
+		String expectedOutput = "\nSearch Results\n"
+				+ "1. [by 6PM] submit proposal to tutor at NUS \n"
+				+ "2. [9AM - 10AM] have coffee with mentor in Nus \n\n";
+		testCommand(userInput, expectedOutput);
+	}
+	
+	public void testEmptyStringSearch() throws IOException {
+		prepareTaskListForTestSearch();
 
 		// boundary case: invalid search
-		userInput = "search ''";
-		searchEmptyString(userInput);
-
+		String userInput = "search ''";
+		testCommand(userInput, "Search is invalid.\n");
+	}
+	
+	public void testNoSearchResults() throws IOException {
+		prepareTaskListForTestSearch();
+		
 		// boundary case: search with no search results
-		userInput = "search 'fishes'";
-		searchNoResults(userInput);
+		String userInput = "search 'fishes'";
+		testCommand(userInput, "No search results found.\n");
 	}
 
 	private void prepareTaskListForTestSearch() {
@@ -193,21 +204,6 @@ public class IntegrationTestSuite {
 		userInput = "add 'have coffee with mentor in Nus' from "
 				+ "27 Oct 9am to 27 Oct 10am";
 		runCommand(userInput);
-	}
-
-	private void searchNoResults(String userInput) throws IOException {
-		testCommand(userInput, "No search results found.\n");
-	}
-
-	private void searchEmptyString(String userInput) throws IOException {
-		testCommand(userInput, "Search is invalid.\n");
-	}
-
-	private void searchMultipleResults(String userInput) throws IOException {
-		String expectedOutput = "\nSearch Results\n"
-				+ "1. [by 6PM] submit proposal to tutor at NUS \n"
-				+ "2. [9AM - 10AM] have coffee with mentor in Nus \n\n";
-		testCommand(userInput, expectedOutput);
 	}
 
 	@Test

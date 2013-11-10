@@ -89,25 +89,7 @@ public class TaskManager {
 	}
 
 	// @author A0101286N
-	/**
-	 * Adds a new task into the list. Maintains a sorted list of items after
-	 * each add.
-	 * 
-	 * @param newTask
-	 *            Task to be added into task list
-	 * @return modified task list
-	 * @throws Exception
-	 */
-	public ArrayList<Task> addTask(Task newTask) throws Exception {
-		assert (newTask != null);
-
-		newTask.setId(tasks.size() + 1);
-		tasks.add(newTask);
-
-		TaskManagerUtils.sortAndUpdateIds(tasks);
-		return tasks;
-	}
-
+	
 	/**
 	 * Adds a task based on the number of date arguments.
 	 * 
@@ -121,12 +103,18 @@ public class TaskManager {
 			throws Exception {
 
 		if (taskDescription == null) {
-			GUI.print_add(Constants.MESSAGE_MISSING_DESCRIPTION,
-					GUIConstants.COLOR_CODE_BLUE);
+			TaskManagerUtils.showErrorMessage();
 			return;
 		}
 
 		assert taskDescription != null;
+		delegateAddTask(taskDescription, dateTimes);
+		storage.save(true);
+	}
+	
+	public void delegateAddTask(String taskDescription,
+			ArrayList<DateTime> dateTimes) throws Exception {
+		
 		int numOfDates = dateTimes.size();
 		if (numOfDates == 0) {
 			Task task = new FloatingTask(taskDescription);
@@ -147,9 +135,28 @@ public class TaskManager {
 					GUIConstants.COLOR_CODE_BLUE);
 
 		}
-		storage.save(true);
+	}
+	
+	/**
+	 * Adds a new task into the list. Maintains a sorted list of items after
+	 * each add.
+	 * 
+	 * @param newTask
+	 *            Task to be added into task list
+	 * @return modified task list
+	 * @throws Exception
+	 */
+	public ArrayList<Task> addTask(Task newTask) throws Exception {
+		assert (newTask != null);
+
+		newTask.setId(tasks.size() + 1);
+		tasks.add(newTask);
+
+		TaskManagerUtils.sortAndUpdateIds(tasks);
+		return tasks;
 	}
 
+	
 	/**
 	 * Replaces the task indicated by the displayId with the newTask Changes
 	 * from one type of task to another if necessary.

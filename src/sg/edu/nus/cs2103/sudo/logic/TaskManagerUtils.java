@@ -279,7 +279,12 @@ public class TaskManagerUtils {
 		}
 		GUI.print_add("\n\n", GUIConstants.COLOR_CODE_GREEN);
 	}
-
+	
+	public static void showErrorMessage() {
+		GUI.print_add(Constants.MESSAGE_MISSING_DESCRIPTION,
+				GUIConstants.COLOR_CODE_BLUE);
+	}
+	
 	// @author A0099314Y
 	/**
 	 * Produces a start DateTime and an end DateTime based on the argument

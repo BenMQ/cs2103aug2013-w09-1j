@@ -295,23 +295,24 @@ public class IntegrationTestSuite {
 	}
 
 	@Test
-	public void testUnfinish() throws IOException {
+	public void testInvalidUnfinish() throws IOException {
 		// boundary case: unfinish task which does not exist
 		String userInput = "unfinish 1";
 		unfinishInvalidTaskId(userInput);
-
+	}
+	
+	@Test 
+	public void testValidUnfinish() throws IOException {
 		prepareTaskListForTestUnfinish();
 
-		userInput = "unfinish 1";
-		UnfinishValidTask(userInput);
-	}
-
-	private void UnfinishValidTask(String userInput) throws IOException {
-		testCommand(userInput, "Un-Finished task: make waffles for breakfast\n"
+		String userInput = "unfinish 1";
+		String expectedOutput = "Un-Finished task: make waffles for breakfast\n"
 				+ "Remaining tasks:\n\n\n"
 				+ "[Fri 29 Nov]========================================\n"
-				+ "1. [by 2PM] make waffles for breakfast ");
+				+ "1. [by 2PM] make waffles for breakfast ";
+		testCommand(userInput, expectedOutput);
 	}
+
 
 	@Test
 	public void testDisplayAll() throws IOException {

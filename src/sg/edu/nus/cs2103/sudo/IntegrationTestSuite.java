@@ -361,7 +361,6 @@ public class IntegrationTestSuite {
 			throws IOException {
 		logicHandler.executeCommand(userInput);
 		assertTrue(outContent.toString().contains(expectedOutput));
-		// assertEquals(expectedOutput, outContent.toString());
 		outContent.reset();
 	}
 

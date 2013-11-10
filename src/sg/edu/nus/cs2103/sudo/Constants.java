@@ -85,7 +85,6 @@ public class Constants {
 	public static final String HISTORY_NAME = "sudo.his";
 	public static final String HISTORY_NAME_TEST = "test.his";
 
-
 	public static final DateTimeFormatter DATE_MONTH_FORMAT = 
 			DateTimeFormat.forPattern("EEE d MMM");
 	public static final DateTimeFormatter DATE_MONTH_YEAR_FORMAT = 

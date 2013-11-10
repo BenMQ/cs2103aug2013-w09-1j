@@ -52,6 +52,16 @@ public class InputParserTest {
 	}
 
 	@Test
+	public void testParseDateTimes() {
+		ArrayList<DateTime> dates = InputParser.parseDateTime("add 'wash' " +
+				"by oct 14th 11pm", COMMAND_TYPE.ADD);
+		String expected = "2013-10-14T23:00:00.000+08:00";
+		
+		assertEquals(1, dates.size());
+		assertEquals(expected, dates.get(0).toString());
+	}	
+	
+	@Test
 	public void testParseDescription(){
 	    String[] testcases = new String[] {
 	        "'sudo' is an amazing app",
@@ -70,7 +80,7 @@ public class InputParserTest {
 		String description = InputParser.parseDescription(userInput);
 		
 		assertEquals(description, null);
-	}	
+	}
 	
 	@Test
 	public void testEmptyStringDescription() throws IOException{
@@ -131,9 +141,9 @@ public class InputParserTest {
 
 	@Test
 	public void testParseAddTimedTask() throws IOException{
-		String userInput = "add 'make waffles for breakfast' from 13 October" +
-				" to 14 October 2pm";
-		String expectedStartDate = "Sun Oct 13 14:00:00 SGT 2013";
+		String userInput = "add 'make waffles for breakfast' from 13 October " +
+				"10am to 14 October 2pm";
+		String expectedStartDate = "Sun Oct 13 10:00:00 SGT 2013";
 		String expectedEndDate = "Mon Oct 14 14:00:00 SGT 2013";
 		runCommand(userInput);
 		

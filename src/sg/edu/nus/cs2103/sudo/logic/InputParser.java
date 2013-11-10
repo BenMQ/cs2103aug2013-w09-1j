@@ -38,8 +38,8 @@ public class InputParser {
 		Parser dtparser = new Parser();
 		String dateTimeString = getDateTimeString(userInput, command);
 		List<DateGroup> dateGroups = dtparser.parse(dateTimeString);
-		ArrayList<List<Date>> dateLists = ParserUtils.getDateLists(dateGroups);	
-		ArrayList<DateTime> dateTimes = ParserUtils.
+		ArrayList<List<Date>> dateLists = InputParserUtils.getDateLists(dateGroups);	
+		ArrayList<DateTime> dateTimes = InputParserUtils.
 				convertToDateTimes(dateLists);
 		
 		return dateTimes;
@@ -63,13 +63,13 @@ public class InputParser {
 	 * @return COMMAND_TYPE 
 	 */	
 	public static COMMAND_TYPE parseCommandType(String userInput) {
-		String commandWord = ParserUtils.getCommandWord(userInput);
-		COMMAND_TYPE commandType = ParserUtils.getCommandType(commandWord);
+		String commandWord = InputParserUtils.getCommandWord(userInput);
+		COMMAND_TYPE commandType = InputParserUtils.getCommandType(commandWord);
 		assert commandType != null;
 		
-		int numOfWords = ParserUtils.countWords(userInput);
+		int numOfWords = InputParserUtils.countWords(userInput);
 		boolean notEnoughArguments = numOfWords < 
-				ParserUtils.getNumOfWordsNeeded(commandType);
+				InputParserUtils.getNumOfWordsNeeded(commandType);
 		
 		if (notEnoughArguments) { 
 			return COMMAND_TYPE.INCOMPLETE;
@@ -144,7 +144,7 @@ public class InputParser {
             return NOT_FOUND;
         }
         String secondArgument = spaceDelimitedInput[2];
-        long millis = ParserUtils.parseDurationToMillis(secondArgument);
+        long millis = InputParserUtils.parseDurationToMillis(secondArgument);
         if (millis < 0) {
             return NOT_FOUND;
         } else {
@@ -168,9 +168,9 @@ public class InputParser {
 	    String[] inputWords = userInput.trim().split("\\s+");	    
 	    String[] relevantWord = 
 	            Arrays.copyOfRange(inputWords,
-	                               ParserUtils.getNumWordsToTrim(command),
+	                               InputParserUtils.getNumWordsToTrim(command),
 	                               inputWords.length);
-	    return ParserUtils.joinString(relevantWord, " ");
+	    return InputParserUtils.joinString(relevantWord, " ");
 	}    
 }
 

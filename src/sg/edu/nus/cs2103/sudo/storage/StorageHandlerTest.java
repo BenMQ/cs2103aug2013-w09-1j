@@ -8,7 +8,7 @@ import java.io.FileReader;
 import java.util.ArrayList;
 
 import sg.edu.nus.cs2103.sudo.COMMAND_TYPE;
-import sg.edu.nus.cs2103.sudo.StorageConstants;
+import sg.edu.nus.cs2103.sudo.Constants;
 import sg.edu.nus.cs2103.sudo.logic.DeadlineTask;
 import sg.edu.nus.cs2103.sudo.logic.FloatingTask;
 import sg.edu.nus.cs2103.sudo.logic.InputParser;
@@ -42,7 +42,7 @@ public class StorageHandlerTest {
 	@Before
 	public void setUp() {
 		file = new File(TEST_NAME);
-		historyFile = new File(StorageConstants.HISTORY_NAME);
+		historyFile = new File(Constants.HISTORY_NAME);
     }
 	
 	@After

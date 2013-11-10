@@ -335,6 +335,28 @@ public class TaskManagerTest {
         expected.add(tmr1300);
         assertEquals(expected, actual);
     }
+	
+	@Test
+    public void testGetFlexibleTimeRangeThreeInputs() {
+
+        DateTime dt0800 = today(8, 0);
+        DateTime dt0900 = today(9, 0)
+        DateTime dt2359 = today(23, 59, 59);
+        ArrayList<DateTime> input = new ArrayList<DateTime>();
+
+        input.add(dt0800);
+        input.add(dt0900);
+        input.add(dt2359);
+        
+        try {
+            @SuppressWarnings("unused")
+            ArrayList<DateTime> actual = 
+                    TaskManagerUtils.getFlexibleTimeRange(input); 
+            assertTrue(false); // unreachable, assertion should always fail
+        } catch (AssertionError e) {
+            assertTrue(true);
+        }
+    }
     
 	@Test
 	public void testGetFreeIntervalsNoTask() throws Exception {

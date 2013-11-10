@@ -119,17 +119,17 @@ public class TaskManager {
 		int numOfDates = dateTimes.size();
 		if (numOfDates == 0) {
 			Task task = new FloatingTask(taskDescription);
-			this.addTask(task);
+			this.addTaskAndSort(task);
 			GUI.print_add(task.getAddMessage(), GUIConstants.COLOR_CODE_BLUE);
 
 		} else if (numOfDates == 1) {
 			Task task = new DeadlineTask(taskDescription, dateTimes);
-			this.addTask(task);
+			this.addTaskAndSort(task);
 			GUI.print_add(task.getAddMessage(), GUIConstants.COLOR_CODE_BLUE);
 
 		} else if (numOfDates == 2) {
 			Task task = new TimedTask(taskDescription, dateTimes);
-			this.addTask(task);
+			this.addTaskAndSort(task);
 			GUI.print_add(task.getAddMessage(), GUIConstants.COLOR_CODE_BLUE);
 		} else {
 			GUI.print_add(Constants.MESSAGE_INVALID_NUMBER_OF_DATES,
@@ -147,7 +147,7 @@ public class TaskManager {
 	 * @return modified task list
 	 * @throws Exception
 	 */
-	public ArrayList<Task> addTask(Task newTask) throws Exception {
+	public ArrayList<Task> addTaskAndSort(Task newTask) throws Exception {
 		assert (newTask != null);
 
 		newTask.setId(tasks.size() + 1);

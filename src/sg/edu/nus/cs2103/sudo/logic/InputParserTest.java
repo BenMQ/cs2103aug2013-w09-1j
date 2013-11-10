@@ -65,19 +65,19 @@ public class InputParserTest {
 	}
 
 	@Test
-	public void testParseAddMissingDescription() throws IOException{
-		String userInput = "add nothing";
-		testCommand(userInput, Constants.MESSAGE_MISSING_DESCRIPTION + Constants.MESSAGE_EMPTY_LIST);
+	public void testNullDescription() throws IOException{
+		String userInput = "add from 19 October 2013 to 22 October 2014";
+		String description = InputParser.parseDescription(userInput);
 		
-		assertEquals(0, manager.getTasks().size());
-	}
+		assertEquals(description, null);
+	}	
 	
 	@Test
 	public void testEmptyStringDescription() throws IOException{
 		String userInput = "add '' from 19 October 2013 to 22 October 2014";
-		runCommand(userInput);
+		String description = InputParser.parseDescription(userInput);
 		
-		assertEquals(0, manager.getTasks().size());
+		assertEquals(description, null);
 	}		
 	
 	@Test
@@ -89,7 +89,7 @@ public class InputParserTest {
 	
 	@Test
 	public void testParseIdNotFound(){	
-		int actual = InputParser.parseId("add 'make waffles " +
+		int actual = InputParser.parseId("edit 'make waffles " +
 				"for breakfast'");
 		assertEquals(InputParser.NOT_FOUND, actual);
 	}
@@ -143,6 +143,15 @@ public class InputParserTest {
 				manager.getTasks().get(0).endTime.toDate().toString());
 		assertEquals(1, manager.getTasks().size());
 		assertTrue(manager.getTasks().get(0).isTimedTask());
+	}	
+	
+	@Test
+	public void testParseAddNullDescription() throws IOException{
+		String userInput = "add nothing";
+		testCommand(userInput, Constants.MESSAGE_MISSING_DESCRIPTION + 
+				Constants.MESSAGE_EMPTY_LIST);
+		
+		assertEquals(0, manager.getTasks().size());
 	}	
 	
 	@Test

@@ -130,6 +130,13 @@ public class InputParserUtils {
 		}
 	}
 	
+	public static String trimDescription(String userInput, String desc) {
+		if (desc != null) {
+            userInput = userInput.replace("'" + desc + "'", "");
+        }
+		return userInput;
+	}	
+	
 	//@author A0099314Y
 	/**
      * Parse a string of the form 2h3m into milliseconds

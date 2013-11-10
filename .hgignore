@@ -1,5 +1,7 @@
 syntax: glob
 
+*.java.orig
+
 # Ignore history and save files
 .his
 .sav

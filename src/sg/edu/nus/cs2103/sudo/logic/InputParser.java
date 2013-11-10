@@ -161,15 +161,13 @@ public class InputParser {
 	public static String getDateTimeString(String userInput,
 	        COMMAND_TYPE command) {
         String desc = parseDescription(userInput);
-        if (desc != null) {
-            userInput = userInput.replace("'" + desc + "'", "");
-        }
+        userInput = InputParserUtils.trimDescription(userInput, desc);
 	    String[] inputWords = userInput.trim().split("\\s+");	    
 	    String[] relevantWord = 
 	            Arrays.copyOfRange(inputWords,
 	                               InputParserUtils.getNumWordsToTrim(command),
 	                               inputWords.length);
 	    return InputParserUtils.joinString(relevantWord, " ");
-	}    
+	}
 }
 

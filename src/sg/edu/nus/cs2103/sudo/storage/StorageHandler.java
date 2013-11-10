@@ -8,11 +8,14 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+
 import org.joda.time.DateTime;
+
 import sg.edu.nus.cs2103.sudo.COMMAND_TYPE;
 import sg.edu.nus.cs2103.sudo.Constants;
 import sg.edu.nus.cs2103.sudo.StorageConstants;
 import sg.edu.nus.cs2103.sudo.exceptions.NoHistoryException;
+import sg.edu.nus.cs2103.sudo.exceptions.WrongTaskDescriptionStringException;
 import sg.edu.nus.cs2103.sudo.logic.DeadlineTask;
 import sg.edu.nus.cs2103.sudo.logic.FloatingTask;
 import sg.edu.nus.cs2103.sudo.logic.InputParser;
@@ -24,28 +27,32 @@ public class StorageHandler {
 	/**
 	 * This StorageHandler class is responsible for:
 	 * 1.Open and read file from the disk, and write changes to disk.
-	 * 2.Keep track of the history, capture every change and save to the file.
-	 * 3.Provide undo/redo functions
+	 * 2.Keep track of the history, capture every change and save the undoable history records into the file.
+	 * 3.Provide undo/redo functions when running
 	 * 
-	 * @author Liu Dake
+	 * @author A0105656E
 	 */
+	private static StorageHandler storageHandler;
 	private String fileName;
 	public ArrayList<ArrayList<String>> history;
 	public ArrayList<ArrayList<String>> history_redo;
-	
 	private ArrayList<Task> tasks;
-	
-	private static StorageHandler storageHandler;
+
 	/**
 	 * (This is a singleton class)
 	 * Build a StorageHandler.
-	 * @param String of the file name, ArrayList of all Task objects
+	 * @param  fileName
 	 */
 	private StorageHandler(String fileName) {
 		this.fileName = fileName;
 		initializeHistory();
 	}
 	
+	/**
+	 * 
+	 * Give a StorageHandler.
+	 * @param fileName
+	 */
 	public static StorageHandler getStorageHandler(String fileName) {
 		if (storageHandler == null) {
 			storageHandler = new StorageHandler(fileName);
@@ -53,12 +60,18 @@ public class StorageHandler {
 		return storageHandler;
 	}
 	
+	/**
+	 * reset the StorageHandler but keep the files
+	 */
 	public static void resetStorageHandler() {
 			storageHandler.history.clear();
 			storageHandler.history_redo.clear();
 			storageHandler = null;
 	}
 	
+	/**
+	 * reset the StorageHandler and clear all files.
+	 */
 	public static void resetAll(String fileName) {
 		File file = new File(fileName);
 		File historyFile = new File(StorageConstants.HISTORY_NAME);
@@ -69,7 +82,9 @@ public class StorageHandler {
 		storageHandler = null;
 }
 	
-	
+	/**
+	 * initialize history files and ArrayLists but keep the history file on disk
+	 */
 	private void initializeHistory(){
 		history_redo = new ArrayList<ArrayList<String>>();
 		history = new ArrayList<ArrayList<String>>();
@@ -78,16 +93,29 @@ public class StorageHandler {
 		history.add(nullTasks);
 	}
 	
+	/**
+	 * clear history files and overwrite the history record on disk
+	 */
 	public void rebuildHistory(){
 		initializeHistory();
 		saveHistory();
 	}
-	
+	/**
+	 * read history file from the disk
+	 * @throws FileNotFoundException
+	 */
 	private void readHistory() throws FileNotFoundException{
 		history = XMLSerializer.read(StorageConstants.HISTORY_NAME);
 	}
 	
-	public boolean prepareFile(ArrayList<Task> taskIn) {
+	/**
+	 * 
+	 * Read history file and task file from the disk to task list.
+	 * @param taskIn the ArrayList of the whole task. Must be related to the task ArrayList in taskManager.
+	 * @return isReloaded shows whether this is first time run or reload from previous record
+	 */
+	
+	public boolean prepareFile(ArrayList<Task> taskIn) throws WrongTaskDescriptionStringException {
 		tasks = taskIn;
 		boolean isReloaded = true;
 		try {
@@ -108,7 +136,6 @@ public class StorageHandler {
 				}
 				iptBuff.close();
 				readHistory();
-				
 			}
 			return isReloaded;
 		} catch (FileNotFoundException e) {
@@ -116,70 +143,98 @@ public class StorageHandler {
 			saveHistory();
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			GUI.print_add(Constants.MESSAGE_IO_ERROR, 4);
 			e.printStackTrace();
 		}
 		return isReloaded;
 	}
+		
+	/**
+	 * Build a FloatingTask
+	 * @param input the task description string
+	 * @return flt the FloatingTask
+	 */
+	private FloatingTask buildFloatingTask(String input){
+		int bound = input.indexOf("#");
+		FloatingTask flt = new FloatingTask(input.substring(0, bound));
+		if(input.substring(bound+1).equals("true")){
+			flt.setComplete(true);
+		}
+		return flt;
+	}
+	
+	/**
+	 * Build a Deadline Task
+	 * @param input the task description string
+	 * @return ddt the DeadlineTask
+	 */
+	private DeadlineTask buildDeadlineTask(String input){
+		int bound = input.indexOf("#");
+		String descrbtion = input.substring(0, bound);
+		input=input.substring(bound+1);
+		bound = input.indexOf("#");
+		String dateAndTime =  input.substring(0, bound);
+		String finished = input.substring(bound+1);
+		ArrayList<DateTime> dateTimes = 
+		        InputParser.parseDateTime("fake 'fake' " + dateAndTime,
+		                                  COMMAND_TYPE.INVALID);
+		DeadlineTask ddt = new DeadlineTask(descrbtion, dateTimes);
+		if(finished.equals("true")){
+			ddt.setComplete(true);
+		}
+		return ddt;
+	}
+	
+	/**
+	 * Build a TimedTask
+	 * @param input the task description string
+	 * @return tmt the TimedTask
+	 */
+	private TimedTask buildTimedTask(String input){
+		int bound = input.indexOf("#");
+		String descrbtion = input.substring(0, bound);
+		input=input.substring(bound+1);
+		bound = input.indexOf("#");
+		String dateAndTime =  input.substring(0, bound);
+		String finished = input.substring(bound+1);
+		ArrayList<DateTime> dateTimes =
+		        InputParser.parseDateTime("fake 'fake' "+ dateAndTime,
+		                                  COMMAND_TYPE.INVALID);
+		TimedTask tmt = new TimedTask(descrbtion, dateTimes );
+		if(finished.equals("true")){
+			tmt.setComplete(true);
+		}
+		return tmt;
+	}
 	
 	/**
 	 * Convert one String into one Task
-	 * @param String which describes the task
+	 * @param input String which describes the task
 	 * @return Task described by the  String
+	 * @throws WrongTaskDescriptionStringException 
 	 */	
-	private Task stringToTask(String input){
+	private Task stringToTask(String input) throws WrongTaskDescriptionStringException{
 		int bound = input.indexOf("#");
 		String taskKind = input.substring(0, bound);
 		String next = input.substring(bound+1);
 		if(taskKind.equals("floating")){
-			bound = next.indexOf("#");
-			FloatingTask flt = new FloatingTask(next.substring(0, bound));
-			if(next.substring(bound+1).equals("true")){
-				flt.setComplete(true);
-			}
-			return flt;
+			return buildFloatingTask(next);
 		}else if(taskKind.equals("DEADLINE")){
-			bound = next.indexOf("#");
-			String descrbtion = next.substring(0, bound);
-			next=next.substring(bound+1);
-			bound = next.indexOf("#");
-			String dateAndTime =  next.substring(0, bound);
-			String finished = next.substring(bound+1);
-			ArrayList<DateTime> dateTimes = 
-			        InputParser.parseDateTime("fake 'fake' " + dateAndTime,
-			                                  COMMAND_TYPE.INVALID);
-			DeadlineTask ddt = new DeadlineTask(descrbtion, dateTimes);
-			if(finished.equals("true")){
-				ddt.setComplete(true);
-			}
-			return ddt;
+			return buildDeadlineTask(next);
 		}else if(taskKind.equals("TIMED")){
-			bound = next.indexOf("#");
-			String descrbtion = next.substring(0, bound);
-			next=next.substring(bound+1);
-			bound = next.indexOf("#");
-			String dateAndTime =  next.substring(0, bound);
-			String finished = next.substring(bound+1);
-			ArrayList<DateTime> dateTimes =
-			        InputParser.parseDateTime("fake 'fake' "+ dateAndTime,
-			                                  COMMAND_TYPE.INVALID);
-			TimedTask tmt = new TimedTask(descrbtion, dateTimes );
-			if(finished.equals("true")){
-				tmt.setComplete(true);
-			}
-			return tmt;
+			return buildTimedTask(next);
 		}else{
-			//should throw exception instead of return null...
-			return null;
+			throw(new WrongTaskDescriptionStringException("Task description string error: no such kind of task."));
 		}
 	}
 	
 	/**
 	 * Convert a list of Strings into a list of Tasks
-	 * @param ArrayList<String> which describes the tasks
-	 * @return ArrayList<Task> described by the  Strings
+	 * @param str ArrayList<String> which describes the tasks
+	 * @return tasks ArrayList<Task> described by the  Strings
+	 * @throws WrongTaskDescriptionStringException 
 	 */	
-	private ArrayList<Task> stringsToTasks(ArrayList<String> str){
+	private ArrayList<Task> stringsToTasks(ArrayList<String> str) throws WrongTaskDescriptionStringException{
 		ArrayList<Task> tasks = new ArrayList<Task>();
 		for(String i: str){
 			tasks.add(stringToTask(i));
@@ -189,8 +244,8 @@ public class StorageHandler {
 	
 	/**
 	 * Convert a list of Tasks into a list of Strings
-	 * @param ArrayList<Task> described by the  Strings
-	 * @return ArrayList<String> which describes the tasks
+	 * @param tasks ArrayList<Task> described by the  Strings
+	 * @return toReturn ArrayList<String> which describes the tasks
 	 */	
 	private ArrayList<String> tasksToStrings(ArrayList<Task> tasks){
 		ArrayList<String> toReturn = new ArrayList<String>();
@@ -201,7 +256,10 @@ public class StorageHandler {
 		return toReturn;
 	}
 	
-	//Save the history
+	/**
+	 * Write history records (undo) to the disk.
+	 * @throws FileNotFoundException
+	 */	
 	private void saveHistory(){
 			try {
 				XMLSerializer.write(history, StorageConstants.HISTORY_NAME);
@@ -214,8 +272,7 @@ public class StorageHandler {
 	/**
 	 * Save all the tasks and undo-history(optional) into the disc
 	 * 
-	 * @param ArrayList<Task>	The ArrayList of the tasks.
-	 * 	      Boolean			save the history or not
+	 * @param  saveHistory Boolean save the history or not
 	 * @throws IOException 
 	 */	
 	public void save(Boolean saveHistory) throws IOException {
@@ -238,11 +295,12 @@ public class StorageHandler {
 	/**
 	 * Undo returns the last change made by the user.
 	 * It will be saved after user exit sudo
-	 * @return ArrayList<Task> the result of undo
+	 * @return tasks ArrayList<Task> the result of undo
 	 * @throws NoHistoryException
 	 * @throws FileNotFoundException 
+	 * @throws WrongTaskDescriptionStringException 
 	 */	
-	public ArrayList<Task> undo() throws NoHistoryException, FileNotFoundException{
+	public ArrayList<Task> undo() throws NoHistoryException, FileNotFoundException, WrongTaskDescriptionStringException{
 
 		if(history.size()>1){
 			history_redo.add(tasksToStrings(tasks));
@@ -257,11 +315,12 @@ public class StorageHandler {
 	/**
 	 * Redo returns the change before undo made by the user.
 	 * It will not be saved after user exit
-	 * @return ArrayList<Task> the result of redo
+	 * @return tasks ArrayList<Task> the result of redo
 	 * @throws NoHistoryException
 	 * @throws FileNotFoundException 
+	 * @throws WrongTaskDescriptionStringException 
 	 */	
-	public ArrayList<Task> redo() throws NoHistoryException, FileNotFoundException{
+	public ArrayList<Task> redo() throws NoHistoryException, FileNotFoundException, WrongTaskDescriptionStringException{
 		if(history_redo.size()>0){
 			tasks = stringsToTasks(history_redo.get(history_redo.size()-1));
 			history.add(tasksToStrings(tasks));

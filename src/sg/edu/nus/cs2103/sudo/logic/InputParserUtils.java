@@ -24,7 +24,7 @@ import com.joestelmach.natty.DateGroup;
  * @author Yos Riady
  * 
  */
-public class ParserUtils {
+public class InputParserUtils {
 	/**
 	 * Retrieves date List objects from joda-datetime DateGroup objects.
 	 * 

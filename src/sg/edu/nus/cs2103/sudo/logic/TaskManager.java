@@ -176,6 +176,7 @@ public class TaskManager {
 	public ArrayList<Task> editTask(int taskId, String taskDescription,
 			ArrayList<DateTime> dates) throws IllegalStateException,
 			IndexOutOfBoundsException, Exception {
+		
 		assert (dates.size() <= 2);
 
 		TaskManagerUtils.checkEmptyList(tasks);
@@ -194,7 +195,7 @@ public class TaskManager {
 	}
 
 	/**
-	 * Prints out finished tasks
+	 * Prints out finished tasks on GUI
 	 */
 	public void displayFinishedTasks() {
 		ArrayList<Task> tasks = TaskManagerUtils.getFinishedTasks(this.tasks);
@@ -213,7 +214,7 @@ public class TaskManager {
 	}
 
 	/**
-	 * Prints tasks to stdout. Incomplete tasks are always printed by default.
+	 * Prints tasks to GUI. Incomplete tasks are always printed by default.
 	 * If showAll is set to true, completed tasks are printed as well.
 	 * 
 	 * @param showAll
@@ -353,8 +354,7 @@ public class TaskManager {
 	}
 
 	/**
-	 * Searches for matches with the searchStr. By default, only incomplete
-	 * tasks will be searched.
+	 * Searches for matches with the searchStr.
 	 * 
 	 * @param searchStr
 	 *            string to be search for
@@ -687,8 +687,6 @@ public class TaskManager {
 
 	// @author DAKE
 	/**
-	 * 
-	 * 
 	 * If history does not exist, throw Exception
 	 * 
 	 * @return

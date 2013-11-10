@@ -1,3 +1,4 @@
+// @author A0101286N
 package sg.edu.nus.cs2103.sudo.logic;
 
 import java.util.ArrayList;
@@ -11,7 +12,7 @@ import sg.edu.nus.cs2103.ui.DisplayUtils;
 import sg.edu.nus.cs2103.ui.GUI;
 import sg.edu.nus.cs2103.ui.GUIConstants;
 
-// @author A0101286N
+
 /**
  * This class contains static methods that help execute some of the methods in
  * TaskManager.

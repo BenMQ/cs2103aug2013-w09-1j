@@ -2,7 +2,6 @@ package sg.edu.nus.cs2103.sudo.logic;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -12,8 +11,8 @@ import org.joda.time.MutableInterval;
 import sg.edu.nus.cs2103.sudo.Constants;
 import sg.edu.nus.cs2103.sudo.HelpConstants;
 import sg.edu.nus.cs2103.sudo.exceptions.NoHistoryException;
+import sg.edu.nus.cs2103.sudo.exceptions.WrongTaskDescriptionStringException;
 import sg.edu.nus.cs2103.sudo.storage.StorageHandler;
-
 import sg.edu.nus.cs2103.ui.DisplayUtils;
 import sg.edu.nus.cs2103.ui.GUI;
 import sg.edu.nus.cs2103.ui.GUIConstants;
@@ -75,7 +74,12 @@ public class TaskManager {
 		StorageHandler.resetAll(Constants.FILE_NAME);
 		tasks = new ArrayList<Task>();
 		storage = StorageHandler.getStorageHandler(Constants.FILE_NAME);
-		isReloaded = storage.prepareFile(tasks);
+		try {
+			isReloaded = storage.prepareFile(tasks);
+		} catch (WrongTaskDescriptionStringException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		TaskManagerUtils.updateAllIds(tasks);
 		try {
 			taskManager = new TaskManager();
@@ -693,7 +697,12 @@ public class TaskManager {
 	 */
 	public void undo() {
 		try {
-			tasks = storage.undo();
+			try {
+				tasks = storage.undo();
+			} catch (WrongTaskDescriptionStringException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			GUI.print_add(Constants.MESSAGE_UNDO, GUIConstants.COLOR_CODE_BLUE);
 		} catch (FileNotFoundException e) {
 			storage.rebuildHistory();
@@ -732,6 +741,9 @@ public class TaskManager {
 		} catch (NoHistoryException e) {
 			GUI.print_add(Constants.MESSAGE_LAST_HISTORY,
 					GUIConstants.COLOR_CODE_BLUE);
+		} catch (WrongTaskDescriptionStringException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		TaskManagerUtils.updateAllIds(tasks);
 	}

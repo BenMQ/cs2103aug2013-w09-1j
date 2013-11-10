@@ -71,7 +71,7 @@ public class TaskManager {
 		this.tasks = tasks;
 	}
 	
-	// @author DAKE!!
+	// @author A0105656E
 	public void relaunch() {
 		StorageHandler.resetAll(Constants.FILE_NAME);
 		tasks = new ArrayList<Task>();

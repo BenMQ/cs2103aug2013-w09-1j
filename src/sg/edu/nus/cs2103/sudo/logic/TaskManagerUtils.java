@@ -91,21 +91,20 @@ public class TaskManagerUtils {
 			throw new IllegalStateException(Constants.MESSAGE_EMPTY_LIST);
 		}
 	}
-	
-	public static void checkEmptyFloatingList(ArrayList<FloatingTask> floatingTasks) {
+
+	public static void checkEmptyFloatingList(
+			ArrayList<FloatingTask> floatingTasks) {
 		if (floatingTasks.isEmpty()) {
 			throw new IllegalStateException(Constants.MESSAGE_NO_FLOATING_TASKS);
 		}
 	}
-	
+
 	public static void checkIfAlreadyComplete(Task currTask) {
 		if (currTask.isComplete()) {
 			throw new UnsupportedOperationException(
 					Constants.MESSAGE_ALREADY_COMPLETE);
 		}
 	}
-
-
 
 	/**
 	 * Checks for the validity of the index used in operations. If invalid,
@@ -192,12 +191,12 @@ public class TaskManagerUtils {
 		}
 		return toReturn;
 	}
-	
+
 	public static void formatAllTasks(ArrayList<Task> tasks, boolean showAll) {
 		boolean floatingStarted = false;
 		boolean finishedStarted = false;
 		DateTime previousDate = null;
-		
+
 		for (int i = 0; i < tasks.size(); i++) {
 
 			Task task = tasks.get(i);
@@ -209,23 +208,22 @@ public class TaskManagerUtils {
 			if (showAll || !task.isComplete) {
 
 				if (!task.isComplete() && !task.isFloatingTask()) {
-					previousDate = DisplayUtils.
-							insertDateSeparators(previousDate, task);
+					previousDate = DisplayUtils.insertDateSeparators(
+							previousDate, task);
 				} else {
-					floatingStarted = DisplayUtils.
-							insertFloatingSeparator(floatingStarted, task);
-					finishedStarted = DisplayUtils.
-							insertFinishedSeparator(finishedStarted, task);
+					floatingStarted = DisplayUtils.insertFloatingSeparator(
+							floatingStarted, task);
+					finishedStarted = DisplayUtils.insertFinishedSeparator(
+							finishedStarted, task);
 				}
 
-				GUI.print_add("\n",GUIConstants.COLOR_CODE_GREEN);
+				GUI.print_add("\n", GUIConstants.COLOR_CODE_GREEN);
 				DisplayUtils.prettyPrint(task);
 				GUI.print_add(" " + completed, GUIConstants.COLOR_CODE_YELLOW);
-				
+
 			}
 		}
 	}
-
 
 	/**
 	 * @param searchStr
@@ -250,7 +248,7 @@ public class TaskManagerUtils {
 		}
 		return searchResults;
 	}
-	
+
 	/**
 	 * Prints out the list of search results containing Task objects.
 	 * 
@@ -264,137 +262,144 @@ public class TaskManagerUtils {
 			throw new IllegalStateException(Constants.MESSAGE_NO_SEARCH_RESULTS);
 		}
 
-		GUI.print_add("\n"+Constants.MESSAGE_SEARCH_RESULTS, GUIConstants.COLOR_CODE_YELLOW);
+		GUI.print_add("\n" + Constants.MESSAGE_SEARCH_RESULTS,
+				GUIConstants.COLOR_CODE_YELLOW);
 		for (int i = 0; i < searchResults.size(); i++) {
 			Task task = searchResults.get(i);
-			
+
 			String completed = "";
 			if (task.isComplete()) {
 				completed = Constants.TASK_COMPLETED_FLAG;
 			}
-			
-			GUI.print_add("\n",GUIConstants.COLOR_CODE_GREEN);
+
+			GUI.print_add("\n", GUIConstants.COLOR_CODE_GREEN);
 			DisplayUtils.prettyPrint(task);
 			GUI.print_add(" " + completed, GUIConstants.COLOR_CODE_YELLOW);
-	
+
 		}
-		GUI.print_add("\n\n",GUIConstants.COLOR_CODE_GREEN);
+		GUI.print_add("\n\n", GUIConstants.COLOR_CODE_GREEN);
 	}
-	
-	//@author A0099314Y
+
+	// @author A0099314Y
 	/**
-     * Produces a start DateTime and an end DateTime based on the argument
-     * given. If the input is an empty array, the range will be the current day.
-     * If the input has one DateTime, the range will be that particular day. If
-     * the input has two DateTimes, the range will be that.
-     * 
-     * @param dateTimes arrayList of start and end DateTime
-     * @return range calculated
-     */
-    public static ArrayList<DateTime> getFlexibleTimeRange(
-            ArrayList<DateTime> dateTimes) {
-        assert (dateTimes.size() >= 0 && dateTimes.size() <= 2);
-        if (dateTimes.size() == 2) {
-            if (dateTimes.get(0).isAfter(dateTimes.get(1))) {
-                Collections.reverse(dateTimes);
-            }
-            return dateTimes;
-        } else {
-            DateTime day;
-            if (dateTimes.size() == 1) {
-                day = dateTimes.get(0);
-            } else {
-                day = DateTime.now();
-            }
-            DateTime startOfDay = DateTimeUtils.getStartOfDay(day);
-            DateTime endOfDay = DateTimeUtils.getEndOfDay(day);
-            ArrayList<DateTime> range = new ArrayList<DateTime>(2);
-            range.add(startOfDay);
-            range.add(endOfDay);
-            return range;
-        }
-    }
-    
-    /**
-     * Validates parameters for schedule command, must have a valid index that
-     * is not completed, the dateTimes must have at most 1 date, duration must
-     * be positive. 
-     * @param duration duration in milliseconds
-     * @param dateTimes DateTimes parsed from the input
-     * @param index parsed index from the input
-     */
-    public static boolean validateScheduleParams(long duration,
-            ArrayList<DateTime> dateTimes, int index, ArrayList<Task> tasks) {
-        try {
-            TaskManagerUtils.checkValidityIndex(index, tasks);  
-        } catch (IndexOutOfBoundsException e) {
-            GUI.print_add(Constants.MESSAGE_INVALID_TASK_INDEX, 
-                          GUIConstants.COLOR_CODE_RED);
-            
-            return false;
-        }
-        if (dateTimes.size() > 1) {
-            GUI.print_add(Constants.MESSAGE_INVALID_NUMBER_OF_DATES, 
-                          GUIConstants.COLOR_CODE_RED);
-            return false;
-        } else if (duration <= 0) {
-            GUI.print_add(Constants.MESSAGE_INCOMPLETE_COMMAND, 
-                          GUIConstants.COLOR_CODE_RED);
-            return false;
-        }
-        
-        if (tasks.get(index).isComplete()) {
-            GUI.print_add(Constants.MESSAGE_ALREADY_COMPLETE, 
-                          GUIConstants.COLOR_CODE_RED);
-            return false;
-        }
-        return true;
-    }
-    
+	 * Produces a start DateTime and an end DateTime based on the argument
+	 * given. If the input is an empty array, the range will be the current day.
+	 * If the input has one DateTime, the range will be that particular day. If
+	 * the input has two DateTimes, the range will be that.
+	 * 
+	 * @param dateTimes
+	 *            arrayList of start and end DateTime
+	 * @return range calculated
+	 */
+	public static ArrayList<DateTime> getFlexibleTimeRange(
+			ArrayList<DateTime> dateTimes) {
+		assert (dateTimes.size() >= 0 && dateTimes.size() <= 2);
+		if (dateTimes.size() == 2) {
+			if (dateTimes.get(0).isAfter(dateTimes.get(1))) {
+				Collections.reverse(dateTimes);
+			}
+			return dateTimes;
+		} else {
+			DateTime day;
+			if (dateTimes.size() == 1) {
+				day = dateTimes.get(0);
+			} else {
+				day = DateTime.now();
+			}
+			DateTime startOfDay = DateTimeUtils.getStartOfDay(day);
+			DateTime endOfDay = DateTimeUtils.getEndOfDay(day);
+			ArrayList<DateTime> range = new ArrayList<DateTime>(2);
+			range.add(startOfDay);
+			range.add(endOfDay);
+			return range;
+		}
+	}
+
+	/**
+	 * Validates parameters for schedule command, must have a valid index that
+	 * is not completed, the dateTimes must have at most 1 date, duration must
+	 * be positive.
+	 * 
+	 * @param duration
+	 *            duration in milliseconds
+	 * @param dateTimes
+	 *            DateTimes parsed from the input
+	 * @param index
+	 *            parsed index from the input
+	 */
+	public static boolean validateScheduleParams(long duration,
+			ArrayList<DateTime> dateTimes, int index, ArrayList<Task> tasks) {
+		try {
+			TaskManagerUtils.checkValidityIndex(index, tasks);
+		} catch (IndexOutOfBoundsException e) {
+			GUI.print_add(Constants.MESSAGE_INVALID_TASK_INDEX,
+					GUIConstants.COLOR_CODE_RED);
+
+			return false;
+		}
+		if (dateTimes.size() > 1) {
+			GUI.print_add(Constants.MESSAGE_INVALID_NUMBER_OF_DATES,
+					GUIConstants.COLOR_CODE_RED);
+			return false;
+		} else if (duration <= 0) {
+			GUI.print_add(Constants.MESSAGE_INCOMPLETE_COMMAND,
+					GUIConstants.COLOR_CODE_RED);
+			return false;
+		}
+
+		if (tasks.get(index).isComplete()) {
+			GUI.print_add(Constants.MESSAGE_ALREADY_COMPLETE,
+					GUIConstants.COLOR_CODE_RED);
+			return false;
+		}
+		return true;
+	}
+
 	/**
 	 * Shows the correct display message depending on showAll.
 	 */
-	public static void showDisplayMessage(ArrayList<Task> tasks,
-	        boolean showAll) {
+	public static void showDisplayMessage(ArrayList<Task> tasks, boolean showAll) {
 		if (showAll) {
 			GUI.print_add(Constants.MESSAGE_DISPLAY_ALL,
-			              GUIConstants.COLOR_CODE_BLUE);
+					GUIConstants.COLOR_CODE_BLUE);
 		} else {
 			if (tasks.isEmpty()) {
 				GUI.print_add(Constants.MESSAGE_EMPTY_LIST,
-				              GUIConstants.COLOR_CODE_BLUE); 
+						GUIConstants.COLOR_CODE_BLUE);
 			} else {
 				GUI.print_add(Constants.MESSAGE_DISPLAY,
-				              GUIConstants.COLOR_CODE_BLUE);
+						GUIConstants.COLOR_CODE_BLUE);
 
 			}
 		}
 	}
 
-	//@author A0101286N
+	// @author A0101286N
 	/**
 	 * Shows the correct display message for finished tasks.
 	 */
 	public static void showDisplayMessage() {
-		GUI.print_add(Constants.MESSAGE_DISPLAY_FINISHED, GUIConstants.COLOR_CODE_BLUE);
-		GUI.print_add(Constants.FINISHED_TASK_SEPARATOR, GUIConstants.COLOR_CODE_BLUE);
+		GUI.print_add(Constants.MESSAGE_DISPLAY_FINISHED,
+				GUIConstants.COLOR_CODE_BLUE);
+		GUI.print_add(Constants.FINISHED_TASK_SEPARATOR,
+				GUIConstants.COLOR_CODE_BLUE);
 	}
-	
+
 	public static void clearTasks(ArrayList<Task> tasks) {
 		tasks.clear();
 	}
-	
+
 	public static ArrayList<Task> getFinishedTasks(ArrayList<Task> tasks) {
 		ArrayList<Task> toReturn = new ArrayList<Task>();
-		
-		for (Task task: tasks) {
+
+		for (Task task : tasks) {
 			if (task.isComplete()) {
 				toReturn.add(task);
 			}
 		}
 		return toReturn;
 	}
-	
+
 	public static ArrayList<FloatingTask> getFloatingTasks(ArrayList<Task> tasks) {
 		ArrayList<FloatingTask> toReturn = new ArrayList<FloatingTask>();
 
@@ -405,16 +410,16 @@ public class TaskManagerUtils {
 		}
 		return toReturn;
 	}
-	
-	//@author A0105656E
+
+	// @author A0105656E
 	/**
 	 * Transfer all tasks from one ArrayList to another ArrayList
 	 **/
 	public static void transferTasks(ArrayList<Task> from, ArrayList<Task> to) {
 		to.clear();
-		for(Task t:from){
+		for (Task t : from) {
 			to.add(t);
 		}
 	}
-	
+
 }

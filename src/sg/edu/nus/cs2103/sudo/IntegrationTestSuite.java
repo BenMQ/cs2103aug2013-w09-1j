@@ -28,7 +28,7 @@ import sg.edu.nus.cs2103.ui.DisplayUtils;
 public class IntegrationTestSuite {
 
 	private static final String SAVE_FILENAME = "integration_test.sav";
-	private static final String HISTORY_FILENAME = "integration_history.sav";
+	private static final String HISTORY_FILENAME = "integration_test.his";
 
 	private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
 	BufferedReader savefile_reader;
@@ -42,10 +42,11 @@ public class IntegrationTestSuite {
 
 	@Before
 	public void setUp() throws FileNotFoundException {
+		
 		savefile = new File(SAVE_FILENAME);
 		historyfile = new File(HISTORY_FILENAME);
-		storage = StorageHandler.getStorageHandler(SAVE_FILENAME);
-		manager = TaskManager.getTaskManager();
+		storage = StorageHandler.getStorageHandler(SAVE_FILENAME, HISTORY_FILENAME);
+		manager = TaskManager.getTaskManager(SAVE_FILENAME, HISTORY_FILENAME);
 		logicHandler = LogicHandler.getLogicHandler(manager, user);
 		System.setOut(new PrintStream(outContent));
 	}

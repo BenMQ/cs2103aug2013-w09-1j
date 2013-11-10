@@ -1,7 +1,5 @@
 package sg.edu.nus.cs2103.ui;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 
 import sg.edu.nus.cs2103.sudo.logic.LogicHandler;
@@ -14,6 +12,8 @@ import java.awt.Graphics;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -28,12 +28,41 @@ import org.jnativehook.keyboard.NativeKeyListener;
  *
  * @author LiuDake A0105656
  */
+
+
+
 public class GUI extends javax.swing.JFrame implements NativeKeyListener {	
+	
+	private static class SudoTextPane extends JTextPane {		
+        public SudoTextPane() {		
+            super();		
+            setOpaque(false);		
+            // this is needed if using Nimbus L&F - see http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6687960		
+            setBackground(Color.BLACK);		
+        }		
+        @Override		
+        protected void paintComponent(Graphics g) {		
+            // set background green - but can draw image here too		
+            g.setColor(Color.BLACK);		
+            g.fillRect(0, 0, getWidth(), getHeight());		
+		
+            BufferedImage img = null;		
+            try {		
+                img = ImageIO.read(new File(GUIConstants.BACKGROUND_IMAGE_NAME));		
+            } catch (IOException e) {		
+            }		
+            g.drawImage(img, 0, 0, this);		
+		
+            super.paintComponent(g);		
+        }		
+}
+
+	
     /**
      * The following code creates new GUI.
      * MainTextPane is the main text displaying area which is static so that other static objects can call it.
      */
-	static public JTextPane MainTextPane = new JTextPane();
+	static public SudoTextPane MainTextPane = new SudoTextPane();
 	
     /**
      * StyledDocument stores all text layouts for MainTextPane.
@@ -69,16 +98,13 @@ public class GUI extends javax.swing.JFrame implements NativeKeyListener {
 		}
 	}
 
-	public static void addNewStyle(String style,StyledDocument doc,int size,int bold,int italic,int underline,Color color,String fontName)
+	public static void addNewStyle(String style,StyledDocument doc,int size,int bold,int italic,Color color,String fontName)
 	 {
-	  Style sys = StyleContext.getDefaultStyleContext().getStyle(StyleContext.DEFAULT_STYLE);
-	  try { doc.removeStyle(style); } catch(Exception e) {}
-	  
+	  doc.removeStyle(style);//clean the style if exist
 	  Style s = doc.addStyle(style,null); // add
 	  StyleConstants.setFontSize(s,size); // size
 	  StyleConstants.setBold(s,(bold==1)?true:false); // bold
 	  StyleConstants.setItalic(s,(italic==1)?true:false); // italian
-	  StyleConstants.setUnderline(s,(underline==1)?true:false); // downline
 	  StyleConstants.setForeground(s,color); // color
 	  StyleConstants.setFontFamily(s,fontName);  // font
 	  //StyleConstants.setBackground(s, Color.BLACK);
@@ -105,17 +131,17 @@ public class GUI extends javax.swing.JFrame implements NativeKeyListener {
 				e.printStackTrace();
 			}
 	    	StyledDocument styledDoc = MainTextPane.getStyledDocument();
-			addNewStyle("Green",styledDoc,18,1,0,0,Color.GREEN,"OCR A Std");//main text
-			addNewStyle("Yellow",styledDoc,18,1,0,0,new Color(254, 254, 125),"OCR A Std");//labels
-			addNewStyle("Blue",styledDoc,18,1,1,0,new java.awt.Color(145, 192, 246),"OCR A Std");//command feedback
-			addNewStyle("Red",styledDoc,18,1,0,0,new java.awt.Color(254, 100, 100),"OCR A Std");//Error
-			addNewStyle("White",styledDoc,18,1,1,0,Color.WHITE,"OCR A Std");//ID and highlighted texts
+			addNewStyle("Green",styledDoc,18,1,0,Color.GREEN,"OCR A Std");//main text
+			addNewStyle("Yellow",styledDoc,18,1,0,new Color(254, 254, 125),"OCR A Std");//labels
+			addNewStyle("Blue",styledDoc,18,1,1,new java.awt.Color(145, 192, 246),"OCR A Std");//command feedback
+			addNewStyle("Red",styledDoc,18,1,0,new java.awt.Color(254, 100, 100),"OCR A Std");//Error
+			addNewStyle("White",styledDoc,18,1,1,Color.WHITE,"OCR A Std");//ID and highlighted texts
 	    }
 	/**
 	 * GUI class builder. Initialize logicHandler, build text styles, then initialize GUI components.
 	 */	
     public GUI() {
-		manager = TaskManager.getTaskManager();
+		manager = TaskManager.getTaskManager(Constants.FILE_NAME, Constants.HISTORY_NAME);
 		logicHandler = LogicHandler.getLogicHandler(manager, null);
 		rebuildStyle();
 		initComponents();
@@ -187,7 +213,7 @@ public class GUI extends javax.swing.JFrame implements NativeKeyListener {
     	
     	//Initialize all GUI components
         jScrollPaneInput = new javax.swing.JScrollPane();
-        jTextPaneInput = new javax.swing.JTextField();
+        SudoTextPaneInput = new javax.swing.JTextField();
         jTextAreaLogo = new javax.swing.JTextArea();
         jScrollPaneMainText = new javax.swing.JScrollPane();
         jScrollPaneFloating = new javax.swing.JScrollPane();
@@ -202,27 +228,27 @@ public class GUI extends javax.swing.JFrame implements NativeKeyListener {
 		caret.setUpdatePolicy(DefaultCaret.NEVER_UPDATE);
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         //KeyListeners for keyboard actions
-        jTextPaneInput.addKeyListener(new KeyAdapter() {
+        SudoTextPaneInput.addKeyListener(new KeyAdapter() {
 			public void keyPressed(KeyEvent e) {
 				//previous command
 				if (e.getKeyCode() == KeyEvent.VK_UP && previousInputPointer>=0){
 					previousInputPointer--;
-					jTextPaneInput.setText(previousInput.get(previousInputPointer+1));
+					SudoTextPaneInput.setText(previousInput.get(previousInputPointer+1));
 				}
 				//"next" command
 				if (e.getKeyCode() == KeyEvent.VK_DOWN && previousInputPointer<previousInput.size()-1){
 					previousInputPointer++;
-					jTextPaneInput.setText(previousInput.get(previousInputPointer));
+					SudoTextPaneInput.setText(previousInput.get(previousInputPointer));
 				}
 				//execute
 				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-					String ipt = jTextPaneInput.getText();
+					String ipt = SudoTextPaneInput.getText();
 					if(!ipt.equals("")){
 						previousInput.add(ipt);
 						previousInputPointer=previousInput.size()-1;
 						rebuildStyle();
-						String userInput =  jTextPaneInput.getText();
-						jTextPaneInput.setText(null);
+						String userInput =  SudoTextPaneInput.getText();
+						SudoTextPaneInput.setText(null);
 						logicHandler.executeCommand(userInput);
 						try {
 							FloatingTextArea.setText("Floating tasks:\n\n"+
@@ -242,7 +268,7 @@ public class GUI extends javax.swing.JFrame implements NativeKeyListener {
 		});
         
         //GUI components properties and behavior
-        jScrollPaneInput.setViewportView(jTextPaneInput);
+        jScrollPaneInput.setViewportView(SudoTextPaneInput);
         MainTextPane.setEditable(false);
         MainTextPane.setBackground(Color.BLACK);
         MainTextPane.setAutoscrolls(false);
@@ -364,7 +390,7 @@ public class GUI extends javax.swing.JFrame implements NativeKeyListener {
     private javax.swing.JScrollPane jScrollPaneFloating;
     private javax.swing.JScrollPane jScrollPaneLogo;
     private javax.swing.JScrollPane jScrollPaneInput;
-    private javax.swing.JTextField jTextPaneInput;
+    private javax.swing.JTextField SudoTextPaneInput;
     private javax.swing.JTextArea jTextAreaLogo;
     private ArrayList<String> previousInput;
     private int previousInputPointer;

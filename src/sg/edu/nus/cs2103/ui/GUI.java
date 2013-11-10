@@ -128,7 +128,6 @@ public class GUI extends javax.swing.JFrame implements NativeKeyListener {
 		StyleConstants.setItalic(s, (italic == 1) ? true : false); // italian
 		StyleConstants.setForeground(s, color); // color
 		StyleConstants.setFontFamily(s, fontName); // font
-		StyleConstants.setBackground(s, Color.BLACK);
 	}
 
 	public static void useStyle(StyledDocument styledDoc, String content,

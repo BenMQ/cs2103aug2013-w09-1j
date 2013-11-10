@@ -73,7 +73,8 @@ public class IntegrationTestSuite {
 
 	@Test
 	public void testAddDeadlineTask() throws IOException {
-		String userInput = "add 'make waffles for breakfast' by Monday 14 October 2pm";
+		String userInput = "add 'make waffles for breakfast' "
+				+ "by Monday 14 October 2pm";
 
 		ArrayList<DateTime> dateTimes = InputParser.parseDateTime(userInput,
 				COMMAND_TYPE.ADD);
@@ -87,7 +88,8 @@ public class IntegrationTestSuite {
 
 	@Test
 	public void testTimedTask() throws IOException {
-		String userInput = "add 'make waffles for breakfast' from Monday 14 October 2pm to Wednesday 16 October";
+		String userInput = "add 'make waffles for breakfast' "
+				+ "from Monday 14 October 2pm to Wednesday 16 October";
 		ArrayList<DateTime> dateTimes = InputParser.parseDateTime(userInput,
 				COMMAND_TYPE.ADD);
 		String startTime = dateTimes.get(0).toString("dd MMMM hh:mm a");
@@ -101,7 +103,8 @@ public class IntegrationTestSuite {
 
 	@Test
 	public void testValidAliases() throws IOException {
-		String userInput = "do 'make waffles for breakfast' by Monday 14 October 2pm";
+		String userInput = "do 'make waffles for breakfast' "
+				+ "by Monday 14 October 2pm";
 		String taskDescription = InputParser.parseDescription(userInput);
 		runCommand(userInput);
 
@@ -114,13 +117,15 @@ public class IntegrationTestSuite {
 
 	@Test
 	public void testInvalidAliases() throws IOException {
-		String userInput = "bamboozle 'make waffles for breakfast' by Monday 14 October 2pm";
+		String userInput = "bamboozle 'make waffles for breakfast'"
+				+ " by Monday 14 October 2pm";
 		testCommand(userInput, Constants.MESSAGE_INVALID_COMMAND);
 	}
 
 	@Test
 	public void testDelete() throws IOException {
-		String userInput = "add 'make waffles for breakfast' by Monday 14 October 2pm";
+		String userInput = "add 'make waffles for breakfast' "
+				+ "by Monday 14 October 2pm";
 		String taskDescription = InputParser.parseDescription(userInput);
 		runCommand(userInput);
 
@@ -133,7 +138,8 @@ public class IntegrationTestSuite {
 
 	@Test
 	public void testPrettyPrint() throws IOException {
-		String userInput = "add 'make waffles for lunch' from 14 October 10am to 14 October 2pm";
+		String userInput = "add 'make waffles for lunch' "
+				+ "from 14 October 10am to 14 October 2pm";
 		runCommand(userInput);
 
 		userInput = "add 'make cake for breakfast' by 14 October 9am";
@@ -150,7 +156,8 @@ public class IntegrationTestSuite {
 
 	@Test
 	public void testEdit() {
-		String userInput = "add 'make waffles for lunch' from 12 December 10am to 2pm";
+		String userInput = "add 'make waffles for lunch' "
+				+ "from 12 December 10am to 2pm";
 		runCommand(userInput);
 
 		userInput = "edit 1 from 8am to 12pm";

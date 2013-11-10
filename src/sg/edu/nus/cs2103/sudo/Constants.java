@@ -18,7 +18,7 @@ public class Constants {
 			"successfully.\n";
 	public static final String MESSAGE_WELCOME_TO_SUDO_RELOAD_B =	"To get " +
 			"a full list of commands, type: help\nTo learn more about a"
-			+ " command: help [command]\n";
+			+ " command: help <command>\n";
 	public static final String MESSAGE_INVALID_COMMAND = "Invalid command.\n";
 	public static final String MESSAGE_INVALID_TASK_INDEX = "Invalid task "
 			+ "index.\n";

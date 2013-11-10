@@ -266,12 +266,17 @@ public class TaskManagerUtils {
 
 		GUI.print_add("\n"+Constants.MESSAGE_SEARCH_RESULTS, GUIConstants.COLOR_CODE_YELLOW);
 		for (int i = 0; i < searchResults.size(); i++) {
-			String toDisplay = searchResults.get(i).toString();
-			int space_place = toDisplay.indexOf(" ");
-			String number = toDisplay.substring(0, space_place);
-			toDisplay=toDisplay.substring(space_place)+"\n";
-			GUI.print_add("\n"+number, GUIConstants.COLOR_CODE_WHITE);
-			GUI.print_add(toDisplay, GUIConstants.COLOR_CODE_GREEN);
+			Task task = searchResults.get(i);
+			
+			String completed = "";
+			if (task.isComplete()) {
+				completed = Constants.TASK_COMPLETED_FLAG;
+			}
+			
+			GUI.print_add("\n",GUIConstants.COLOR_CODE_GREEN);
+			DisplayUtils.prettyPrint(task);
+			GUI.print_add(" " + completed, GUIConstants.COLOR_CODE_YELLOW);
+	
 		}
 		GUI.print_add("\n\n",GUIConstants.COLOR_CODE_GREEN);
 	}

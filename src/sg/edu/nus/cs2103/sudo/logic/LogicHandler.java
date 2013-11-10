@@ -129,7 +129,7 @@ public final class LogicHandler {
 				this.manager.displayAllTasks();
 				return;
 			case SEARCH:
-				this.manager.searchAndDisplay(taskDescription);
+				this.manager.searchAllAndDisplay(taskDescription);
 				return;
 			case FREE:
 	            this.manager.searchForFreeIntervals(

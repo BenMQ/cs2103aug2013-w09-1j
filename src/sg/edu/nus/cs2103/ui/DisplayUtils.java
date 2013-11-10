@@ -111,8 +111,8 @@ public class DisplayUtils {
 	 * for tasks not on the current year, else 
 	 * returns a date-month format for task display. 
 	 * 
-	 * @param String
-	 * @return int
+	 * @param DateTime
+	 * @return DateTimeFormatter
 	 */
 	public static DateTimeFormatter getDateFormat(DateTime previousDate) {
 		DateTimeFormatter dateFormat = Constants.DATE_MONTH_FORMAT;
@@ -126,7 +126,7 @@ public class DisplayUtils {
 
 	/**
 	 * Gets the right color (red, yellow, etc.)
-	 * for a particular String prefix (Overdue, etc.). 
+	 * for a given String prefix (Overdue, etc.). 
 	 * 
 	 * @param String
 	 * @return int

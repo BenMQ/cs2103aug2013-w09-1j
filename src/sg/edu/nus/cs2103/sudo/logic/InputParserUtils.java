@@ -10,8 +10,8 @@ import org.joda.time.MutablePeriod;
 import org.joda.time.format.PeriodFormatterBuilder;
 import org.joda.time.format.PeriodParser;
 
-import sg.edu.nus.cs2103.sudo.AliasConstants;
 import sg.edu.nus.cs2103.sudo.COMMAND_TYPE;
+import sg.edu.nus.cs2103.sudo.Constants;
 
 import com.joestelmach.natty.DateGroup;
 
@@ -85,7 +85,7 @@ public class InputParserUtils {
 	 * @return COMMAND_TYPE
 	 */
 	public static COMMAND_TYPE getCommandType(String userCommand) {
-		COMMAND_TYPE commandType = AliasConstants.aliases.get(userCommand
+		COMMAND_TYPE commandType = Constants.aliases.get(userCommand
 				.toUpperCase());
 		if (commandType == null) {
 			return COMMAND_TYPE.INVALID;

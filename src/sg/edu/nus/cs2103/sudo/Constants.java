@@ -1,5 +1,7 @@
 package sg.edu.nus.cs2103.sudo;
 
+import java.util.HashMap;
+
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
@@ -10,13 +12,13 @@ public class Constants {
 			+ "full list of commands, type:\n";
 	public static final String MESSAGE_WELCOME_TO_SUDO_FIRST_B = "help\n\nTo " +
 			"learn more about a command,"
-			+ " type: help <command>\n";
+			+ " type: help [command]\n";
 	public static final String MESSAGE_WELCOME_TO_SUDO_RELOAD_A = "Welcome " +
 			"back, dear user.\nYour past records have been loaded " +
 			"successfully.\n";
 	public static final String MESSAGE_WELCOME_TO_SUDO_RELOAD_B =	"To get " +
 			"a full list of commands, type: help\nTo learn more about a"
-			+ " command: help <command>\n";
+			+ " command: help [command]\n";
 	public static final String MESSAGE_INVALID_COMMAND = "Invalid command.\n";
 	public static final String MESSAGE_INVALID_TASK_INDEX = "Invalid task "
 			+ "index.\n";
@@ -98,4 +100,52 @@ public class Constants {
 	public static final int SEPARATOR_LENGTH = 50;
 	public static final char SEPARATOR_CHAR = '=';
 
+	/**
+	 *  This key-value table maps aliases to their corresponding COMMAND_TYPE.
+	 */
+	public static final HashMap<String, COMMAND_TYPE> aliases = 
+			new HashMap<String, COMMAND_TYPE>() {
+				
+		private static final long serialVersionUID = 1L;
+		{
+			put("ADD", COMMAND_TYPE.ADD);
+			put("DO", COMMAND_TYPE.ADD);
+			put("SUDO", COMMAND_TYPE.ADD);
+
+			put("DELETE", COMMAND_TYPE.DELETE);
+			put("DEL", COMMAND_TYPE.DELETE);
+			put("REMOVE", COMMAND_TYPE.DELETE);
+
+			put("EDIT", COMMAND_TYPE.EDIT);
+			put("CHANGE", COMMAND_TYPE.EDIT);
+			put("MODIFY", COMMAND_TYPE.EDIT);
+
+			put("FINISH", COMMAND_TYPE.FINISH);
+			put("COMPLETE", COMMAND_TYPE.FINISH);
+			put("DONE", COMMAND_TYPE.FINISH);
+
+			put("SEARCH", COMMAND_TYPE.SEARCH);
+			put("FIND", COMMAND_TYPE.SEARCH);
+
+			put("DISPLAY", COMMAND_TYPE.DISPLAY);
+			put("SHOW", COMMAND_TYPE.DISPLAY);
+
+			put("UNDO", COMMAND_TYPE.UNDO);
+			put("REDO", COMMAND_TYPE.REDO);
+			put("FREE", COMMAND_TYPE.FREE);
+			put("SCHEDULE", COMMAND_TYPE.SCHEDULE);
+			put("SORT", COMMAND_TYPE.SORT);
+			
+			put("HELP", COMMAND_TYPE.HELP);
+			put("COMMANDS", COMMAND_TYPE.HELP);
+			
+			put("ALL", COMMAND_TYPE.ALL);
+			put("UNFINISH", COMMAND_TYPE.UNFINISH);
+
+			put("EXIT", COMMAND_TYPE.EXIT);
+			put("QUIT", COMMAND_TYPE.EXIT);
+		}
+	};
+	
+	
 }

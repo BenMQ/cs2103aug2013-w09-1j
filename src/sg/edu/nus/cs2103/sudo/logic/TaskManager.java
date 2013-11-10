@@ -56,7 +56,8 @@ public class TaskManager {
 		}
 		return taskManager;
 	}
-
+	
+	// @author DAKE!!
 	/**
 	 * Load an ArrayList of tasks into memory. This method should be called upon
 	 * launch after the storage unit has read the stored item from disk. This
@@ -69,7 +70,7 @@ public class TaskManager {
 		this.tasks = tasks;
 	}
 
-	// @author DAKE!!
+	
 	public void relaunch() {
 		StorageHandler.resetAll(Constants.FILE_NAME);
 		tasks = new ArrayList<Task>();

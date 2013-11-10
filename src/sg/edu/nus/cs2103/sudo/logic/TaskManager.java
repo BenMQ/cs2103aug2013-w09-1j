@@ -38,17 +38,17 @@ public class TaskManager {
 	// is this the first time sudo is run?
 	private boolean isReloaded = false;
 
-	private TaskManager() throws Exception {
+	private TaskManager(String taskFileName, String historyFileName) throws Exception {
 		tasks = new ArrayList<Task>();
-		storage = StorageHandler.getStorageHandler(Constants.FILE_NAME);
+		storage = StorageHandler.getStorageHandler(taskFileName, historyFileName);
 		isReloaded = storage.prepareFile(tasks);
 		TaskManagerUtils.updateAllIds(tasks);
 	}
 
-	public static TaskManager getTaskManager() {
+	public static TaskManager getTaskManager(String taskFileName, String historyFileName) {
 		if (taskManager == null) {
 			try {
-				taskManager = new TaskManager();
+				taskManager = new TaskManager(taskFileName, historyFileName);
 			} catch (Exception e) {
 
 			}
@@ -56,7 +56,7 @@ public class TaskManager {
 		return taskManager;
 	}
 	
-	// @author DAKE!!
+	// @author A0105656E
 	/**
 	 * Load an ArrayList of tasks into memory. This method should be called upon
 	 * launch after the storage unit has read the stored item from disk. This
@@ -70,10 +70,10 @@ public class TaskManager {
 	}
 
 	
-	public void relaunch() {
-		StorageHandler.resetAll(Constants.FILE_NAME);
+	public void relaunch(String taskFileName, String historyFileName) {
+		StorageHandler.resetAll(Constants.FILE_NAME, Constants.HISTORY_NAME);
 		tasks = new ArrayList<Task>();
-		storage = StorageHandler.getStorageHandler(Constants.FILE_NAME);
+		storage = StorageHandler.getStorageHandler(Constants.FILE_NAME, Constants.HISTORY_NAME);
 		try {
 			isReloaded = storage.prepareFile(tasks);
 		} catch (WrongTaskDescriptionStringException e1) {
@@ -82,7 +82,7 @@ public class TaskManager {
 		}
 		TaskManagerUtils.updateAllIds(tasks);
 		try {
-			taskManager = new TaskManager();
+			taskManager = new TaskManager(taskFileName, historyFileName);
 			GUI.print_add("Files rebuilt.", GUIConstants.COLOR_CODE_RED);
 
 		} catch (Exception e) {
@@ -689,7 +689,7 @@ public class TaskManager {
 		storage.save(true);
 	}
 
-	// @author DAKE
+	// @author A0105656E
 	/**
 	 * If history does not exist, throw Exception
 	 * 

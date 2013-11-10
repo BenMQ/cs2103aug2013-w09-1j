@@ -3,13 +3,16 @@ package sg.edu.nus.cs2103.sudo.logic;
 import static org.junit.Assert.*;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Scanner;
+
 import sg.edu.nus.cs2103.sudo.COMMAND_TYPE;
 import sg.edu.nus.cs2103.sudo.Constants;
 import sg.edu.nus.cs2103.sudo.logic.InputParser;
+
 import org.joda.time.DateTime;
 import org.junit.After;
 import org.junit.Before;
@@ -23,17 +26,25 @@ public class InputParserTest {
 	TaskManager manager;
 	LogicHandler logicHandler;
 	InputParser parser;
-	
+	private static final String SAVE_FILENAME = "inputParser_test.sav";
+	private static final String HISTORY_FILENAME = "inputParser_test.his";
+	private File savefile;
+	private File historyfile;
+
 	@Before
 	public void setUp() {
-		manager = TaskManager.getTaskManager();
+		savefile = new File(SAVE_FILENAME);
+		historyfile = new File(HISTORY_FILENAME);
+		manager = TaskManager.getTaskManager(SAVE_FILENAME, HISTORY_FILENAME);
 		logicHandler = LogicHandler.getLogicHandler(manager, user);
 		System.setOut(new PrintStream(outContent));
     }
-	
+
 	@After
     public void tearDown() {
         manager.clearTasks();
+        savefile.delete();
+		historyfile.delete();
     }	
 	
 	@Test

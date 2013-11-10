@@ -50,7 +50,7 @@ public class GUI extends javax.swing.JFrame implements NativeKeyListener {
                 img = ImageIO.read(new File(GUIConstants.BACKGROUND_IMAGE_NAME));
             } catch (IOException e) {
             }
-            g.drawImage(img, 0, 0, this);
+            //g.drawImage(img, 0, 0, this);
 
             super.paintComponent(g);
         }

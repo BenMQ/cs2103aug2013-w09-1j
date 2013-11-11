@@ -50,7 +50,7 @@ public class StorageHandler {
 	}
 	
 	/**
-	 * 
+	 * S
 	 * Give a StorageHandler.
 	 * @param fileName
 	 */

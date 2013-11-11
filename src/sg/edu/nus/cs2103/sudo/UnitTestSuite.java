@@ -18,7 +18,7 @@ import sg.edu.nus.cs2103.sudo.storage.StorageHandlerTest;
 
 //@author A0099317U
 @RunWith(Suite.class)
-@SuiteClasses({ InputParserTest.class, TaskManagerTest.class, StorageHandlerTest.class })
+@SuiteClasses({StorageHandlerTest.class, InputParserTest.class,  TaskManagerTest.class  })
 public class UnitTestSuite {
 
 }

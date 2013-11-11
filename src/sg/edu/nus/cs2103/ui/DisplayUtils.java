@@ -6,6 +6,8 @@ import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormatter;
 
 import sg.edu.nus.cs2103.sudo.Constants;
+import sg.edu.nus.cs2103.sudo.logic.DateTimeUtils;
+import sg.edu.nus.cs2103.sudo.logic.StringUtils;
 import sg.edu.nus.cs2103.sudo.logic.Task;
 
 //@author A0099317U
@@ -45,8 +47,8 @@ public class DisplayUtils {
 		DateTime today = DateTime.now();
 		DateTime tomorrow = DateTime.now().plusDays(1);
 		boolean is_overdue = previousDate.compareTo(DateTime.now()) < 0;
-		boolean is_today = isSameDate(previousDate, today);
-		boolean is_tomorrow = isSameDate(previousDate, tomorrow);
+		boolean is_today = DateTimeUtils.isSameDate(previousDate, today);
+		boolean is_tomorrow = DateTimeUtils.isSameDate(previousDate, tomorrow);
 		
 		if (is_overdue) {
 			prefix = GUIConstants.OVERDUE_PREFIX;
@@ -69,7 +71,7 @@ public class DisplayUtils {
 		DateTime currentDate = task.getEndTime();
 		boolean dateIsNull = (previousDate == null);
 		
-		if (dateIsNull || !isSameDate(currentDate, previousDate)) {
+		if (dateIsNull || !DateTimeUtils.isSameDate(currentDate, previousDate)) {
 			previousDate = currentDate;
 			DisplayUtils.printDateSeparator(previousDate);
 		}
@@ -181,24 +183,7 @@ public class DisplayUtils {
 	 */				
 	protected static String generateSeparator(String label){
 		int separatorLength = Constants.SEPARATOR_LENGTH - label.length();
-		return fillString(separatorLength, Constants.SEPARATOR_CHAR);
-	}
-	
-	/**
-	 * Helper method to generate a string of characters
-	 * of specified length.
-	 * @param int
-	 * @param char
-	 * @return String
-	 */	
-	protected static String fillString(final int length, 
-			final char charToFill) {
-		  if (length > 0) {
-		    char[] array = new char[length];
-		    Arrays.fill(array, charToFill);
-		    return new String(array);
-		  }
-		  return "";
+		return StringUtils.fillString(separatorLength, Constants.SEPARATOR_CHAR);
 	}
 	
 	/**
@@ -208,28 +193,5 @@ public class DisplayUtils {
 	 */		
 	public static String formatDate(final DateTime datetime) {
 		return datetime.toString("dd MMMM hh:mm a");
-	}
-	
-	/**
-	 * This operation check if 2 DateTime objects have exactly same date
-	 * 
-	 * @param dt1
-	 *            is first date time
-	 * @param dt2
-	 *            is second date time
-	 * @return true if 2 objects have same date or false if otherwise
-	 * 
-	 */
-	public static boolean isSameDate(DateTime dt1, DateTime dt2) {
-		if (dt1 == null && dt2 == null)
-			return true;
-		if (dt1 == null && dt2 != null)
-			return false;
-		if (dt1 != null && dt2 == null)
-			return false;
-
-		return ((dt1.getYear() == dt2.getYear())
-				&& (dt1.getMonthOfYear() == dt2.getMonthOfYear()) 
-				&& (dt1.getDayOfMonth() == dt2.getDayOfMonth()));
 	}	
 }

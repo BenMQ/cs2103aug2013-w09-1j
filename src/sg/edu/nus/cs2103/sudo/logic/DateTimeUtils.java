@@ -6,6 +6,12 @@ import org.joda.time.DateTimeComparator;
 import sg.edu.nus.cs2103.sudo.Constants;
 
 //@author A0099317U
+
+/**
+ * This class contains static methods used to compare and 
+ * modify Joda DateTime objects.
+ *  
+ */
 public class DateTimeUtils {
 
 	/**
@@ -18,6 +24,29 @@ public class DateTimeUtils {
 		boolean hasZeroMinutes = datetime.getMinuteOfHour() > 0;
 		return isNotNull && hasZeroMinutes;
 	}
+	
+	/**
+	 * This operation check if 2 DateTime objects have exactly same date
+	 * 
+	 * @param dt1
+	 *            is first date time
+	 * @param dt2
+	 *            is second date time
+	 * @return true if 2 objects have same date or false if otherwise
+	 * 
+	 */
+	public static boolean isSameDate(DateTime dt1, DateTime dt2) {
+		if (dt1 == null && dt2 == null)
+			return true;
+		if (dt1 == null && dt2 != null)
+			return false;
+		if (dt1 != null && dt2 == null)
+			return false;
+
+		return ((dt1.getYear() == dt2.getYear())
+				&& (dt1.getMonthOfYear() == dt2.getMonthOfYear()) 
+				&& (dt1.getDayOfMonth() == dt2.getDayOfMonth()));
+	}	
 	
     /**
      * Gets the last second of the day as a DateTime
@@ -62,10 +91,6 @@ public class DateTimeUtils {
 
 		int check = dtComp.compare(endTime, startTime);
 
-		// check = 0 if the startTime and endTime are the same (Invalid
-		// TimedTask)
-		// check = -1 if endTime occurs before startTime (Invalid TimedTask)
-		// check = 1 if endTime occurs after startTime (Valid TimedTask)
 		boolean sameStartAndEnd = check == 0;
 		if (sameStartAndEnd) {
 			throw new IllegalArgumentException(

@@ -108,13 +108,12 @@ public class TaskManager {
 			throws Exception {
 
 		if (taskDescription == null) {
-			TaskManagerUtils.showErrorMessage();
-			return;
+			GUI.print_add(Constants.MESSAGE_MISSING_DESCRIPTION,
+					GUIConstants.COLOR_CODE_BLUE);
+		} else {
+			delegateAddTask(taskDescription, dateTimes);
+			storage.save(true);
 		}
-
-		assert taskDescription != null;
-		delegateAddTask(taskDescription, dateTimes);
-		storage.save(true);
 	}
 	
 	public void delegateAddTask(String taskDescription,

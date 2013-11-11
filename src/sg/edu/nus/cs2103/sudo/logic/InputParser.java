@@ -36,7 +36,7 @@ public class InputParser {
 	public static ArrayList<DateTime> parseDateTime(String userInput,
 	        COMMAND_TYPE command) {
 		Parser dtparser = new Parser();
-		String dateTimeString = getDateTimeString(userInput, command);
+		String dateTimeString = InputParserUtils.getDateTimeString(userInput, command);
 		List<DateGroup> dateGroups = dtparser.parse(dateTimeString);
 		ArrayList<List<Date>> dateLists = InputParserUtils.getDateLists(dateGroups);	
 		ArrayList<DateTime> dateTimes = InputParserUtils.
@@ -152,22 +152,5 @@ public class InputParser {
         }
     }
     
-	/**
-	 * Strips the command and other irrelevant arguments in the user input.
-	 * @param userInput user input string
-	 * @param command the type of the command
-	 * @return the input string with irrelevant keywords stripped away
-	 */
-	public static String getDateTimeString(String userInput,
-	        COMMAND_TYPE command) {
-        String desc = parseDescription(userInput);
-        userInput = InputParserUtils.trimDescription(userInput, desc);
-	    String[] inputWords = userInput.trim().split("\\s+");	    
-	    String[] relevantWord = 
-	            Arrays.copyOfRange(inputWords,
-	                               InputParserUtils.getNumWordsToTrim(command),
-	                               inputWords.length);
-	    return InputParserUtils.joinString(relevantWord, " ");
-	}
 }
 

@@ -1,6 +1,7 @@
 package sg.edu.nus.cs2103.sudo.logic;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -192,5 +193,24 @@ public class InputParserUtils {
         
         return buffer.toString();
     }
+    
+    
+	/**
+	 * Strips the command and other irrelevant arguments in the user input.
+	 * @param userInput user input string
+	 * @param command the type of the command
+	 * @return the input string with irrelevant keywords stripped away
+	 */
+	public static String getDateTimeString(String userInput,
+	        COMMAND_TYPE command) {
+        String desc = InputParser.parseDescription(userInput);
+        userInput = trimDescription(userInput, desc);
+	    String[] inputWords = userInput.trim().split("\\s+");	    
+	    String[] relevantWord = 
+	            Arrays.copyOfRange(inputWords,
+	                               InputParserUtils.getNumWordsToTrim(command),
+	                               inputWords.length);
+	    return joinString(relevantWord, " ");
+	}
     
 }

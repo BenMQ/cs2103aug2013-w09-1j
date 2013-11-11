@@ -293,7 +293,7 @@ public class TaskManagerTest {
 	@Test
 	public void testGetFlexibleTimeRangeEmpty() {
 		ArrayList<DateTime> input = new ArrayList<DateTime>();
-		ArrayList<DateTime> actual = TaskManagerUtils
+		ArrayList<DateTime> actual = DateTimeUtils
 				.getFlexibleTimeRange(input);
 		DateTime dt0000 = today(0, 0);
 		DateTime dt2359 = today(23, 59, 59);
@@ -311,7 +311,7 @@ public class TaskManagerTest {
 		ArrayList<DateTime> input = new ArrayList<DateTime>();
 		input.add(dt2359);
 
-		ArrayList<DateTime> actual = TaskManagerUtils
+		ArrayList<DateTime> actual = DateTimeUtils
 				.getFlexibleTimeRange(input);
 
 		ArrayList<DateTime> expected = new ArrayList<DateTime>();
@@ -329,7 +329,7 @@ public class TaskManagerTest {
 		input.add(dt2359);
 		input.add(tmr1300);
 
-		ArrayList<DateTime> actual = TaskManagerUtils
+		ArrayList<DateTime> actual = DateTimeUtils
 				.getFlexibleTimeRange(input);
 
 		ArrayList<DateTime> expected = new ArrayList<DateTime>();
@@ -348,7 +348,7 @@ public class TaskManagerTest {
 		input.add(tmr1300);
 		input.add(dt2359);
 
-		ArrayList<DateTime> actual = TaskManagerUtils
+		ArrayList<DateTime> actual = DateTimeUtils
 				.getFlexibleTimeRange(input);
 
 		ArrayList<DateTime> expected = new ArrayList<DateTime>();
@@ -371,7 +371,7 @@ public class TaskManagerTest {
 
 		try {
 			@SuppressWarnings("unused")
-			ArrayList<DateTime> actual = TaskManagerUtils
+			ArrayList<DateTime> actual = DateTimeUtils
 					.getFlexibleTimeRange(input);
 			assertTrue(false); // unreachable, assertion should always fail
 		} catch (AssertionError e) {

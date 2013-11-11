@@ -585,7 +585,7 @@ public class TaskManager {
 	 */
 	public ArrayList<DateTime> getTimeRangeFromNow(ArrayList<DateTime> dateTimes) {
 
-		ArrayList<DateTime> timeRange = TaskManagerUtils
+		ArrayList<DateTime> timeRange = DateTimeUtils
 				.getFlexibleTimeRange(dateTimes);
 
 		if (timeRange.get(0).isBefore(DateTime.now())) {

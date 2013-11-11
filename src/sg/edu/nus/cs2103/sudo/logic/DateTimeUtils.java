@@ -1,5 +1,8 @@
 package sg.edu.nus.cs2103.sudo.logic;
 
+import java.util.ArrayList;
+import java.util.Collections;
+
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeComparator;
 
@@ -68,6 +71,41 @@ public class DateTimeUtils {
                 day.getMonthOfYear(), day.getDayOfMonth(), 0, 0, 0);
     }
 
+	// @author A0099314Y
+	/**
+	 * Produces a start DateTime and an end DateTime based on the argument
+	 * given. If the input is an empty array, the range will be the current day.
+	 * If the input has one DateTime, the range will be that particular day. If
+	 * the input has two DateTimes, the range will be that.
+	 * 
+	 * @param dateTimes
+	 *            arrayList of start and end DateTime
+	 * @return range calculated
+	 */
+	public static ArrayList<DateTime> getFlexibleTimeRange(
+			ArrayList<DateTime> dateTimes) {
+		assert (dateTimes.size() >= 0 && dateTimes.size() <= 2);
+		if (dateTimes.size() == 2) {
+			if (dateTimes.get(0).isAfter(dateTimes.get(1))) {
+				Collections.reverse(dateTimes);
+			}
+			return dateTimes;
+		} else {
+			DateTime day;
+			if (dateTimes.size() == 1) {
+				day = dateTimes.get(0);
+			} else {
+				day = DateTime.now();
+			}
+			DateTime startOfDay = DateTimeUtils.getStartOfDay(day);
+			DateTime endOfDay = DateTimeUtils.getEndOfDay(day);
+			ArrayList<DateTime> range = new ArrayList<DateTime>(2);
+			range.add(startOfDay);
+			range.add(endOfDay);
+			return range;
+		}
+	}    
+    
 	/**
 	 * Helper method Checks the validity of 2 DateTimes. To be valid, the first
 	 * DateTime must occur chronologically before the second DateTime. If
@@ -104,4 +142,5 @@ public class DateTimeUtils {
 		}
 	}    
     
+	
 }

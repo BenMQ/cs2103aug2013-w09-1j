@@ -3,7 +3,7 @@ package sg.edu.nus.cs2103.ui;
 public class GUIConstants {
 	public static final int KEYBOARD_SPACE = 32;
 	public static final int KEYBOARD_TAB = 9;
-	public static final String BACKGROUND_IMAGE_NAME = "image.jpg";
+	public static final String BACKGROUND_IMAGE_NAME = "Image.jpg";
 	
 	public static final int COLOR_CODE_GREEN = 0;
 	public static final int COLOR_CODE_YELLOW = 1;

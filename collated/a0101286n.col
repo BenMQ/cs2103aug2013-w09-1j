@@ -1,0 +1,1545 @@
+//@author: a0101286n
+
+
+
+	/**
+	 * origin: C:\Users\Sony\workspace\sudo\src\sg\edu\nus\cs2103\sudo\IntegrationTestSuite.java
+	 */
+
+	@Test
+	public void testValidSearch() throws IOException {
+		prepareTaskListForTestSearch();
+
+		String userInput = "search 'nus'";
+		String expectedOutput = "\nSearch Results\n"
+				+ "1. [by 6PM] submit proposal to tutor at NUS \n"
+				+ "2. [9AM - 10AM] have coffee with mentor in Nus \n\n";
+		testCommand(userInput, expectedOutput);
+	}
+
+	@Test
+	public void testEmptyStringSearch() throws IOException {
+		prepareTaskListForTestSearch();
+
+		// boundary case: invalid search
+		String userInput = "search ''";
+		testCommand(userInput, "Search is invalid.\n");
+	}
+
+	@Test
+	public void testNoSearchResults() throws IOException {
+		prepareTaskListForTestSearch();
+
+		// boundary case: search with no search results
+		String userInput = "search 'fishes'";
+		testCommand(userInput, "No search results found.\n");
+	}
+
+	private void prepareTaskListForTestSearch() {
+		String userInput = "add 'submit proposal to tutor at NUS' "
+				+ "by 26 October 6pm";
+		runCommand(userInput);
+
+		userInput = "add 'have coffee with mentor in Nus' from "
+				+ "27 Oct 9am to 27 Oct 10am";
+		runCommand(userInput);
+	}
+
+	@Test
+	public void testSort() throws IOException {
+		String userInput = "add 'make dinner' by 10 November 2015 5pm";
+		runCommand(userInput);
+
+		userInput = "add 'make lunch' by 10 November 2015 11am";
+		runCommand(userInput);
+
+		// equivalence partitioning: sorting by date
+		userInput = "all";
+		testCommand(userInput, "Displaying all tasks\n\n\n"
+				+ "[Tue 10 Nov 2015]===================================\n"
+				+ "1. [by 11AM] make lunch \n" + "2. [by 5PM] make dinner ");
+
+		userInput = "finish 1";
+		runCommand(userInput);
+
+		// equivalence partitioning: sorting by incomplete tasks
+		userInput = "all";
+		testCommand(userInput, "Displaying all tasks\n\n\n"
+				+ "[Tue 10 Nov 2015]===================================\n"
+				+ "1. [by 5PM] make dinner \n\n"
+				+ "[Finished tasks]====================================\n"
+				+ "2. [by 11AM] make lunch Done!");
+	}
+
+	@Test
+	public void testInvalidFinish() throws IOException {
+		// boundary case: finish task which does not exist
+		String userInput = "finish 1";
+		finishInvalidTaskId(userInput);
+		userInput = "finish 0";
+		finishInvalidTaskId(userInput);
+		userInput = "finish -1";
+		finishInvalidTaskId(userInput);
+	}
+
+	@Test
+	public void testValidFinish() throws IOException {
+		prepareTaskListForTestFinish();
+
+		String userInput = "finish 1";
+		finishValidTask(userInput);
+
+	}
+	
+	@Test
+	public void testInvalidFinishCompletedTask() throws IOException {
+		prepareTaskListForTestFinish();
+			
+		String userInput = "finish 1";
+		runCommand(userInput);
+		
+		// boundary case: finish a completed task
+		userInput = "finish 1";
+		finishFinishedTask(userInput);
+	}
+	
+	private void finishFinishedTask(String userInput) throws IOException {
+		testCommand(userInput, Constants.MESSAGE_ALREADY_COMPLETE);
+	}
+
+	private void finishValidTask(String userInput) throws IOException {
+		testCommand(userInput, "Finished task: make waffles for breakfast\n"
+				+ "Remaining tasks:\n");
+	}
+
+	private void prepareTaskListForTestFinish() {
+		String userInput;
+		userInput = "add 'make waffles for breakfast' by 29 Nov 2pm";
+		InputParser.parseDescription(userInput);
+		runCommand(userInput);
+		
+	}
+
+	private void prepareTaskListForTestUnfinish() {
+		prepareTaskListForTestFinish();
+		String userInput = "finish 1";
+		runCommand(userInput);
+	}
+
+	private void finishInvalidTaskId(String userInput) throws IOException {
+		testCommand(userInput, Constants.MESSAGE_INVALID_TASK_INDEX);
+	}
+
+	private void unfinishInvalidTaskId(String userInput) throws IOException {
+		finishInvalidTaskId(userInput);
+
+	}
+
+	@Test
+	public void testInvalidUnfinish() throws IOException {
+		// boundary case: unfinish task which does not exist
+		String userInput = "unfinish 1";
+		unfinishInvalidTaskId(userInput);
+	}
+	
+	@Test 
+	public void testValidUnfinish() throws IOException {
+		prepareTaskListForTestUnfinish();
+
+		String userInput = "unfinish 1";
+		String expectedOutput = "Un-Finished task: make waffles for breakfast\n"
+				+ "Remaining tasks:\n\n\n"
+				+ "[Fri 29 Nov]========================================\n"
+				+ "1. [by 2PM] make waffles for breakfast ";
+		testCommand(userInput, expectedOutput);
+	}
+
+
+	@Test
+	public void testDisplayAll() throws IOException {
+		String userInput;
+		prepareTaskListForTestDisplayAll();
+
+		userInput = "all";
+		displayIncompleteAndCompleteTasks(userInput);
+	}
+
+	private void displayIncompleteAndCompleteTasks(String userInput)
+			throws IOException {
+		testCommand(userInput, "Displaying all tasks\n\n\n"
+				+ "[Sat 30 Nov]========================================\n"
+				+ "1. [7PM - 9PM] do assignment for 2103 \n\n"
+				+ "[Finished tasks]====================================\n"
+				+ "2. [by 9PM] make waffles Done!");
+	}
+
+	private void prepareTaskListForTestDisplayAll() {
+		String userInput = "add 'make waffles' by 29 nov 9pm";
+		runCommand(userInput);
+		userInput = "add 'do assignment for 2103' from 30 nov 7pm to 9pm";
+		runCommand(userInput);
+		userInput = "finish 1";
+		runCommand(userInput);
+	}
+
+	@Test
+	public void testEmptyDisplay() throws IOException {
+		// boundary case: display when task list is empty
+		String userInput = "display";
+		testCommand(userInput, Constants.MESSAGE_EMPTY_LIST);
+	}
+
+	// End of segment: C:\Users\Sony\workspace\sudo\src\sg\edu\nus\cs2103\sudo\IntegrationTestSuite.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Sony\workspace\sudo\src\sg\edu\nus\cs2103\sudo\logic\DeadlineTask.java
+	 */
+
+/**
+ *         This class stores the information about Deadline Tasks. Deadline
+ *         Tasks will have an id, description, isComplete and endTime. None of
+ *         these fields will be null.
+ */
+public class DeadlineTask extends Task {
+
+	// Deadline Task constructor
+	public DeadlineTask(String taskDescription, ArrayList<DateTime> dateTimes) {
+		assert (taskDescription != null);
+		assert (dateTimes.size() == 1);
+
+		this.description = taskDescription;
+		DateTime endTime = dateTimes.get(0);
+
+		this.endTime = endTime;
+	}
+	
+	public DeadlineTask(int id, String taskDescription, boolean isComplete, DateTime endTime) {
+		this.id = id;
+		this.description = taskDescription;
+		this.isComplete = isComplete;
+		this.endTime = endTime;
+	}
+	
+	public String toStringForFile() {
+		int bound = endTime.toString().indexOf(":");
+		String returnedEndTime = this.endTime.toString()
+				.substring(0, bound + 3);
+
+		return "DEADLINE" + "#" + description + "#" + returnedEndTime + "#"
+				+ isComplete;
+	}
+	
+	// End of segment: C:\Users\Sony\workspace\sudo\src\sg\edu\nus\cs2103\sudo\logic\DeadlineTask.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Sony\workspace\sudo\src\sg\edu\nus\cs2103\sudo\logic\FloatingTask.java
+	 */
+
+/**
+ *         This class stores the information about Floating Tasks. Floating
+ *         Tasks will have an id, description and isComplete. None of these
+ *         fields will be null.
+ */
+
+public class FloatingTask extends Task {
+
+	// Floating object constructor
+	public FloatingTask(String taskDescription) {
+		assert (taskDescription != null);
+
+		this.description = taskDescription;
+	}
+
+	// To be used to store in .txt
+	public String toStringForFile() {
+		return "floating" + "#" + description + "#" + isComplete;
+	}
+	
+	// End of segment: C:\Users\Sony\workspace\sudo\src\sg\edu\nus\cs2103\sudo\logic\FloatingTask.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Sony\workspace\sudo\src\sg\edu\nus\cs2103\sudo\logic\SortTasksByCompletedComparator.java
+	 */
+
+package sg.edu.nus.cs2103.sudo.logic;
+
+import java.util.Comparator;
+
+/**
+ * This class is implements the comparator in order to allow sorting of tasks by
+ * completed parameter
+ */
+public class SortTasksByCompletedComparator implements Comparator<Task> {
+
+	@Override
+	public int compare(Task task1, Task task2) {
+		return (task1.isComplete() == task2.isComplete() ? 0 : (task1
+				.isComplete() ? 1 : -1));
+	}
+
+}
+
+	// End of segment: C:\Users\Sony\workspace\sudo\src\sg\edu\nus\cs2103\sudo\logic\SortTasksByCompletedComparator.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Sony\workspace\sudo\src\sg\edu\nus\cs2103\sudo\logic\SortTasksByEndTimeComparator.java
+	 */
+
+package sg.edu.nus.cs2103.sudo.logic;
+
+import java.util.Comparator;
+
+/**
+ * This class allows sorting of tasks in a list according to their end times. 
+ * Floating Tasks will always appear at the end. 
+ * 
+ */
+public class SortTasksByEndTimeComparator implements Comparator<Task> {
+	
+	@Override
+	public int compare(Task task1, Task task2) {
+		if (task1.endTime != null) {
+			if (task2.endTime != null) {
+				return task1.endTime.compareTo(task2.endTime);
+			} else {
+				return -1;
+			}
+		} else {
+			if (task2.endTime != null) {
+				return 1;
+			} else {
+				return 0;
+			}
+		}
+	}
+}
+
+	// End of segment: C:\Users\Sony\workspace\sudo\src\sg\edu\nus\cs2103\sudo\logic\SortTasksByEndTimeComparator.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Sony\workspace\sudo\src\sg\edu\nus\cs2103\sudo\logic\Task.java
+	 */
+
+/**
+ * This class stores the information about all types of Tasks.
+ * This abstract class is the parent class of TimedTask, DeadlineTask and FloatingTask
+ * Some of the fields like endTime and/or startTime may be empty.
+ * 
+ */
+
+public abstract class Task {
+	protected int id;
+	protected String description = "";
+	protected Boolean isComplete = false;
+	protected DateTime startTime;
+	protected DateTime endTime;
+	
+	public Task() {}
+	public Task(int id, String description, DateTime startTime, DateTime endTime) {
+	    this.id = id;
+	    this.description = description;
+	    this.startTime = startTime;
+	    this.endTime = endTime;
+	}
+	
+	public int getId() {
+		return id;
+	}
+	
+	public String getDescription() {
+		return description;
+	}
+
+	public DateTime getStartTime() {
+		return startTime;
+	}
+	
+	public DateTime getEndTime() {
+		return endTime;
+	}	
+	
+	public boolean isComplete() {
+		return isComplete;
+	}
+	
+	public boolean isFloatingTask() {
+		return this.startTime == null && this.endTime == null;
+	}
+
+	public boolean isDeadlineTask() {
+		return this.getEndTime() != null;
+	}
+
+	public boolean isTimedTask() {
+		return this.getStartTime() != null && this.isDeadlineTask();
+	}
+	
+	public boolean isOnSameDay(){
+		return this.getStartTime().getDayOfYear() == this.getEndTime().getDayOfYear();
+	}
+	
+	/**
+	 * Converts the task object into a string with the following format:
+	 * 1) Timed task: desc from x to y
+	 * 2) Deadline task: desc by x
+	 * 3) Floating task: desc
+	 */
+	public String toString() {
+		String output = id + ". " + description;
+	    if (startTime != null) {
+	        output += " from " + startTime.toString("EEE dd MMMM hh:mm a") + " to " + endTime.toString("EEE dd MMMM hh:mm a");
+	    } else if (endTime != null) {
+	        output += " by " + endTime.toString("EEE dd MMMM hh:mm a");
+	    }
+	    
+	    return output;
+	}
+	
+	public void setId(int id) {
+		this.id = id;
+	}
+	
+	public void setDescription(String newDescription) {
+		description = newDescription;
+	}
+	
+	public void setStartTime(DateTime startTime) {
+		this.startTime = startTime;
+	}
+	
+	public void setEndTime(DateTime endTime) {
+		this.endTime = endTime;
+	}
+	
+	public void setComplete(Boolean isComplete) {
+		this.isComplete = isComplete;
+	}
+	
+	public abstract String toStringForFile();
+	
+	// End of segment: C:\Users\Sony\workspace\sudo\src\sg\edu\nus\cs2103\sudo\logic\Task.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Sony\workspace\sudo\src\sg\edu\nus\cs2103\sudo\logic\TaskManager.java
+	 */
+
+public class TaskManager {
+
+	private static TaskManager taskManager;
+
+	// A list of timed, deadline and floating tasks
+	private ArrayList<Task> tasks;
+
+	// The storage handler
+	private StorageHandler storage;
+
+	// is this the first time sudo is run?
+	private boolean isReloaded = false;
+
+	private TaskManager(String taskFileName, String historyFileName) throws Exception {
+		tasks = new ArrayList<Task>();
+		storage = StorageHandler.getStorageHandler(taskFileName, historyFileName);
+		isReloaded = storage.prepareFile(tasks);
+		TaskManagerUtils.updateAllIds(tasks);
+	}
+
+	public static TaskManager getTaskManager(String taskFileName, String historyFileName) {
+		if (taskManager == null) {
+			try {
+				taskManager = new TaskManager(taskFileName, historyFileName);
+			} catch (Exception e) {
+
+			}
+		}
+		return taskManager;
+	}
+	
+	// End of segment: C:\Users\Sony\workspace\sudo\src\sg\edu\nus\cs2103\sudo\logic\TaskManager.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Sony\workspace\sudo\src\sg\edu\nus\cs2103\sudo\logic\TaskManager.java
+	 */
+
+	
+	/**
+	 * Adds a task based on the number of date arguments.
+	 * 
+	 * @param taskDescription
+	 *            The task description
+	 * @param dateTimes
+	 *            A list of DateTimes
+	 * @throws Exception
+	 */
+	public void add(String taskDescription, ArrayList<DateTime> dateTimes)
+			throws Exception {
+
+		if (taskDescription == null) {
+			GUI.print_add(Constants.MESSAGE_MISSING_DESCRIPTION,
+					GUIConstants.COLOR_CODE_BLUE);
+		} else {
+			delegateAddTask(taskDescription, dateTimes);
+			storage.save(true);
+		}
+	}
+	
+	public void delegateAddTask(String taskDescription,
+			ArrayList<DateTime> dateTimes) throws Exception {
+		
+		int numOfDates = dateTimes.size();
+		if (numOfDates == 0) {
+			Task task = new FloatingTask(taskDescription);
+			this.addTaskAndSort(task);
+			GUI.print_add(task.getAddMessage(), GUIConstants.COLOR_CODE_BLUE);
+
+		} else if (numOfDates == 1) {
+			Task task = new DeadlineTask(taskDescription, dateTimes);
+			this.addTaskAndSort(task);
+			GUI.print_add(task.getAddMessage(), GUIConstants.COLOR_CODE_BLUE);
+
+		} else if (numOfDates == 2) {
+			Task task = new TimedTask(taskDescription, dateTimes);
+			this.addTaskAndSort(task);
+			GUI.print_add(task.getAddMessage(), GUIConstants.COLOR_CODE_BLUE);
+		} else {
+			GUI.print_add(Constants.MESSAGE_INVALID_NUMBER_OF_DATES,
+					GUIConstants.COLOR_CODE_BLUE);
+
+		}
+	}
+	
+	/**
+	 * Adds a new task into the list. Maintains a sorted list of items after
+	 * each add.
+	 * 
+	 * @param newTask
+	 *            Task to be added into task list
+	 * @return modified task list
+	 * @throws Exception
+	 */
+	public ArrayList<Task> addTaskAndSort(Task newTask) throws Exception {
+		assert (newTask != null);
+
+		newTask.setId(tasks.size() + 1);
+		tasks.add(newTask);
+
+		TaskManagerUtils.sortAndUpdateIds(tasks);
+		return tasks;
+	}
+
+	
+	/**
+	 * Replaces the task indicated by the displayId with the newTask Changes
+	 * from one type of task to another if necessary.
+	 * 
+	 * @param taskId
+	 *            id of task to be edited
+	 * @param taskDescription
+	 *            new task description (if any)
+	 * @param dates
+	 *            ArrayList of DateTimes containing new DateTimes (if any)
+	 * @return modified task list
+	 * @throws IllegalStateException
+	 * @throws IndexOutOfBoundsException
+	 * @throws Exception
+	 */
+	public ArrayList<Task> editTask(int taskId, String taskDescription,
+			ArrayList<DateTime> dates) throws IllegalStateException,
+			IndexOutOfBoundsException, Exception {
+		
+		assert (dates.size() <= 2);
+
+		TaskManagerUtils.checkEmptyList(tasks);
+
+		int index = taskId - 1;
+		TaskManagerUtils.checkValidityIndex(index, tasks);
+
+		GUI.print_add(String.format(Constants.MESSAGE_EDIT, taskId),
+				GUIConstants.COLOR_CODE_BLUE);
+
+		TaskManagerUtils.editTaskHelper(taskDescription, dates, index, tasks);
+
+		TaskManagerUtils.sortAndUpdateIds(tasks);
+		storage.save(true);
+		return tasks;
+	}
+
+	/**
+	 * Prints out finished tasks on GUI
+	 */
+	public void displayFinishedTasks() {
+		ArrayList<Task> tasks = TaskManagerUtils.getFinishedTasks(this.tasks);
+		TaskManagerUtils.showDisplayMessage();
+
+		for (Task task : tasks) {
+			String completed = "";
+			if (task.isComplete()) {
+				completed = Constants.TASK_COMPLETED_FLAG;
+			}
+			GUI.print_add("\n", GUIConstants.COLOR_CODE_YELLOW);
+			DisplayUtils.prettyPrint(task);
+			GUI.print_add(" " + completed, GUIConstants.COLOR_CODE_YELLOW);
+
+		}
+	}
+
+	/**
+	 * Prints tasks to GUI. Incomplete tasks are always printed by default.
+	 * If showAll is set to true, completed tasks are printed as well.
+	 * 
+	 * @param showAll
+	 *            set to true to include completed tasks
+	 */
+	public void displayAllTasks(boolean showAll) throws IllegalStateException {
+		TaskManagerUtils.checkEmptyList(tasks);
+
+		TaskManagerUtils.showDisplayMessage(tasks, showAll);
+
+		TaskManagerUtils.formatAllTasks(tasks, showAll);
+	}
+
+	/**
+	 * Prints all incomplete tasks only.
+	 * 
+	 * @throws IllegalStateException
+	 */
+	public void displayAllTasks() throws IllegalStateException {
+		displayAllTasks(false);
+	}
+
+	/**
+	 * Displays floating tasks only. To be shown in the side bar in the GUI
+	 * Formatted to be 17 characters per line.
+	 * 
+	 * @return String of floating tasks.
+	 */
+	public String displayFloatingTasks() {
+		ArrayList<FloatingTask> floatingTasks = TaskManagerUtils
+				.getFloatingTasks(tasks);
+
+		TaskManagerUtils.checkEmptyFloatingList(floatingTasks);
+
+		return TaskManagerUtils.formatFloatingTasks(floatingTasks);
+	}
+
+	/**
+	 * Mark an incomplete task as completed.
+	 * 
+	 * @param taskId
+	 *            id of task to be marked as completed
+	 * @return modified task list
+	 * @throws IOException
+	 * @throws Exception
+	 */
+	public ArrayList<Task> markAsComplete(int taskId)
+			throws UnsupportedOperationException, IOException {
+
+		int index = taskId - 1;
+
+		TaskManagerUtils.checkValidityIndex(index, tasks);
+		Task currTask = tasks.get(index);
+		TaskManagerUtils.checkIfAlreadyComplete(currTask);
+
+		currTask.setComplete(true);
+
+		GUI.print_add(
+				String.format(Constants.MESSAGE_FINISH, currTask.description),
+				GUIConstants.COLOR_CODE_YELLOW);
+
+		TaskManagerUtils.sortAndUpdateIds(tasks);
+		storage.save(true);
+
+		return tasks;
+	}
+
+	/**
+	 * Mark a completed task as incomplete.
+	 * 
+	 * @param taskId
+	 *            id of task to be marked as incomplete
+	 * @return modified task list
+	 * @throws Exception
+	 */
+	public ArrayList<Task> markAsIncomplete(int taskId) throws Exception {
+
+		int index = taskId - 1;
+		TaskManagerUtils.checkValidityIndex(index, tasks);
+
+		Task currTask = tasks.get(index);
+		if (!currTask.isComplete()) {
+			throw new UnsupportedOperationException(
+					Constants.MESSAGE_ALREADY_INCOMPLETE);
+		}
+
+		currTask.setComplete(false);
+		GUI.print_add(
+				String.format(Constants.MESSAGE_UNFINISH, currTask.description),
+				GUIConstants.COLOR_CODE_YELLOW);
+
+		TaskManagerUtils.sortAndUpdateIds(tasks);
+		storage.save(true);
+		return tasks;
+	}
+
+	/**
+	 * Search for Task objects matching the input search string. By default,
+	 * only incomplete tasks will be searched. Prints out the list of searched
+	 * Task objects.
+	 * 
+	 * @param searchStr
+	 *            string to be searched for
+	 * @return ArrayList<Task> list of search results
+	 * @throws NullPointerException
+	 * @throws IllegalStateException
+	 */
+	public ArrayList<Task> searchAndDisplay(String searchStr)
+			throws NullPointerException, IllegalStateException {
+
+		GUI.print_add(String.format(Constants.MESSAGE_SEARCH, searchStr),
+				GUIConstants.COLOR_CODE_YELLOW);
+
+		ArrayList<Task> searchResults = search(searchStr, false);
+		TaskManagerUtils.displaySearchResults(searchResults);
+
+		return searchResults;
+	}
+
+	/**
+	 * Search for Task objects matching the input search string. Searches all
+	 * Task objects. Prints out the list of searched Task objects.
+	 * 
+	 * @param searchStr
+	 *            string to be searched for
+	 * @return ArrayList<Task> list of search results
+	 * @throws NullPointerException
+	 * @throws IllegalStateException
+	 */
+	public ArrayList<Task> searchAllAndDisplay(String searchStr)
+			throws NullPointerException, IllegalStateException {
+
+		ArrayList<Task> searchResults = search(searchStr, true);
+		TaskManagerUtils.displaySearchResults(searchResults);
+
+		return searchResults;
+	}
+
+	/**
+	 * Searches for matches with the searchStr.
+	 * 
+	 * @param searchStr
+	 *            string to be search for
+	 * @param searchAll
+	 *            set to true if search for incomplete and completed tasks
+	 * @returns ArrayList<Task> list of search results
+	 * @throws NullPointerException
+	 * @throws IllegalStateException
+	 */
+	public ArrayList<Task> search(String searchStr, boolean searchAll)
+			throws NullPointerException, IllegalStateException {
+
+		boolean isInvalidString = searchStr == null || searchStr == "";
+		if (isInvalidString) {
+			throw new NullPointerException(Constants.MESSAGE_INVALID_SEARCH);
+		}
+
+		TaskManagerUtils.checkEmptyList(tasks);
+
+		ArrayList<Task> searchResults = TaskManagerUtils.searchHelper(tasks,
+				searchStr, searchAll);
+
+		return searchResults;
+	}
+
+	// End of segment: C:\Users\Sony\workspace\sudo\src\sg\edu\nus\cs2103\sudo\logic\TaskManager.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Sony\workspace\sudo\src\sg\edu\nus\cs2103\sudo\logic\TaskManager.java
+	 */
+
+	/**
+	 * Removes the task by first searching for the search string in the task
+	 * description. If there is exactly one match, just delete it. If there are
+	 * multiple matches, display all searchResults to user. By default,
+	 * searchResults searches through all tasks. Wait for user input to delete
+	 * again.
+	 * 
+	 * @param searchStr
+	 *            string to searched for
+	 * @throws IOException
+	 * @throws Exception
+	 */
+	public int delete(String searchStr) throws IOException {
+
+		boolean isInvalidString = (searchStr == null || searchStr == "");
+		if (isInvalidString) {
+			throw new NullPointerException(Constants.MESSAGE_INVALID_DELETE);
+		}
+
+		ArrayList<Task> searchResults = search(searchStr, true);
+		int numResults = searchResults.size();
+
+		if (numResults == 0) {
+			throw new IllegalStateException(Constants.MESSAGE_NO_SEARCH_RESULTS);
+		} else if (numResults == 1) {
+			delete(searchResults.get(0).getId());
+		} else {
+			GUI.print_add("\n" + Constants.MESSAGE_MULTIPLE_DELETE,
+					GUIConstants.COLOR_CODE_BLUE);
+			TaskManagerUtils.displaySearchResults(searchResults);
+		}
+
+		return numResults;
+	}
+
+	/**
+	 * The task with the specified id is deleted from the task list.
+	 * 
+	 * @param taskId
+	 *            id of task to be deleted
+	 * @throws IOException
+	 */
+	public void delete(int taskId) throws IOException {
+		int index = taskId - 1;
+
+		TaskManagerUtils.checkValidityIndex(index, tasks);
+
+		GUI.print_add(String.format(Constants.MESSAGE_DELETE,
+				tasks.get(index).description), GUIConstants.COLOR_CODE_RED);
+
+		tasks.remove(index);
+		TaskManagerUtils.sortAndUpdateIds(tasks);
+		storage.save(true);
+	}
+
+	// End of segment: C:\Users\Sony\workspace\sudo\src\sg\edu\nus\cs2103\sudo\logic\TaskManager.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Sony\workspace\sudo\src\sg\edu\nus\cs2103\sudo\logic\TaskManagerTest.java
+	 */
+
+public class TaskManagerTest {
+	private static final String SAVE_FILENAME = "taskmanagertest_save.sav";
+	private static final String HISTORY_FILENAME = "taskmanager_history.sav";
+
+	private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+	BufferedReader savefile_reader;
+	Scanner user = new Scanner(System.in);
+	private static TaskManager manager;
+	private File savefile;
+	private File historyfile;
+	private final static String floatingTaskDescription = "learn how to fish";
+	private final static String timedTaskDescription = "Trying an invalid"
+			+ " time interval";
+
+	@Before
+	public void setUp() throws FileNotFoundException {
+		savefile = new File(SAVE_FILENAME);
+		historyfile = new File(HISTORY_FILENAME);
+		StorageHandler.getStorageHandler(SAVE_FILENAME, HISTORY_FILENAME);
+		manager = TaskManager.getTaskManager(SAVE_FILENAME, HISTORY_FILENAME);
+		System.setOut(new PrintStream(outContent));
+	}
+
+	@After
+	public void tearDown() throws IOException {
+		manager.clearTasks();
+		savefile.delete();
+		historyfile.delete();
+	}
+
+	@Test
+	public void testAddTasks() throws Exception {
+		// adding valid floating task
+		manager.addTaskAndSort(new FloatingTask(floatingTaskDescription));
+		assertEquals("1. learn how to fish false\n",
+				displayTasks(manager.getTasks()));
+
+		ArrayList<DateTime> dateTimes = new ArrayList<DateTime>();
+		dateTimes.add(new DateTime());
+		dateTimes.add(new DateTime(2006, 3, 26, 12, 0, 0, 0));
+
+		// boundary case: add task with invalid time interval
+		try {
+			manager.addTaskAndSort(new TimedTask(timedTaskDescription,
+					dateTimes));
+		} catch (Exception e) {
+			assertEquals(Constants.MESSAGE_END_BEFORE_START_TIME,
+					e.getMessage());
+		}
+
+		// boundary case: add task with same start and end time
+		dateTimes.clear();
+		dateTimes.add(new DateTime());
+		dateTimes.add(new DateTime());
+
+		// boundary case: adding the same start and end time
+		/*
+		 * try { manager.addTask(new TimedTask("Trying same start and end time",
+		 * dateTimes)); } catch (Exception e) {
+		 * assertEquals(Constants.MESSAGE_SAME_START_END_TIME, e.getMessage());
+		 * }
+		 */
+
+		manager.addTaskAndSort(new TimedTask(0,
+				"Have dinner with family in NUS", false, new DateTime(2013, 10,
+						23, 19, 0, 0, 0), new DateTime(2013, 10, 23, 21, 0, 0,
+						0)));
+		assertEquals(
+				"1. Have dinner with family in NUS from Wed 23 October 07:00 PM"
+						+ " to Wed 23 October 09:00 PM false\n"
+						+ "2. learn how to fish false\n",
+				displayTasks(manager.getTasks()));
+
+		// adding valid deadline task
+		manager.addTaskAndSort(new DeadlineTask(0, "Submit proposal at Nus",
+				false, new DateTime(2013, 10, 21, 0, 0, 0, 0)));
+		assertEquals(
+				"1. Submit proposal at Nus by Mon 21 October 12:00 AM false\n"
+						+ "2. Have dinner with family in NUS from "
+						+ "Wed 23 October 07:00 PM"
+						+ " to Wed 23 October 09:00 PM false\n"
+						+ "3. learn how to fish false\n",
+				displayTasks(manager.getTasks()));
+	}
+
+	@Test
+	public void testFinishTasksInvalid() throws Exception {
+		testAddTasks();
+
+		// Equivalence partitioning
+		// boundary case: invalid task id
+		try {
+			manager.markAsComplete(-1);
+		} catch (Exception e) {
+			assertEquals(Constants.MESSAGE_INVALID_TASK_INDEX, e.getMessage());
+		}
+
+		// Equivalence partitioning & boundary value analysis
+		// boundary case: invalid task id
+		try {
+			manager.markAsComplete(0);
+		} catch (Exception e) {
+			assertEquals(Constants.MESSAGE_INVALID_TASK_INDEX, e.getMessage());
+		}
+
+		// Equivalence partitioning & boundary value analysis
+		// boundary case: invalid task id
+		try {
+			manager.markAsComplete(manager.getTasks().size() + 1);
+		} catch (Exception e) {
+			assertEquals(Constants.MESSAGE_INVALID_TASK_INDEX, e.getMessage());
+		}
+
+	}
+
+	public void testFinishTasksValid() throws Exception {
+		testAddTasks();
+
+		// valid task id
+		manager.markAsComplete(2);
+		assertEquals(
+				"1. Submit proposal at Nus by Mon 21 October 12:00 AM false\n"
+						+ "2. learn how to fish false\n"
+						+ "3. Have dinner with family in NUS "
+						+ "from Wed 23 October 07:00 PM to Wed "
+						+ "23 October 09:00 PM true\n",
+				displayTasks(manager.getTasks()));
+	}
+
+	@Test
+	public void testEditTasks() throws Exception {
+		testAddTasks();
+		assertEquals(
+				"1. Submit proposal at Nus by Mon 21 October 12:00 AM false\n"
+						+ "2. Have dinner with family in NUS from"
+						+ " Wed 23 October 07:00 PM"
+						+ " to Wed 23 October 09:00 PM false\n"
+						+ "3. learn how to fish false\n",
+				displayTasks(manager.getTasks()));
+
+		// boundary case where number of dateTimes taken in by method is 0
+		// (floating task)
+		// boundary case for taskId: last task in the list
+		manager.editTask(3, "learn how to fish with dad",
+				new ArrayList<DateTime>());
+		assertEquals(
+				"1. Submit proposal at Nus by Mon 21 October 12:00 AM false\n"
+						+ "2. Have dinner with family in NUS from "
+						+ "Wed 23 October 07:00 PM "
+						+ "to Wed 23 October 09:00 PM false\n"
+						+ "3. learn how to fish with dad false\n",
+				displayTasks(manager.getTasks()));
+
+		// boundary case for taskId; invalid task id
+		try {
+			manager.editTask(4, "learn to sew from mom",
+					new ArrayList<DateTime>());
+		} catch (Exception e) {
+			assertEquals("Invalid task index.\n", e.getMessage());
+		}
+
+		// boundary case: string input is empty
+		ArrayList<DateTime> dateTimes = new ArrayList<DateTime>();
+		dateTimes.add(new DateTime(2013, 10, 22, 9, 0, 0, 0));
+		manager.editTask(1, "", dateTimes);
+		assertEquals(
+				"1. Submit proposal at Nus by Tue 22 October 09:00 AM false\n"
+						+ "2. Have dinner with family in NUS from Wed 23 October 07:00 PM "
+						+ "to Wed 23 October 09:00 PM false\n"
+						+ "3. learn how to fish with dad false\n",
+				displayTasks(manager.getTasks()));
+
+		// boundary case: number of dateTimes is 2 (timed task)
+		dateTimes.add(new DateTime(2013, 10, 22, 17, 0, 0, 0));
+		manager.editTask(1, "", dateTimes);
+		assertEquals(
+				"1. Submit proposal at Nus from Tue 22 October 09:00 AM to "
+						+ "Tue 22 October 05:00 PM false\n"
+						+ "2. Have dinner with family in NUS from "
+						+ "Wed 23 October 07:00 PM "
+						+ "to Wed 23 October 09:00 PM false\n"
+						+ "3. learn how to fish with dad false\n",
+				displayTasks(manager.getTasks()));
+
+	}
+
+	/**
+	 * Tests searching for a string in the incomplete floating tasks TODO: Test
+	 * search for both complete and incomplete floating tasks
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	public void testSearchTasksValid() throws Exception {
+		testAddTasks();
+
+		assertEquals(
+				"2. Have dinner with family in NUS from Wed 23 October 07:00 PM "
+						+ "to Wed 23 October 09:00 PM false\n",
+				displayTasks(manager.search("family", true)));
+
+		assertEquals(
+				"1. Submit proposal at Nus by Mon 21 October 12:00 AM false\n"
+						+ "2. Have dinner with family in NUS from "
+						+ "Wed 23 October 07:00 PM"
+						+ " to Wed 23 October 09:00 PM false\n",
+				displayTasks(manager.search("nus", false)));
+
+		assertEquals("Nothing to display.\n",
+				displayTasks(manager.search("fishes", true)));
+
+	}
+
+	public void testSearchEmptyString() throws Exception {
+		testAddTasks();
+
+		// boundary case: search string is empty
+		try {
+			assertEquals(Constants.NOTHING_TO_DISPLAY,
+					displayTasks(manager.search("", true)));
+		} catch (Exception e) {
+			assertEquals(Constants.MESSAGE_INVALID_SEARCH, e.getMessage());
+		}
+	}
+
+	@Test
+	public void testDeleteInvalidId() throws Exception {
+		testAddTasks();
+		assertEquals(
+				"1. Submit proposal at Nus by Mon 21 October 12:00 AM false\n"
+						+ "2. Have dinner with family in NUS from "
+						+ "Wed 23 October 07:00 PM "
+						+ "to Wed 23 October 09:00 PM false\n"
+						+ "3. learn how to fish false\n",
+				displayTasks(manager.getTasks()));
+
+		// boundary case: task id is 0
+		try {
+			manager.delete(0);
+		} catch (Exception e) {
+			assertEquals(Constants.MESSAGE_INVALID_TASK_INDEX, e.getMessage());
+		}
+
+	}
+
+	@Test
+	public void testDeleteOneSearchResult() throws Exception {
+		testAddTasks();
+		assertEquals(
+				"1. Submit proposal at Nus by Mon 21 October 12:00 AM false\n"
+						+ "2. Have dinner with family in NUS from Wed 23 October 07:00 PM "
+						+ "to Wed 23 October 09:00 PM false\n"
+						+ "3. learn how to fish false\n",
+				displayTasks(manager.getTasks()));
+
+		// equivalence partitioning: when search results of delete is 1
+		manager.delete("fish");
+		assertEquals("Deleted: learn how to fish\n", outContent.toString());
+		outContent.reset();
+
+		assertEquals(
+				"1. Submit proposal at Nus by Mon 21 October 12:00 AM false\n"
+						+ "2. Have dinner with family in NUS from Wed 23 October 07:00 PM"
+						+ " to Wed 23 October 09:00 PM false\n",
+				displayTasks(manager.getTasks()));
+
+	}
+
+	// End of segment: C:\Users\Sony\workspace\sudo\src\sg\edu\nus\cs2103\sudo\logic\TaskManagerTest.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Sony\workspace\sudo\src\sg\edu\nus\cs2103\sudo\logic\TaskManagerUtils.java
+	 */
+
+package sg.edu.nus.cs2103.sudo.logic;
+
+import java.util.ArrayList;
+import java.util.Collections;
+
+import org.joda.time.DateTime;
+
+import sg.edu.nus.cs2103.sudo.Constants;
+
+import sg.edu.nus.cs2103.ui.DisplayUtils;
+import sg.edu.nus.cs2103.ui.GUI;
+import sg.edu.nus.cs2103.ui.GUIConstants;
+
+
+/**
+ * This class contains static methods that help execute some of the methods in
+ * TaskManager.
+ * 
+ */
+public class TaskManagerUtils {
+
+	private static final int NUM_PRECEDING_CHARACTERS = 3;
+	private static final int MAX_CHARACTER_LENGTH = 17;
+
+	/**
+	 * Helper method to editTask given the index in the ArrayList<Task>
+	 * 
+	 * @param taskDescription
+	 * @param dates
+	 * @param index
+	 */
+	public static void editTaskHelper(String taskDescription,
+			ArrayList<DateTime> dates, int index, ArrayList<Task> tasks) {
+
+		Task oldTask = tasks.remove(index);
+		Task newTask = TaskManagerUtils.editDescription(taskDescription,
+				oldTask);
+
+		newTask = TaskManagerUtils.editDateTime(dates, newTask);
+		tasks.add(newTask);
+	}
+
+	/**
+	 * Helper method to edit the description in a given task
+	 * 
+	 * @param taskDescription
+	 * @param task
+	 * @return
+	 */
+	public static Task editDescription(String taskDescription, Task task) {
+		if (taskDescription != "" && taskDescription != null) {
+			task.setDescription(taskDescription);
+		}
+		return task;
+	}
+
+	/**
+	 * Helper method to edit the date and time in a given task
+	 * 
+	 * @param dates
+	 * @param task
+	 * @return
+	 */
+	public static Task editDateTime(ArrayList<DateTime> dates, Task task) {
+		if (dates.size() == 1) {
+			if (!(task instanceof DeadlineTask)) {
+				task = new DeadlineTask(task.getId(), task.getDescription(),
+						task.isComplete(), dates.get(0));
+			} else {
+				task.setEndTime(dates.get(0));
+			}
+		} else if (dates.size() == 2) {
+			DateTimeUtils.checkValidityTimes(dates.get(0), dates.get(1));
+			if (!(task instanceof TimedTask)) {
+				task = new TimedTask(task.getId(), task.getDescription(),
+						task.isComplete(), dates.get(0), dates.get(1));
+			} else {
+				task.setStartTime(dates.get(0));
+				task.setEndTime(dates.get(1));
+			}
+		}
+
+		return task;
+	}
+
+	public static void checkEmptyList(ArrayList<Task> list)
+			throws IllegalStateException {
+		if (list.isEmpty()) {
+			throw new IllegalStateException(Constants.MESSAGE_EMPTY_LIST);
+		}
+	}
+
+	public static void checkEmptyFloatingList(
+			ArrayList<FloatingTask> floatingTasks) {
+		if (floatingTasks.isEmpty()) {
+			throw new IllegalStateException(Constants.MESSAGE_NO_FLOATING_TASKS);
+		}
+	}
+
+	public static void checkIfAlreadyComplete(Task currTask) {
+		if (currTask.isComplete()) {
+			throw new UnsupportedOperationException(
+					Constants.MESSAGE_ALREADY_COMPLETE);
+		}
+	}
+
+	/**
+	 * Checks for the validity of the index used in operations. If invalid,
+	 * throw exception.
+	 * 
+	 * @param index
+	 * @param list
+	 * @throws IndexOutOfBoundsException
+	 */
+	public static void checkValidityIndex(int index, ArrayList<Task> list)
+			throws IndexOutOfBoundsException {
+
+		if (index < 0 || index >= list.size()) {
+			throw new IndexOutOfBoundsException(
+					Constants.MESSAGE_INVALID_TASK_INDEX);
+		}
+	}
+
+	/**
+	 * Updates the id of each of the Task objects. To be done after every
+	 * operation.
+	 */
+	public static void updateAllIds(ArrayList<Task> tasks) {
+		for (int i = 0; i < tasks.size(); i++) {
+			tasks.get(i).setId(i + 1);
+		}
+	}
+
+	/**
+	 * Sorts all the Task objects according to end time and incomplete tasks
+	 * before completed tasks.
+	 * 
+	 * @throws Exception
+	 */
+	public static ArrayList<Task> sortTasks(ArrayList<Task> tasks) {
+		Collections.sort(tasks, new SortTasksByEndTimeComparator());
+		Collections.sort(tasks, new SortTasksByCompletedComparator());
+		return tasks;
+	}
+
+	/**
+	 * Sorts all the Task objects and updates all the ids. The ArrayList is now
+	 * ready for saving to history and file.
+	 */
+	public static void sortAndUpdateIds(ArrayList<Task> tasks) {
+		sortTasks(tasks);
+		updateAllIds(tasks);
+	}
+
+	/**
+	 * Helper method to format the floating tasks nicely.
+	 * 
+	 * @param floatingTasks
+	 *            ArrayList<FloatingTask> that is to be formatted
+	 * @return String of formatted floating tasks
+	 */
+	public static String formatFloatingTasks(
+			ArrayList<FloatingTask> floatingTasks) {
+		String toReturn = "";
+		for (FloatingTask task : floatingTasks) {
+			if (!task.isComplete()) {
+				String str = task.toString();
+
+				assert (!str.isEmpty());
+				if (str.length() > MAX_CHARACTER_LENGTH) {
+					String[] tokens = str.split(" ");
+					int currLength = 0;
+
+					for (int j = 0; j < tokens.length; j++) {
+						String token = tokens[j];
+						currLength += token.length();
+						if (currLength > MAX_CHARACTER_LENGTH && j > 1) {
+							currLength = NUM_PRECEDING_CHARACTERS;
+							currLength += token.length();
+							toReturn += "\n   ";
+						}
+						toReturn += token + " ";
+					}
+				} else {
+					toReturn += str;
+				}
+				toReturn += "\n";
+			}
+		}
+		return toReturn;
+	}
+
+	public static void formatAllTasks(ArrayList<Task> tasks, boolean showAll) {
+		boolean floatingStarted = false;
+		boolean finishedStarted = false;
+		DateTime previousDate = null;
+
+		for (int i = 0; i < tasks.size(); i++) {
+
+			Task task = tasks.get(i);
+
+			String completed = "";
+			if (task.isComplete()) {
+				completed = Constants.TASK_COMPLETED_FLAG;
+			}
+			if (showAll || !task.isComplete) {
+
+				if (!task.isComplete() && !task.isFloatingTask()) {
+					previousDate = DisplayUtils.insertDateSeparators(
+							previousDate, task);
+				} else {
+					floatingStarted = DisplayUtils.insertFloatingSeparator(
+							floatingStarted, task);
+					finishedStarted = DisplayUtils.insertFinishedSeparator(
+							finishedStarted, task);
+				}
+
+				GUI.print_add("\n", GUIConstants.COLOR_CODE_GREEN);
+				DisplayUtils.prettyPrint(task);
+				GUI.print_add(" " + completed, GUIConstants.COLOR_CODE_YELLOW);
+
+			}
+		}
+	}
+
+	/**
+	 * @param searchStr
+	 *            string to be searched for
+	 * @param searchAll
+	 *            set to true if search for incomplete and completed tasks
+	 * @return ArrayList<Task> list of search results
+	 */
+	public static ArrayList<Task> searchHelper(ArrayList<Task> tasks,
+			String searchStr, boolean searchAll) {
+		ArrayList<Task> searchResults = new ArrayList<Task>();
+
+		for (int i = 0; i < tasks.size(); i++) {
+			Task currTask = tasks.get(i);
+			String currTaskStr = currTask.getDescription();
+
+			if (currTaskStr.toLowerCase().contains(searchStr.toLowerCase())) {
+				if (searchAll || !currTask.isComplete) {
+					searchResults.add(currTask);
+				}
+			}
+		}
+		return searchResults;
+	}
+
+	/**
+	 * Prints out the list of search results containing Task objects.
+	 * 
+	 * @param searchResults
+	 * @throws IllegalStateException
+	 */
+	public static void displaySearchResults(ArrayList<Task> searchResults)
+			throws IllegalStateException {
+
+		if (searchResults.isEmpty()) {
+			throw new IllegalStateException(Constants.MESSAGE_NO_SEARCH_RESULTS);
+		}
+
+		GUI.print_add("\n" + Constants.MESSAGE_SEARCH_RESULTS,
+				GUIConstants.COLOR_CODE_YELLOW);
+		for (int i = 0; i < searchResults.size(); i++) {
+			Task task = searchResults.get(i);
+
+			String completed = "";
+			if (task.isComplete()) {
+				completed = Constants.TASK_COMPLETED_FLAG;
+			}
+
+			GUI.print_add("\n", GUIConstants.COLOR_CODE_GREEN);
+			DisplayUtils.prettyPrint(task);
+			GUI.print_add(" " + completed, GUIConstants.COLOR_CODE_YELLOW);
+
+		}
+		GUI.print_add("\n\n", GUIConstants.COLOR_CODE_GREEN);
+	}
+	
+	// End of segment: C:\Users\Sony\workspace\sudo\src\sg\edu\nus\cs2103\sudo\logic\TaskManagerUtils.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Sony\workspace\sudo\src\sg\edu\nus\cs2103\sudo\logic\TaskManagerUtils.java
+	 */
+
+	/**
+	 * Shows the correct display message for finished tasks.
+	 */
+	public static void showDisplayMessage() {
+		GUI.print_add(Constants.MESSAGE_DISPLAY_FINISHED,
+				GUIConstants.COLOR_CODE_BLUE);
+		GUI.print_add(Constants.FINISHED_TASK_SEPARATOR,
+				GUIConstants.COLOR_CODE_BLUE);
+	}
+
+	public static void clearTasks(ArrayList<Task> tasks) {
+		tasks.clear();
+	}
+
+	public static ArrayList<Task> getFinishedTasks(ArrayList<Task> tasks) {
+		ArrayList<Task> toReturn = new ArrayList<Task>();
+
+		for (Task task : tasks) {
+			if (task.isComplete()) {
+				toReturn.add(task);
+			}
+		}
+		return toReturn;
+	}
+
+	public static ArrayList<FloatingTask> getFloatingTasks(ArrayList<Task> tasks) {
+		ArrayList<FloatingTask> toReturn = new ArrayList<FloatingTask>();
+
+		for (Task task : tasks) {
+			if ((task instanceof FloatingTask)) {
+				toReturn.add((FloatingTask) task);
+			}
+		}
+		return toReturn;
+	}
+
+	// End of segment: C:\Users\Sony\workspace\sudo\src\sg\edu\nus\cs2103\sudo\logic\TaskManagerUtils.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Sony\workspace\sudo\src\sg\edu\nus\cs2103\sudo\logic\TimedTask.java
+	 */
+
+/**
+ *         This class stores the information about Timed Tasks. Timed Tasks will
+ *         have an id, description, isComplete, startTime and endTime. None of
+ *         these fields will be null.
+ */
+
+public class TimedTask extends Task {
+
+
+	// Timed Task constructor
+	public TimedTask(String taskDescription, ArrayList<DateTime> dateTimes)
+			throws IllegalArgumentException {
+		assert (taskDescription != null);
+		assert (dateTimes.size() == 2);
+
+		this.description = taskDescription;
+		DateTime startTime = dateTimes.get(0);
+		DateTime endTime = dateTimes.get(1);
+
+		checkValidityTimes(startTime, endTime);
+
+		this.startTime = startTime;
+		this.endTime = endTime;
+	}
+	
+	public TimedTask(int id, String taskDescription, boolean isComplete, DateTime startTime, DateTime endTime) {
+		checkValidityTimes(startTime, endTime);
+		
+		this.id = id;
+		this.description = taskDescription;
+		this.isComplete = isComplete;
+		this.startTime = startTime;
+		this.endTime = endTime;
+	}
+	
+	// End of segment: C:\Users\Sony\workspace\sudo\src\sg\edu\nus\cs2103\sudo\logic\TimedTask.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Sony\workspace\sudo\src\sg\edu\nus\cs2103\sudo\logic\TimedTask.java
+	 */
+
+	private void checkValidityTimes(DateTime startTime, DateTime endTime) {
+		checkStartAndEndTime(startTime, endTime);
+	}
+	
+	private void checkStartAndEndTime(DateTime startTime, DateTime endTime) {
+		DateTimeComparator dtComp = DateTimeComparator.getInstance();
+
+		int check = dtComp.compare(endTime, startTime);
+
+		// check == 0 if the startTime and endTime are the same (Invalid
+		// TimedTask)
+		// check == -1 if endTime occurs before startTime (Invalid TimedTask)
+		// check == 1 if endTime occurs after startTime (Valid TimedTask)
+		boolean sameStartAndEnd = check == 0;
+		if (sameStartAndEnd) {
+			throw new IllegalArgumentException(
+					Constants.MESSAGE_SAME_START_END_TIME);
+		} else {
+			boolean invalidStartAndEnd = check == -1;
+			if (invalidStartAndEnd) {
+				throw new IllegalArgumentException(
+						Constants.MESSAGE_END_BEFORE_START_TIME);
+			}
+		}
+	}
+	
+	// End of segment: C:\Users\Sony\workspace\sudo\src\sg\edu\nus\cs2103\sudo\logic\TimedTask.java
+
+
+
+
+

@@ -1,0 +1,1373 @@
+//@author: a0099317u
+
+
+
+	/**
+	 * origin: C:\Users\Sony\workspace\sudo\src\sg\edu\nus\cs2103\sudo\exceptions\IncompleteCommandException.java
+	 */
+
+public class IncompleteCommandException extends Exception {
+	private static final long serialVersionUID = 1L;
+	private final String DEFAULT_MESSAGE = Constants.MESSAGE_INCOMPLETE_COMMAND;
+	private String MESSAGE;
+
+	public IncompleteCommandException() {
+		MESSAGE = DEFAULT_MESSAGE;
+	}
+
+	public IncompleteCommandException(String message) {
+		MESSAGE = message;
+	}
+
+	public String getMessage() {
+		return MESSAGE;
+	}
+
+}
+	// End of segment: C:\Users\Sony\workspace\sudo\src\sg\edu\nus\cs2103\sudo\exceptions\IncompleteCommandException.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Sony\workspace\sudo\src\sg\edu\nus\cs2103\sudo\exceptions\InvalidCommandException.java
+	 */
+
+public class InvalidCommandException extends Exception {
+	private static final long serialVersionUID = 1L;
+	private final String DEFAULT_MESSAGE = Constants.MESSAGE_INVALID_COMMAND;
+	private String MESSAGE;
+
+	public InvalidCommandException() {
+		MESSAGE = DEFAULT_MESSAGE;
+	}
+
+	public InvalidCommandException(String message) {
+		MESSAGE = message;
+	}
+
+	public String getMessage() {
+		return MESSAGE;
+	}
+
+}
+	// End of segment: C:\Users\Sony\workspace\sudo\src\sg\edu\nus\cs2103\sudo\exceptions\InvalidCommandException.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Sony\workspace\sudo\src\sg\edu\nus\cs2103\sudo\IntegrationTestSuite.java
+	 */
+
+public class IntegrationTestSuite {
+
+	private static final String SAVE_FILENAME = "integration_test.sav";
+	private static final String HISTORY_FILENAME = "integration_test.his";
+
+	private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+	BufferedReader savefile_reader;
+	Scanner user = new Scanner(System.in);
+	private static StorageHandler storage;
+	private static LogicHandler logicHandler;
+	private static TaskManager manager;
+
+	private File savefile;
+	private File historyfile;
+
+	@Before
+	public void setUp() throws FileNotFoundException {
+		
+		savefile = new File(SAVE_FILENAME);
+		historyfile = new File(HISTORY_FILENAME);
+		storage = StorageHandler.getStorageHandler(SAVE_FILENAME, HISTORY_FILENAME);
+		manager = TaskManager.getTaskManager(SAVE_FILENAME, HISTORY_FILENAME);
+		logicHandler = LogicHandler.getLogicHandler(manager, user);
+		System.setOut(new PrintStream(outContent));
+	}
+
+	@After
+	public void tearDown() throws IOException {
+		manager.clearTasks();
+		savefile.delete();
+		historyfile.delete();
+	}
+
+	@Test
+	public void testAddFloatingTask() throws IOException {
+		String userInput = "add 'make waffles for breakfast'";
+		String taskDescription = InputParser.parseDescription(userInput);
+		String expectedOutput = String.format(Constants.MESSAGE_ADD_FLOATING,
+				taskDescription)
+				+ "Remaining tasks:\n"
+				+ Constants.FLOATING_TASK_SEPARATOR
+				+ "\n1. make waffles for breakfast ";
+
+		testCommand(userInput, expectedOutput);
+		testStorageContent();
+	}
+
+	@Test
+	public void testAddDeadlineTask() throws IOException {
+		String userInput = "add 'make waffles for breakfast' "
+				+ "by Monday 14 October 2pm";
+
+		ArrayList<DateTime> dateTimes = InputParser.parseDateTime(userInput,
+				COMMAND_TYPE.ADD);
+		String endTime = dateTimes.get(0).toString("dd MMMM hh:mm a");
+		String taskDescription = InputParser.parseDescription(userInput);
+		String expectedOutput = String.format(Constants.MESSAGE_ADD_DEADLINE,
+				taskDescription, endTime);
+		testCommand(userInput, expectedOutput);
+		testStorageContent();
+	}
+
+	@Test
+	public void testTimedTask() throws IOException {
+		String userInput = "add 'make waffles for breakfast' "
+				+ "from Monday 14 October 2pm to Wednesday 16 October";
+		ArrayList<DateTime> dateTimes = InputParser.parseDateTime(userInput,
+				COMMAND_TYPE.ADD);
+		String startTime = dateTimes.get(0).toString("dd MMMM hh:mm a");
+		String endTime = dateTimes.get(1).toString("dd MMMM hh:mm a");
+		String taskDescription = InputParser.parseDescription(userInput);
+		String expectedOutput = String.format(Constants.MESSAGE_ADD_TIMED,
+				taskDescription, startTime, endTime);
+		testCommand(userInput, expectedOutput);
+		testStorageContent();
+	}
+
+	@Test
+	public void testValidAliases() throws IOException {
+		String userInput = "do 'make waffles for breakfast' "
+				+ "by Monday 14 October 2pm";
+		String taskDescription = InputParser.parseDescription(userInput);
+		runCommand(userInput);
+
+		String expectedOutput = String.format(Constants.MESSAGE_DELETE
+				+ Constants.MESSAGE_EMPTY_LIST, taskDescription);
+		testCommand("remove 'waffle'", expectedOutput);
+
+		testStorageContent();
+	}
+
+	@Test
+	public void testInvalidAliases() throws IOException {
+		String userInput = "bamboozle 'make waffles for breakfast'"
+				+ " by Monday 14 October 2pm";
+		testCommand(userInput, Constants.MESSAGE_INVALID_COMMAND);
+	}
+
+	@Test
+	public void testDelete() throws IOException {
+		String userInput = "add 'make waffles for breakfast' "
+				+ "by Monday 14 October 2pm";
+		String taskDescription = InputParser.parseDescription(userInput);
+		runCommand(userInput);
+
+		String expectedOutput = String.format(Constants.MESSAGE_DELETE
+				+ Constants.MESSAGE_EMPTY_LIST, taskDescription);
+
+		testCommand("delete 'waffle'\n", expectedOutput);
+		testStorageContent();
+	}
+
+	@Test
+	public void testPrettyPrint() throws IOException {
+		String userInput = "add 'make waffles for lunch' "
+				+ "from 14 October 10am to 14 October 2pm";
+		runCommand(userInput);
+
+		userInput = "add 'make cake for breakfast' by 14 October 9am";
+		runCommand(userInput);
+
+		Task deadlineTask = IntegrationTestSuite.manager.getTasks().get(0);
+		Task timedTask = IntegrationTestSuite.manager.getTasks().get(1);
+
+		assertEquals("1. [by 9AM] make cake for breakfast",
+				DisplayUtils.prettyPrint(deadlineTask));
+		assertEquals("2. [10AM - 2PM] make waffles for lunch",
+				DisplayUtils.prettyPrint(timedTask));
+	}
+
+	@Test
+	public void testEdit() {
+		String userInput = "add 'make waffles for lunch' "
+				+ "from 12 December 10am to 2pm";
+		runCommand(userInput);
+
+		userInput = "edit 1 from 8am to 12pm";
+		runCommand(userInput);
+
+		Task task = IntegrationTestSuite.manager.getTasks().get(0);
+		assertEquals("1. [8AM - 12PM] make waffles for lunch",
+				DisplayUtils.prettyPrint(task));
+	}
+
+	// End of segment: C:\Users\Sony\workspace\sudo\src\sg\edu\nus\cs2103\sudo\IntegrationTestSuite.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Sony\workspace\sudo\src\sg\edu\nus\cs2103\sudo\IntegrationTestSuite.java
+	 */
+
+	/**
+	 * Helper test method for operations not currently being tested.
+	 * 
+	 * @param String
+	 */
+	public void runCommand(String userInput) {
+		logicHandler.executeCommand(userInput);
+		outContent.reset();
+	}
+
+	/**
+	 * Helper test method to test logic correctness and console output.
+	 * 
+	 * @param String
+	 * @param String
+	 */
+	private void testCommand(String userInput, String expectedOutput)
+			throws IOException {
+		logicHandler.executeCommand(userInput);
+		assertTrue(outContent.toString().contains(expectedOutput));
+		outContent.reset();
+	}
+
+	/**
+	 * Helper test method to test storage content.
+	 * 
+	 * @param String
+	 */
+	public void testStorageContent() throws FileNotFoundException, IOException {
+		savefile_reader = new BufferedReader(new FileReader(SAVE_FILENAME));
+		for (Task task : manager.getTasks()) {
+			String taskString = task.toStringForFile();
+			assertEquals(savefile_reader.readLine(), taskString);
+		}
+		savefile_reader.close();
+	}
+
+}
+
+	// End of segment: C:\Users\Sony\workspace\sudo\src\sg\edu\nus\cs2103\sudo\IntegrationTestSuite.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Sony\workspace\sudo\src\sg\edu\nus\cs2103\sudo\logic\DateTimeUtils.java
+	 */
+
+
+/**
+ * This class contains static methods used to compare and 
+ * modify Joda DateTime objects.
+ *  
+ */
+public class DateTimeUtils {
+
+	/**
+	 * Determines if a DateTime has zero minute values.
+	 * @param DateTime
+	 * @return boolean
+	 */		
+	public static boolean hasZeroMinutes(final DateTime datetime) {
+		boolean isNotNull = (datetime != null);
+		boolean hasZeroMinutes = datetime.getMinuteOfHour() > 0;
+		return isNotNull && hasZeroMinutes;
+	}
+	
+	/**
+	 * This operation check if 2 DateTime objects have exactly same date
+	 * 
+	 * @param dt1
+	 *            is first date time
+	 * @param dt2
+	 *            is second date time
+	 * @return true if 2 objects have same date or false if otherwise
+	 * 
+	 */
+	public static boolean isSameDate(DateTime dt1, DateTime dt2) {
+		if (dt1 == null && dt2 == null)
+			return true;
+		if (dt1 == null && dt2 != null)
+			return false;
+		if (dt1 != null && dt2 == null)
+			return false;
+
+		return ((dt1.getYear() == dt2.getYear())
+				&& (dt1.getMonthOfYear() == dt2.getMonthOfYear()) 
+				&& (dt1.getDayOfMonth() == dt2.getDayOfMonth()));
+	}	
+	
+    /**
+     * Gets the last second of the day as a DateTime
+     * @param day date to be used
+     * @return the same day, but with 23:59:59
+     */
+    public static DateTime getEndOfDay(DateTime day) {
+        return new DateTime(day.getYear(),
+                day.getMonthOfYear(), day.getDayOfMonth(), 23, 59, 59);
+    }
+    
+    /**
+     * Gets the first second of the day as a Date
+     * @param day date to be used
+     * @return the same day, but with 00:00:00
+     */
+    public static DateTime getStartOfDay(DateTime day) {
+        return new DateTime(day.getYear(),
+                day.getMonthOfYear(), day.getDayOfMonth(), 0, 0, 0);
+    }
+
+	// End of segment: C:\Users\Sony\workspace\sudo\src\sg\edu\nus\cs2103\sudo\logic\DateTimeUtils.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Sony\workspace\sudo\src\sg\edu\nus\cs2103\sudo\logic\DeadlineTask.java
+	 */
+
+	public String getAddMessage() {
+		return String.format(Constants.MESSAGE_ADD_DEADLINE, 
+				this.description,
+				DisplayUtils.formatDate(this.endTime));
+	}
+
+	/**
+	 * Helper method to return a formatted string for Deadline tasks.
+	 * @param Task
+	 * @return String
+	 */
+	public String getDateString() {
+		DateTimeFormatter onlytimeformat = Constants.HOUR_FORMAT;
+		if (DateTimeUtils.hasZeroMinutes(this.getEndTime())) {
+			onlytimeformat = Constants.HOUR_MINUTE_FORMAT;
+		}		
+		
+		return new StringBuilder(this.getId() + ". [by " + this.getEndTime().
+				toString(onlytimeformat) + "] ").toString();
+	}
+	
+}
+
+	// End of segment: C:\Users\Sony\workspace\sudo\src\sg\edu\nus\cs2103\sudo\logic\DeadlineTask.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Sony\workspace\sudo\src\sg\edu\nus\cs2103\sudo\logic\FloatingTask.java
+	 */
+
+	public String getAddMessage(){
+		return String.format(Constants.MESSAGE_ADD_FLOATING, this.description);
+	}
+
+	public String getDateString() {
+		return "";
+	}
+
+}
+	// End of segment: C:\Users\Sony\workspace\sudo\src\sg\edu\nus\cs2103\sudo\logic\FloatingTask.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Sony\workspace\sudo\src\sg\edu\nus\cs2103\sudo\logic\InputParser.java
+	 */
+
+/**
+ * This InputParser class is responsible for extracting commands
+ * and description/time parameters from user string inputs.
+ */
+public class InputParser {
+	
+	/** Flag used when a Task of specified is not found. */
+    public static final int NOT_FOUND = Integer.MIN_VALUE;
+
+	/**
+	 * Parses dates from the user's input string.
+	 * 
+	 * @param userInput 			string of the user's input
+	 * @return ArrayList<DateTime>	A list of DateTime objects
+	 */	
+	public static ArrayList<DateTime> parseDateTime(String userInput,
+	        COMMAND_TYPE command) {
+		Parser dtparser = new Parser();
+		String dateTimeString = InputParserUtils.getDateTimeString(userInput, command);
+		List<DateGroup> dateGroups = dtparser.parse(dateTimeString);
+		ArrayList<List<Date>> dateLists = InputParserUtils.getDateLists(dateGroups);	
+		ArrayList<DateTime> dateTimes = InputParserUtils.
+				convertToDateTimes(dateLists);
+		
+		return dateTimes;
+	}
+
+	/**
+	 * Reads the user input for command.
+	 * 
+	 * @param scanner		A scanner object
+	 * @return String 	the user's input command 
+	 */
+	public static String readCommand(Scanner scanner) {
+		System.out.print("command:");
+		return scanner.nextLine();
+	}	
+	
+	/**
+	 * Validates the user input for a specific COMMAND_TYPE.
+	 * 
+	 * @param userInput		the user's input
+	 * @return COMMAND_TYPE 
+	 */	
+	public static COMMAND_TYPE parseCommandType(String userInput) {
+		String commandWord = StringUtils.getFirstWord(userInput);
+		COMMAND_TYPE commandType = InputParserUtils.getCommandType(commandWord);
+		assert commandType != null;
+		
+		int numOfWords = StringUtils.countWords(userInput);
+		boolean notEnoughArguments = numOfWords < 
+				InputParserUtils.getNumOfWordsNeeded(commandType);
+		
+		if (notEnoughArguments) { 
+			return COMMAND_TYPE.INCOMPLETE;
+		} else {
+			return commandType;
+		}
+	}
+
+	/**
+	 * Parses the user input for task descriptions.
+	 * 
+	 * @param userInput		the user's input
+	 * @return String 
+	 */	
+	public static String parseDescription(String userInput) {
+		Pattern p = Pattern.compile("(?:^|)'([^']*?)'(?:$|)", 
+				Pattern.MULTILINE);
+        Matcher m = p.matcher(userInput);
+        if (m.find()) {
+        	String description = m.group().substring(1, m.group().length() - 1);
+        	return validateEmptyDescription(description);
+        } else {
+            return null;
+        }
+	}
+
+	/**
+	 * Returns null for empty task descriptions.
+	 * 
+	 * @param String
+	 * @return String 
+	 */	
+	public static String validateEmptyDescription(String description) {
+		if(description.length() <= 0){
+			return null;
+		}
+		return description;
+	}
+	
+	// End of segment: C:\Users\Sony\workspace\sudo\src\sg\edu\nus\cs2103\sudo\logic\InputParser.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Sony\workspace\sudo\src\sg\edu\nus\cs2103\sudo\logic\InputParserTest.java
+	 */
+
+public class InputParserTest {
+	private final ByteArrayOutputStream outContent = 
+			new ByteArrayOutputStream();
+	Scanner user = new Scanner(System.in);
+	TaskManager manager;
+	LogicHandler logicHandler;
+	InputParser parser;
+	private static final String SAVE_FILENAME = "inputParser_test.sav";
+	private static final String HISTORY_FILENAME = "inputParser_test.his";
+	private File savefile;
+	private File historyfile;
+
+	@Before
+	public void setUp() {
+		savefile = new File(SAVE_FILENAME);
+		historyfile = new File(HISTORY_FILENAME);
+		manager = TaskManager.getTaskManager(SAVE_FILENAME, HISTORY_FILENAME);
+		logicHandler = LogicHandler.getLogicHandler(manager, user);
+		System.setOut(new PrintStream(outContent));
+    }
+
+	@After
+    public void tearDown() {
+        manager.clearTasks();
+        savefile.delete();
+		historyfile.delete();
+    }	
+	
+	@Test
+	public void testParseEmptyDates() {
+		ArrayList<DateTime> dates = InputParser.parseDateTime("add " +
+				"'finish homework'", COMMAND_TYPE.ADD);
+		assertEquals(0, dates.size());
+	}
+	
+	@Test
+	public void testParseDates() {
+		ArrayList<DateTime> dates = InputParser.parseDateTime("add 'golf' " +
+				"from the day before next thursday to 19 december", 
+				COMMAND_TYPE.ADD);
+		assertEquals(2, dates.size());
+	}
+
+	@Test
+	public void testParseDateTimes() {
+		ArrayList<DateTime> dates = InputParser.parseDateTime("add 'wash' " +
+				"by oct 14th 11pm", COMMAND_TYPE.ADD);
+		String expected = "2013-10-14T23:00:00.000+08:00";
+		
+		assertEquals(1, dates.size());
+		assertEquals(expected, dates.get(0).toString());
+	}	
+	
+	@Test
+	public void testParseDescription(){
+	    String[] testcases = new String[] {
+	        "'sudo' is an amazing app",
+		    "sudo is an amazing 'app'",
+		    "sudo is an 'amazing' app",
+	    };	
+	    
+	    assertEquals("sudo", InputParser.parseDescription(testcases[0]));
+	    assertEquals("app", InputParser.parseDescription(testcases[1]));
+	    assertEquals("amazing", InputParser.parseDescription(testcases[2]));
+	}
+
+	@Test
+	public void testNullDescription() throws IOException{
+		String userInput = "add from 19 October 2013 to 22 October 2014";
+		String description = InputParser.parseDescription(userInput);
+		
+		assertEquals(description, null);
+	}
+	
+	@Test
+	public void testEmptyStringDescription() throws IOException{
+		String userInput = "add '' from 19 October 2013 to 22 October 2014";
+		String description = InputParser.parseDescription(userInput);
+		
+		assertEquals(description, null);
+	}		
+	
+	@Test
+	public void testParseId(){
+		int actual = InputParser.parseId("edit 2 'make pancakes " +
+				"for breakfast'");
+		assertEquals(2, actual);
+	}
+	
+	@Test
+	public void testParseIdNotFound(){	
+		int actual = InputParser.parseId("edit 'make waffles " +
+				"for breakfast'");
+		assertEquals(InputParser.NOT_FOUND, actual);
+	}
+	
+	@Test
+	public void testIncompleteCommands() throws IOException{
+		testCommand("add", Constants.MESSAGE_INCOMPLETE_COMMAND);
+		testCommand("search", Constants.MESSAGE_INCOMPLETE_COMMAND);
+		testCommand("edit 1", Constants.MESSAGE_INCOMPLETE_COMMAND);
+		testCommand("schedule 1", Constants.MESSAGE_INCOMPLETE_COMMAND);
+	}
+	
+	@Test
+	public void testInvalidCommands() throws IOException{
+		testCommand("fishing", Constants.MESSAGE_INVALID_COMMAND);
+	}
+
+	@Test
+	public void testParseAddFloatingTask() throws IOException{
+		String userInput = "add 'make waffles for breakfast'";
+		runCommand(userInput);
+		
+		assertEquals(1, manager.getTasks().size());
+		assertTrue(manager.getTasks().get(0).isFloatingTask());
+	}
+
+	@Test
+	public void testParseAddDeadlineTask() throws IOException{
+		String userInput = "add 'make waffles for breakfast' by Monday" +
+				" 14 October 2pm";
+		String expectedEndDate = "Mon Oct 14 14:00:00";
+		runCommand(userInput);
+		
+		assertEquals(expectedEndDate, 
+				manager.getTasks().get(0).endTime.toDate().toString()
+				    .substring(0, 19)); // Timezone compatibility
+		assertEquals(1, manager.getTasks().size());
+		assertTrue(manager.getTasks().get(0).isDeadlineTask());
+	}
+
+	@Test
+	public void testParseAddTimedTask() throws IOException{
+		String userInput = "add 'make waffles for breakfast' from 13 October " +
+				"10am to 14 October 2pm";
+		String expectedStartDate = "Sun Oct 13 10:00:00";
+		String expectedEndDate = "Mon Oct 14 14:00:00";
+		runCommand(userInput);
+		
+		assertEquals(expectedStartDate, 
+				manager.getTasks().get(0).startTime.toDate().toString()
+				    .substring(0, 19)); // Timezone compatibility
+		assertEquals(expectedEndDate, 
+				manager.getTasks().get(0).endTime.toDate().toString()
+				    .substring(0, 19)); // Timezone compatibility
+		assertEquals(1, manager.getTasks().size());
+		assertTrue(manager.getTasks().get(0).isTimedTask());
+	}	
+	
+	@Test
+	public void testParseAddNullDescription() throws IOException{
+		String userInput = "add nothing";
+		testCommand(userInput, Constants.MESSAGE_MISSING_DESCRIPTION + 
+				Constants.MESSAGE_EMPTY_LIST);
+		
+		assertEquals(0, manager.getTasks().size());
+	}	
+	
+	@Test
+	public void testParseAddInvalidNumberOfDates() throws IOException{
+		String userInput = "add 'time travel' from 19 October 2013 to 22 " +
+				"October 2014 to 24 November 2016";
+		runCommand(userInput);
+		
+		assertEquals(0, manager.getTasks().size());
+	}
+	
+	/**
+	 * Helper test method for operations not currently being tested.
+	 * @param String
+	 */
+	public void runCommand(String userInput) {
+		logicHandler.executeCommand(userInput);
+		outContent.reset();
+	}	
+	
+	/**
+	 * Helper test method to test logic correctness and console output.
+	 * @param String
+	 * @param String
+	 */	
+	private void testCommand(String userInput, String expectedOutput) 
+			throws IOException{		
+		logicHandler.executeCommand(userInput);
+		assertEquals(expectedOutput,outContent.toString());
+		outContent.reset();
+	}
+	
+}
+
+	// End of segment: C:\Users\Sony\workspace\sudo\src\sg\edu\nus\cs2103\sudo\logic\InputParserTest.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Sony\workspace\sudo\src\sg\edu\nus\cs2103\sudo\logic\InputParserUtils.java
+	 */
+
+/**
+ * This class contains some static methods to parse task 
+ * information such as task ID, description, and natty-JodaDateTime
+ * conversion.
+ */
+public class InputParserUtils {
+	/**
+	 * Retrieves date List objects from joda-datetime DateGroup objects.
+	 * 
+	 * @param dateGroups
+	 *            A list of joda-datetime DateGroup objects
+	 * @return ArrayList of Date Lists
+	 */
+	public static ArrayList<List<Date>> getDateLists(List<DateGroup> dateGroups) {
+		ArrayList<List<Date>> dateLists = new ArrayList<List<Date>>();
+		for (DateGroup dateGroup : dateGroups) {
+			List<Date> dateList = dateGroup.getDates();
+			dateLists.add(dateList);
+		}
+
+		return dateLists;
+	}
+
+	/**
+	 * Convert DateLists to joda-DateTime objects.
+	 * 
+	 * @param dateLists
+	 *            ArrayList of Date Lists
+	 * @return ArrayList of DateTime objects
+	 */
+	public static ArrayList<DateTime> convertToDateTimes(
+			ArrayList<List<Date>> dateLists) {
+		ArrayList<DateTime> dateTimes = new ArrayList<DateTime>();
+		if (dateLists.isEmpty()) {
+			return dateTimes;
+		}
+
+		List<Date> dates = dateLists.get(0);
+		for (Date date : dates) {
+			DateTime dt = new DateTime(date);
+			dateTimes.add(dt);
+		}
+		return dateTimes;
+	}
+
+	/**
+	 * Validates that the first word (command word) is a valid COMMAND_TYPE. In
+	 * other words, this method checks if the command is in COMMAND_TYPE.
+	 * 
+	 * @param userCommand
+	 *            The user's command word
+	 * @return COMMAND_TYPE
+	 */
+	public static COMMAND_TYPE getCommandType(String userCommand) {
+		COMMAND_TYPE commandType = Constants.aliases.get(userCommand
+				.toUpperCase());
+		if (commandType == null) {
+			return COMMAND_TYPE.INVALID;
+		}
+		return commandType;
+	}
+
+	/**
+	 * Returns the minimum number of words required for a valid command.
+	 * 
+	 * @param commandType
+	 * @return number of words
+	 */
+	public static int getNumOfWordsNeeded(COMMAND_TYPE commandType) {
+		assert commandType != null;
+		switch (commandType) {
+		case EDIT:
+        case SCHEDULE:
+			return 3;
+		case ADD:
+		case DELETE:
+		case SEARCH:
+			return 2;
+		case FINISH:
+		default:
+			return 1;
+		}
+	}
+	
+	// End of segment: C:\Users\Sony\workspace\sudo\src\sg\edu\nus\cs2103\sudo\logic\InputParserUtils.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Sony\workspace\sudo\src\sg\edu\nus\cs2103\sudo\logic\LogicHandler.java
+	 */
+
+/**
+ * LogicHandler is a facade class responsible for providing a simple API to
+ * handle most of the Task operations of sudo.
+ * 
+ */
+public final class LogicHandler {
+
+	private static LogicHandler logicHandler;
+
+	private Scanner scanner;
+	private TaskManager manager;
+
+	/**
+	 * Constructor to initialize the logicHandler Object.
+	 * 
+	 * @param manager
+	 *            : a TaskManager object to delegate operations to
+	 * @param scanner
+	 *            : a Scanner object that listens for user input
+	 */
+	private LogicHandler(TaskManager manager, Scanner scanner) {
+		if (manager == null) {
+			throw new NullPointerException("TaskManager cannot be null!");
+		}
+		
+		this.manager = manager;
+		this.scanner = scanner;
+	}
+
+	/**
+	 * Returns a singleton instance of logicHandler. Uses dependency injection
+	 * to take in a TaskManager and Scanner object.
+	 * 
+	 * @param manager
+	 *            : a TaskManager object to delegate operations to
+	 * @param scanner
+	 *            : a Scanner object that listens for user input
+	 * @return logicHandler : a logicHandler object
+	 */
+	public static LogicHandler getLogicHandler(TaskManager manager,
+			Scanner scanner) {
+		if (logicHandler == null) {
+			logicHandler = new LogicHandler(manager, scanner);
+		}
+		return logicHandler;
+	}
+
+	public TaskManager getManager() {
+		return this.manager;
+	}
+
+	public Scanner getScanner() {
+		return this.scanner;
+	}
+
+	/**
+	 * Executes a TaskManager method based on the user's input.
+	 * 
+	 * @param userInput
+	 *            : string of the user's input
+	 */
+	public void executeCommand(final String userInput) {
+		COMMAND_TYPE userCommand = InputParser.
+				parseCommandType(userInput);
+		assert (userCommand != null);
+
+		String taskDescription = InputParser.
+				parseDescription(userInput);
+		int targetId = InputParser.parseId(userInput);
+		long duration = InputParser.parseDuration(userInput);
+		ArrayList<DateTime> dateTimes = InputParser.
+				parseDateTime(userInput, userCommand);
+
+		try {
+			switch (userCommand) {
+			case INVALID:
+				throw new InvalidCommandException();
+			case INCOMPLETE:
+				throw new IncompleteCommandException();
+			case DISPLAY:
+				this.manager.displayAllTasks();
+				return;
+			case ALL:
+				this.manager.displayAllTasks(true);
+				return;
+			case FINISH:
+				boolean idNotFound = (targetId == InputParser.NOT_FOUND);
+				if(idNotFound){
+					this.manager.displayFinishedTasks();
+				} else {
+					this.manager.markAsComplete(targetId);
+					this.manager.displayAllTasks();
+				}
+				return;
+			case UNFINISH:
+				this.manager.markAsIncomplete(targetId);
+				this.manager.displayAllTasks();
+				return;
+			case ADD:
+				this.manager.add(taskDescription, dateTimes);
+				this.manager.displayAllTasks();
+				return;
+			case DELETE:
+				if (taskDescription == null) {
+					this.manager.delete(targetId);
+				} else {
+					this.manager.delete(taskDescription);
+				}
+				this.manager.displayAllTasks();
+				return;
+			case EDIT:
+				this.manager.editTask(targetId, 
+						taskDescription, dateTimes);
+				this.manager.displayAllTasks();
+				return;
+			case SEARCH:
+				this.manager.searchAllAndDisplay(taskDescription);
+				return;
+			case FREE:
+	            this.manager.searchForFreeIntervals(
+	            		dateTimes);   
+			    return;
+			case SCHEDULE:
+                this.manager.scheduleTask(
+                		targetId, duration, dateTimes); 
+                this.manager.displayAllTasks();
+                return;				
+			case UNDO:
+				this.manager.undo();
+				this.manager.displayAllTasks();
+				return;
+			case REDO:
+				this.manager.redo();
+				this.manager.displayAllTasks();
+				return;
+			case HELP:
+				this.manager.help(taskDescription);
+				return;
+			case EXIT:
+				this.manager.saveTasks();
+				System.exit(0);
+				return;
+			default:
+				assert false; //Invalid commands are caught.
+				return;
+			}
+		} catch (Exception e) {
+			GUI.print_add(e.getMessage(), GUIConstants.COLOR_CODE_RED);
+		}
+	}
+
+}
+
+	// End of segment: C:\Users\Sony\workspace\sudo\src\sg\edu\nus\cs2103\sudo\logic\LogicHandler.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Sony\workspace\sudo\src\sg\edu\nus\cs2103\sudo\logic\StringUtils.java
+	 */
+
+
+/**
+ * This class contains static methods used to create and modify strings. 
+ */
+public class StringUtils {
+	
+	/**
+	 * Get the first word (the command word) from the user input.
+	 * 
+	 * @param userInput
+	 *            the user's input
+	 * @return String first word
+	 */
+	public static String getFirstWord(String userInput) {
+		String[] words = userInput.trim().split(" ");
+		return words[0];
+	}	
+	
+	/**
+	 * Count the number of words in a string.
+	 * 
+	 * @param inputString
+	 *            A string input
+	 * @return number of words
+	 */
+	public static int countWords(String inputString) {
+		if (inputString.trim().isEmpty()) {
+			return 0;
+		} else {
+			return inputString.trim().split("\\s+").length;
+		}
+	}	
+	
+    /**
+     * Joins an array of strings with the delimiter
+     * @param strings array of strings to join
+     * @return joined strings
+     */
+    public static String joinString(String[] strings, String delimiter) {
+        StringBuffer buffer = new StringBuffer();
+        
+        for (int i = 0; i < strings.length; i++) {
+            buffer.append(strings[i]);
+            if (i < strings.length - 1) {
+                buffer.append(delimiter);
+            }
+        }
+        
+        return buffer.toString();
+    }
+    
+	/**
+	 * Helper method to generate a string of characters
+	 * of specified length.
+	 * @param int
+	 * @param char
+	 * @return String
+	 */	
+	public static String fillString(final int length, 
+			final char charToFill) {
+		  if (length > 0) {
+		    char[] array = new char[length];
+		    Arrays.fill(array, charToFill);
+		    return new String(array);
+		  }
+		  return "";
+	}    
+    
+	public static String trimDescription(String userInput, String desc) {
+		if (desc != null) {
+            userInput = userInput.replace("'" + desc + "'", "");
+        }
+		return userInput;
+	}	    
+}
+
+	// End of segment: C:\Users\Sony\workspace\sudo\src\sg\edu\nus\cs2103\sudo\logic\StringUtils.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Sony\workspace\sudo\src\sg\edu\nus\cs2103\sudo\logic\Task.java
+	 */
+
+	public abstract String getAddMessage();
+	
+	public abstract String getDateString();
+	
+}
+
+	// End of segment: C:\Users\Sony\workspace\sudo\src\sg\edu\nus\cs2103\sudo\logic\Task.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Sony\workspace\sudo\src\sg\edu\nus\cs2103\sudo\logic\TaskManager.java
+	 */
+
+	/**
+	 * Helps the user get started with using sudo
+	 * 
+	 * @param topic
+	 */
+	public void help(String topic) {
+		if (topic == null) {
+			GUI.print_add(HelpConstants.MESSAGE_WELCOME_HELP_PAGE,
+					GUIConstants.COLOR_CODE_YELLOW);
+		} else {
+			String helpMessage = HelpConstants.helpTopics.get(topic
+					.toUpperCase());
+			if (helpMessage == null) {
+				GUI.print_add(
+						String.format(HelpConstants.HELP_NOT_FOUND, topic),
+						GUIConstants.COLOR_CODE_RED);
+			} else {
+				GUI.print_add(helpMessage, GUIConstants.COLOR_CODE_YELLOW);
+			}
+		}
+	}
+
+	public ArrayList<Task> getTasks() {
+		return this.tasks;
+	}
+
+	public void clearTasks() {
+		TaskManagerUtils.clearTasks(tasks);
+	}
+
+	public boolean isReloaded() {
+		return isReloaded;
+	}
+
+	public int getTaskNumber() {
+		return this.tasks.size();
+	}
+
+}
+
+	// End of segment: C:\Users\Sony\workspace\sudo\src\sg\edu\nus\cs2103\sudo\logic\TaskManager.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Sony\workspace\sudo\src\sg\edu\nus\cs2103\sudo\logic\TimedTask.java
+	 */
+
+	public String getAddMessage() {
+		return String.format(Constants.MESSAGE_ADD_TIMED, this.description,
+				DisplayUtils.formatDate(this.startTime),
+				DisplayUtils.formatDate(this.endTime));
+	}
+
+	/**
+	 * Helper method to return a formatted string for Timed tasks.
+	 * @param Task
+	 * @return String
+	 */	
+	public String getDateString() {
+		DateTimeFormatter onlytimeformat = Constants.HOUR_FORMAT;
+		if (DateTimeUtils.hasZeroMinutes(this.getEndTime())) {
+			onlytimeformat = Constants.HOUR_MINUTE_FORMAT;
+		}		
+		
+		if(this.isOnSameDay()){
+			return new StringBuilder(this.getId() + ". [" + this.getStartTime().
+					toString(onlytimeformat) + " - "  
+					+ this.getEndTime().toString(onlytimeformat) + 
+					"] ").toString();
+		} else {
+			return new StringBuilder(this.getId() + ". ["
+				+ this.getStartTime().toString(Constants.DATE_MONTH_FORMAT) 
+				+ " " + this.getStartTime().toString(onlytimeformat) + " - "
+				+ this.getEndTime().toString(onlytimeformat) + "] ").toString();
+		}
+	}
+}
+
+
+
+	// End of segment: C:\Users\Sony\workspace\sudo\src\sg\edu\nus\cs2103\sudo\logic\TimedTask.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Sony\workspace\sudo\src\sg\edu\nus\cs2103\sudo\UnitTestSuite.java
+	 */
+
+@RunWith(Suite.class)
+@SuiteClasses({StorageHandlerTest.class, InputParserTest.class,  TaskManagerTest.class  })
+public class UnitTestSuite {
+
+}
+
+	// End of segment: C:\Users\Sony\workspace\sudo\src\sg\edu\nus\cs2103\sudo\UnitTestSuite.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Sony\workspace\sudo\src\sg\edu\nus\cs2103\ui\DisplayUtils.java
+	 */
+
+/**
+ * This class is library of static methods to output strings
+ * for display by UI and GUI components.
+ */
+public class DisplayUtils {
+	
+	/**
+	 * Prints a pretty string representation of a Task.
+	 * @param Task
+	 */
+	public static String prettyPrint (Task task) {
+		String taskString = task.getDateString();
+		if (task.isFloatingTask()) {
+			taskString = task.getId() + ". ";
+		} 
+		
+		return GUI.print_add(taskString, 
+				GUIConstants.COLOR_CODE_WHITE) + 
+				GUI.print_add(task.getDescription(), 
+						GUIConstants.COLOR_CODE_GREEN);
+	}	
+	
+	/**
+	 * Returns contextual prefixes to day separators such as Today, Overdue, 
+	 * and so on based on current day
+	 * @param int
+	 * @return String
+	 */	
+	public static String getPrefix(DateTime previousDate) {
+		String prefix = "";
+		DateTime today = DateTime.now();
+		DateTime tomorrow = DateTime.now().plusDays(1);
+		boolean is_overdue = previousDate.compareTo(DateTime.now()) < 0;
+		boolean is_today = DateTimeUtils.isSameDate(previousDate, today);
+		boolean is_tomorrow = DateTimeUtils.isSameDate(previousDate, tomorrow);
+		
+		if (is_overdue) {
+			prefix = GUIConstants.OVERDUE_PREFIX;
+		} else if (is_today) {
+			prefix = GUIConstants.TODAY_PREFIX;
+		} else if (is_tomorrow) {
+			prefix = GUIConstants.TOMORROW_PREFIX;
+		}
+		return prefix;
+	}	
+	
+	/**
+	 * Determines when to add date-level separators in display.
+	 * @param DateTime
+	 * @param Task
+	 * @return DateTime
+	 */		
+	public static DateTime insertDateSeparators(DateTime previousDate, 
+			Task task) {
+		DateTime currentDate = task.getEndTime();
+		boolean dateIsNull = (previousDate == null);
+		
+		if (dateIsNull || !DateTimeUtils.isSameDate(currentDate, previousDate)) {
+			previousDate = currentDate;
+			DisplayUtils.printDateSeparator(previousDate);
+		}
+		return previousDate;
+	}
+	
+	/**
+	 * Adds separators between groups of tasks on a different date.
+	 * For example, tasks for today are separated from tasks 
+	 * tomorrow and next Monday.
+	 * 
+	 * @param DateTime
+	 */	
+	public static void printDateSeparator(DateTime previousDate) {
+		DateTimeFormatter dateFormat = getDateFormat(previousDate);
+		String prefix = getPrefix(previousDate);
+		String label = createLabel(previousDate, dateFormat, prefix);
+		int color = getPrefixColor(prefix);
+		
+		GUI.print_add("\n\n["+ label + "]" + generateSeparator(label), color);
+	}
+
+	/**
+	 * Returns a string label containing any contextual prefixes 
+	 * (Today, Overdue, etc) and date information.
+	 * 
+	 * @param DateTime
+	 * @param DateTimeFormatter
+	 * @param String
+	 */		
+	public static String createLabel(DateTime previousDate,
+			DateTimeFormatter dateFormat, String prefix) {
+		return prefix + previousDate.toString(dateFormat);
+	}
+	
+	
+	/**
+	 * Returns date-month-year date format 
+	 * for tasks not on the current year, else 
+	 * returns a date-month format for task display. 
+	 * 
+	 * @param DateTime
+	 * @return DateTimeFormatter
+	 */
+	public static DateTimeFormatter getDateFormat(DateTime previousDate) {
+		DateTimeFormatter dateFormat = Constants.DATE_MONTH_FORMAT;
+		boolean isNotTheSameYear = previousDate.getYear() 
+				!= DateTime.now().getYear();
+		if(isNotTheSameYear){
+			dateFormat = Constants.DATE_MONTH_YEAR_FORMAT;
+		}
+		return dateFormat;
+	}
+
+	/**
+	 * Gets the right color (red, yellow, etc.)
+	 * for a given String prefix (Overdue, etc.). 
+	 * 
+	 * @param String
+	 * @return int
+	 */
+	public static int getPrefixColor(String prefix) {
+		int index = 1;
+		if (prefix.equals(GUIConstants.OVERDUE_PREFIX)) {
+			index += 2;
+		}
+		return index;
+	}	
+	
+	/**
+	 * Adds separator to indicate finished tasks.
+	 * @param boolean
+	 * @param Task
+	 * @return boolean
+	 */	
+	public static boolean insertFinishedSeparator(boolean finishedStarted, 
+			Task task) {
+		if (!finishedStarted && task.isComplete()) {
+			finishedStarted = true;
+			GUI.print_add(Constants.FINISHED_TASK_SEPARATOR, 
+					GUIConstants.COLOR_CODE_YELLOW);
+		}
+		return finishedStarted;
+	}
+
+	/**
+	 * Adds separator to indicate floating tasks.
+	 * @param boolean
+	 * @param Task
+	 * @return boolean
+	 */			
+	public static boolean insertFloatingSeparator(boolean floatingStarted, 
+			Task task) {
+		if (!floatingStarted && task.isFloatingTask()) {
+			floatingStarted = true;
+			GUI.print_add(Constants.FLOATING_TASK_SEPARATOR, 
+					GUIConstants.COLOR_CODE_YELLOW);
+		}
+		return floatingStarted;
+	}
+	
+	
+	/**
+	 * Generates a separator of constant length 
+	 * Constants.SEPARATOR_LENGTH
+	 * 
+	 * @param label
+	 * @return String
+	 */				
+	protected static String generateSeparator(String label){
+		int separatorLength = Constants.SEPARATOR_LENGTH - label.length();
+		return StringUtils.fillString(separatorLength, Constants.SEPARATOR_CHAR);
+	}
+	
+	/**
+	 * Helper method to return a pretty string for DateTime objects.
+	 * @param DateTime
+	 * @return String
+	 */		
+	public static String formatDate(final DateTime datetime) {
+		return datetime.toString("dd MMMM hh:mm a");
+	}	
+}
+
+	// End of segment: C:\Users\Sony\workspace\sudo\src\sg\edu\nus\cs2103\ui\DisplayUtils.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Sony\workspace\sudo\src\sg\edu\nus\cs2103\ui\UI.java
+	 */
+
+public class UI {
+	
+	public static void main(String[] args) throws Exception {	
+		Scanner user = new Scanner( System.in );
+		TaskManager manager = TaskManager.getTaskManager(Constants.FILE_NAME, Constants.HISTORY_NAME);
+		LogicHandler logicHandler = LogicHandler.getLogicHandler(manager, user);
+		while (true) {
+			String userInput = InputParser.readCommand(user);
+			logicHandler.executeCommand(userInput);
+		}
+	}
+	
+}
+
+	// End of segment: C:\Users\Sony\workspace\sudo\src\sg\edu\nus\cs2103\ui\UI.java
+
+
+
+
+

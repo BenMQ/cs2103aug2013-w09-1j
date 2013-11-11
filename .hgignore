@@ -1,0 +1,27 @@
+syntax: glob
+
+*.java.orig
+
+# Ignore history and save files
+.his
+.sav
+
+# Mac OS X
+.DS_Store
+
+# Windows
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+*.class
+
+.classpath
+.settings
+.project
+sudo.his
+sudo.sav
+inputParser_test.his
+inputParser_test.sav
+Test.his
+Test.sav

@@ -19,8 +19,6 @@ import com.joestelmach.natty.Parser;
 /**
  * This InputParser class is responsible for extracting commands
  * and description/time parameters from user string inputs.
- * 
- * @author Yos Riady 
  */
 public class InputParser {
 	

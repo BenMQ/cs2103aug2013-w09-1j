@@ -4,8 +4,6 @@ import org.joda.time.DateTime;
 
 //@author A0101286N
 /**
- * @author Ipsita Mohapatra A0101286N
- *
  * This class stores the information about all types of Tasks.
  * This abstract class is the parent class of TimedTask, DeadlineTask and FloatingTask
  * Some of the fields like endTime and/or startTime may be empty.

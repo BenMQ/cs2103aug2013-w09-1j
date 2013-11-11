@@ -30,8 +30,7 @@ import org.jnativehook.keyboard.NativeKeyEvent;
 import org.jnativehook.keyboard.NativeKeyListener;
 
 /**
- * 
- * @author LiuDake A0105656
+ * @author A0105656E
  */
 
 public class GUI extends javax.swing.JFrame implements NativeKeyListener {

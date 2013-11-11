@@ -6,9 +6,6 @@ import java.util.Comparator;
 /**
  * This class is implements the comparator in order to allow sorting of tasks by
  * completed parameter
- * 
- * @author Ipsita Mohapatra A0101286N
- * 
  */
 public class SortTasksByCompletedComparator implements Comparator<Task> {
 

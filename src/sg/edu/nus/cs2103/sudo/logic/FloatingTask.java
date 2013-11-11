@@ -4,12 +4,9 @@ import sg.edu.nus.cs2103.sudo.Constants;
 
 //@author A0101286N
 /**
- * @author Ipsita Mohapatra A0101286N
- * 
  *         This class stores the information about Floating Tasks. Floating
  *         Tasks will have an id, description and isComplete. None of these
  *         fields will be null.
- * 
  */
 
 public class FloatingTask extends Task {

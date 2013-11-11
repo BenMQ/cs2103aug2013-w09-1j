@@ -21,9 +21,6 @@ import com.joestelmach.natty.DateGroup;
  * This class contains some static methods to parse task 
  * information such as task ID, description, and natty-JodaDateTime
  * conversion.
- * 
- * @author Yos Riady
- * 
  */
 public class InputParserUtils {
 	/**

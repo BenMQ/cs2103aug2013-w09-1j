@@ -11,8 +11,6 @@ import sg.edu.nus.cs2103.ui.DisplayUtils;
 
 // @author A0101286N
 /**
- * @author Ipsita Mohapatra 
- * 
  *         This class stores the information about Timed Tasks. Timed Tasks will
  *         have an id, description, isComplete, startTime and endTime. None of
  *         these fields will be null.
@@ -47,7 +45,7 @@ public class TimedTask extends Task {
 		this.endTime = endTime;
 	}
 	
-	// @author Liu Dake
+	// @author A0105656E
 	// To be used to store in .txt
 	public String toStringForFile() {
 		int bound = startTime.toString().indexOf(":");
@@ -60,6 +58,7 @@ public class TimedTask extends Task {
 				+ returnedEndTime + "#" + isComplete;
 	}
 	
+	// @author A0101286N
 	private void checkValidityTimes(DateTime startTime, DateTime endTime) {
 		checkStartAndEndTime(startTime, endTime);
 	}

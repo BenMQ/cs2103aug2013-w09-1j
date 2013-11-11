@@ -17,8 +17,6 @@ import sg.edu.nus.cs2103.ui.GUIConstants;
  * This class contains static methods that help execute some of the methods in
  * TaskManager.
  * 
- * @author Ipsita Mohapatra
- * 
  */
 public class TaskManagerUtils {
 

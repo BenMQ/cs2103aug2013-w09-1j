@@ -1,3 +1,4 @@
+// @author A0105656E
 package sg.edu.nus.cs2103.sudo.storage;
 
 import java.io.BufferedReader;
@@ -28,8 +29,6 @@ public class StorageHandler {
 	 * 1.Open and read file from the disk, and write changes to disk.
 	 * 2.Keep track of the history, capture every change and save the undoable history records into the file.
 	 * 3.Provide undo/redo functions when running
-	 * 
-	 * @author A0105656E
 	 */
 	private static StorageHandler storageHandler;
 	private String fileName;
@@ -50,7 +49,6 @@ public class StorageHandler {
 	}
 	
 	/**
-	 * S
 	 * Give a StorageHandler.
 	 * @param fileName
 	 */

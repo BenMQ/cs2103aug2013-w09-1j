@@ -4,8 +4,6 @@ package sg.edu.nus.cs2103.sudo.logic;
 import java.util.Comparator;
 
 /**
- * @author Ipsita Mohapatra A0101286N
- *
  * This class allows sorting of tasks in a list according to their end times. 
  * Floating Tasks will always appear at the end. 
  * 

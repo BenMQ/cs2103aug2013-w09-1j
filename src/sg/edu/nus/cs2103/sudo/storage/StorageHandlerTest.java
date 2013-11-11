@@ -1,3 +1,4 @@
+// @author A0105656E
 package sg.edu.nus.cs2103.sudo.storage;
 
 import static org.junit.Assert.*;
@@ -84,7 +85,7 @@ public class StorageHandlerTest {
 		assertEquals(true, file.exists());
 		assertEquals(true, historyFile.exists());
 		BufferedReader iptBuff = new BufferedReader(new FileReader(
-				TEST_NAME));
+				TEST_NAME));  	 	 	
 		String temp = iptBuff.readLine();
 		assertEquals("TIMED#Sleeping#2013-10-14T01:00 to 2013-10-14T07:00#false", temp);
 		temp = iptBuff.readLine();

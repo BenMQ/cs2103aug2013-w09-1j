@@ -494,7 +494,6 @@ public class TaskManager {
 	 *            will be that day. if none is specified, the date range will be
 	 *            the current day.
 	 * @return intervals that are free today
-	 * @author chenminqi
 	 */
 	public ArrayList<MutableInterval> getFreeIntervals(
 			ArrayList<DateTime> dateTimes) {

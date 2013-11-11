@@ -14,9 +14,6 @@ import sg.edu.nus.cs2103.sudo.logic.Task;
 /**
  * This class is library of static methods to output strings
  * for display by UI and GUI components.
- * 
- * @author Yos Riady
- * 
  */
 public class DisplayUtils {
 	

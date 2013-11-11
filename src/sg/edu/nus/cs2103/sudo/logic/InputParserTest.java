@@ -141,11 +141,12 @@ public class InputParserTest {
 	public void testParseAddDeadlineTask() throws IOException{
 		String userInput = "add 'make waffles for breakfast' by Monday" +
 				" 14 October 2pm";
-		String expectedEndDate = "Mon Oct 14 14:00:00 SGT 2013";
+		String expectedEndDate = "Mon Oct 14 14:00:00";
 		runCommand(userInput);
 		
 		assertEquals(expectedEndDate, 
-				manager.getTasks().get(0).endTime.toDate().toString());
+				manager.getTasks().get(0).endTime.toDate().toString()
+				    .substring(0, 19)); // Timezone compatibility
 		assertEquals(1, manager.getTasks().size());
 		assertTrue(manager.getTasks().get(0).isDeadlineTask());
 	}
@@ -154,14 +155,16 @@ public class InputParserTest {
 	public void testParseAddTimedTask() throws IOException{
 		String userInput = "add 'make waffles for breakfast' from 13 October " +
 				"10am to 14 October 2pm";
-		String expectedStartDate = "Sun Oct 13 10:00:00 SGT 2013";
-		String expectedEndDate = "Mon Oct 14 14:00:00 SGT 2013";
+		String expectedStartDate = "Sun Oct 13 10:00:00";
+		String expectedEndDate = "Mon Oct 14 14:00:00";
 		runCommand(userInput);
 		
 		assertEquals(expectedStartDate, 
-				manager.getTasks().get(0).startTime.toDate().toString());
+				manager.getTasks().get(0).startTime.toDate().toString()
+				    .substring(0, 19)); // Timezone compatibility
 		assertEquals(expectedEndDate, 
-				manager.getTasks().get(0).endTime.toDate().toString());
+				manager.getTasks().get(0).endTime.toDate().toString()
+				    .substring(0, 19)); // Timezone compatibility
 		assertEquals(1, manager.getTasks().size());
 		assertTrue(manager.getTasks().get(0).isTimedTask());
 	}	

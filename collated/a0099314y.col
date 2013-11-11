@@ -1,0 +1,721 @@
+//@author: a0099314y
+
+
+
+	/**
+	 * origin: C:\Users\Sony\workspace\sudo\src\sg\edu\nus\cs2103\sudo\logic\DateTimeUtils.java
+	 */
+
+	/**
+	 * Produces a start DateTime and an end DateTime based on the argument
+	 * given. If the input is an empty array, the range will be the current day.
+	 * If the input has one DateTime, the range will be that particular day. If
+	 * the input has two DateTimes, the range will be that.
+	 * 
+	 * @param dateTimes
+	 *            arrayList of start and end DateTime
+	 * @return range calculated
+	 */
+	public static ArrayList<DateTime> getFlexibleTimeRange(
+			ArrayList<DateTime> dateTimes) {
+		assert (dateTimes.size() >= 0 && dateTimes.size() <= 2);
+		if (dateTimes.size() == 2) {
+			if (dateTimes.get(0).isAfter(dateTimes.get(1))) {
+				Collections.reverse(dateTimes);
+			}
+			return dateTimes;
+		} else {
+			DateTime day;
+			if (dateTimes.size() == 1) {
+				day = dateTimes.get(0);
+			} else {
+				day = DateTime.now();
+			}
+			DateTime startOfDay = DateTimeUtils.getStartOfDay(day);
+			DateTime endOfDay = DateTimeUtils.getEndOfDay(day);
+			ArrayList<DateTime> range = new ArrayList<DateTime>(2);
+			range.add(startOfDay);
+			range.add(endOfDay);
+			return range;
+		}
+	}    
+    
+	/**
+	 * Helper method Checks the validity of 2 DateTimes. To be valid, the first
+	 * DateTime must occur chronologically before the second DateTime. If
+	 * invalid, throw exception.
+	 * 
+	 * @param startTime
+	 * @param endTime
+	 */
+	public static void checkValidityTimes(DateTime startTime, DateTime endTime) {
+		checkStartAndEndTime(startTime, endTime);
+	}
+
+	/**
+	 * Helper method.
+	 * 
+	 * @param startTime
+	 * @param endTime
+	 */
+	public static void checkStartAndEndTime(DateTime startTime, DateTime endTime) {
+		DateTimeComparator dtComp = DateTimeComparator.getInstance();
+
+		int check = dtComp.compare(endTime, startTime);
+
+		boolean sameStartAndEnd = check == 0;
+		if (sameStartAndEnd) {
+			throw new IllegalArgumentException(
+					Constants.MESSAGE_SAME_START_END_TIME);
+		} else {
+			boolean invalidStartAndEnd = check == -1;
+			if (invalidStartAndEnd) {
+				throw new IllegalArgumentException(
+						Constants.MESSAGE_END_BEFORE_START_TIME);
+			}
+		}
+	}    
+    
+	
+}
+
+	// End of segment: C:\Users\Sony\workspace\sudo\src\sg\edu\nus\cs2103\sudo\logic\DateTimeUtils.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Sony\workspace\sudo\src\sg\edu\nus\cs2103\sudo\logic\InputParser.java
+	 */
+
+	/**
+	 * Attempts to get the content between first and second space, 
+	 * and parse as integer. -1 for unsuccessful parsing.
+	 * 
+	 * @param userInput 
+	 * @return int
+	 */	
+	public static int parseId(String userInput) {
+	    String[] spaceDelimitedInput = userInput.split("\\s+");
+	    if (spaceDelimitedInput.length < 2) {
+	        return NOT_FOUND;
+	    }
+	    String firstArgument = spaceDelimitedInput[1];
+	    try {
+	        int id = Integer.parseInt(firstArgument);
+	        return id;
+	    } catch (NumberFormatException e) {
+	        return NOT_FOUND;
+	    }
+	}
+	
+	/**
+     * Attempts to get the content between second and third space, 
+     * and parse as milliseconds. -1 for unsuccessful parsing.
+     * 
+     * @param userInput 
+     * @return duration in milliseconds
+     */ 
+    public static long parseDuration(String userInput) {
+        String[] spaceDelimitedInput = userInput.split("\\s+");
+        if (spaceDelimitedInput.length < 3) {
+            return NOT_FOUND;
+        }
+        String secondArgument = spaceDelimitedInput[2];
+        long millis = InputParserUtils.parseDurationToMillis(secondArgument);
+        if (millis < 0) {
+            return NOT_FOUND;
+        } else {
+            return millis;
+        }
+    }
+    
+}
+
+
+	// End of segment: C:\Users\Sony\workspace\sudo\src\sg\edu\nus\cs2103\sudo\logic\InputParser.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Sony\workspace\sudo\src\sg\edu\nus\cs2103\sudo\logic\InputParserUtils.java
+	 */
+
+	/**
+     * Parse a string of the form 2h3m into milliseconds
+     * http://stackoverflow.com/posts/11021986/revisions
+     * @param periodString
+     * @return the input string in milliseconds
+     */
+    public static long parseDurationToMillis(String periodString) {
+        PeriodParser parser = new PeriodFormatterBuilder()
+           .appendHours().appendSuffix("h")
+           .appendMinutes().appendSuffix("m")
+           .toParser();
+
+        MutablePeriod period = new MutablePeriod();
+        parser.parseInto(period, periodString, 0, Locale.getDefault());
+
+        return period.toDurationFrom(new DateTime(0)).getMillis();
+    }
+
+    /**
+     * Calculates the number of words that are irrelevant to date time parsing
+     * @param command type of command
+     * @return the number of words at the beginning of the command that are not
+     * relevant to date time parsing
+     */
+    public static int getNumWordsToTrim(COMMAND_TYPE command) {
+        switch (command) {
+        case SCHEDULE:
+            return 3;
+        case EDIT:
+            return 2;
+        case INVALID:
+            return 0;
+        default:
+            return 1;
+        }
+    }
+    
+	/**
+	 * Strips the command and other irrelevant arguments in the user input.
+	 * @param userInput user input string
+	 * @param command the type of the command
+	 * @return the input string with irrelevant keywords stripped away
+	 */
+	public static String getDateTimeString(String userInput,
+	        COMMAND_TYPE command) {
+        String desc = InputParser.parseDescription(userInput);
+        userInput = StringUtils.trimDescription(userInput, desc);
+	    String[] inputWords = userInput.trim().split("\\s+");	    
+	    String[] relevantWord = 
+	            Arrays.copyOfRange(inputWords,
+	                               InputParserUtils.getNumWordsToTrim(command),
+	                               inputWords.length);
+	    return StringUtils.joinString(relevantWord, " ");
+	}
+    
+}
+
+	// End of segment: C:\Users\Sony\workspace\sudo\src\sg\edu\nus\cs2103\sudo\logic\InputParserUtils.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Sony\workspace\sudo\src\sg\edu\nus\cs2103\sudo\logic\TaskManager.java
+	 */
+
+	/**
+	 * Search and prints out intervals that are free during the current day.
+	 * Intervals shorter than 10 minutes are ignored.
+	 * 
+	 * @param dateTimes
+	 *            0 to 2 DateTimes. If only one is specified, the date range
+	 *            will be that day. if none is specified, the date range will be
+	 *            the current day.
+	 * 
+	 */
+	public void searchForFreeIntervals(ArrayList<DateTime> dateTimes) {
+		assert (dateTimes.size() >= 0 && dateTimes.size() <= 2);
+
+		if (dateTimes.size() > 1) {
+			GUI.print_add(Constants.MESSAGE_INVALID_NUMBER_OF_DATES,
+					GUIConstants.COLOR_CODE_RED);
+			return;
+		}
+
+		ArrayList<DateTime> timeRange = getTimeRangeFromNow(dateTimes);
+		ArrayList<MutableInterval> free = getFreeIntervals(timeRange);
+		boolean noSlotsFound = true;
+
+		for (int i = 0; i < free.size(); i++) {
+			MutableInterval interval = free.get(i);
+			if (interval.toDurationMillis() >= Constants.FREE_SLOT_MINIMUM_DURATION) {
+				if (noSlotsFound) {
+					GUI.print_add(
+							String.format(Constants.MESSAGE_FREE_SLOTS_PREFIX,
+									timeRange.get(0).toString("dd MMMM"))
+									+ "\n", GUIConstants.COLOR_CODE_YELLOW);
+
+					noSlotsFound = false;
+				}
+				String output = interval.getStart().toString("hh:mm a")
+						+ " to " + interval.getEnd().toString("hh:mm a") + "\n";
+				GUI.print_add(output, GUIConstants.COLOR_CODE_YELLOW);
+
+			}
+		}
+		if (noSlotsFound) {
+			GUI.print_add(Constants.MESSAGE_NO_FREE_SLOTS,
+					GUIConstants.COLOR_CODE_RED);
+		}
+	}
+
+	/**
+	 * Searches for all occupied time slots of a given time range. An interval
+	 * that corresponds to the last second of the given time range, which lasts
+	 * for 0 seconds will be inserted at the end.
+	 * 
+	 * @param timeRange
+	 *            ArrayList of two DateTimes that indicates the time range to be
+	 *            searched for
+	 * @return intervals that are occupied today, at least 1 item will be
+	 *         returned.
+	 */
+	public ArrayList<MutableInterval> getOccupiedIntervals(
+			ArrayList<DateTime> timeRange) {
+		TaskManagerUtils.sortTasks(tasks);
+
+		DateTime start = timeRange.get(0);
+		DateTime end = timeRange.get(1);
+
+		ArrayList<MutableInterval> occupied = new ArrayList<MutableInterval>();
+		MutableInterval last = new MutableInterval(end, end);
+		occupied.add(last);
+
+		for (int i = tasks.size() - 1; i >= 0; i--) {
+			Task task = tasks.get(i);
+
+			if (task.isComplete() || !(task.isTimedTask())) {
+				// we are only concerned with incomplete TimedTask
+				continue;
+			} else if (!task.endTime.isAfter(start)) {
+				// all unprocessed items ends before today, no more items needs
+				// processing
+				break;
+			} else if (!task.startTime.isBefore(last.getStart())) {
+				// we are only concerned with tasks that starts before the last
+				// occupied slot
+				continue;
+			} else if (!task.endTime.isBefore(last.getStart())) {
+				// overlap between task's end time and the last occupied slot's
+				// start time
+				last.setStart(task.startTime);
+			} else {
+				// there is a gap
+				last = new MutableInterval(task.startTime, task.endTime);
+				occupied.add(last);
+				if (!task.startTime.isAfter(start)) {
+					// reached the start of the day, no more processing needed.
+					last.setStart(start);
+					break;
+				}
+			}
+
+		}
+		Collections.reverse(occupied);
+		return occupied;
+	}
+
+	/**
+	 * Searches for all free time slots of a specified time range
+	 * 
+	 * @param dateTimes
+	 *            0 to 2 DateTimes. If only one is specified, the date range
+	 *            will be that day. if none is specified, the date range will be
+	 *            the current day.
+	 * @return intervals that are free today
+	 */
+	public ArrayList<MutableInterval> getFreeIntervals(
+			ArrayList<DateTime> dateTimes) {
+		DateTime start = dateTimes.get(0);
+		ArrayList<MutableInterval> free = new ArrayList<MutableInterval>();
+
+		ArrayList<MutableInterval> occupied = getOccupiedIntervals(dateTimes);
+
+		if (occupied.get(0).getStart().isAfter(start)) {
+			free.add(new MutableInterval(start, occupied.get(0).getStart()));
+		}
+
+		for (int i = 0; i < occupied.size() - 1; i++) {
+			free.add(new MutableInterval(occupied.get(i).getEnd(), occupied
+					.get(i + 1).getStart()));
+		}
+
+		return free;
+	}
+
+	/**
+	 * Schedules an incomplete to a free slot selected automatically.
+	 * 
+	 * @param taskId
+	 *            the task ID to be scheduled, must not be a completed task
+	 * @param duration
+	 *            the duration of the task in milliseconds
+	 * @param dateTimes
+	 *            desired time range
+	 * @throws Exception
+	 */
+	public void scheduleTask(int taskId, long duration,
+			ArrayList<DateTime> dateTimes) throws Exception {
+		int index = taskId - 1;
+
+		boolean valid = TaskManagerUtils.validateScheduleParams(duration,
+				dateTimes, index, tasks);
+
+		if (!valid) {
+			return;
+		}
+
+		ArrayList<DateTime> timeRange = getTimeRangeFromNow(dateTimes);
+
+		ArrayList<MutableInterval> free = getFreeIntervals(timeRange);
+		for (int i = 0; i < free.size(); i++) {
+			MutableInterval candidate = free.get(i);
+			DateTime start, startDay0800, startDay2300, nextDay0800;
+
+			while (candidate.toDurationMillis() >= duration) {
+				start = candidate.getStart();
+				startDay0800 = getStartOfWorkingHours(start);
+				startDay2300 = getEndOfWorkingHours(start);
+				nextDay0800 = startDay0800.plusDays(1);
+				try {
+					if (start.isBefore(startDay0800)) {
+						candidate.setStart(startDay0800);
+						continue;
+					} else if (start.isAfter(startDay2300)) {
+						candidate.setEnd(nextDay0800);
+						continue;
+					}
+				} catch (IllegalArgumentException e) {
+					// duration is too short for consideration, moving on
+					break;
+				}
+				DateTime end = start.plusMillis((int) duration);
+				if (!end.isAfter(startDay2300)) {
+					scheduleTaskWithDetails(index, start, end);
+					return;
+				} else {
+					break;
+				}
+			}
+		}
+		GUI.print_add(Constants.MESSAGE_NO_FREE_SLOTS,
+				GUIConstants.COLOR_CODE_RED);
+	}
+
+	/**
+	 * Gets a time range that is strictly after the current time. See also
+	 * getFlexibleTimeRange
+	 * 
+	 * @param dateTimes
+	 *            an array of no more than 2 elements.
+	 * @return a pair of DateTimes that indicates a time range
+	 */
+	public ArrayList<DateTime> getTimeRangeFromNow(ArrayList<DateTime> dateTimes) {
+
+		ArrayList<DateTime> timeRange = DateTimeUtils
+				.getFlexibleTimeRange(dateTimes);
+
+		if (timeRange.get(0).isBefore(DateTime.now())) {
+			timeRange.set(0, DateTime.now());
+		}
+		return timeRange;
+	}
+
+	/**
+	 * Schedule a task into the specified start and end time period
+	 * 
+	 * @param index
+	 *            internal index of the task
+	 * @param start
+	 *            start time of the intended slot
+	 * @param end
+	 *            end time of the intended slot
+	 * @throws IOException
+	 */
+	public void scheduleTaskWithDetails(int index, DateTime start, DateTime end)
+			throws IOException {
+		ArrayList<DateTime> range = new ArrayList<DateTime>(2);
+		range.add(start);
+		range.add(end);
+
+		String description = tasks.get(index).getDescription();
+
+		TaskManagerUtils.editTaskHelper(null, range, index, tasks);
+		GUI.print_add(String.format(Constants.MESSAGE_ADD_TIMED, description,
+				DisplayUtils.formatDate(start), DisplayUtils.formatDate(end)),
+				GUIConstants.COLOR_CODE_YELLOW);
+
+		TaskManagerUtils.sortAndUpdateIds(tasks);
+
+		storage.save(true);
+	}
+
+	public DateTime getEndOfWorkingHours(DateTime start) {
+		return new DateTime(start.getYear(), start.getMonthOfYear(),
+				start.getDayOfMonth(), 23, 0, 0);
+	}
+
+	public DateTime getStartOfWorkingHours(DateTime start) {
+		return new DateTime(start.getYear(), start.getMonthOfYear(),
+				start.getDayOfMonth(), 8, 0, 0);
+	}
+
+	// End of segment: C:\Users\Sony\workspace\sudo\src\sg\edu\nus\cs2103\sudo\logic\TaskManager.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Sony\workspace\sudo\src\sg\edu\nus\cs2103\sudo\logic\TaskManagerTest.java
+	 */
+
+	@Test
+	public void testGetFlexibleTimeRangeEmpty() {
+		ArrayList<DateTime> input = new ArrayList<DateTime>();
+		ArrayList<DateTime> actual = DateTimeUtils
+				.getFlexibleTimeRange(input);
+		DateTime dt0000 = today(0, 0);
+		DateTime dt2359 = today(23, 59, 59);
+		ArrayList<DateTime> expected = new ArrayList<DateTime>();
+		expected.add(dt0000);
+		expected.add(dt2359);
+		assertEquals(expected, actual);
+	}
+
+	@Test
+	public void testGetFlexibleTimeRangeOneInput() {
+		DateTime dt0000 = today(0, 0);
+		DateTime dt2359 = today(23, 59, 59);
+
+		ArrayList<DateTime> input = new ArrayList<DateTime>();
+		input.add(dt2359);
+
+		ArrayList<DateTime> actual = DateTimeUtils
+				.getFlexibleTimeRange(input);
+
+		ArrayList<DateTime> expected = new ArrayList<DateTime>();
+		expected.add(dt0000);
+		expected.add(dt2359);
+		assertEquals(expected, actual);
+	}
+
+	@Test
+	public void testGetFlexibleTimeRangeTwoInputs() {
+		DateTime tmr1300 = today(13, 0).plusDays(1);
+		DateTime dt2359 = today(23, 59, 59);
+
+		ArrayList<DateTime> input = new ArrayList<DateTime>();
+		input.add(dt2359);
+		input.add(tmr1300);
+
+		ArrayList<DateTime> actual = DateTimeUtils
+				.getFlexibleTimeRange(input);
+
+		ArrayList<DateTime> expected = new ArrayList<DateTime>();
+		expected.add(dt2359);
+		expected.add(tmr1300);
+		assertEquals(expected, actual);
+	}
+
+	@Test
+	public void testGetFlexibleTimeRangeTwoInputsReversed() {
+		DateTime tmr1300 = today(13, 0).plusDays(1);
+		DateTime dt2359 = today(23, 59, 59);
+
+		ArrayList<DateTime> input = new ArrayList<DateTime>();
+
+		input.add(tmr1300);
+		input.add(dt2359);
+
+		ArrayList<DateTime> actual = DateTimeUtils
+				.getFlexibleTimeRange(input);
+
+		ArrayList<DateTime> expected = new ArrayList<DateTime>();
+		expected.add(dt2359);
+		expected.add(tmr1300);
+		assertEquals(expected, actual);
+	}
+
+	@Test
+	public void testGetFlexibleTimeRangeThreeInputs() {
+
+		DateTime dt0800 = today(8, 0);
+		DateTime dt0900 = today(9, 0);
+		DateTime dt2359 = today(23, 59, 59);
+		ArrayList<DateTime> input = new ArrayList<DateTime>();
+
+		input.add(dt0800);
+		input.add(dt0900);
+		input.add(dt2359);
+
+		try {
+			@SuppressWarnings("unused")
+			ArrayList<DateTime> actual = DateTimeUtils
+					.getFlexibleTimeRange(input);
+			assertTrue(false); // unreachable, assertion should always fail
+		} catch (AssertionError e) {
+			assertTrue(true);
+		}
+	}
+
+	@Test
+	public void testGetFreeIntervalsNoTask() throws Exception {
+		DateTime now = new DateTime();
+		DateTime dt0000 = new DateTime(now.getYear(), now.getMonthOfYear(),
+				now.getDayOfMonth(), 0, 0, 0);
+		DateTime dt2359 = new DateTime(now.getYear(), now.getMonthOfYear(),
+				now.getDayOfMonth(), 23, 59, 59);
+		ArrayList<DateTime> range = new ArrayList<DateTime>();
+		range.add(dt0000);
+		range.add(dt2359);
+		// No task
+		ArrayList<MutableInterval> actual = manager.getFreeIntervals(range);
+		ArrayList<MutableInterval> expected = new ArrayList<MutableInterval>();
+		expected.add(new MutableInterval(dt0000, dt2359));
+
+		assertEquals(expected, actual);
+	}
+
+	@Test
+	public void testGetFreeIntervalsSomeTasks() throws Exception {
+		DateTime now = new DateTime();
+		DateTime dt0000 = new DateTime(now.getYear(), now.getMonthOfYear(),
+				now.getDayOfMonth(), 0, 0, 0);
+		DateTime dt2359 = new DateTime(now.getYear(), now.getMonthOfYear(),
+				now.getDayOfMonth(), 23, 59, 59);
+		ArrayList<DateTime> range = new ArrayList<DateTime>();
+		range.add(dt0000);
+		range.add(dt2359);
+		// some slots
+		manager.addTaskAndSort(new TimedTask(0, "timed", false, today(11, 0),
+				today(12, 0)));
+		manager.addTaskAndSort(new TimedTask(0, "timed", false, today(17, 0),
+				today(18, 0)));
+		ArrayList<MutableInterval> actual = manager.getFreeIntervals(range);
+		ArrayList<MutableInterval> expected = new ArrayList<MutableInterval>();
+		expected.add(new MutableInterval(dt0000, today(11, 0)));
+		expected.add(new MutableInterval(today(12, 0), today(17, 0)));
+		expected.add(new MutableInterval(today(18, 0), dt2359));
+		assertEquals(expected, actual);
+	}
+
+	@Test
+	public void testGetFreeIntervalsWholeDay() throws Exception {
+		DateTime now = new DateTime();
+		DateTime dt0000 = new DateTime(now.getYear(), now.getMonthOfYear(),
+				now.getDayOfMonth(), 0, 0, 0);
+		DateTime dt2359 = new DateTime(now.getYear(), now.getMonthOfYear(),
+				now.getDayOfMonth(), 23, 59, 59);
+		ArrayList<DateTime> range = new ArrayList<DateTime>();
+		range.add(dt0000);
+		range.add(dt2359);
+		// whole day
+		manager.addTaskAndSort(new TimedTask(0, "timed", false, dt0000, dt2359));
+		ArrayList<MutableInterval> actual = manager.getFreeIntervals(range);
+		ArrayList<MutableInterval> expected = new ArrayList<MutableInterval>();
+		assertEquals(expected, actual);
+	}
+
+	private String displayTasks(ArrayList<Task> tasks) {
+
+		String str = "";
+
+		if (tasks.isEmpty()) {
+			str += Constants.NOTHING_TO_DISPLAY;
+			return str;
+		}
+
+		for (int i = 0; i < tasks.size(); i++) {
+			Task task = tasks.get(i);
+			str += task.toString() + " " + task.isComplete() + "\n";
+		}
+
+		return str;
+
+	}
+
+	private DateTime today(int hours, int minutes, int seconds) {
+		DateTime now = DateTime.now();
+		return new DateTime(now.getYear(), now.getMonthOfYear(),
+				now.getDayOfMonth(), hours, minutes, seconds);
+	}
+
+	private DateTime today(int hours, int minutes) {
+		return today(hours, minutes, 0);
+	}
+}
+
+	// End of segment: C:\Users\Sony\workspace\sudo\src\sg\edu\nus\cs2103\sudo\logic\TaskManagerTest.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Sony\workspace\sudo\src\sg\edu\nus\cs2103\sudo\logic\TaskManagerUtils.java
+	 */
+
+	/**
+	 * Validates parameters for schedule command, must have a valid index that
+	 * is not completed, the dateTimes must have at most 1 date, duration must
+	 * be positive.
+	 * 
+	 * @param duration
+	 *            duration in milliseconds
+	 * @param dateTimes
+	 *            DateTimes parsed from the input
+	 * @param index
+	 *            parsed index from the input
+	 */
+	public static boolean validateScheduleParams(long duration,
+			ArrayList<DateTime> dateTimes, int index, ArrayList<Task> tasks) {
+		try {
+			TaskManagerUtils.checkValidityIndex(index, tasks);
+		} catch (IndexOutOfBoundsException e) {
+			GUI.print_add(Constants.MESSAGE_INVALID_TASK_INDEX,
+					GUIConstants.COLOR_CODE_RED);
+
+			return false;
+		}
+		if (dateTimes.size() > 1) {
+			GUI.print_add(Constants.MESSAGE_INVALID_NUMBER_OF_DATES,
+					GUIConstants.COLOR_CODE_RED);
+			return false;
+		} else if (duration <= 0) {
+			GUI.print_add(Constants.MESSAGE_INCOMPLETE_COMMAND,
+					GUIConstants.COLOR_CODE_RED);
+			return false;
+		}
+
+		if (tasks.get(index).isComplete()) {
+			GUI.print_add(Constants.MESSAGE_ALREADY_COMPLETE,
+					GUIConstants.COLOR_CODE_RED);
+			return false;
+		}
+		return true;
+	}
+
+	/**
+	 * Shows the correct display message depending on showAll.
+	 */
+	public static void showDisplayMessage(ArrayList<Task> tasks, boolean showAll) {
+		if (showAll) {
+			GUI.print_add(Constants.MESSAGE_DISPLAY_ALL,
+					GUIConstants.COLOR_CODE_BLUE);
+		} else {
+			if (tasks.isEmpty()) {
+				GUI.print_add(Constants.MESSAGE_EMPTY_LIST,
+						GUIConstants.COLOR_CODE_BLUE);
+			} else {
+				GUI.print_add(Constants.MESSAGE_DISPLAY,
+						GUIConstants.COLOR_CODE_BLUE);
+
+			}
+		}
+	}
+
+	// End of segment: C:\Users\Sony\workspace\sudo\src\sg\edu\nus\cs2103\sudo\logic\TaskManagerUtils.java
+
+
+
+
+

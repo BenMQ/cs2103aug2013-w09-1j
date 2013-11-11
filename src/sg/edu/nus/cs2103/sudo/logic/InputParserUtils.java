@@ -66,18 +66,6 @@ public class InputParserUtils {
 	}
 
 	/**
-	 * Get the first word (the command word) from the user input.
-	 * 
-	 * @param userInput
-	 *            the user's input
-	 * @return String first word
-	 */
-	public static String getCommandWord(String userInput) {
-		String[] words = userInput.trim().split(" ");
-		return words[0];
-	}
-
-	/**
 	 * Validates that the first word (command word) is a valid COMMAND_TYPE. In
 	 * other words, this method checks if the command is in COMMAND_TYPE.
 	 * 
@@ -92,21 +80,6 @@ public class InputParserUtils {
 			return COMMAND_TYPE.INVALID;
 		}
 		return commandType;
-	}
-
-	/**
-	 * Count the number of words in a string.
-	 * 
-	 * @param inputString
-	 *            A string input
-	 * @return number of words
-	 */
-	public static int countWords(String inputString) {
-		if (inputString.trim().isEmpty()) {
-			return 0;
-		} else {
-			return inputString.trim().split("\\s+").length;
-		}
 	}
 
 	/**
@@ -130,13 +103,6 @@ public class InputParserUtils {
 			return 1;
 		}
 	}
-	
-	public static String trimDescription(String userInput, String desc) {
-		if (desc != null) {
-            userInput = userInput.replace("'" + desc + "'", "");
-        }
-		return userInput;
-	}	
 	
 	//@author A0099314Y
 	/**
@@ -176,25 +142,6 @@ public class InputParserUtils {
         }
     }
     
-    /**
-     * Joins an array of strings with the delimiter
-     * @param strings array of strings to join
-     * @return joined strings
-     */
-    public static String joinString(String[] strings, String delimiter) {
-        StringBuffer buffer = new StringBuffer();
-        
-        for (int i = 0; i < strings.length; i++) {
-            buffer.append(strings[i]);
-            if (i < strings.length - 1) {
-                buffer.append(delimiter);
-            }
-        }
-        
-        return buffer.toString();
-    }
-    
-    
 	/**
 	 * Strips the command and other irrelevant arguments in the user input.
 	 * @param userInput user input string
@@ -204,13 +151,13 @@ public class InputParserUtils {
 	public static String getDateTimeString(String userInput,
 	        COMMAND_TYPE command) {
         String desc = InputParser.parseDescription(userInput);
-        userInput = trimDescription(userInput, desc);
+        userInput = StringUtils.trimDescription(userInput, desc);
 	    String[] inputWords = userInput.trim().split("\\s+");	    
 	    String[] relevantWord = 
 	            Arrays.copyOfRange(inputWords,
 	                               InputParserUtils.getNumWordsToTrim(command),
 	                               inputWords.length);
-	    return joinString(relevantWord, " ");
+	    return StringUtils.joinString(relevantWord, " ");
 	}
     
 }

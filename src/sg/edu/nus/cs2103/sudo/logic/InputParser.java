@@ -63,11 +63,11 @@ public class InputParser {
 	 * @return COMMAND_TYPE 
 	 */	
 	public static COMMAND_TYPE parseCommandType(String userInput) {
-		String commandWord = InputParserUtils.getCommandWord(userInput);
+		String commandWord = StringUtils.getFirstWord(userInput);
 		COMMAND_TYPE commandType = InputParserUtils.getCommandType(commandWord);
 		assert commandType != null;
 		
-		int numOfWords = InputParserUtils.countWords(userInput);
+		int numOfWords = StringUtils.countWords(userInput);
 		boolean notEnoughArguments = numOfWords < 
 				InputParserUtils.getNumOfWordsNeeded(commandType);
 		

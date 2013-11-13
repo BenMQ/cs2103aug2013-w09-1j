@@ -20,7 +20,7 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-// @author A0101286N
+//@author A0101286N
 public class TaskManagerTest {
 	private static final String SAVE_FILENAME = "taskmanagertest_save.sav";
 	private static final String HISTORY_FILENAME = "taskmanager_history.sav";
@@ -289,7 +289,7 @@ public class TaskManagerTest {
 
 	}
 
-	// @author A0099314Y
+	//@author A0099314Y
 	@Test
 	public void testGetFlexibleTimeRangeEmpty() {
 		ArrayList<DateTime> input = new ArrayList<DateTime>();

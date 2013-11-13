@@ -24,7 +24,7 @@ import sg.edu.nus.cs2103.ui.GUIConstants;
  * commands such as adding, editing, searching and deleting Task objects. It is
  * also responsible for throwing exceptions when necessary.
  */
-// @author A0101286N
+//@author A0101286N
 public class TaskManager {
 
 	private static TaskManager taskManager;
@@ -56,7 +56,7 @@ public class TaskManager {
 		return taskManager;
 	}
 	
-	// @author A0105656E
+	//@author A0105656E
 	/**
 	 * Load an ArrayList of tasks into memory. This method should be called upon
 	 * launch after the storage unit has read the stored item from disk. This
@@ -93,7 +93,7 @@ public class TaskManager {
 		}
 	}
 
-	// @author A0101286N
+	//@author A0101286N
 	
 	/**
 	 * Adds a task based on the number of date arguments.
@@ -383,7 +383,7 @@ public class TaskManager {
 		return searchResults;
 	}
 
-	// @author A0099314Y
+	//@author A0099314Y
 	/**
 	 * Search and prints out intervals that are free during the current day.
 	 * Intervals shorter than 10 minutes are ignored.
@@ -631,7 +631,7 @@ public class TaskManager {
 				start.getDayOfMonth(), 8, 0, 0);
 	}
 
-	// @author A0101286N
+	//@author A0101286N
 	/**
 	 * Removes the task by first searching for the search string in the task
 	 * description. If there is exactly one match, just delete it. If there are
@@ -687,7 +687,7 @@ public class TaskManager {
 		storage.save(true);
 	}
 
-	// @author A0105656E
+	//@author A0105656E
 	/**
 	 * If history does not exist, throw Exception
 	 * 
@@ -746,7 +746,7 @@ public class TaskManager {
 		TaskManagerUtils.updateAllIds(tasks);
 	}
 
-	// @author A0099317U
+	//@author A0099317U
 	/**
 	 * Helps the user get started with using sudo
 	 * 

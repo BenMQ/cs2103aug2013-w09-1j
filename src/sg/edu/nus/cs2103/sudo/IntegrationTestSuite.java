@@ -169,7 +169,7 @@ public class IntegrationTestSuite {
 				DisplayUtils.prettyPrint(task));
 	}
 
-	// @author A0101286N
+	//@author A0101286N
 	@Test
 	public void testValidSearch() throws IOException {
 		prepareTaskListForTestSearch();
@@ -353,7 +353,7 @@ public class IntegrationTestSuite {
 		testCommand(userInput, Constants.MESSAGE_EMPTY_LIST);
 	}
 
-	// @author A0099317U
+	//@author A0099317U
 	/**
 	 * Helper test method for operations not currently being tested.
 	 * 

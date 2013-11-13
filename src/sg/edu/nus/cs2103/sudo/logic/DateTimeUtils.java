@@ -71,7 +71,7 @@ public class DateTimeUtils {
                 day.getMonthOfYear(), day.getDayOfMonth(), 0, 0, 0);
     }
 
-	// @author A0099314Y
+	//@author A0099314Y
 	/**
 	 * Produces a start DateTime and an end DateTime based on the argument
 	 * given. If the input is an empty array, the range will be the current day.

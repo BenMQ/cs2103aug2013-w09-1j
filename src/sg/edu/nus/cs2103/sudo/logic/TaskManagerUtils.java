@@ -1,4 +1,4 @@
-// @author A0101286N
+//@author A0101286N
 package sg.edu.nus.cs2103.sudo.logic;
 
 import java.util.ArrayList;
@@ -279,7 +279,7 @@ public class TaskManagerUtils {
 		GUI.print_add("\n\n", GUIConstants.COLOR_CODE_GREEN);
 	}
 	
-	// @author A0099314Y
+	//@author A0099314Y
 	/**
 	 * Validates parameters for schedule command, must have a valid index that
 	 * is not completed, the dateTimes must have at most 1 date, duration must
@@ -339,7 +339,7 @@ public class TaskManagerUtils {
 		}
 	}
 
-	// @author A0101286N
+	//@author A0101286N
 	/**
 	 * Shows the correct display message for finished tasks.
 	 */
@@ -376,7 +376,7 @@ public class TaskManagerUtils {
 		return toReturn;
 	}
 
-	// @author A0105656E
+	//@author A0105656E
 	/**
 	 * Transfer all tasks from one ArrayList to another ArrayList
 	 **/

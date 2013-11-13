@@ -30,7 +30,8 @@ import org.jnativehook.keyboard.NativeKeyEvent;
 import org.jnativehook.keyboard.NativeKeyListener;
 
 /**
- * @author A0105656E
+ * 
+ * @author LiuDake A0105656E
  */
 
 public class GUI extends javax.swing.JFrame implements NativeKeyListener {
@@ -70,7 +71,7 @@ public class GUI extends javax.swing.JFrame implements NativeKeyListener {
 			BufferedImage img = null;
 			try {
 				img = ImageIO
-						.read(getClass().getClassLoader().getResource(GUIConstants.BACKGROUND_IMAGE_NAME));
+						.read(new File(GUIConstants.BACKGROUND_IMAGE_NAME));
 			} catch (IOException e) {
 			}
 			g.drawImage(img, 0, 0, this);

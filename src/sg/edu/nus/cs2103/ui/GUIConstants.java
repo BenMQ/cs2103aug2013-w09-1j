@@ -1,5 +1,9 @@
 package sg.edu.nus.cs2103.ui;
 
+/**
+ * 
+ * @author LiuDake A0105656
+ */
 public class GUIConstants {
 	public static final int KEYBOARD_SPACE = 32;
 	public static final int KEYBOARD_TAB = 9;
